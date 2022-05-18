@@ -1,6 +1,7 @@
 module.exports = {
 
     precommit: {
+        gitHook: false,
         enable: false
     },
 
