@@ -1,2 +1,3 @@
+import { createApp } from 'vue';
 import Demo from './demo.vue';
-Demo.create({}, '.vui-demo');
+createApp(Demo).mount('.vui-demo');

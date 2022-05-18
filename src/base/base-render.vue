@@ -1,4 +1,5 @@
 <script>
+import { h } from 'vue';
 export default {
 
     functional: true,
@@ -10,32 +11,25 @@ export default {
         }
     },
 
-    render(h, context) {
-        const content = context.props.content;
+    setup(props, ctx) {
 
-        if (content) {
-
-            //vNode list
-            if (Array.isArray(content)) {
-                return content;
-            }
-
-            //vNode
-            if (content.context && content.context._isVue) {
-                return content;
-            }
-
-            //render function
-            if (typeof content === 'function') {
-                return content.call(context, h, context);
-            }
-
+        //vNode
+        // if (isVNode(props.content)) {
+        //     return h(props.content);
+        // }
+           
+        //render function
+        if (typeof props.content === 'function') {
+            return () => {
+                return props.content.call(ctx, h, ctx);
+            };
         }
 
-        //console.log(content);
+        //console.log(props.content);
         
         //text node
-        return context._v(content);
+        return () => props.content;
+
     }
 
 };

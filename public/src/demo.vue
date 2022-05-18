@@ -942,7 +942,7 @@ const Demo = {
     }
 };
 
-registerComponent(Demo);
+//registerComponent(Demo);
 
 export default Demo;
 </script>

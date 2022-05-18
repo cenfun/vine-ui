@@ -7,15 +7,16 @@ module.exports = {
 
     outdate: {
         exclude: [
-            'vue'
+            //'vue'
         ]
     },
  
     build: {
+        vendors: ['vine-ui'],
         overrides: {
-       
-            'vue': {
-                main: ['dist/vue.js']
+            vue: {
+                dependencies: {},
+                main: 'dist/vue.runtime.global.js'
             }
           
         }

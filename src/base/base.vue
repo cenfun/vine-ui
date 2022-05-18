@@ -80,11 +80,16 @@ export default {
         },
 
         getSlot(name) {
-            let ls = this.$slots[name];
-            if (!ls) {
+            const fun = this.$slots[name];
+            if (!fun) {
                 return;
             }
-            ls = ls.filter((it) => it.tag);
+            let ls = fun();
+            //console.log(ls);
+
+            ls = ls.filter((it) => it.type);
+
+            //console.log(ls);
             return ls;
         },
 

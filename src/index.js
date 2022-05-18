@@ -1,5 +1,4 @@
 import Util from './helper/util.js';
-import createElement from './helper/create-element.js';
 import registerComponent from './helper/register-component.js';
 
 import VuiBase from './base/base.vue';
@@ -20,7 +19,6 @@ import VuiTooltip from './components/tooltip/tooltip.vue';
 
 export {
     Util,
-    createElement,
     registerComponent,
 
     VuiBase,
@@ -42,7 +40,6 @@ export {
 
 export default {
     Util,
-    createElement,
     registerComponent,
 
     VuiBase,

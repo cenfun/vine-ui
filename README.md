@@ -1,5 +1,5 @@
 # vine UI
-> Lightweight UI base on vue 2.x.
+> Lightweight UI base on vue 3.x.
 * Minified: 69.2 KB
 * Gzip: 15.7 KB
 ## Components
@@ -38,18 +38,5 @@ see [demo.vue](public/src/demo.vue)
 
 ## Changelog
 
-* v2.0.6
-    * fixed tab render
-
-* v2.0.5
-    * added dropdown
-
-* v2.0.4
-    * added flyover
-    * added tab
-
-* v2.0.2
-    * added select
-
-* v2.0.0
-    * retired IE
+* 3.0.0
+    * update to vue 3.x
