@@ -34,7 +34,7 @@ const Modal = {
 
     props: {
         content: {
-            validator: v => true,
+            validator: (v) => true,
             default: ''
         },
         padding: {

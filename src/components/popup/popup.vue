@@ -10,7 +10,7 @@ export default {
     props: {
 
         target: {
-            validator: v => true,
+            validator: (v) => true,
             default: ''
         },
 
@@ -27,7 +27,7 @@ export default {
         },
 
         content: {
-            validator: v => true,
+            validator: (v) => true,
             default: ''
         },
 
@@ -37,7 +37,7 @@ export default {
         },
 
         container: {
-            validator: v => true,
+            validator: (v) => true,
             default: ''
         }
 

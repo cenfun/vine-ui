@@ -10,15 +10,15 @@ const toNum = (num) => {
 };
 
 const isWindow = (obj) => {
-    return !!(obj && obj === obj.window);
+    return Boolean(obj && obj === obj.window);
 };
 
 const isDocument = (obj) => {
-    return !!(obj && obj.nodeType === 9);
+    return Boolean(obj && obj.nodeType === 9);
 };
 
 const isElement = (obj) => {
-    return !!(obj && obj.nodeType === 1);
+    return Boolean(obj && obj.nodeType === 1);
 };
 
 export const toRect = (obj) => {
@@ -298,7 +298,7 @@ const getTypeList = (positions, defaultList) => {
         positions = [positions];
     }
     const map = {};
-    positions.forEach(item => {
+    positions.forEach((item) => {
         item = (`${item}`).trim().toLowerCase();
         if (defaultPositions[item]) {
             map[item] = true;
@@ -307,7 +307,7 @@ const getTypeList = (positions, defaultList) => {
         if (!item) {
             return;
         }
-        defaultList.forEach(pd => {
+        defaultList.forEach((pd) => {
             if (pd.indexOf(item) !== -1) {
                 map[pd] = true;
             }

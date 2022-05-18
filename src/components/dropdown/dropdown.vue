@@ -115,7 +115,7 @@ const Dropdown = {
 
         const options = Array.from(this.$refs.select.options);
         if (options.length) {
-            this.listOptions = options.map(option => {
+            this.listOptions = options.map((option) => {
                 return {
                     value: option.value,
                     label: option.textContent
@@ -135,7 +135,7 @@ const Dropdown = {
         dataModelValue: {
 
             handler(newName, oldName) {
-                const item = this.list.find(it => it.value === this.dataModelValue);
+                const item = this.list.find((it) => it.value === this.dataModelValue);
                 if (item) {
                     this.viewValue = this.dataModelValue;
                 } else {

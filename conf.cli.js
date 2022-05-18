@@ -1,19 +1,23 @@
 module.exports = {
 
-    preCommit: false,
- 
-    moduleOverrides: {
-       
-        'vue': {
-            main: ['dist/vue.js']
-        }
-      
+    precommit: {
+        enable: false
     },
 
     outdate: {
         exclude: [
             'vue'
         ]
+    },
+ 
+    build: {
+        overrides: {
+       
+            'vue': {
+                main: ['dist/vue.js']
+            }
+          
+        }
     }
 
 };

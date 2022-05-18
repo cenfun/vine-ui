@@ -14,7 +14,7 @@ const TabPane = {
 
     props: {
         content: {
-            validator: v => true,
+            validator: (v) => true,
             default: ''
         },
         selected: {

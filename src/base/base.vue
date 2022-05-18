@@ -84,7 +84,7 @@ export default {
             if (!ls) {
                 return;
             }
-            ls = ls.filter(it => it.tag);
+            ls = ls.filter((it) => it.tag);
             return ls;
         },
 

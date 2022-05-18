@@ -54,7 +54,7 @@ const Select = {
             if (!Util.isList(this.options)) {
                 return;
             }
-            this.list = this.options.map(item => {
+            this.list = this.options.map((item) => {
                 if (item && typeof item === 'object') {
                     if (typeof item.value === 'undefined') {
                         item.value = item.label;

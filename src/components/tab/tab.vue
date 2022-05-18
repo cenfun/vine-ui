@@ -88,7 +88,7 @@ const Tab = {
             }
         },
         toolbar: {
-            validator: v => true,
+            validator: (v) => true,
             default: ''
         },
         tabs: {

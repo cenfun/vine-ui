@@ -39,7 +39,7 @@ const Flex = {
             }
         },
         content: {
-            validator: v => true,
+            validator: (v) => true,
             default: ''
         },
         spacing: {

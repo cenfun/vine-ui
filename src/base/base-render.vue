@@ -5,7 +5,7 @@ export default {
 
     props: {
         content: {
-            validator: v => true,
+            validator: (v) => true,
             default: ''
         }
     },

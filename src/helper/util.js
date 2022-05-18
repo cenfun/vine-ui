@@ -43,6 +43,10 @@ export const token = function(len, pre = '') {
     return pre + str;
 };
 
+export const hasOwn = function(obj, key) {
+    return Object.prototype.hasOwnProperty.call(obj, key);
+};
+
 export const getValue = function(data, dotPathStr, defaultValue) {
     if (!dotPathStr) {
         return defaultValue;
@@ -54,7 +58,7 @@ export const getValue = function(data, dotPathStr, defaultValue) {
         const item = list.shift();
         current = current[item];
     }
-    if (current && current.hasOwnProperty(lastKey)) {
+    if (current && hasOwn(current, lastKey)) {
         const value = current[lastKey];
         if (typeof (value) !== 'undefined') {
             return value;

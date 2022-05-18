@@ -1,12 +1,12 @@
 <template>
   <VuiFlex
     direction="column"
-    class="vui-preview"
+    class="vui-demo"
   >
-    <div class="vui-preview-header">
-      vine UI Preview
+    <div class="vui-demo-header">
+      Vine UI Demo
     </div>
-    <div class="vui-preview-body vui-flex-auto">
+    <div class="vui-demo-body vui-flex-auto">
       <div class="vui-item vui-flex-row">
         <div class="vui-item-name">
           VuiInput
@@ -704,7 +704,7 @@
         </div>
       </div>
     </div>
-    <div class="vui-preview-footer">
+    <div class="vui-demo-footer">
       &copy; vine UI
     </div>
     <VuiFlyover
@@ -893,7 +893,7 @@ const Demo = {
         initTooltip() {
             setTimeout(() => {
                 const tooltips = Array.prototype.slice.call(document.querySelectorAll('[tooltip]'));
-                tooltips.forEach(item => {
+                tooltips.forEach((item) => {
                     item.addEventListener('click', () => {
                         this.pinTooltip(item);
                     });
@@ -958,13 +958,13 @@ body {
     color: #333;
 }
 
-.vui-preview {
+.vui-demo {
     width: 100%;
     height: 100%;
     position: relative;
 }
 
-.vui-preview-header {
+.vui-demo-header {
     padding: 10px;
     font-weight: bold;
     font-size: 16px;
@@ -972,7 +972,7 @@ body {
     border-bottom: 1px solid #ccc;
 }
 
-.vui-preview-body {
+.vui-demo-body {
     overflow-y: auto;
 }
 
@@ -993,7 +993,7 @@ body {
     padding: 5px 5px 5px 10px;
 }
 
-.vui-preview-footer {
+.vui-demo-footer {
     padding: 5px;
     background: #eee;
 }

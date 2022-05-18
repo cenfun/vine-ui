@@ -20,7 +20,7 @@ const TabItem = {
             default: 'left'
         },
         content: {
-            validator: v => true,
+            validator: (v) => true,
             default: ''
         },
         index: {

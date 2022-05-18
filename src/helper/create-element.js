@@ -3,7 +3,7 @@ import Util from './util.js';
 export default function createElement(vNode, option, container) {
     const ref = Util.token(16, 'ref-');
     const v = new Vue({
-        render: h => {
+        render: (h) => {
             if (typeof (option) === 'function') {
                 option = option.call(this, h);
             }

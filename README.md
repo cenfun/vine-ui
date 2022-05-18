@@ -31,7 +31,7 @@ export default {
     }
 }
 ```
-see [preview.vue](preview/src/preview.vue)
+see [demo.vue](public/src/demo.vue)
 
 ## Changelog
 

@@ -35,7 +35,7 @@ const Flyover = {
             }
         },
         content: {
-            validator: v => true,
+            validator: (v) => true,
             default: ''
         },
         attachToBody: {
