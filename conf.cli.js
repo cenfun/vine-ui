@@ -12,7 +12,6 @@ module.exports = {
     },
  
     build: {
-        vendors: ['vine-ui'],
         overrides: {
             vue: {
                 dependencies: {},
