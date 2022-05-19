@@ -3,8 +3,13 @@
     direction="column"
     class="vui-demo"
   >
-    <div class="vui-demo-header">
+    <div class="vui-demo-header vui-flex-row">
       Vine UI Demo
+      <a
+        href="https://github.com/cenfun/vine-ui"
+        target="_blank"
+        class="icon-github"
+      />
     </div>
     <div class="vui-demo-body vui-flex-auto">
       <div class="vui-item vui-flex-row">
@@ -701,7 +706,7 @@
       </div>
     </div>
     <div class="vui-demo-footer">
-      &copy; vine UI
+      &copy; Vine UI
     </div>
     <VuiFlyover
       ref="flyover"
@@ -1005,5 +1010,20 @@ body {
 
 .vui-tab-icon-plus {
     background-image: url("images/plus.svg");
+}
+
+.icon-github {
+    margin-left: 15px;
+    width: 26px;
+    height: 26px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 26px 26px;
+    background-image: url("images/github.svg");
+    opacity: 0.6;
+}
+
+.icon-github:hover {
+    opacity: 1;
 }
 </style>
