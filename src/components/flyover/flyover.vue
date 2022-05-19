@@ -91,17 +91,14 @@ const Flyover = {
     },
 
     mounted() {
-        if (this.attachToBody || !this.$el.parentNode) {
-            document.body.appendChild(this.$el);
-        }
+        // if (this.attachToBody || !this.$el.parentNode) {
+        //     document.body.appendChild(this.$el);
+        // }
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         this.unbindEvents();
         this.lockBody(false);
-        if (this.$el.parentNode) {
-            this.$el.parentNode.removeChild(this.$el);
-        }
     },
 
     methods: {

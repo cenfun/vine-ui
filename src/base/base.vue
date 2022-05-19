@@ -6,13 +6,8 @@ export default {
         BaseRender
     },
 
-    model: {
-        prop: 'parentModelValue',
-        event: 'model-value-change'
-    },
-
     props: {
-        parentModelValue: {
+        modelValue: {
             type: [String, Boolean, Number, Object],
             default: null
         },
@@ -42,22 +37,27 @@ export default {
         return {
             classId: '',
             dataVisible: this.visible,
-            dataModelValue: this.parentModelValue
+            //bridge from parent and child v-model: moduleValue
+            dataModelValue: this.modelValue
         };
     },
 
     watch: {
         
-        parentModelValue: function(nv) {
+        //from parent changed props
+        modelValue: function(nv) {
+            //this.log('modelValue changed:', nv);
             this.dataModelValue = nv;
+        },
+
+        //from child changed value
+        dataModelValue: function(nv) {
+            //this.log('dataModelValue changed:', nv);
+            this.$emit('update:modelValue', nv);
         },
 
         visible: function(nv) {
             this.dataVisible = nv;
-        },
-
-        dataModelValue: function(nv) {
-            this.$emit('model-value-change', nv);
         }
     },
 
@@ -67,6 +67,17 @@ export default {
 
     methods: {
 
+        log() {
+            const args = Array.from(arguments);
+            args.unshift(this.classId);
+            console.log.apply(console, args);
+        },
+
+        destroy() {
+            //this.log('destroy');
+            this.$.appContext.app.unmount();
+        },
+
         getClassId() {
             const ls = ['vui'];
             const cn = this.$options.name;
@@ -75,7 +86,7 @@ export default {
             } else {
                 console.error('Invalid component name', this);
             }
-            ls.push(this._uid);
+            ls.push(this._.uid);
             return ls.join('-');
         },
 

@@ -2,8 +2,6 @@
 import { h } from 'vue';
 export default {
 
-    functional: true,
-
     props: {
         content: {
             validator: (v) => true,

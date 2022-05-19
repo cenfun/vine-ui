@@ -44,6 +44,9 @@ export const token = function(len, pre = '') {
 };
 
 export const hasOwn = function(obj, key) {
+    if (!obj) {
+        return false;
+    }
     return Object.prototype.hasOwnProperty.call(obj, key);
 };
 

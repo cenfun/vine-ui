@@ -91,11 +91,8 @@ const Tooltip = {
         this.update();
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         this.unbindEvents();
-        if (this.$el.parentNode) {
-            this.$el.parentNode.removeChild(this.$el);
-        }
         this.$emit('close');
     },
 
@@ -166,7 +163,7 @@ const Tooltip = {
             if (this.$target) {
                 this.dataVisible = false;
             } else {
-                this.$destroy();
+                this.destroy();
             }
         },
 

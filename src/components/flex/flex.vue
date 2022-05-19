@@ -86,12 +86,6 @@ const Flex = {
        
     },
 
-    beforeDestroy() {
-        if (this.$el.parentNode) {
-            this.$el.parentNode.removeChild(this.$el);
-        }
-    },
-
     methods: {
 
 

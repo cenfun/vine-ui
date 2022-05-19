@@ -1,25 +1,45 @@
 
 import { h, createApp } from 'vue';
-//import Util from './util.js';
+import { hasOwn } from './util.js';
 
-function createElement(vNode, option, container) {
+function createElement(rootComponent, rootProps, container) {
 
-    if (typeof (option) === 'function') {
-        option = option.call(this, h);
+    if (typeof rootProps === 'function') {
+        rootProps = rootProps.call(this, h);
     }
 
-    const vn = createApp(vNode, option).mount(container);
-    
-    return vn;
-}
+    let slots;
+    if (hasOwn(rootProps, 'slots')) {
+        slots = rootProps.slots;
+        delete rootProps.slots;
+    }
 
+    //console.log(rootProps);
+
+    const app = createApp({
+        setup() {
+            return () => h(rootComponent, rootProps, slots);
+        }
+    });
+    //console.log('app', app);
+    
+    if (container) {
+        app.mount(container);
+    } else {
+        const instance = app.mount(document.createDocumentFragment());
+        document.body.appendChild(instance.$el);
+    }
+
+    return app;
+}
 
 const registerComponent = (Component) => {
     if (!Component) {
+        console.log(`Failed to register component: ${Component}`);
         return;
     }
-    Component.create = function(option, container) {
-        return createElement(Component, option, container);
+    Component.create = function(rootProps, container) {
+        return createElement(Component, rootProps, container);
     };
 };
 

@@ -1,3 +1,5 @@
+import { h, createApp } from 'vue';
+
 import Util from './helper/util.js';
 import registerComponent from './helper/register-component.js';
 
@@ -18,6 +20,8 @@ import VuiTab from './components/tab/tab.vue';
 import VuiTooltip from './components/tooltip/tooltip.vue';
 
 export {
+    h,
+    createApp,
     Util,
     registerComponent,
 
@@ -39,6 +43,8 @@ export {
 };
 
 export default {
+    h,
+    createApp,
     Util,
     registerComponent,
 

@@ -66,32 +66,21 @@ const Modal = {
     },
 
     mounted() {
-        if (!this.$el.parentNode) {
-            document.body.appendChild(this.$el);
-        }
 
         //close event handler
-
         const bindEvents = (e) => {
             const $main = this.$el.querySelector('.vui-modal-main');
             if ($main === e.target || $main.contains(e.target)) {
                 return;
             }
             document.removeEventListener('click', bindEvents);
-            this.$destroy();
+            this.destroy();
         };
 
         setTimeout(() => {
             document.addEventListener('click', bindEvents);
         }, 100);
 
-    },
-
-    beforeDestroy() {
-        const p = this.$el.parentNode;
-        if (p) {
-            p.removeChild(this.$el);
-        }
     }
 
 };

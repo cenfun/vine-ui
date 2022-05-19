@@ -159,14 +159,11 @@ const Popover = {
         this.update();
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         clearTimeout(this.timeout_close);
         this.updateStop();
         this.unbindEvents();
         this.positionInfo = null;
-        if (this.$el.parentNode) {
-            this.$el.parentNode.removeChild(this.$el);
-        }
         this.$emit('close');
     },
 
@@ -348,7 +345,7 @@ const Popover = {
             if (this.$target) {
                 this.dataVisible = false;
             } else {
-                this.$destroy();
+                this.destroy();
             }
         },
 

@@ -220,10 +220,6 @@
             <VuiButton @click.native="flyoverVisible=false">
               Hide
             </VuiButton>
-
-            <VuiButton @click.native="$refs.flyover.$destroy()">
-              Destroy
-            </VuiButton>
           </VuiFlex>
         </div>
       </div>
@@ -779,9 +775,7 @@ const Demo = {
             tabActive: 1,
             tabPanes: ['Pane 1', 'Pane 2', function(h) {
                 return h(VuiButton, {
-                    props: {
-                        label: 'Label'
-                    }
+                    label: 'Label'
                 });
             }],
             flexDirection: 'column',
@@ -846,16 +840,14 @@ const Demo = {
         openModal() {
             VuiModal.create((h) => {
                 return {
-                    props: {
-                        title: 'Modal Title'
-                    },
-                    scopedSlots: {
-                        default: (props) => {
-                            return h(VuiCheckbox, {
-                                props: {
-                                    label: 'Modal Checkbox'
-                                }
-                            });
+                    title: 'Modal Title',
+                    slots: {
+                        default: () => {
+                            return [h(VuiCheckbox, {
+                                label: 'Modal Checkbox'
+                            }), h(VuiButton, {
+                                label: 'Modal Button'
+                            })];
                         }
                     }
                 };
@@ -865,24 +857,16 @@ const Demo = {
         openPopover: function(e) {
             VuiPopover.create((h) => {
                 return {
-                    props: {
-                        target: e.target,
-                        title: 'Popover Title'
-                    },
-                    scopedSlots: {
+                    target: e.target,
+                    title: 'Popover Title',
+                    slots: {
                         default: (props) => {
                             return [h(VuiCheckbox, {
-                                props: {
-                                    label: 'Popover Checkbox 1'
-                                }
+                                label: 'Popover Checkbox 1'
                             }), h(VuiCheckbox, {
-                                props: {
-                                    label: 'Popover Checkbox 2'
-                                }
+                                label: 'Popover Checkbox 2'
                             }), h(VuiCheckbox, {
-                                props: {
-                                    label: 'Popover Checkbox 3'
-                                }
+                                label: 'Popover Checkbox 3'
                             })];
                         }
                     }
@@ -914,10 +898,8 @@ const Demo = {
             }
             elem.$tooltip = VuiTooltip.create((h) => {
                 return {
-                    props: {
-                        target: elem,
-                        text: elem.getAttribute('tooltip')
-                    }
+                    target: elem,
+                    text: elem.getAttribute('tooltip')
                 };
             });
         },
@@ -929,7 +911,7 @@ const Demo = {
             if (elem.$tooltip.disabled) {
                 return;
             }
-            elem.$tooltip.$destroy();
+            elem.$tooltip.unmount();
             elem.$tooltip = null;
         },
 
@@ -942,7 +924,7 @@ const Demo = {
     }
 };
 
-//registerComponent(Demo);
+registerComponent(Demo);
 
 export default Demo;
 </script>
