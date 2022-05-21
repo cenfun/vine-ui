@@ -12,13 +12,7 @@ module.exports = {
     },
  
     build: {
-        overrides: {
-            vue: {
-                dependencies: {},
-                main: 'dist/vue.runtime.global.js'
-            }
-          
-        }
+
     }
 
 };
