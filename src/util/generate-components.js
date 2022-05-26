@@ -1,3 +1,5 @@
+import createComponent from './create-component.js';
+
 export default function(context) {
     
     const components = {};
@@ -31,6 +33,8 @@ export default function(context) {
         //esModule default
         const Component = context(path).default;
         //console.log(context(path));
+
+        Component.createComponent = createComponent;
 
         // no private component
         if (Component.private) {

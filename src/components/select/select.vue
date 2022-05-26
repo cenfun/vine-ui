@@ -59,8 +59,6 @@ import { Util } from '../..';
 import Base from '../../base/base.vue';
 import selectOnFocus from '../../util/select-on-focus.js';
 
-import registerComponent from '../../util/register-component.js';
-
 import IconX from '../../base/images/icon-x.vue';
 
 const Select = {
@@ -394,8 +392,6 @@ const Select = {
     }
 
 };
-
-registerComponent(Select);
 
 export default Select;
 </script>

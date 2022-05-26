@@ -13,7 +13,7 @@
 </template>
 <script>
 import Base from '../../base/base.vue';
-import registerComponent from '../../util/register-component.js';
+
 const Button = {
     
     name: 'Button',
@@ -42,8 +42,6 @@ const Button = {
     }
 
 };
-
-registerComponent(Button);
 
 export default Button;
 </script>

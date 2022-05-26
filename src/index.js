@@ -1,6 +1,6 @@
 import Util from './util/util.js';
-import registerComponent from './util/register-component.js';
 import VuiBase from './base/base.vue';
+import createComponent from './util/create-component.js';
 
 import generateComponents from './util/generate-components.js';
 
@@ -11,8 +11,8 @@ const components = generateComponents(context);
 export {
     components,
     Util,
-    registerComponent,
-    VuiBase
+    VuiBase,
+    createComponent
 };
 
 export default components;

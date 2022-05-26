@@ -23,7 +23,6 @@
 
 <script>
 import Popup from '../../base/base-popup.vue';
-import registerComponent from '../../util/register-component.js';
 
 const Tooltip = {
 
@@ -221,8 +220,6 @@ const Tooltip = {
         }
     }
 };
-
-registerComponent(Tooltip);
 
 export default Tooltip;
 </script>

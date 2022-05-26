@@ -39,7 +39,6 @@
 
 <script>
 import Popup from '../../base/base-popup.vue';
-import registerComponent from '../../util/register-component.js';
 
 const Popover = {
 
@@ -456,8 +455,6 @@ const Popover = {
         }
     }
 };
-
-registerComponent(Popover);
 
 export default Popover;
 </script>

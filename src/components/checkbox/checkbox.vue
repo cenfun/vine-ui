@@ -18,7 +18,6 @@
 </template>
 <script>
 import Base from '../../base/base.vue';
-import registerComponent from '../../util/register-component.js';
 import Util from '../../util/util.js';
 const Checkbox = {
 
@@ -39,7 +38,7 @@ const Checkbox = {
         }
     }
 };
-registerComponent(Checkbox);
+
 export default Checkbox;
 </script>
 <style lang="scss">

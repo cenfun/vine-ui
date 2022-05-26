@@ -16,7 +16,6 @@
 </template>
 <script>
 import Base from '../../base/base.vue';
-import registerComponent from '../../util/register-component.js';
 
 const Loading = {
     name: 'Loading',
@@ -71,8 +70,6 @@ const Loading = {
         }
     }
 };
-
-registerComponent(Loading);
 
 export default Loading;
 </script>

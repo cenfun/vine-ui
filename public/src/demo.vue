@@ -733,13 +733,10 @@
 </template>
 <script>
 /* eslint-disable chain/dependencies */
-import {
-    registerComponent,
-    components
-} from 'vine-ui';
+import { components, createComponent } from 'vine-ui';
 /* eslint-enable */
 
-console.log(components);
+console.log('components', components);
 
 const {
     VuiButton,
@@ -757,6 +754,9 @@ const {
 } = components;
 
 const Demo = {
+
+    createComponent,
+    
     components: {
         VuiButton,
         VuiCheckbox,
@@ -853,37 +853,35 @@ const Demo = {
         },
 
         openModal() {
-            VuiModal.create((h) => {
+            VuiModal.createComponent({
+                title: 'Modal Title'
+            }, (h) => {
                 return {
-                    title: 'Modal Title',
-                    slots: {
-                        default: () => {
-                            return [h(VuiCheckbox, {
-                                label: 'Modal Checkbox'
-                            }), h(VuiButton, {
-                                label: 'Modal Button'
-                            })];
-                        }
+                    default: () => {
+                        return [h(VuiCheckbox, {
+                            label: 'Modal Checkbox'
+                        }), h(VuiButton, {
+                            label: 'Modal Button'
+                        })];
                     }
                 };
             });
         },
 
         openPopover: function(e) {
-            VuiPopover.create((h) => {
+            VuiPopover.createComponent({
+                target: e.target,
+                title: 'Popover Title'
+            }, (h) => {
                 return {
-                    target: e.target,
-                    title: 'Popover Title',
-                    slots: {
-                        default: (props) => {
-                            return [h(VuiCheckbox, {
-                                label: 'Popover Checkbox 1'
-                            }), h(VuiCheckbox, {
-                                label: 'Popover Checkbox 2'
-                            }), h(VuiCheckbox, {
-                                label: 'Popover Checkbox 3'
-                            })];
-                        }
+                    default: (props) => {
+                        return [h(VuiCheckbox, {
+                            label: 'Popover Checkbox 1'
+                        }), h(VuiCheckbox, {
+                            label: 'Popover Checkbox 2'
+                        }), h(VuiCheckbox, {
+                            label: 'Popover Checkbox 3'
+                        })];
                     }
                 };
             });
@@ -911,11 +909,9 @@ const Demo = {
             if (elem.$tooltip) {
                 return;
             }
-            elem.$tooltip = VuiTooltip.create((h) => {
-                return {
-                    target: elem,
-                    text: elem.getAttribute('tooltip')
-                };
+            elem.$tooltip = VuiTooltip.createComponent({
+                target: elem,
+                text: elem.getAttribute('tooltip')
             });
         },
 
@@ -938,8 +934,6 @@ const Demo = {
         }
     }
 };
-
-registerComponent(Demo);
 
 export default Demo;
 </script>

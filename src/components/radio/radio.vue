@@ -20,7 +20,6 @@
 </template>
 <script>
 import Base from '../../base/base.vue';
-import registerComponent from '../../util/register-component.js';
 import Util from '../../util/util.js';
 const Radio = {
 
@@ -56,8 +55,6 @@ const Radio = {
         }
     }
 };
-
-registerComponent(Radio);
 
 export default Radio;
 </script>

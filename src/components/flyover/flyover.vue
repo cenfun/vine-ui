@@ -14,7 +14,6 @@
 
 <script>
 import Base from '../../base/base.vue';
-import registerComponent from '../../util/register-component.js';
 
 const Flyover = {
 
@@ -156,8 +155,6 @@ const Flyover = {
 
     }
 };
-
-registerComponent(Flyover);
 
 export default Flyover;
 

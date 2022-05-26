@@ -56,7 +56,6 @@
 </template>
 <script>
 import Base from '../../base/base.vue';
-import registerComponent from '../../util/register-component.js';
 //import Util from '../../util/util.js';
 import TabItem from './tab-item.vue';
 import TabPane from './tab-pane.vue';
@@ -110,8 +109,6 @@ const Tab = {
         }
     }
 };
-
-registerComponent(Tab);
 
 export default Tab;
 </script>

@@ -1,5 +1,6 @@
 <script>
 import BaseRender from './base-render.vue';
+
 export default {
 
     components: {

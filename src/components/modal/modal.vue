@@ -24,7 +24,6 @@
 
 <script>
 import Base from '../../base/base.vue';
-import registerComponent from '../../util/register-component.js';
 
 import IconX from '../../base/images/icon-x.vue';
 
@@ -90,8 +89,6 @@ const Modal = {
     }
 
 };
-
-registerComponent(Modal);
 
 export default Modal;
 </script>

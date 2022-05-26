@@ -14,7 +14,6 @@
 
 <script>
 import Base from '../../base/base.vue';
-import registerComponent from '../../util/register-component.js';
 
 const Flex = {
 
@@ -91,8 +90,6 @@ const Flex = {
 
     }
 };
-
-registerComponent(Flex);
 
 export default Flex;
 

@@ -1,2 +1,2 @@
 import Demo from './demo.vue';
-Demo.create();
+Demo.createComponent();
