@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import Popup from '../popup/popup.vue';
-import registerComponent from '../../helper/register-component.js';
+import Popup from '../../base/base-popup.vue';
+import registerComponent from '../../util/register-component.js';
 
 const Tooltip = {
 

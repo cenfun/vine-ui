@@ -14,7 +14,7 @@
 
 <script>
 import Base from '../../base/base.vue';
-import registerComponent from '../../helper/register-component.js';
+import registerComponent from '../../util/register-component.js';
 
 const Flex = {
 

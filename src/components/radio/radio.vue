@@ -20,8 +20,8 @@
 </template>
 <script>
 import Base from '../../base/base.vue';
-import registerComponent from '../../helper/register-component.js';
-import Util from '../../helper/util.js';
+import registerComponent from '../../util/register-component.js';
+import Util from '../../util/util.js';
 const Radio = {
 
     name: 'Radio',

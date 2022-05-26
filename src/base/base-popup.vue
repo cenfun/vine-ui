@@ -1,8 +1,8 @@
 <script>
-import Base from '../../base/base.vue';
+import Base from './base.vue';
 import {
     getDefaultPositions, getBestPosition, getRect, getElement, toRect
-} from './popup-helper.js';
+} from '../util/popup-helper.js';
 
 export default {
     extends: Base,
@@ -65,7 +65,7 @@ export default {
         position: absolute;
         width: 9px;
         height: 9px;
-        background-image: url("./popup-arrow.svg");
+        background-image: url("./images/popup-arrow.svg");
         background-size: 54px 54px;
         background-repeat: no-repeat;
         z-index: 1;

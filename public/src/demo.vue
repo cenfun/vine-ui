@@ -726,8 +726,15 @@
 </template>
 <script>
 /* eslint-disable chain/dependencies */
-import VUI, {
+import {
     registerComponent,
+    components
+} from 'vine-ui';
+/* eslint-enable */
+
+console.log(components);
+
+const {
     VuiButton,
     VuiCheckbox,
     VuiDropdown,
@@ -741,10 +748,7 @@ import VUI, {
     VuiSelect,
     VuiTab,
     VuiTooltip
-} from 'vine-ui';
-/* eslint-enable */
-
-console.log(VUI);
+} = components;
 
 const Demo = {
     components: {
@@ -755,10 +759,12 @@ const Demo = {
         VuiFlyover,
         VuiInput,
         VuiLoading,
+        VuiModal,
+        VuiPopover,
         VuiRadio,
         VuiSelect,
         VuiTab,
-        VuiPopover
+        VuiTooltip
     },
     
     data() {
@@ -992,7 +998,7 @@ body {
 .vui-popup-arrow-example {
     height: 54px;
     background-repeat: no-repeat;
-    background-image: url("../../src/components/popup/popup-arrow.svg");
+    background-image: url("../../src/base/images/popup-arrow.svg");
     background-size: 54px 54px;
 }
 

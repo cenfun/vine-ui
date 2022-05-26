@@ -55,9 +55,9 @@
 <script>
 import { Util } from '../..';
 import Base from '../../base/base.vue';
-import selectOnFocus from '../../helper/select-on-focus.js';
+import selectOnFocus from '../../util/select-on-focus.js';
 
-import registerComponent from '../../helper/register-component.js';
+import registerComponent from '../../util/register-component.js';
 
 const Dropdown = {
 

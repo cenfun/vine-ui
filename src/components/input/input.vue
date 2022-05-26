@@ -22,8 +22,8 @@
 </template>
 <script>
 import Base from '../../base/base.vue';
-import registerComponent from '../../helper/register-component.js';
-import selectOnFocus from '../../helper/select-on-focus.js';
+import registerComponent from '../../util/register-component.js';
+import selectOnFocus from '../../util/select-on-focus.js';
 const Input = {
 
     name: 'Input',
