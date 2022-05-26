@@ -12,7 +12,9 @@ module.exports = {
     },
  
     build: {
-        cssExtract: false
+        cssExtract: false,
+
+        afterAll: require('./scripts/after-all-build.js')
     }
 
 };

@@ -1,28 +1,20 @@
+![](scripts/vine.jpg)
+
 # Vine UI
-> Lightweight UI base on vue 3.x.
-* Minified: 69.2 KB
-* Gzip: 15.7 KB
+- Lightweight UI components based on [Vue 3](https://github.com/vuejs/core)
+- Dist size (js minified: false): 433.4KB / gzip: 17.3KB
 
 ## Preview Online
 [https://cenfun.github.io/vine-ui/](https://cenfun.github.io/vine-ui/)
+
 ## Components
-* Button
-* Checkbox
-* Dropdown
-* Flex
-* Flyover
-* Input
-* Loading
-* Modal
-* Popover
-* Radio
-* Select
-* Tab
-* Tooltip
+- VuiButton  - VuiCheckbox  - VuiDropdown  - VuiFlex  - VuiFlyover  - VuiInput  - VuiLoading  - VuiModal  - VuiPopover  - VuiPopup  - VuiRadio  - VuiSelect  - VuiTab  - VuiTooltip  
+
 ## Install
 ```sh
 npm i vine-ui
 ```
+
 ## Usage
 ```
 import {
