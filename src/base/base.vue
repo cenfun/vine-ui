@@ -76,7 +76,7 @@ export default {
         },
 
         destroy() {
-            //this.log('destroy');
+            //this.log('destroy app NOT component');
             this.$.appContext.app.unmount();
         },
 

@@ -791,9 +791,9 @@ const Demo = {
             flexWidth: '300px',
             flexHeight: '200px',
             loadingColor: '',
-            loadingSize: '',
+            loadingSize: 'l',
             loadingFast: false,
-            loadingCenter: false,
+            loadingCenter: true,
             loadingVisible: true,
             selectValue: 'STG',
             selectOptions: [{
@@ -874,7 +874,7 @@ const Demo = {
                 title: 'Popover Title'
             }, (h) => {
                 return {
-                    default: (props) => {
+                    default: () => {
                         return [h(VuiCheckbox, {
                             label: 'Popover Checkbox 1'
                         }), h(VuiCheckbox, {

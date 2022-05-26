@@ -1,5 +1,5 @@
 
-import { h, createApp } from 'vue';
+import { createApp, h } from 'vue';
 
 const createComponent = function(props, slots, container) {
     const Component = this;
@@ -8,20 +8,32 @@ const createComponent = function(props, slots, container) {
         slots = slots.call(this, h);
     }
 
+    // full signature
+    // function h(
+    //  type: string | Component,
+    //  props?: object | null,
+    //  children?: Children | Slot | Slots
+    // ): VNode
+  
     const app = createApp({
         setup() {
             return () => h(Component, props, slots);
         }
     });
-    
-    //console.log('app', app);
+
+    // instance proxy
+    let instance;
     
     if (container) {
-        app.mount(container);
+        instance = app.mount(container);
     } else {
-        const instance = app.mount(document.createDocumentFragment());
+        instance = app.mount(document.createDocumentFragment());
         document.body.appendChild(instance.$el);
     }
+
+    // console.log(instance);
+
+    //console.log('app', app);
 
     return app;
 
