@@ -1,14 +1,14 @@
 <template>
-  <div :class="['vui','vui-radio', classId]">
+  <div :class="['vui','vui-radio', cid]">
     <input
-      :id="classId"
+      :id="cid"
       :checked="dataModelValue === value"
       :disabled="disabled"
       :name="name"
       type="radio"
       @change="onChange"
     >
-    <label :for="classId">
+    <label :for="cid">
       <slot>
         <BaseRender
           v-if="label"

@@ -1,5 +1,5 @@
 <template>
-  <div :class="['vui','vui-input', classId]">
+  <div :class="['vui','vui-input', cid]">
     <label v-if="labelContent">
       <slot>
         <BaseRender

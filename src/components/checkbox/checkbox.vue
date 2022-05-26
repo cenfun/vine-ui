@@ -1,12 +1,12 @@
 <template>
-  <div :class="['vui','vui-checkbox', classId]">
+  <div :class="['vui','vui-checkbox', cid]">
     <input
-      :id="classId"
+      :id="cid"
       v-model="dataModelValue"
       :disabled="disabled"
       type="checkbox"
     >
-    <label :for="classId">
+    <label :for="cid">
       <slot>
         <BaseRender
           v-if="label"

@@ -36,7 +36,7 @@ const Button = {
             if (this.primary) {
                 ls.push('vui-button-primary');
             }
-            ls.push(this.classId);
+            ls.push(this.cid);
             return ls;
         }
     }

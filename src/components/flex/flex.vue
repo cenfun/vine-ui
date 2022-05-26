@@ -61,7 +61,7 @@ const Flex = {
                 ls.push('vui-flex-spacing');
                 ls.push(`vui-flex-spacing-${this.spacing}`);
             }
-            ls.push(this.classId);
+            ls.push(this.cid);
             return ls;
         },
 

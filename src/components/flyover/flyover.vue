@@ -57,7 +57,7 @@ const Flyover = {
                 'vui',
                 'vui-flyover',
                 `vui-flyover-${this.position}`,
-                this.classId
+                this.cid
             ];
         },
         styleList() {

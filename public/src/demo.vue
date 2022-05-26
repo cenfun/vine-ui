@@ -526,7 +526,7 @@
         <div class="vui-item-name">
           VuiSelect
         </div>
-        <div class="vui-item-example vui-flex-auto vui-flex-row">
+        <div class="vui-item-example vui-flex-auto">
           <VuiFlex spacing="15">
             <VuiSelect
               v-model="selectValue"
@@ -534,11 +534,13 @@
               :options="selectOptions"
             />
 
-            <VuiSelect v-model="selectValue">
+            <VuiSelect label="selected:">
               <option>option 1</option>
               <option>option 2</option>
               <option>option 3</option>
-              <option>One</option>
+              <option selected>
+                One
+              </option>
               <option>Two</option>
             </VuiSelect>
 
@@ -552,46 +554,42 @@
               <option>option 3</option>
             </VuiSelect>
           </VuiFlex>
-        </div>
-      </div>
 
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiDropdown
-        </div>
-        <div class="vui-item-example vui-flex-auto">
-          <VuiFlex spacing="10">
-            <VuiDropdown
-              v-model="dropdownValue"
+          <VuiFlex
+            spacing="10"
+            style="margin-top: 10px;"
+          >
+            <VuiSelect
+              v-model="selectValue"
               label="Select:"
-              :options="dropdownList"
+              :options="selectList"
             />
-            <VuiDropdown
-              v-model="dropdownValue"
+            <VuiSelect
+              v-model="selectValue"
               label="200 width:"
               width="200"
-              :options="dropdownList"
+              :options="selectList"
             />
-            <VuiDropdown
-              v-model="dropdownValue"
+            <VuiSelect
+              v-model="selectValue"
               label="Disabled:"
-              :options="dropdownList"
+              :options="selectList"
               disabled
             />
             <div class="vui-flex-empty" />
-            <VuiDropdown
-              v-model="dropdownValue"
+            <VuiSelect
+              v-model="selectValue"
               label="Input:"
-              :options="dropdownResults"
+              :options="selectResults"
               :input="true"
-              @input="onDropDownInput"
-              @delete="onDropDownDelete"
+              @input="onSelectInput"
+              @delete="onSelectDelete"
             />
-            <VuiDropdown
-              v-model="dropdownValue"
+            <VuiSelect
+              v-model="selectValue"
               label="100 width:"
               width="100"
-              :options="dropdownResults"
+              :options="selectResults"
               :input="true"
             />
           </VuiFlex>
@@ -600,8 +598,8 @@
             spacing="10"
             style="margin-top: 10px;"
           >
-            <VuiDropdown
-              v-model="dropdownValue"
+            <VuiSelect
+              v-model="selectValue"
               label="Slot Options:"
             >
               <option />
@@ -609,10 +607,10 @@
               <option>10</option>
               <option>15</option>
               <option>20</option>
-            </VuiDropdown>
+            </VuiSelect>
 
-            <VuiDropdown
-              v-model="dropdownValue"
+            <VuiSelect
+              v-model="selectValue"
               label="Slot Options:"
             >
               <option />
@@ -620,7 +618,7 @@
               <option>10ddddd ddddddddddd</option>
               <option>15ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</option>
               <option>20ddddddd ddddddddddd</option>
-            </VuiDropdown>
+            </VuiSelect>
           </VuiFlex>
         </div>
       </div>
@@ -746,7 +744,6 @@ console.log(components);
 const {
     VuiButton,
     VuiCheckbox,
-    VuiDropdown,
     VuiFlex,
     VuiFlyover,
     VuiInput,
@@ -763,7 +760,6 @@ const Demo = {
     components: {
         VuiButton,
         VuiCheckbox,
-        VuiDropdown,
         VuiFlex,
         VuiFlyover,
         VuiInput,
@@ -781,14 +777,6 @@ const Demo = {
             inputText: '',
             checkboxChecked: true,
             radioValue: '',
-            selectValue: 'Two',
-            selectOptions: [{
-                label: 'One'
-            }, {
-                label: 'Two'
-            }, {
-                label: 'Three'
-            }],
             flyoverVisible: false,
             flyoverPosition: 'right',
             flyoverWidth: '30%',
@@ -807,15 +795,22 @@ const Demo = {
             loadingFast: false,
             loadingCenter: false,
             loadingVisible: true,
-            dropdownValue: 'STG',
-            dropdownList: [
+            selectValue: 'STG',
+            selectOptions: [{
+                label: 'One'
+            }, {
+                label: 'Two'
+            }, {
+                label: 'Three'
+            }],
+            selectList: [
                 '',
                 'DEV',
                 'QA',
                 'STG',
                 'LOCAL'
             ],
-            dropdownResults: [
+            selectResults: [
                 '',
                 'Short',
                 'Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long',
@@ -831,30 +826,30 @@ const Demo = {
 
     methods: {
 
-        onDropDownInput(v) {
-            if (!v) {
+        onSelectInput(e) {
+            if (!e) {
                 return;
             }
             const len = Math.ceil(30 * Math.random());
             const results = [];
             let i = 0;
             while (i < len) {
-                const ls = [v];
+                const ls = [e.data];
                 ls.length = Math.ceil(12 * Math.random());
                 const str = ls.join(' Text');
                 results.push({
                     label: `${i + 1}, ${str}`,
-                    delete: true
+                    deletable: true
                 });
                 i++;
             }
-            this.dropdownResults = results;
+            this.selectResults = results;
 
             //console.log(v);
         },
 
-        onDropDownDelete(item) {
-            console.log('onDropDownDelete', item);
+        onSelectDelete(item) {
+            console.log('onSelectDelete', item);
         },
 
         openModal() {

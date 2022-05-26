@@ -1,5 +1,5 @@
 <template>
-  <div :class="['vui','vui-modal', classId]">
+  <div :class="['vui','vui-modal', cid]">
     <div
       class="vui-modal-main vui-flex-column"
       :style="styleMain"
@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="vui-modal-close">
-      X
+      <IconX />
     </div>
   </div>
 </template>
@@ -26,11 +26,17 @@
 import Base from '../../base/base.vue';
 import registerComponent from '../../util/register-component.js';
 
+import IconX from '../../base/icon-x.vue';
+
 const Modal = {
 
     name: 'Modal',
 
     extends: Base,
+
+    components: {
+        IconX
+    },
 
     props: {
         content: {
@@ -114,6 +120,18 @@ export default Modal;
     margin-top: -15px;
     margin-right: -15px;
     line-height: 40px;
+
+    svg {
+        display: block;
+        width: 24px;
+        height: 24px;
+        margin: 8px 0 0 8px;
+        opacity: 0.6;
+    }
+
+    &:hover svg {
+        opacity: 1;
+    }
 }
 
 .vui-modal-main {

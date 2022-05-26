@@ -1,5 +1,5 @@
 <template>
-  <div :class="['vui','vui-tab', classId]">
+  <div :class="['vui','vui-tab', cid]">
     <div class="vui-tab-header vui-flex-row">
       <div
         v-if="position==='right'"

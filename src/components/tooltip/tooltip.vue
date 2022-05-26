@@ -47,7 +47,7 @@ const Tooltip = {
 
     data() {
         return {
-            classId: '',
+            cid: '',
             //calculation info
             position: 'top',
             align: 'center',
@@ -63,7 +63,7 @@ const Tooltip = {
                 'vui-popup',
                 `vui-popup-${this.position}-${this.align}`,
                 'vui-tooltip',
-                this.classId
+                this.cid
             ];
         },
 
@@ -190,7 +190,7 @@ const Tooltip = {
             targetRect.width += arrowSize * 2;
             targetRect.height += arrowSize * 2;
 
-            const rect = this.getRect(`.${this.classId}`);
+            const rect = this.getRect(`.${this.cid}`);
 
             //console.log(containerRect, targetRect, rect);
             

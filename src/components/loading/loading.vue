@@ -66,7 +66,7 @@ const Loading = {
             if (this.visible) {
                 ls.push('vui-loading-show');
             }
-            ls.push(this.classId);
+            ls.push(this.cid);
             return ls;
         }
     }

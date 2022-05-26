@@ -113,7 +113,7 @@ const Popover = {
                 'vui-popup',
                 `vui-popup-${this.info.position}-${this.info.align}`,
                 'vui-popover',
-                this.classId
+                this.cid
             ];
         },
 
@@ -374,7 +374,7 @@ const Popover = {
 
             this.updateContentHeight();
 
-            const rect = this.getRect(`.${this.classId}`);
+            const rect = this.getRect(`.${this.cid}`);
 
             //console.log(containerRect, targetRect, rect);
             

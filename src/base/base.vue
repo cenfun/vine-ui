@@ -35,7 +35,6 @@ export default {
 
     data() {
         return {
-            classId: '',
             dataVisible: this.visible,
             //bridge from parent and child v-model: moduleValue
             dataModelValue: this.modelValue
@@ -62,14 +61,16 @@ export default {
     },
 
     created() {
-        this.classId = this.getClassId();
+        this.uid = this._.uid;
+        this.cid = this.getComponentId();
+        //console.log(this.cid);
     },
 
     methods: {
 
         log() {
             const args = Array.from(arguments);
-            args.unshift(this.classId);
+            args.unshift(this.cid);
             console.log.apply(console, args);
         },
 
@@ -78,7 +79,7 @@ export default {
             this.$.appContext.app.unmount();
         },
 
-        getClassId() {
+        getComponentId() {
             const ls = ['vui'];
             const cn = this.$options.name;
             if (cn) {
@@ -86,7 +87,7 @@ export default {
             } else {
                 console.error('Invalid component name', this);
             }
-            ls.push(this._.uid);
+            ls.push(this.uid);
             return ls.join('-');
         },
 
