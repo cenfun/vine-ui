@@ -61,7 +61,7 @@ import selectOnFocus from '../../util/select-on-focus.js';
 
 import registerComponent from '../../util/register-component.js';
 
-import IconX from '../../base/icon-x.vue';
+import IconX from '../../base/images/icon-x.vue';
 
 const Select = {
 

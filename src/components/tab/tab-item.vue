@@ -110,12 +110,12 @@ export default TabItem;
 }
 
 .vui-tab-item:hover::before {
-    background-image: url("./hover-before.svg");
+    background-image: url("./images/hover-before.svg");
 }
 
 .vui-tab-item:hover::after {
     left: 100%;
-    background-image: url("./hover-after.svg");
+    background-image: url("./images/hover-after.svg");
 }
 
 .vui-tab-item.selected {
@@ -139,12 +139,12 @@ export default TabItem;
 }
 
 .vui-tab-item.selected::before {
-    background-image: url("./selected-before.svg");
+    background-image: url("./images/selected-before.svg");
 }
 
 .vui-tab-item.selected::after {
     left: 100%;
-    background-image: url("./selected-after.svg");
+    background-image: url("./images/selected-after.svg");
 }
 
 .vui-tab-item > * {

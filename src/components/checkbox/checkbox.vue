@@ -110,7 +110,7 @@ export default Checkbox;
                 }
 
                 &::after {
-                    background-image: url("./checkbox.svg");
+                    background-image: url("./images/checkbox.svg");
                 }
             }
         }
