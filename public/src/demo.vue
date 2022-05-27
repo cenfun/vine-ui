@@ -581,16 +581,17 @@
               v-model="selectValue"
               label="Input:"
               :options="selectResults"
-              :input="true"
-              @input="onSelectInput"
-              @delete="onSelectDelete"
+              :searchable="true"
+              @search="onSelectSearch"
+              @remove="onSelectRemove"
             />
             <VuiSelect
               v-model="selectValue"
               label="100 width:"
               width="100"
               :options="selectResults"
-              :input="true"
+              :searchable="true"
+              @remove="onSelectRemove"
             />
           </VuiFlex>
 
@@ -826,20 +827,21 @@ const Demo = {
 
     methods: {
 
-        onSelectInput(e) {
-            if (!e) {
-                return;
-            }
+        onSelectSearch(e) {
+
+            //console.log(e);
+            const value = e.target.value;
+
             const len = Math.ceil(30 * Math.random());
             const results = [];
             let i = 0;
             while (i < len) {
-                const ls = [e.data];
+                const ls = [value];
                 ls.length = Math.ceil(12 * Math.random());
                 const str = ls.join(' Text');
                 results.push({
                     label: `${i + 1}, ${str}`,
-                    deletable: true
+                    removable: true
                 });
                 i++;
             }
@@ -848,8 +850,8 @@ const Demo = {
             //console.log(v);
         },
 
-        onSelectDelete(item) {
-            console.log('onSelectDelete', item);
+        onSelectRemove(item, e) {
+            console.log('onSelectRemove', item, e);
         },
 
         openModal() {
@@ -889,7 +891,7 @@ const Demo = {
 
         initTooltip() {
             setTimeout(() => {
-                const tooltips = Array.prototype.slice.call(document.querySelectorAll('[tooltip]'));
+                const tooltips = Array.from(document.querySelectorAll('[tooltip]'));
                 tooltips.forEach((item) => {
                     item.addEventListener('click', () => {
                         this.pinTooltip(item);

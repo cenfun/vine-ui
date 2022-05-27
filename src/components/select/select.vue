@@ -14,9 +14,9 @@
       :class="viewClass"
       :style="viewStyle"
       :disabled="disabled"
-      :readonly="!input"
+      :readonly="!searchable"
       @click.stop="onClick"
-      @input="onInput"
+      @input.stop="onInput"
       @focus="onFocus"
       @blur="onBlur"
     >
@@ -44,9 +44,9 @@
           {{ item.label }}
         </div>
         <div
-          v-if="item.deletable"
-          class="vui-select-item-delete"
-          @mousedown="onItemDelete(item)"
+          v-if="item.removable"
+          class="vui-select-item-remove"
+          @mousedown.stop="onItemRemove(item)"
         >
           <IconX />
         </div>
@@ -81,17 +81,12 @@ const Select = {
             default: null
         },
 
-        multiple: {
-            type: Boolean,
-            default: false
-        },
-
         width: {
             type: String,
             default: ''
         },
 
-        input: {
+        searchable: {
             type: Boolean,
             default: false
         }
@@ -142,8 +137,6 @@ const Select = {
                 const item = this.list.find((it) => it.value === this.dataModelValue);
                 if (item) {
                     this.viewValue = this.dataModelValue;
-                } else {
-                    this.viewValue = '';
                 }
             },
             immediate: true
@@ -162,8 +155,8 @@ const Select = {
 
         viewClass() {
             const ls = ['vui-select-view'];
-            if (this.input) {
-                ls.push('vui-select-input');
+            if (this.searchable) {
+                ls.push('vui-select-search');
             }
             return ls;
         },
@@ -205,7 +198,7 @@ const Select = {
     },
 
     updated() {
-        if (this.input) {
+        if (this.searchable) {
             this.layout();
         }
         if (this.firstUpdateWidth) {
@@ -336,22 +329,26 @@ const Select = {
         },
 
         onItemClick(item) {
-            //console.log('onItemClick', item);
+            //this.log('onItemClick', item);
             this.dataModelValue = item.value;
             this.close();
         },
 
-        onItemDelete(item) {
-            this.$emit('delete', item);
+        onItemRemove(item) {
+            //this.log('remove', item);
+            this.$emit('remove', item);
         },
 
         onClick(e) {
-            //console.log('onClick');
+            //this.log('onClick');
             this.open();
         },
 
         onInput(e) {
-            this.$emit('input', e.target.value);
+            //this.log(e);
+            // e.preventDefault();
+            // e.stopImmediatePropagation();
+            this.$emit('search', e);
         },
 
         onFocus(e) {
@@ -456,7 +453,7 @@ export default Select;
     }
 }
 
-.vui-select-input {
+.vui-select-search {
     cursor: text;
 }
 
@@ -478,6 +475,26 @@ export default Select;
     visibility: hidden;
 }
 
+.vui-select-item-label {
+    min-height: 1rem;
+    flex: 1;
+    overflow: hidden;
+}
+
+.vui-select-item-remove {
+    position: relative;
+    cursor: pointer;
+    width: 25px;
+    height: 20px;
+    visibility: hidden;
+    color: #000;
+    opacity: 0.6;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
 .vui-select-item {
     padding: 8px 5px;
     position: relative;
@@ -495,10 +512,18 @@ export default Select;
     &.selected {
         background: #666;
         color: #fff;
+
+        .vui-select-item-remove {
+            color: #fff;
+        }
     }
 
     &:hover {
         background: #e8e8e8;
+
+        .vui-select-item-remove {
+            visibility: visible;
+        }
     }
 
     &.selected:hover {
@@ -506,38 +531,4 @@ export default Select;
     }
 }
 
-.vui-select-item-label {
-    min-height: 1rem;
-    flex: 1;
-}
-
-.vui-select-item-delete {
-    position: relative;
-    cursor: pointer;
-    width: 20px;
-    height: 100%;
-    visibility: hidden;
-
-    svg {
-        width: 24px;
-        height: 24px;
-        display: block;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    &:hover {
-        color: #000;
-    }
-}
-
-.vui-select-item:hover .vui-select-item-delete {
-    visibility: visible;
-}
-
-.vui-select-item.selected .vui-select-item-delete:hover {
-    color: #fff;
-}
 </style>
