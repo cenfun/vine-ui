@@ -27,8 +27,11 @@ const createComponent = function(props, slots, container) {
     if (container) {
         instance = app.mount(container);
     } else {
-        instance = app.mount(document.createDocumentFragment());
+        const temp = document.createElement('div');
+        document.body.appendChild(temp);
+        instance = app.mount(temp);
         document.body.appendChild(instance.$el);
+        temp.remove();
     }
 
     // console.log(instance);

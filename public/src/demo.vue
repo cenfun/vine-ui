@@ -553,6 +553,12 @@
               <option>option 2</option>
               <option>option 3</option>
             </VuiSelect>
+
+            <VuiSelect label="empty list:" />
+
+            <VuiSelect label="empty value:">
+              <div />
+            </VuiSelect>
           </VuiFlex>
 
           <VuiFlex
@@ -579,28 +585,6 @@
             <div class="vui-flex-empty" />
             <VuiSelect
               v-model="selectValue"
-              label="Input:"
-              :options="selectResults"
-              :searchable="true"
-              @search="onSelectSearch"
-              @remove="onSelectRemove"
-            />
-            <VuiSelect
-              v-model="selectValue"
-              label="100 width:"
-              width="100"
-              :options="selectResults"
-              :searchable="true"
-              @remove="onSelectRemove"
-            />
-          </VuiFlex>
-
-          <VuiFlex
-            spacing="10"
-            style="margin-top: 10px;"
-          >
-            <VuiSelect
-              v-model="selectValue"
               label="Slot Options:"
             >
               <option />
@@ -620,6 +604,28 @@
               <option>15ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</option>
               <option>20ddddddd ddddddddddd</option>
             </VuiSelect>
+          </VuiFlex>
+
+          <VuiFlex
+            spacing="10"
+            style="margin-top: 10px;"
+          >
+            <VuiSelect
+              v-model="selectValue"
+              label="Input:"
+              :options="selectResults"
+              :searchable="true"
+              @search="onSelectSearch"
+              @remove="onSelectRemove"
+            />
+            <VuiSelect
+              v-model="selectValue"
+              label="100 width:"
+              width="100"
+              :options="selectResults"
+              :searchable="true"
+              @remove="onSelectRemove"
+            />
           </VuiFlex>
         </div>
       </div>
@@ -664,7 +670,9 @@
             </template>
             <template #panes>
               <div>Pane 1 </div>
-              <div>Pane 2 {{ inputText }}</div>
+              <div style="height: 100px;">
+                Pane 2 100px height {{ inputText }}
+              </div>
               <div>Pane 3</div>
               <VuiButton>
                 Button Pane 4

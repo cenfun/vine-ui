@@ -20,13 +20,12 @@
       @focus="onFocus"
       @blur="onBlur"
     >
-    <select
-      ref="select"
-      disabled
-      class="vui-select-select"
+    <div
+      ref="options"
+      class="vui-select-options"
     >
       <slot />
-    </select>
+    </div>
     <div
       ref="list"
       class="vui vui-select-list"
@@ -61,6 +60,9 @@ import selectOnFocus from '../../util/select-on-focus.js';
 
 import IconX from '../../base/images/icon-x.vue';
 
+const viewMinWidth = 50;
+const viewMaxWidth = 300;
+
 const Select = {
 
     name: 'Select',
@@ -94,53 +96,25 @@ const Select = {
 
     data() {
         return {
-            viewValue: '',
-            //for options from slots
-            listOptions: null,
+            slotOptions: null,
 
-            listMinWidth: 45,
-            listMaxWidth: 300,
-            viewWidth: 50,
-            listVisible: false
+            viewValue: '',
+
+            viewWidth: this.width
+            
         };
     },
 
-    created() {
-        this.init();
-    },
-
-    mounted() {
-
-        const options = Array.from(this.$refs.select.options);
-        if (options.length) {
-            this.listOptions = options.map((option) => {
-                return {
-                    value: option.value,
-                    label: option.textContent,
-                    selected: option.selected
-                };
-            });
-            this.firstUpdateWidth = true;
-        }
-
-        this.$list = this.$refs.list;
-        this.$view = this.$refs.view;
-        this.updateWidth();
-
-    },
-
     watch: {
-
-        dataModelValue: {
-
-            handler(newName, oldName) {
-                const item = this.list.find((it) => it.value === this.dataModelValue);
-                if (item) {
-                    this.viewValue = this.dataModelValue;
-                }
-            },
-            immediate: true
-            
+        list() {
+            this.updateViewValue();
+        },
+        dataModelValue() {
+            //do not update when input now
+            if (this.searchable && this.isOpen) {
+                return;
+            }
+            this.updateViewValue();
         }
     },
 
@@ -162,49 +136,107 @@ const Select = {
         },
 
         viewStyle() {
-            return {
-                'width': `${this.viewWidth}px`
-            };
+            if (this.viewWidth) {
+                let w = this.viewWidth;
+                if ((/^\d+$/).test(this.viewWidth)) {
+                    w += 'px';
+                }
+                return {
+                    'width': `${w}`
+                };
+            }
+            return {};
         },
 
         list() {
+            //props first
+            if (this.options) {
+                const list = this.options.map(function(item) {
+                    if (item && typeof item === 'object') {
+                        return {
+                            ... item,
+                            label: item.label || item.value,
+                            value: item.value || item.label
+                        };
+                    }
+                    return {
+                        label: `${item}`,
+                        value: `${item}`
+                    };
+                });
 
-            if (!Util.isList(this.options)) {
-                if (this.listOptions) {
-                    return this.listOptions;
-                }
-                return [];
+                //console.log(list);
+
+                return list;
+            }
+            // slot options next
+            if (this.slotOptions) {
+                return this.slotOptions;
             }
 
-            const list = this.options.map(function(item) {
-                if (item && typeof item === 'object') {
-                    return {
-                        ... item,
-                        label: item.label || item.value,
-                        value: item.value || item.label
-                    };
-                }
-                return {
-                    label: `${item}`,
-                    value: `${item}`
-                };
-            });
-
-            //console.log(list);
-
-            return list;
+            return [];
         }
 
     },
 
+    created() {
+        this.init();
+    },
+
+    mounted() {
+
+        //this.$refs.options
+
+        const $options = Array.from(this.$refs.options.childNodes).filter((it) => it.nodeType === 1);
+        //this.log($options);
+
+        if ($options.length) {
+            this.slotOptions = $options.map((elem) => {
+
+                const label = elem.innerText;
+                //value could be (empty)
+                let value = elem.getAttribute('value');
+                if (value === null) {
+                    value = label;
+                }
+
+                const option = {
+                    label,
+                    value
+                };
+            
+                //selected only has key
+                const selected = elem.getAttribute('selected');
+                const removable = elem.getAttribute('removable');
+                if (selected !== null) {
+                    option.selected = true;
+                }
+                if (removable !== null) {
+                    option.removable = true;
+                }
+
+                return option;
+            });
+
+        }
+        
+        this.updateViewValue();
+        
+        this.$list = this.$refs.list;
+        this.$view = this.$refs.view;
+
+        //this.log('mounted');
+        this.updateViewWidth('mounted');
+        
+    },
+
     updated() {
         if (this.searchable) {
+            //if list is up, need update list top when list height changed by search results 
             this.layout();
         }
-        if (this.firstUpdateWidth) {
-            this.firstUpdateWidth = false;
-            this.updateWidth();
-        }
+        //this.log('updated');
+        this.updateViewWidth('updated');
     },
 
     methods: {
@@ -281,12 +313,7 @@ const Select = {
             const listRect = this.$list.getBoundingClientRect();
             const bodyRect = document.body.getBoundingClientRect();
 
-            const spacing = 2;
-
-            let top = Math.max(viewRect.top + viewRect.height + spacing, 0);
-            if (viewRect.top + viewRect.height + listRect.height > bodyRect.height) {
-                top = viewRect.top - listRect.height - spacing;
-            }
+            const top = this.getListTop(viewRect, listRect, bodyRect);
 
             let left = Math.max(viewRect.left, 0);
             if (left + listRect.width > bodyRect.width) {
@@ -306,12 +333,45 @@ const Select = {
 
         },
 
-        updateWidth() {
-            if (this.width) {
-                this.viewWidth = this.width;
-            } else {
-                const listRect = this.$list.getBoundingClientRect();
-                this.viewWidth = Util.clamp(Math.ceil(listRect.width) + 15, this.listMinWidth, this.listMaxWidth);
+        getListTop(viewRect, listRect, bodyRect) {
+            const spacing = 2;
+
+            const topDown = viewRect.top + viewRect.height + spacing;
+            const topUp = viewRect.top - listRect.height - spacing;
+            const isDownOk = topDown + listRect.height <= bodyRect.height;
+
+            if (isDownOk) {
+                return topDown;
+            }
+
+            return topUp;
+        },
+
+        updateViewWidth(step) {
+            if (this.viewWidth) {
+                return;
+            }
+            if (!this.list.length) {
+                this.viewWidth = viewMinWidth;
+                return;
+            }
+            
+            const listRect = this.$list.getBoundingClientRect();
+            //this.log(step, listRect);
+            //border is 2 if empty
+            if (listRect.width > 2) {
+                const iconWidth = 15;
+                //no padding because list have same padding 
+                this.viewWidth = Util.clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
+            }
+        },
+
+        updateViewValue() {
+            const dv = this.dataModelValue;
+            const item = this.list.find((it) => it.value === dv);
+            //this.log(item);
+            if (item) {
+                this.viewValue = dv;
             }
         },
 
@@ -331,6 +391,7 @@ const Select = {
         onItemClick(item) {
             //this.log('onItemClick', item);
             this.dataModelValue = item.value;
+            this.updateViewValue();
             this.close();
         },
 
@@ -414,9 +475,10 @@ export default Select;
     background-image: url("./images/select.svg");
     background-repeat: no-repeat;
     background-size: 8px 10px;
-    background-position: right 5px center;
+    background-position: right 7px center;
     padding: 0 20px 0 5px;
     border-radius: 5px;
+    width: 50px;
     height: 30px;
     border: 1px solid #aaa;
     user-select: none;
@@ -443,7 +505,7 @@ export default Select;
     cursor: text;
 }
 
-.vui-select-select {
+.vui-select-options {
     display: none;
 }
 
