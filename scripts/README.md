@@ -1,14 +1,14 @@
-![](scripts/vine.jpg)
+![](/scripts/vine.jpg)
 
 # Vine UI
 - Lightweight UI components based on [Vue 3](https://github.com/vuejs/core)
-- {place-holder-size}
+- {placeholder-size}
 
 ## Preview Online
 [https://cenfun.github.io/vine-ui/](https://cenfun.github.io/vine-ui/)
 
 ## Components
-{place-holder-components}
+{placeholder-components}
 
 ## Install
 ```sh
@@ -27,8 +27,3 @@ export default {
 }
 ```
 see [demo.vue](public/src/demo.vue)
-
-## Changelog
-
-* 3.0.0
-    * update to vue 3.x

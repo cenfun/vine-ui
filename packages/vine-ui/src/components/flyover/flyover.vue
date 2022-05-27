@@ -17,7 +17,7 @@ import Base from '../../base/base.vue';
 
 const Flyover = {
 
-    name: 'Flyover',
+    name: 'VuiFlyover',
 
     extends: Base,
 

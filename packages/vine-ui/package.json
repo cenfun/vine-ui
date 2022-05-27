@@ -1,0 +1,12 @@
+{
+    "name": "vine-ui",
+    "version": "3.0.0",
+    "main": "dist/vine-ui.js",
+    "files": [
+        "dist"
+    ],
+    "dependencies": {
+        "vue": "^3.2.36"
+    },
+    "devDependencies": {}
+}

@@ -14,19 +14,19 @@
         "type": "git",
         "url": "git+https://github.com/cenfun/vine-ui.git"
     },
-    "dependencies": {
-        "vue": "^3.2.33"
-    },
+    "workspaces": [
+        "packages/*"
+    ],
     "devDependencies": {
-        "eslint": "^8.15.0",
+        "eslint": "^8.16.0",
         "eslint-config-plus": "^1.0.2",
         "eslint-plugin-chain": "^2.0.0",
         "eslint-plugin-html": "^6.2.0",
-        "eslint-plugin-vue": "^9.0.0",
-        "postcss": "^8.4.13",
+        "eslint-plugin-vue": "^9.0.1",
+        "postcss": "^8.4.14",
         "postcss-html": "^1.4.1",
         "postcss-scss": "^4.0.4",
-        "stylelint": "^14.8.2",
+        "stylelint": "^14.8.5",
         "stylelint-config-recommended": "^7.0.0",
         "stylelint-config-standard": "^25.0.0"
     }

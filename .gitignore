@@ -3,3 +3,4 @@
 /.temp/
 /dist/
 /public/dist/
+/packages/*/dist/

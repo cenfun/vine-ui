@@ -741,9 +741,7 @@
   </VuiFlex>
 </template>
 <script>
-/* eslint-disable chain/dependencies */
 import { components, createComponent } from 'vine-ui';
-/* eslint-enable */
 
 console.log('components', components);
 
@@ -1032,7 +1030,7 @@ body {
 .vui-popup-arrow-example {
     height: 54px;
     background-repeat: no-repeat;
-    background-image: url("../../src/base/images/popup-arrow.svg");
+    background-image: url("../../../packages/vine-ui/src/base/images/popup-arrow.svg");
     background-size: 54px 54px;
 }
 

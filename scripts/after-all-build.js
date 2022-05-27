@@ -3,9 +3,15 @@ const path = require('path');
 
 module.exports = (o, Util) => {
   
-    const item = o.jobList[0];
+    //console.log(o.jobList);
+
+    const item = o.jobList.find((it) => it.name === 'vine-ui');
+    if (!item) {
+        return 0;
+    }
 
     //console.log(item);
+
     const assets = Util.getValue(item, 'report.statsData.assets.subs');
     const asset = assets[0] || {};
     const size = Util.BF(asset.size);
@@ -17,7 +23,7 @@ module.exports = (o, Util) => {
 
     console.log(sizeStr);
 
-    const dirs = fs.readdirSync(path.resolve(__dirname, '../src/components'));
+    const dirs = fs.readdirSync(path.resolve(__dirname, '../packages/vine-ui/src/components'));
 
     const componentsStr = dirs.map((dir) => {
         const N = dir.slice(0, 1).toUpperCase() + dir.slice(1).toLowerCase();
@@ -27,11 +33,12 @@ module.exports = (o, Util) => {
     const readmeStr = fs.readFileSync(path.resolve(__dirname, 'README.md'), 'utf8');
 
     const readme = Util.replace(readmeStr, {
-        'place-holder-size': sizeStr,
-        'place-holder-components': componentsStr
+        'placeholder-size': sizeStr,
+        'placeholder-components': componentsStr
     });
 
     fs.writeFileSync(path.resolve(__dirname, '../README.md'), readme);
+    fs.writeFileSync(path.resolve(__dirname, '../packages/vine-ui/README.md'), readme);
 
     console.log('updated README.md');
 
