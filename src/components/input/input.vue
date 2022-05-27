@@ -86,20 +86,19 @@ export default Input;
         border-radius: 5px;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
-        &:hover {
+        &:disabled {
+            border: 1px solid #ccc;
+            color: gray;
+        }
+
+        &:hover:not(:disabled) {
             border: 1px solid #888;
         }
 
-        &:focus {
-            color: #495057;
-            background-color: #fff;
+        &:focus:not(:disabled) {
             border-color: #80bdff;
             outline: 0;
             box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
-        }
-
-        &:disabled {
-            border: 1px solid #ccc;
         }
     }
 }
