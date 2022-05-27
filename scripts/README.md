@@ -17,14 +17,11 @@ npm i vine-ui
 
 ## Usage
 ```
-import {
-    VuiCheckbox,
-    VuiInput
-} from "vine-ui";
-
+import { components } from "vine-ui";
+const { VuiButton, VuiInput } = components;
 export default {
     components: {
-        VuiCheckbox,
+        VuiButton,
         VuiInput
     }
 }
