@@ -12,6 +12,10 @@ module.exports = (o, Util) => {
 
     //console.log(item);
 
+    if (!item.minify) {
+        return 0;
+    }
+
     const assets = Util.getValue(item, 'report.statsData.assets.subs');
     const asset = assets[0] || {};
     const size = Util.BF(asset.size);
