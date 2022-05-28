@@ -14,9 +14,9 @@
 <script>
 import Base from '../../base/base.vue';
 
-const Button = {
+export default {
 
-    name: 'Button',
+    name: 'VuiButton',
 
     extends: Base,
 
@@ -43,7 +43,6 @@ const Button = {
 
 };
 
-export default Button;
 </script>
 <style lang="scss">
 .vui-button {

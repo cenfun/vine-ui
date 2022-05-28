@@ -27,15 +27,15 @@ import Base from '../../base/base.vue';
 
 import IconX from '../../base/images/icon-x.vue';
 
-const Modal = {
+export default {
 
-    name: 'Modal',
-
-    extends: Base,
+    name: 'VuiModal',
 
     components: {
         IconX
     },
+
+    extends: Base,
 
     props: {
         content: {
@@ -90,7 +90,6 @@ const Modal = {
 
 };
 
-export default Modal;
 </script>
 <style lang="scss">
 .vui-modal {

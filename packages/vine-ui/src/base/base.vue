@@ -1,5 +1,6 @@
 <script>
 import BaseRender from './base-render.vue';
+import { pascalToKebabCase } from '../util/util.js';
 
 export default {
 
@@ -81,11 +82,14 @@ export default {
         },
 
         getComponentId() {
-            const ls = ['vui'];
+            const ls = [];
             const cn = this.$options.name;
             if (cn) {
-                ls.push(`${cn}`.toLowerCase());
+                const kn = pascalToKebabCase(cn);
+                //console.log(kn);
+                ls.push(kn);
             } else {
+                ls.push('vui');
                 console.error('Invalid component name', this);
             }
             ls.push(this.uid);

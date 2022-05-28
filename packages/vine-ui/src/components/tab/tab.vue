@@ -60,9 +60,9 @@ import Base from '../../base/base.vue';
 import TabItem from './tab-item.vue';
 import TabPane from './tab-pane.vue';
 
-const Tab = {
+export default {
 
-    name: 'Tab',
+    name: 'VuiTab',
 
     components: {
         TabItem,
@@ -110,7 +110,6 @@ const Tab = {
     }
 };
 
-export default Tab;
 </script>
 <style lang="scss">
 .vui-tab {

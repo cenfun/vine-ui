@@ -19,9 +19,9 @@
 <script>
 import Base from '../../base/base.vue';
 import Util from '../../util/util.js';
-const Checkbox = {
+export default {
 
-    name: 'Checkbox',
+    name: 'VuiCheckbox',
 
     extends: Base,
 
@@ -39,7 +39,6 @@ const Checkbox = {
     }
 };
 
-export default Checkbox;
 </script>
 <style lang="scss">
 .vui-checkbox {

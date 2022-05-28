@@ -74,6 +74,15 @@ export const clamp = function(value, min, max) {
     return Math.max(min, Math.min(max, value));
 };
 
+export const pascalToKebabCase = function(text) {
+    return (`${text}`).trim()
+        .replace(/([a-z])([A-Z])/g, '$1-$2')
+        .replace(/\W/g, (m) => ((/[À-ž]/).test(m) ? m : '-'))
+        .replace(/^-+|-+$/g, '')
+        .replace(/-{2,}/g, '-')
+        .toLowerCase();
+};
+
 export default {
     isInvalid,
     toNum,
@@ -81,5 +90,6 @@ export default {
     toList,
     token,
     getValue,
-    clamp
+    clamp,
+    pascalToKebabCase
 };

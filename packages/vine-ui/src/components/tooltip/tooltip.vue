@@ -24,9 +24,9 @@
 <script>
 import Popup from '../../base/base-popup.vue';
 
-const Tooltip = {
+export default {
 
-    name: 'Tooltip',
+    name: 'VuiTooltip',
 
     extends: Popup,
 
@@ -221,7 +221,6 @@ const Tooltip = {
     }
 };
 
-export default Tooltip;
 </script>
 
 <style lang="scss">

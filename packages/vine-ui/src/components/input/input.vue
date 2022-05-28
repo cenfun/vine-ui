@@ -23,9 +23,9 @@
 <script>
 import Base from '../../base/base.vue';
 import selectOnFocus from '../../util/select-on-focus.js';
-const Input = {
+export default {
 
-    name: 'Input',
+    name: 'VuiInput',
 
     directives: {
         select: selectOnFocus
@@ -58,7 +58,6 @@ const Input = {
 
 };
 
-export default Input;
 </script>
 <style lang="scss">
 .vui-input {

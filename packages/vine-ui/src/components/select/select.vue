@@ -63,11 +63,9 @@ import IconX from '../../base/images/icon-x.vue';
 const viewMinWidth = 50;
 const viewMaxWidth = 300;
 
-const Select = {
+export default {
 
-    name: 'Select',
-
-    extends: Base,
+    name: 'VuiSelect',
 
     directives: {
         select: selectOnFocus
@@ -76,6 +74,8 @@ const Select = {
     components: {
         IconX
     },
+
+    extends: Base,
 
     props: {
         options: {
@@ -103,19 +103,6 @@ const Select = {
             viewWidth: this.width
 
         };
-    },
-
-    watch: {
-        list() {
-            this.updateViewValue();
-        },
-        dataModelValue() {
-            //do not update when input now
-            if (this.searchable && this.isOpen) {
-                return;
-            }
-            this.updateViewValue();
-        }
     },
 
     computed: {
@@ -177,6 +164,19 @@ const Select = {
             return [];
         }
 
+    },
+
+    watch: {
+        list() {
+            this.updateViewValue();
+        },
+        dataModelValue() {
+            //do not update when input now
+            if (this.searchable && this.isOpen) {
+                return;
+            }
+            this.updateViewValue();
+        }
     },
 
     created() {
@@ -451,7 +451,6 @@ const Select = {
 
 };
 
-export default Select;
 </script>
 <style lang="scss">
 .vui-select {

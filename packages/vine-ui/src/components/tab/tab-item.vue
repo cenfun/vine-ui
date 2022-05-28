@@ -8,9 +8,9 @@
 </template>
 <script>
 import Base from '../../base/base.vue';
-const TabItem = {
+export default {
 
-    name: 'TabItem',
+    name: 'VuiTabItem',
 
     extends: Base,
 
@@ -54,7 +54,6 @@ const TabItem = {
     }
 };
 
-export default TabItem;
 </script>
 <style lang="scss">
 .vui-tab-item {

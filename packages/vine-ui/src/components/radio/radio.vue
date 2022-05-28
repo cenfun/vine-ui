@@ -21,9 +21,9 @@
 <script>
 import Base from '../../base/base.vue';
 import Util from '../../util/util.js';
-const Radio = {
+export default {
 
-    name: 'Radio',
+    name: 'VuiRadio',
 
     extends: Base,
 
@@ -56,7 +56,6 @@ const Radio = {
     }
 };
 
-export default Radio;
 </script>
 <style lang="scss">
 .vui-radio {

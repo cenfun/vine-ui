@@ -17,8 +17,9 @@
 <script>
 import Base from '../../base/base.vue';
 
-const Loading = {
-    name: 'Loading',
+export default {
+
+    name: 'VuiLoading',
 
     extends: Base,
 
@@ -71,7 +72,6 @@ const Loading = {
     }
 };
 
-export default Loading;
 </script>
 <style lang="scss">
 .vui-loading {

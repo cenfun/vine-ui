@@ -6,9 +6,9 @@
 <script>
 import Base from '../../base/base.vue';
 
-const TabPane = {
+export default {
 
-    name: 'TabPane',
+    name: 'VuiTabPane',
 
     extends: Base,
 
@@ -33,7 +33,6 @@ const TabPane = {
     }
 };
 
-export default TabPane;
 </script>
 <style lang="scss">
 .vui-tab-pane {

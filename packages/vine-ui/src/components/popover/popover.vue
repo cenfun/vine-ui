@@ -40,9 +40,9 @@
 <script>
 import Popup from '../../base/base-popup.vue';
 
-const Popover = {
+export default {
 
-    name: 'Popover',
+    name: 'VuiPopover',
 
     extends: Popup,
 
@@ -456,7 +456,6 @@ const Popover = {
     }
 };
 
-export default Popover;
 </script>
 
 <style lang="scss">

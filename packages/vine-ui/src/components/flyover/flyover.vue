@@ -15,7 +15,7 @@
 <script>
 import Base from '../../base/base.vue';
 
-const Flyover = {
+export default {
 
     name: 'VuiFlyover',
 
@@ -155,8 +155,6 @@ const Flyover = {
 
     }
 };
-
-export default Flyover;
 
 </script>
 

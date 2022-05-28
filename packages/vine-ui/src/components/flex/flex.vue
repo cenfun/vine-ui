@@ -15,9 +15,9 @@
 <script>
 import Base from '../../base/base.vue';
 
-const Flex = {
+export default {
 
-    name: 'Flex',
+    name: 'VuiFlex',
 
     extends: Base,
 
@@ -74,24 +74,8 @@ const Flex = {
             }
             return st;
         }
-    },
-
-
-    created() {
-
-    },
-
-    mounted() {
-
-    },
-
-    methods: {
-
-
     }
 };
-
-export default Flex;
 
 </script>
 
