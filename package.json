@@ -1,11 +1,9 @@
 {
-    "name": "vine-ui",
+    "name": "vine-ui-components",
     "version": "3.0.0",
-    "description": "vine-ui",
-    "main": "dist/vine-ui.js",
-    "files": [
-        "dist"
-    ],
+    "description": "vine ui components",
+    "private": true,
+    "main": "",
     "scripts": {
         "build": "sf lint && sf b -m",
         "pack": "sf lint && sf pack -m -p docs -q v={version}"
