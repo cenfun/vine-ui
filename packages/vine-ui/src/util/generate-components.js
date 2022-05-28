@@ -1,7 +1,7 @@
 import createComponent from './create-component.js';
 
 export default function(context) {
-    
+
     const components = {};
 
     const paths = context.keys();
@@ -10,7 +10,7 @@ export default function(context) {
     paths.forEach((path) => {
 
         //console.log(path);
-    
+
         //get folder name
         //kebab case, custom element names must contain a hyphen.
         const list = path.toLowerCase().split('/');
@@ -19,7 +19,7 @@ export default function(context) {
         const fileName = list.pop();
         const folderName = list.pop();
 
-        // "./vui-button/vui-button.vue" 
+        // "./vui-button/vui-button.vue"
 
         // entry file name must be same with folder name
         if (fileName !== `${folderName}.vue`) {
@@ -40,7 +40,7 @@ export default function(context) {
         if (Component.private) {
             return;
         }
-    
+
         components[componentName] = Component;
     });
 

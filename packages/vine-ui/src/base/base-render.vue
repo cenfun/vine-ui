@@ -15,7 +15,7 @@ export default {
         // if (isVNode(props.content)) {
         //     return h(props.content);
         // }
-           
+
         //render function
         if (typeof props.content === 'function') {
             return () => {
@@ -24,7 +24,7 @@ export default {
         }
 
         //console.log(props.content);
-        
+
         //text node
         return () => props.content;
 

@@ -15,7 +15,7 @@
 import Base from '../../base/base.vue';
 
 const Button = {
-    
+
     name: 'Button',
 
     extends: Base,

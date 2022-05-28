@@ -76,13 +76,13 @@ const Flex = {
         }
     },
 
-  
+
     created() {
-      
+
     },
 
     mounted() {
-       
+
     },
 
     methods: {

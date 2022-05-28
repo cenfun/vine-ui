@@ -43,7 +43,7 @@ export default {
     },
 
     watch: {
-        
+
         //from parent changed props
         modelValue: function(nv) {
             //this.log('modelValue changed:', nv);

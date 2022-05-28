@@ -274,7 +274,7 @@ const Popover = {
             }
             this.update();
         },
-        
+
         //=============================================================================
 
         bindCloseEvent() {
@@ -376,13 +376,13 @@ const Popover = {
             const rect = this.getRect(`.${this.cid}`);
 
             //console.log(containerRect, targetRect, rect);
-            
+
             this.positionInfo = this.getBestPosition(
                 containerRect,
                 targetRect,
                 rect,
                 this.positions,
-                //previous position info for keeping position if has animation (dynamic size) 
+                //previous position info for keeping position if has animation (dynamic size)
                 this.positionInfo
             );
 
@@ -396,7 +396,7 @@ const Popover = {
             if (noChange) {
                 return this;
             }
-           
+
             for (const k in this.info) {
                 this.info[k] = this.positionInfo[k];
             }
@@ -408,7 +408,7 @@ const Popover = {
             this.$el.style.height = 'auto';
             const elem = this.$el.querySelector('.vui-popover-content');
             elem.style.height = 'auto';
-            
+
             const br = elem.getBoundingClientRect();
             const rect = this.toRect(br);
             const ch = rect.height;

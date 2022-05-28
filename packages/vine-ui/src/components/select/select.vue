@@ -101,7 +101,7 @@ const Select = {
             viewValue: '',
 
             viewWidth: this.width
-            
+
         };
     },
 
@@ -204,7 +204,7 @@ const Select = {
                     label,
                     value
                 };
-            
+
                 //selected only has key
                 const selected = elem.getAttribute('selected');
                 const removable = elem.getAttribute('removable');
@@ -219,20 +219,20 @@ const Select = {
             });
 
         }
-        
+
         this.updateViewValue();
-        
+
         this.$list = this.$refs.list;
         this.$view = this.$refs.view;
 
         //this.log('mounted');
         this.updateViewWidth('mounted');
-        
+
     },
 
     updated() {
         if (this.searchable) {
-            //if list is up, need update list top when list height changed by search results 
+            //if list is up, need update list top when list height changed by search results
             this.layout();
         }
         //this.log('updated');
@@ -287,7 +287,7 @@ const Select = {
             if (!this.list.length) {
                 return;
             }
-            
+
             document.body.appendChild(this.$list);
 
             this.$list.style.visibility = 'visible';
@@ -355,13 +355,13 @@ const Select = {
                 this.viewWidth = viewMinWidth;
                 return;
             }
-            
+
             const listRect = this.$list.getBoundingClientRect();
             //this.log(step, listRect);
             //border is 2 if empty
             if (listRect.width > 2) {
                 const iconWidth = 15;
-                //no padding because list have same padding 
+                //no padding because list have same padding
                 this.viewWidth = Util.clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
             }
         },

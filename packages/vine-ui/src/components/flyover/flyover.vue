@@ -51,7 +51,7 @@ const Flyover = {
 
     computed: {
         classList() {
-            
+
             return [
                 'vui',
                 'vui-flyover',

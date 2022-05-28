@@ -192,7 +192,7 @@ const Tooltip = {
             const rect = this.getRect(`.${this.cid}`);
 
             //console.log(containerRect, targetRect, rect);
-            
+
             this.positionInfo = this.getBestPosition(
                 containerRect,
                 targetRect,

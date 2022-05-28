@@ -45,7 +45,7 @@ const TabItem = {
             return ls;
         }
     },
-    
+
     methods: {
         clickHandler(e) {
             //console.log(e);

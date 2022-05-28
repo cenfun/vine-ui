@@ -17,7 +17,7 @@
     ],
     "devDependencies": {
         "eslint": "^8.16.0",
-        "eslint-config-plus": "^1.0.2",
+        "eslint-config-plus": "^1.0.3",
         "eslint-plugin-chain": "^2.0.0",
         "eslint-plugin-html": "^6.2.0",
         "eslint-plugin-vue": "^9.0.1",

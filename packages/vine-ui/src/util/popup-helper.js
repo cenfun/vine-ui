@@ -89,9 +89,9 @@ export const getRect = (target) => {
     rect.top += window.pageYOffset;
     rect.width = elem.offsetWidth;
     rect.height = elem.offsetHeight;
-    
+
     //console.log(elem.tagName, rect);
-    
+
     return rect;
 };
 
@@ -203,7 +203,7 @@ export const defaultPositions = {
             info.left = targetRect.left - rect.width;
         }
     },
-    
+
     'left-top': {
         direction: 'v',
         calculate: (info, containerRect, targetRect, rect) => {
@@ -250,7 +250,7 @@ const calculateChange = (info, previousInfo) => {
     if (!previousInfo) {
         return info;
     }
-    //no change if type no change with previous 
+    //no change if type no change with previous
     if (info.type === previousInfo.type) {
         return info;
     }

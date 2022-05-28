@@ -3,7 +3,7 @@ import { createApp, h } from 'vue';
 
 const createComponent = function(props, slots, container) {
     const Component = this;
-    
+
     if (typeof slots === 'function') {
         slots = slots.call(this, h);
     }
@@ -14,7 +14,7 @@ const createComponent = function(props, slots, container) {
     //  props?: object | null,
     //  children?: Children | Slot | Slots
     // ): VNode
-  
+
     const app = createApp({
         setup() {
             return () => h(Component, props, slots);
@@ -23,7 +23,7 @@ const createComponent = function(props, slots, container) {
 
     // instance proxy
     let instance;
-    
+
     if (container) {
         instance = app.mount(container);
     } else {

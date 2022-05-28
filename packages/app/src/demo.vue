@@ -29,17 +29,17 @@
         <div class="vui-item-example vui-flex-auto vui-flex-row">
           <VuiFlex spacing="5">
             <VuiButton label="Label" />
-           
+
             <VuiButton :label="'Props ' + inputText" />
-           
+
             <VuiButton>
               Slot {{ inputText }}
             </VuiButton>
-          
+
             <VuiButton disabled>
               Disabled
             </VuiButton>
-         
+
             <VuiButton
               primary
               tooltip="This is Button tooltip"
@@ -59,11 +59,11 @@
             <VuiCheckbox>
               Checkbox
             </VuiCheckbox>
-         
+
             <VuiCheckbox checked>
               Checked {{ inputText }}
             </VuiCheckbox>
-   
+
             <VuiCheckbox v-model="checkboxChecked">
               Checkbox v-model
             </VuiCheckbox>
@@ -74,7 +74,7 @@
             >
               Disabled {{ checkboxChecked }}
             </VuiCheckbox>
-  
+
             <VuiCheckbox />
 
             <VuiCheckbox :label="'label '+checkboxChecked" />
@@ -184,7 +184,7 @@
               <option>60%</option>
               <option>100px</option>
             </VuiSelect>
-         
+
             <VuiSelect
               v-model="flyoverPosition"
               label="position:"
@@ -218,24 +218,24 @@
               v-model="inputText"
               label="Name:"
             />
-            
+
             <VuiInput
               v-model="inputText"
               placeholder="no label placeholder"
               width="150px"
             />
-            
+
             <VuiInput disabled>
               Disabled {{ inputText }}:
             </VuiInput>
-            
+
             <VuiInput
               type="number"
               step="10"
             >
               Number:
             </VuiInput>
-            
+
             <VuiInput
               :label="inputText"
               placeholder="props"
@@ -471,7 +471,7 @@
           </div>
         </div>
       </div>
-      
+
 
       <div class="vui-item vui-flex-row">
         <div class="vui-item-name">
@@ -486,7 +486,7 @@
             >
               Radio 1
             </VuiRadio>
-           
+
             <VuiRadio
               v-model="radioValue"
               name="radioName"
@@ -494,13 +494,13 @@
             >
               Radio 2 {{ inputText }}
             </VuiRadio>
-           
+
             <VuiRadio
               checked
               name="radioDisabledName"
               value="3"
             />
-           
+
             <VuiRadio
               v-model="radioValue"
               disabled
@@ -509,7 +509,7 @@
             >
               Disabled {{ radioValue }}
             </VuiRadio>
-           
+
             <VuiRadio
               v-model="radioValue"
               checked
@@ -629,7 +629,7 @@
           </VuiFlex>
         </div>
       </div>
-      
+
 
       <div class="vui-item vui-flex-row">
         <div class="vui-item-name">
@@ -654,7 +654,7 @@
                 Tab 1 {{ inputText }}
               </div>
               <div>Tab 2</div>
-            
+
               <div
                 class="vui-tab-icon vui-tab-icon-tools"
                 tooltip="This is tab tooltip"
@@ -704,7 +704,7 @@
             <VuiButton tooltip="This is VuiTooltip left This is VuiTooltip left">
               Hover Tooltip
             </VuiButton>
-           
+
             <div class="vui-flex-auto">
               <VuiButton tooltip="This is VuiTooltip left">
                 Hover Tooltip
@@ -763,7 +763,7 @@ const {
 const Demo = {
 
     createComponent,
-    
+
     components: {
         VuiButton,
         VuiCheckbox,
@@ -778,7 +778,7 @@ const Demo = {
         VuiTab,
         VuiTooltip
     },
-    
+
     data() {
         return {
             inputText: '',

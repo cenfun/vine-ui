@@ -53,7 +53,7 @@ const Input = {
         labelContent() {
             return this.label || this.$slots.default;
         }
-        
+
     }
 
 };
