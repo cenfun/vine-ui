@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <link rel="icon" href="data:,">
-    <title>Vine UI Demo</title>
+    <title>Vine UI</title>
 </head>
 <body>
    <!--inject:start-->
-   <script src="../../../node_modules/vue/dist/vue.runtime.global.js"></script>
+   <script src="../../../node_modules/vue/dist/vue.runtime.global.prod.js"></script>
    <script src="../../../node_modules/vine-ui/dist/vine-ui.js"></script>
    <script src="../dist/vine-ui-app.js"></script>
    <!--inject:end-->
@@ -16,7 +16,7 @@
    <script>
        //keep scroll position when reload
        const storeKey = 'vui-scroll-position';
-       const scrollTarget = document.querySelector('.vui-demo-body');
+       const scrollTarget = document.querySelector('.vui-body');
        const positionHandler = function(event) {
            const position = sessionStorage.getItem(storeKey);
            if (position) {

@@ -1,13 +1,13 @@
 <template>
   <VuiFlex
     direction="column"
-    class="vui-demo"
+    class="vui-app"
   >
-    <div class="vui-demo-header vui-flex-row">
-      <div class="vui-demo-title">
+    <div class="vui-header vui-flex-row">
+      <div class="vui-title">
         Vine UI
       </div>
-      <div class="vui-demo-sub">
+      <div class="vui-sub">
         Based on <a
           href="https://github.com/vuejs/core"
           target="_blank"
@@ -21,7 +21,7 @@
         />
       </div>
     </div>
-    <div class="vui-demo-body vui-flex-auto">
+    <div class="vui-body vui-flex-auto">
       <div class="vui-item vui-flex-row">
         <div class="vui-item-name">
           VuiButton
@@ -760,7 +760,7 @@ const {
     VuiTooltip
 } = components;
 
-const Demo = {
+const App = {
 
     createComponent,
 
@@ -943,7 +943,7 @@ const Demo = {
     }
 };
 
-export default Demo;
+export default App;
 </script>
 <style lang="scss">
 html,
@@ -957,27 +957,27 @@ body {
     color: #333;
 }
 
-.vui-demo {
+.vui-app {
     width: 100%;
     height: 100%;
     position: relative;
 }
 
-.vui-demo-header {
+.vui-header {
     padding: 5px 10px;
     background: #f5f5f5;
     border-bottom: 1px solid #ccc;
     box-sizing: border-box;
 }
 
-.vui-demo-title {
+.vui-title {
     height: 30px;
     line-height: 30px;
     font-size: 16px;
     font-weight: bold;
 }
 
-.vui-demo-sub {
+.vui-sub {
     padding-left: 10px;
     color: #666;
     height: 30px;
@@ -1001,7 +1001,7 @@ body {
     opacity: 1;
 }
 
-.vui-demo-body {
+.vui-body {
     overflow-y: auto;
     padding: 10px;
 }

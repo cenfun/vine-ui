@@ -5,13 +5,11 @@ module.exports = {
         enable: false
     },
 
-    outdate: {
-        exclude: [
-            //'vue'
-        ]
-    },
- 
     build: {
+        define: {
+            //__VUE_OPTIONS_API__: true,
+            //__VUE_PROD_DEVTOOLS__: false
+        },
         cssExtract: false,
 
         afterAll: require('./scripts/after-all-build.js')

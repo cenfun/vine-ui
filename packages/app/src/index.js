@@ -1,2 +1,6 @@
-import Demo from './demo.vue';
-Demo.createComponent();
+import App from './app.vue';
+const app = App.createComponent();
+
+app.config.errorHandler = (err, instance, info) => {
+    console.log(err, instance, info);
+};

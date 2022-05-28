@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <link rel="icon" href="data:,">
-    <title>Vine UI Demo</title>
+    <title>Vine UI</title>
 </head>
 <body>
    <!--inject:start-->
@@ -16,7 +16,7 @@
    <script>
        //keep scroll position when reload
        const storeKey = 'vui-scroll-position';
-       const scrollTarget = document.querySelector('.vui-demo-body');
+       const scrollTarget = document.querySelector('.vui-body');
        const positionHandler = function(event) {
            const position = sessionStorage.getItem(storeKey);
            if (position) {

@@ -26,4 +26,4 @@ export default {
     }
 }
 ```
-see [demo.vue](/packages/app/src/demo.vue)
+see [app.vue](/packages/app/src/app.vue)
