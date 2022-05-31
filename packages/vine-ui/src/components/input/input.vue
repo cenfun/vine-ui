@@ -11,7 +11,6 @@
     <input
       v-model="dataModelValue"
       v-select
-      v-bind="$attrs"
       :disabled="disabled"
       :placeholder="placeholder"
       :type="type"

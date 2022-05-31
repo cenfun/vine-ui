@@ -9,7 +9,6 @@
       ref="view"
       v-model="viewValue"
       v-select
-      v-bind="$attrs"
       type="text"
       :class="viewClass"
       :style="viewStyle"
