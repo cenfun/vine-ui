@@ -98,10 +98,13 @@
               </VuiSelect>
               <VuiSelect v-model="flexSpacing">
                 <option />
+                <option>3</option>
                 <option>5</option>
+                <option>8</option>
                 <option>10</option>
                 <option>15</option>
                 <option>20</option>
+                <option>30</option>
               </VuiSelect>
               <VuiSelect v-model="flexWidth">
                 <option>100px</option>

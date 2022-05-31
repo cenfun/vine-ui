@@ -41,12 +41,12 @@ export default {
             validator: (v) => true,
             default: ''
         },
+
+        //default support '3', '5', '8', '10', '15', '20', '30'
+        //others need override vui-flex-spacing-x by yourself
         spacing: {
             type: String,
-            default: '',
-            validator(value) {
-                return ['', '5', '10', '15', '20'].includes(value);
-            }
+            default: ''
         }
     },
 
@@ -91,9 +91,19 @@ export default {
     margin: 0;
 }
 
+.vui-flex-spacing-3 > * {
+    margin-left: 3px;
+    margin-top: 3px;
+}
+
 .vui-flex-spacing-5 > * {
     margin-left: 5px;
     margin-top: 5px;
+}
+
+.vui-flex-spacing-8 > * {
+    margin-left: 8px;
+    margin-top: 8px;
 }
 
 .vui-flex-spacing-10 > * {
@@ -109,6 +119,11 @@ export default {
 .vui-flex-spacing-20 > * {
     margin-left: 20px;
     margin-top: 20px;
+}
+
+.vui-flex-spacing-30 > * {
+    margin-left: 30px;
+    margin-top: 30px;
 }
 
 .vui-flex-spacing > *:first-child,
