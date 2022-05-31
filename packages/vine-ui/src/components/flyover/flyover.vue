@@ -66,11 +66,12 @@ export default {
         },
         bodyClass() {
             if (this.position === 'left') {
-                return;
+                return '';
             }
             if (this.attachToBody || !this.$el.parentNode) {
                 return 'vui-flyover-overflow-hidden';
             }
+            return '';
         }
     },
 
