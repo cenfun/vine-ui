@@ -2,7 +2,7 @@
 
 # Vine UI
 - Lightweight UI components based on [Vue 3](https://github.com/vuejs/core)
-- Dist size (js minified: true): 65.0KB / gzip: 14.8KB
+- Dist size (js minified: true): 65.5KB / gzip: 15.0KB
 
 ## Preview Online
 [https://cenfun.github.io/vine-ui/](https://cenfun.github.io/vine-ui/)
