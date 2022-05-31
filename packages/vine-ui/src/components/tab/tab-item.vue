@@ -50,6 +50,7 @@ export default {
         clickHandler(e) {
             //console.log(e);
             this.dataModelValue = this.index;
+            this.$emit('change', this.index);
         }
     }
 };

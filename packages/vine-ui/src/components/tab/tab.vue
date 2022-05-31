@@ -25,6 +25,7 @@
           :index="i"
           :selected="dataModelValue===i"
           :position="position"
+          @change="onChange"
         />
       </div>
 
@@ -106,6 +107,12 @@ export default {
         },
         paneList() {
             return this.panes || this.getSlot('panes') || this.getSlot('default') || [];
+        }
+    },
+
+    methods: {
+        onChange(index) {
+            this.$emit('change', index);
         }
     }
 };

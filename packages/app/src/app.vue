@@ -642,6 +642,7 @@
           <VuiTab
             v-model="tabActive"
             position="left"
+            @change="onTabChange"
           >
             <template #toolbar>
               <div class="vui-flex-auto" />
@@ -691,6 +692,7 @@
             :toolbar="'Right Toolbar Props ' + inputText"
             :tabs="['Tab 1', 'Tab 2', 'Tab 3']"
             :panes="tabPanes"
+            @change="onTabChange"
           />
         </div>
       </div>
@@ -942,6 +944,10 @@ const App = {
                 return;
             }
             elem.$tooltip.disabled = !elem.$tooltip.disabled;
+        },
+
+        onTabChange(index) {
+            console.log(`tab change: ${index}`);
         }
     }
 };
