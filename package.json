@@ -6,6 +6,7 @@
     "main": "",
     "scripts": {
         "build": "sf lint && sf b -m",
+        "patch": "npm run build && sf publish patch",
         "pack": "sf lint && sf pack -m -p docs -q v={version}"
     },
     "repository": {
