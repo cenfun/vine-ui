@@ -503,7 +503,6 @@
         </div>
       </div>
 
-
       <div class="vui-item vui-flex-row">
         <div class="vui-item-name">
           VuiRadio
@@ -661,6 +660,44 @@
         </div>
       </div>
 
+      <div class="vui-item vui-flex-row">
+        <div class="vui-item-name">
+          VuiSwitch
+        </div>
+        <div class="vui-item-example vui-flex-auto vui-flex-row">
+          <VuiFlex spacing="10">
+            <VuiSwitch>switch:</VuiSwitch>
+            <VuiSwitch checked>
+              checked:
+            </VuiSwitch>
+            <VuiSwitch disabled>
+              disabled:
+            </VuiSwitch>
+
+            <VuiSwitch
+              colors="darkred, green"
+            >
+              colors:
+            </VuiSwitch>
+
+            <VuiSwitch
+              width="28px"
+              height="16px"
+              colors=",green"
+            >
+              small:
+            </VuiSwitch>
+
+            <VuiSwitch
+              width="45px"
+              height="24px"
+              checked
+            >
+              large:
+            </VuiSwitch>
+          </VuiFlex>
+        </div>
+      </div>
 
       <div class="vui-item vui-flex-row">
         <div class="vui-item-name">
@@ -790,6 +827,7 @@ const {
     VuiProgress,
     VuiRadio,
     VuiSelect,
+    VuiSwitch,
     VuiTab,
     VuiTooltip
 } = components;
@@ -810,6 +848,7 @@ const App = {
         VuiProgress,
         VuiRadio,
         VuiSelect,
+        VuiSwitch,
         VuiTab,
         VuiTooltip
     },
