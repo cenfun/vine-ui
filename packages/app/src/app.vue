@@ -78,6 +78,10 @@
             <VuiCheckbox />
 
             <VuiCheckbox :label="'label '+checkboxChecked" />
+
+            <VuiCheckbox>
+              this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long!
+            </VuiCheckbox>
           </VuiFlex>
         </div>
       </div>
@@ -548,6 +552,10 @@
               value="2"
               :label="'Props ' + radioValue"
             />
+
+            <VuiRadio name="radioDisabledName">
+              this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long!
+            </VuiRadio>
           </VuiFlex>
         </div>
       </div>
