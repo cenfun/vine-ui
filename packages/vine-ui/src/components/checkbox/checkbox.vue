@@ -129,6 +129,12 @@ export default {
             }
         }
 
+        &:not(:disabled, :checked, :focus) {
+            ~ label:hover::before {
+                border-color: #888;
+            }
+        }
+
         &:focus:not(:checked) {
             ~ label::before {
                 border-color: #80bdff;
@@ -139,12 +145,6 @@ export default {
             ~ label::before {
                 background-color: rgb(0 123 255 / 50%);
                 border-color: #80bdff;
-            }
-        }
-
-        &:not(:disabled):not(:checked):not(:focus) {
-            ~ label:hover::before {
-                border-color: #888;
             }
         }
     }

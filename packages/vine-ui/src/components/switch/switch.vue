@@ -25,6 +25,7 @@
 </template>
 <script>
 import Base from '../../base/base.vue';
+import Util from '../../util/util.js';
 
 const defaultColors = ['#aaaaaa', '#1890ff'];
 
@@ -55,8 +56,7 @@ export default {
 
     data() {
         return {
-            buttonColors: defaultColors,
-            buttonChecked: this.checked
+            buttonColors: defaultColors
         };
     },
 
@@ -73,7 +73,7 @@ export default {
         buttonClassList() {
             return {
                 'vui-switch-button': true,
-                'vui-switch-checked': this.buttonChecked,
+                'vui-switch-checked': this.dataModelValue,
                 'vui-switch-disabled': this.disabled
             };
         },
@@ -83,14 +83,14 @@ export default {
                 'width': this.width,
                 'height': this.height,
                 'border-radius': this.height,
-                'background-color': this.buttonChecked ? this.buttonColors[1] : this.buttonColors[0]
+                'background-color': this.dataModelValue ? this.buttonColors[1] : this.buttonColors[0]
             };
         },
 
         iconStyleList() {
             return {
                 width: `calc(${this.height} - 4px)`,
-                right: this.buttonChecked ? '2px' : `calc(${this.width} - ${this.height} + 2px)`
+                right: this.dataModelValue ? '2px' : `calc(${this.width} - ${this.height} + 2px)`
             };
         },
 
@@ -102,6 +102,10 @@ export default {
     created() {
         const ls = `${this.colors}`.split(',').map((it) => it.trim());
         this.buttonColors = [ls[0] || defaultColors[0], ls[1] || defaultColors[1]];
+
+        if (Util.isInvalid(this.dataModelValue)) {
+            this.dataModelValue = this.checked;
+        }
     },
 
     methods: {
@@ -109,8 +113,7 @@ export default {
             if (this.disabled) {
                 return;
             }
-            this.buttonChecked = !this.buttonChecked;
-            this.$emit('change', this.buttonChecked);
+            this.dataModelValue = !this.dataModelValue;
         }
     }
 };

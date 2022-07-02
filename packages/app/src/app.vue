@@ -27,7 +27,7 @@
           VuiButton
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="5">
+          <VuiFlex spacing="5px">
             <VuiButton label="Label" />
 
             <VuiButton :label="'Props ' + inputText" />
@@ -55,7 +55,7 @@
           VuiCheckbox
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10">
+          <VuiFlex spacing="10px">
             <VuiCheckbox>
               Checkbox
             </VuiCheckbox>
@@ -91,24 +91,26 @@
           VuiFlex
         </div>
         <div class="vui-item-example vui-flex-auto">
-          <VuiFlex spacing="10">
+          <VuiFlex spacing="10px">
             <VuiFlex
-              spacing="10"
+              spacing="10px"
               direction="column"
             >
               <VuiSelect v-model="flexDirection">
                 <option>row</option>
                 <option>column</option>
               </VuiSelect>
+
+              <VuiSwitch v-model="flexCenter">
+                center
+              </VuiSwitch>
+
               <VuiSelect v-model="flexSpacing">
                 <option />
-                <option>3</option>
-                <option>5</option>
-                <option>8</option>
-                <option>10</option>
-                <option>15</option>
-                <option>20</option>
-                <option>30</option>
+                <option>5px</option>
+                <option>10px</option>
+                <option>15px</option>
+                <option>20px</option>
               </VuiSelect>
               <VuiSelect v-model="flexWidth">
                 <option>100px</option>
@@ -125,6 +127,7 @@
 
             <VuiFlex
               :direction="flexDirection"
+              :center="flexCenter"
               :spacing="flexSpacing"
               :width="flexWidth"
               :height="flexHeight"
@@ -138,6 +141,7 @@
 
             <VuiFlex
               :direction="flexDirection"
+              :center="flexCenter"
               :spacing="flexSpacing"
               :width="flexWidth"
               :height="flexHeight"
@@ -156,6 +160,7 @@
 
             <VuiFlex
               :direction="flexDirection"
+              :center="flexCenter"
               :spacing="flexSpacing"
               :width="flexWidth"
               :height="flexHeight"
@@ -181,7 +186,7 @@
           VuiFlyover
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10">
+          <VuiFlex spacing="10px">
             <VuiSelect
               v-model="flyoverWidth"
               label="width:"
@@ -220,7 +225,7 @@
           VuiInput
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10">
+          <VuiFlex spacing="10px">
             <VuiInput
               v-model="inputText"
               label="Name:"
@@ -256,7 +261,7 @@
           VuiLoading
         </div>
         <div class="vui-item-example vui-flex-auto">
-          <VuiFlex spacing="10">
+          <VuiFlex spacing="10px">
             <VuiSelect
               v-model="loadingColor"
               label="Color"
@@ -313,7 +318,7 @@
           VuiPopover
         </div>
         <div class="vui-item-example vui-flex-auto vui-popover-example">
-          <VuiFlex spacing="20">
+          <VuiFlex spacing="20px">
             <VuiButton @click.native="openPopover">
               Open Popover
             </VuiButton>
@@ -484,7 +489,7 @@
           VuiProgress
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10">
+          <VuiFlex spacing="10px">
             <VuiProgress />
             <VuiProgress percentage="100%" />
             <VuiProgress
@@ -512,7 +517,7 @@
           VuiRadio
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10">
+          <VuiFlex spacing="10px">
             <VuiRadio
               v-model="radioValue"
               name="radioName"
@@ -565,7 +570,7 @@
           VuiSelect
         </div>
         <div class="vui-item-example vui-flex-auto">
-          <VuiFlex spacing="15">
+          <VuiFlex spacing="15px">
             <VuiSelect
               v-model="selectValue"
               label="My List:"
@@ -600,7 +605,7 @@
           </VuiFlex>
 
           <VuiFlex
-            spacing="10"
+            spacing="10px"
             style="margin-top: 10px;"
           >
             <VuiSelect
@@ -645,7 +650,7 @@
           </VuiFlex>
 
           <VuiFlex
-            spacing="10"
+            spacing="10px"
             style="margin-top: 10px;"
           >
             <VuiSelect
@@ -673,8 +678,10 @@
           VuiSwitch
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10">
-            <VuiSwitch>switch:</VuiSwitch>
+          <VuiFlex spacing="10px">
+            <VuiSwitch v-model="switchValue">
+              switch:
+            </VuiSwitch>
             <VuiSwitch checked>
               checked:
             </VuiSwitch>
@@ -689,6 +696,7 @@
             </VuiSwitch>
 
             <VuiSwitch
+              v-model="switchValue"
               width="28px"
               height="16px"
               colors=",green"
@@ -778,7 +786,7 @@
           VuiTooltip
         </div>
         <div class="vui-item-example vui-flex-auto">
-          <VuiFlex spacing="20">
+          <VuiFlex spacing="20px">
             <VuiButton tooltip="This is VuiTooltip left This is VuiTooltip left">
               Hover Tooltip
             </VuiButton>
@@ -875,8 +883,9 @@ const App = {
                     label: 'Label'
                 });
             }],
+            flexCenter: false,
             flexDirection: 'column',
-            flexSpacing: '5',
+            flexSpacing: '5px',
             flexWidth: '300px',
             flexHeight: '200px',
             loadingColor: '',
@@ -884,6 +893,7 @@ const App = {
             loadingFast: false,
             loadingCenter: true,
             loadingVisible: true,
+            switchValue: false,
             selectValue: 'STG',
             selectOptions: [{
                 label: 'One'
