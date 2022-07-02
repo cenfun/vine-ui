@@ -475,6 +475,34 @@
         </div>
       </div>
 
+      <div class="vui-item vui-flex-row">
+        <div class="vui-item-name">
+          VuiProgress
+        </div>
+        <div class="vui-item-example vui-flex-auto vui-flex-row">
+          <VuiFlex spacing="10">
+            <VuiProgress />
+            <VuiProgress percentage="100" />
+            <VuiProgress
+              percentage="50"
+              height="10px"
+              width="200px"
+            />
+
+            <VuiProgress
+              percentage="10"
+              color="firebrick"
+              border-color="darkred"
+            />
+            <VuiProgress
+              percentage="80"
+              color="green"
+              border-color="darkgreen"
+            />
+          </VuiFlex>
+        </div>
+      </div>
+
 
       <div class="vui-item vui-flex-row">
         <div class="vui-item-name">
@@ -759,6 +787,7 @@ const {
     VuiLoading,
     VuiModal,
     VuiPopover,
+    VuiProgress,
     VuiRadio,
     VuiSelect,
     VuiTab,
@@ -778,6 +807,7 @@ const App = {
         VuiLoading,
         VuiModal,
         VuiPopover,
+        VuiProgress,
         VuiRadio,
         VuiSelect,
         VuiTab,
