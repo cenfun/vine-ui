@@ -15,7 +15,7 @@ export default {
 
     props: {
         percentage: {
-            type: Number,
+            type: [Number, String],
             default: 0
         },
         width: {
@@ -51,12 +51,17 @@ export default {
         },
 
         styleList() {
+            let per = this.percentage;
+            if (typeof per === 'string') {
+                per = parseFloat(per);
+            }
+
             const st = {
                 'width': this.width,
                 'height': this.height,
                 'border-radius': this.radius,
                 'border-color': this.borderColor,
-                'background': `linear-gradient(${this.color} 0 0) 0/${this.percentage}% no-repeat`
+                'background': `linear-gradient(${this.color} 0 0) 0/${per}% no-repeat`
             };
             return st;
         }

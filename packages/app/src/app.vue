@@ -482,7 +482,7 @@
         <div class="vui-item-example vui-flex-auto vui-flex-row">
           <VuiFlex spacing="10">
             <VuiProgress />
-            <VuiProgress percentage="100" />
+            <VuiProgress percentage="100%" />
             <VuiProgress
               percentage="50"
               height="10px"
