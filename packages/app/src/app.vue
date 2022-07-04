@@ -1011,7 +1011,7 @@ const App = {
             }
             elem.$tooltip = VuiTooltip.createComponent({
                 target: elem,
-                text: elem.getAttribute('tooltip')
+                html: `<div>${elem.getAttribute('tooltip')}</div>`
             });
         },
 

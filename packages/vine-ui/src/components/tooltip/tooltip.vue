@@ -9,7 +9,10 @@
       mode="out-in"
       name="vui-fade"
     >
-      <div class="vui-tooltip-text">
+      <div
+        ref="content"
+        class="vui-tooltip-content"
+      >
         <slot>
           <BaseRender
             v-if="content || text"
@@ -33,6 +36,11 @@ export default {
     props: {
 
         text: {
+            type: String,
+            default: ''
+        },
+
+        html: {
             type: String,
             default: ''
         },
@@ -76,6 +84,7 @@ export default {
 
     },
 
+
     created() {
         if (this.bindTarget) {
             this.dataVisible = false;
@@ -86,6 +95,12 @@ export default {
         if (this.attachToBody || !this.$el.parentNode) {
             document.body.appendChild(this.$el);
         }
+
+        //console.log(this.html);
+        if (this.html) {
+            this.$refs.content.innerHTML = this.html;
+        }
+
         this.bindEvents();
         this.update();
     },
@@ -234,7 +249,7 @@ export default {
     box-shadow: 0 2px 3px 0 rgb(0 0 0 / 20%);
     transition: opacity 0.2s linear, visibility 0.2s linear;
 
-    .vui-tooltip-text {
+    .vui-tooltip-content {
         padding: 10px;
         display: inline-block;
         font-size: 14px;
