@@ -1,6 +1,6 @@
 {
     "name": "vine-ui",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "main": "dist/vine-ui.js",
     "files": [
         "dist"
