@@ -5,10 +5,7 @@
     :disabled="disabled"
   >
     <slot>
-      <BaseRender
-        v-if="label"
-        :content="label"
-      />
+      <BaseRender :content="label" />
     </slot>
   </button>
 </template>

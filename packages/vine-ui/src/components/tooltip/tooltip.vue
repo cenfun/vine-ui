@@ -14,10 +14,7 @@
         class="vui-tooltip-content"
       >
         <slot>
-          <BaseRender
-            v-if="content || text"
-            :content="content || text"
-          />
+          <BaseRender :content="text" />
         </slot>
       </div>
     </transition>

@@ -10,10 +10,7 @@
     >
     <label :for="cid">
       <slot>
-        <BaseRender
-          v-if="label"
-          :content="label"
-        />
+        <BaseRender :content="label" />
       </slot>
     </label>
   </div>
@@ -158,7 +155,7 @@ export default {
             }
         }
 
-        &:not(:disabled):not(:checked):not(:focus) {
+        &:not(:disabled, :checked, :focus) {
             ~ label:hover::before {
                 border-color: #888;
             }

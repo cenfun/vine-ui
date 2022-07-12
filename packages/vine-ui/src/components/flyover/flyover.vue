@@ -4,10 +4,7 @@
     :style="styleList"
   >
     <slot>
-      <BaseRender
-        v-if="content"
-        :content="content"
-      />
+      <BaseRender :content="content" />
     </slot>
   </div>
 </template>

@@ -26,10 +26,7 @@
         </div>
         <div :class="classContent">
           <slot>
-            <BaseRender
-              v-if="content"
-              :content="content"
-            />
+            <BaseRender :content="content" />
           </slot>
         </div>
       </div>

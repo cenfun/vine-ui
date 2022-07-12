@@ -2,10 +2,7 @@
   <div :class="['vui','vui-input', cid]">
     <label v-if="labelContent">
       <slot>
-        <BaseRender
-          v-if="label"
-          :content="label"
-        />
+        <BaseRender :content="label" />
       </slot>
     </label>
     <input

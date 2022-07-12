@@ -5,10 +5,7 @@
       class="vui-switch-label"
     >
       <slot>
-        <BaseRender
-          v-if="label"
-          :content="label"
-        />
+        <BaseRender :content="label" />
       </slot>
     </div>
     <div

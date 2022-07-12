@@ -52,15 +52,15 @@ const flyover = reactive({
 onMounted(() => {
     VuiFlyover.createComponent(flyover, (h) => {
         return {
-            default() {
-                return h('div', {
-                    style: 'padding:10px;'
-                }, h(VuiButton, {
+            default: () => h('div', {
+                style: 'padding:10px;'
+            }, {
+                default: () => h(VuiButton, {
                     onclick() {
                         flyover.visible = !flyover.visible;
                     }
-                }, 'Close'));
-            }
+                }, 'Close')
+            })
         };
     });
 });

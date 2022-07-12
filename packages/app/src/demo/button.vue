@@ -2,10 +2,10 @@
   <VuiFlex spacing="5px">
     <VuiButton label="Label" />
 
-    <VuiButton :label="'Props ' + inputText" />
+    <VuiButton :label="'Props ' + text" />
 
     <VuiButton>
-      Slot {{ inputText }}
+      <b>Slot</b> {{ text }}
     </VuiButton>
 
     <VuiButton disabled>
@@ -28,6 +28,6 @@ const {
     VuiFlex
 } = components;
 
-const inputText = 'Input Text';
+const text = 'Text';
 
 </script>

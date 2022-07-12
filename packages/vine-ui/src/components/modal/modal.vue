@@ -9,10 +9,7 @@
       </div>
       <div class="vui-modal-content vui-flex-auto">
         <slot>
-          <BaseRender
-            v-if="content"
-            :content="content"
-          />
+          <BaseRender :content="content" />
         </slot>
       </div>
     </div>

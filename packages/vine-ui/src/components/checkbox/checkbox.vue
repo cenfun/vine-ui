@@ -8,10 +8,7 @@
     >
     <label :for="cid">
       <slot>
-        <BaseRender
-          v-if="label"
-          :content="label"
-        />
+        <BaseRender :content="label" />
       </slot>
     </label>
   </div>

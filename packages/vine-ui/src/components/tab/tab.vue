@@ -6,10 +6,7 @@
         class="vui-tab-toolbar vui-flex-auto vui-flex-row"
       >
         <slot name="toolbar">
-          <BaseRender
-            v-if="toolbar"
-            :content="toolbar"
-          />
+          <BaseRender :content="toolbar" />
         </slot>
       </div>
 
@@ -35,10 +32,7 @@
         class="vui-tab-toolbar vui-flex-auto vui-flex-row"
       >
         <slot name="toolbar">
-          <BaseRender
-            v-if="toolbar"
-            :content="toolbar"
-          />
+          <BaseRender :content="toolbar" />
         </slot>
       </div>
     </div>
