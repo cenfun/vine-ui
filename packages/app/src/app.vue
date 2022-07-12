@@ -11,7 +11,7 @@
         Based on <a
           href="https://github.com/vuejs/core"
           target="_blank"
-        >Vue 3</a>
+        >Vue 3.x</a>
       </div>
       <div>
         <a
@@ -27,26 +27,7 @@
           VuiButton
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="5px">
-            <VuiButton label="Label" />
-
-            <VuiButton :label="'Props ' + inputText" />
-
-            <VuiButton>
-              Slot {{ inputText }}
-            </VuiButton>
-
-            <VuiButton disabled>
-              Disabled
-            </VuiButton>
-
-            <VuiButton
-              primary
-              tooltip="This is Button tooltip"
-            >
-              Button Primary
-            </VuiButton>
-          </VuiFlex>
+          <DemoButton />
         </div>
       </div>
 
@@ -55,34 +36,7 @@
           VuiCheckbox
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10px">
-            <VuiCheckbox>
-              Checkbox
-            </VuiCheckbox>
-
-            <VuiCheckbox checked>
-              Checked {{ inputText }}
-            </VuiCheckbox>
-
-            <VuiCheckbox v-model="checkboxChecked">
-              Checkbox v-model
-            </VuiCheckbox>
-
-            <VuiCheckbox
-              v-model="checkboxChecked"
-              disabled
-            >
-              Disabled {{ checkboxChecked }}
-            </VuiCheckbox>
-
-            <VuiCheckbox />
-
-            <VuiCheckbox :label="'label '+checkboxChecked" />
-
-            <VuiCheckbox>
-              this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long!
-            </VuiCheckbox>
-          </VuiFlex>
+          <DemoCheckbox />
         </div>
       </div>
 
@@ -91,93 +45,7 @@
           VuiFlex
         </div>
         <div class="vui-item-example vui-flex-auto">
-          <VuiFlex spacing="10px">
-            <VuiFlex
-              spacing="10px"
-              direction="column"
-            >
-              <VuiSelect v-model="flexDirection">
-                <option>row</option>
-                <option>column</option>
-              </VuiSelect>
-
-              <VuiSwitch v-model="flexCenter">
-                center
-              </VuiSwitch>
-
-              <VuiSelect v-model="flexSpacing">
-                <option />
-                <option>5px</option>
-                <option>10px</option>
-                <option>15px</option>
-                <option>20px</option>
-              </VuiSelect>
-              <VuiSelect v-model="flexWidth">
-                <option>100px</option>
-                <option>200px</option>
-                <option>300px</option>
-                <option>30%</option>
-              </VuiSelect>
-              <VuiSelect v-model="flexHeight">
-                <option>100px</option>
-                <option>200px</option>
-                <option>300px</option>
-              </VuiSelect>
-            </VuiFlex>
-
-            <VuiFlex
-              :direction="flexDirection"
-              :center="flexCenter"
-              :spacing="flexSpacing"
-              :width="flexWidth"
-              :height="flexHeight"
-              style="background: #ccc;"
-            >
-              <VuiButton>Button</VuiButton>
-              <span>span</span>
-              <button>Button</button>
-              <div>div</div>
-            </VuiFlex>
-
-            <VuiFlex
-              :direction="flexDirection"
-              :center="flexCenter"
-              :spacing="flexSpacing"
-              :width="flexWidth"
-              :height="flexHeight"
-              style="background: #ccc;"
-            >
-              <VuiButton>Button</VuiButton>
-              <div
-                class="vui-flex-auto"
-                style="background: #eee;"
-              >
-                <span>auto</span>
-                <button>Button</button>
-              </div>
-              <div>div</div>
-            </VuiFlex>
-
-            <VuiFlex
-              :direction="flexDirection"
-              :center="flexCenter"
-              :spacing="flexSpacing"
-              :width="flexWidth"
-              :height="flexHeight"
-              style="background: #ccc;"
-            >
-              <VuiButton>Button</VuiButton>
-              <span>span</span>
-              <div
-                class="vui-flex-empty"
-                style="background: #eee;"
-              >
-                empty
-              </div>
-              <button>Button</button>
-              <div>div</div>
-            </VuiFlex>
-          </VuiFlex>
+          <DemoFlex />
         </div>
       </div>
 
@@ -186,37 +54,7 @@
           VuiFlyover
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10px">
-            <VuiSelect
-              v-model="flyoverWidth"
-              label="width:"
-            >
-              <option>30%</option>
-              <option>50%</option>
-              <option>60%</option>
-              <option>100px</option>
-            </VuiSelect>
-
-            <VuiSelect
-              v-model="flyoverPosition"
-              label="position:"
-            >
-              <option>right</option>
-              <option>left</option>
-            </VuiSelect>
-
-            <VuiButton @click.native="flyoverVisible=!flyoverVisible">
-              Toggle
-            </VuiButton>
-
-            <VuiButton @click.native="flyoverVisible=true">
-              Show
-            </VuiButton>
-
-            <VuiButton @click.native="flyoverVisible=false">
-              Hide
-            </VuiButton>
-          </VuiFlex>
+          <DemoFlyover />
         </div>
       </div>
 
@@ -810,23 +648,15 @@
         </div>
       </div>
     </div>
-    <VuiFlyover
-      ref="flyover"
-      :visible="flyoverVisible"
-      :position="flyoverPosition"
-      :width="flyoverWidth"
-    >
-      <div style="padding: 10px;">
-        This is flyover container
-        <VuiButton @click.native="flyoverVisible=false">
-          close
-        </VuiButton>
-        {{ inputText }}
-      </div>
-    </VuiFlyover>
   </VuiFlex>
 </template>
 <script>
+import DemoButton from './demo/button.vue';
+import DemoCheckbox from './demo/checkbox.vue';
+import DemoFlex from './demo/flex.vue';
+import DemoFlyover from './demo/flyover.vue';
+
+
 import { components, createComponent } from 'vine-ui';
 
 console.log('components', components);
@@ -853,6 +683,10 @@ const App = {
     createComponent,
 
     components: {
+        DemoButton,
+        DemoCheckbox,
+        DemoFlex,
+        DemoFlyover,
         VuiButton,
         VuiCheckbox,
         VuiFlex,
@@ -872,22 +706,15 @@ const App = {
     data() {
         return {
             inputText: '',
-            checkboxChecked: true,
             radioValue: '',
-            flyoverVisible: false,
-            flyoverPosition: 'right',
-            flyoverWidth: '30%',
+
             tabActive: 1,
             tabPanes: ['Pane 1', 'Pane 2', function(h) {
                 return h(VuiButton, {
                     label: 'Label'
                 });
             }],
-            flexCenter: false,
-            flexDirection: 'column',
-            flexSpacing: '5px',
-            flexWidth: '300px',
-            flexHeight: '200px',
+
             loadingColor: '',
             loadingSize: 'l',
             loadingFast: false,
