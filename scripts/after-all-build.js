@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = (o, Util) => {
-  
+
     //console.log(o.jobList);
 
     const item = o.jobList.find((it) => it.name === 'vine-ui');
@@ -31,7 +31,7 @@ module.exports = (o, Util) => {
 
     const componentsStr = dirs.map((dir) => {
         const N = dir.slice(0, 1).toUpperCase() + dir.slice(1).toLowerCase();
-        return `- Vui${N}  `;
+        return `* Vui${N}  `;
     }).join('\r');
 
     const readmeStr = fs.readFileSync(path.resolve(__dirname, 'README.md'), 'utf8');

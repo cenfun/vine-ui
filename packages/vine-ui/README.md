@@ -2,13 +2,13 @@
 
 # Vine UI
 - Lightweight UI components based on [Vue 3](https://github.com/vuejs/core)
-- Dist size (js minified: true): 69.6KB / gzip: 15.8KB
+- Dist size (js minified: true): 70.8KB / gzip: 15.8KB
 
 ## Preview Online
 [https://cenfun.github.io/vine-ui/](https://cenfun.github.io/vine-ui/)
 
 ## Components
-- VuiButton  - VuiCheckbox  - VuiFlex  - VuiFlyover  - VuiInput  - VuiLoading  - VuiModal  - VuiPopover  - VuiProgress  - VuiRadio  - VuiSelect  - VuiSwitch  - VuiTab  - VuiTooltip  
+* VuiButton  * VuiCheckbox  * VuiFlex  * VuiFlyover  * VuiInput  * VuiLayout  * VuiLoading  * VuiModal  * VuiPopover  * VuiProgress  * VuiRadio  * VuiSelect  * VuiSwitch  * VuiTab  * VuiTooltip  
 
 ## Install
 ```sh
