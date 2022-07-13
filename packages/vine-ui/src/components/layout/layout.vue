@@ -154,9 +154,9 @@ export default {
             const prevNode = e.target.previousElementSibling;
             const nextNode = e.target.nextElementSibling;
 
-            //const prevStyle = getComputedStyle(prevNode);
-            //const nextStyle = getComputedStyle(nextNode);
-            //console.log('prev:', prevStyle.flex, 'next:', nextStyle.flex);
+            // const prevStyle = getComputedStyle(prevNode);
+            // const nextStyle = getComputedStyle(nextNode);
+            // console.log('prev:', prevStyle.flexBasis, 'next:', nextStyle.flexBasis);
 
             const sizeKey = this.direction === 'row' ? 'clientWidth' : 'clientHeight';
 
@@ -212,17 +212,25 @@ export default {
         },
 
         updateHandler(e) {
-            let offset = this.option.offsetX;
-            if (this.direction === 'column') {
-                offset = this.option.offsetY;
-            }
+            const offsetKey = this.direction === 'row' ? 'offsetX' : 'offsetY';
+            const offset = this.option[offsetKey];
+
             //console.log(offset);
             //console.log(this.prevNode, this.nextNode);
+
+            const prevSize = this.prevSize + offset;
+            const nextSize = this.nextSize - offset;
+            if (prevSize < 0 || nextSize < 0) {
+                return;
+            }
+
+            //const styleKey = this.direction === 'row' ? 'width' : 'height';
+            const styleKey = 'flexBasis';
             if (this.prevNode) {
-                this.prevNode.style.flexBasis = `${this.prevSize + offset}px`;
+                this.prevNode.style[styleKey] = `${prevSize}px`;
             }
             if (this.nextNode) {
-                this.nextNode.style.flexBasis = `${this.nextSize - offset}px`;
+                this.nextNode.style[styleKey] = `${nextSize}px`;
             }
 
         },
@@ -278,7 +286,7 @@ export default {
     content: "";
     position: absolute;
     display: block;
-    transform: translate(-50%, -50%);
+    background-color: transparent;
 }
 
 .vui-layout-row > {
@@ -291,6 +299,7 @@ export default {
     .vui-layout-gutter::after {
         width: 10px;
         height: 100%;
+        transform: translateX(-50%);
     }
 }
 
@@ -304,6 +313,7 @@ export default {
     .vui-layout-gutter::after {
         width: 100%;
         height: 10px;
+        transform: translateY(-50%);
     }
 }
 
