@@ -63,34 +63,7 @@
           VuiInput
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10px">
-            <VuiInput
-              v-model="inputText"
-              label="Name:"
-            />
-
-            <VuiInput
-              v-model="inputText"
-              placeholder="no label placeholder"
-              width="150px"
-            />
-
-            <VuiInput disabled>
-              Disabled {{ inputText }}:
-            </VuiInput>
-
-            <VuiInput
-              type="number"
-              step="10"
-            >
-              Number:
-            </VuiInput>
-
-            <VuiInput
-              :label="inputText"
-              placeholder="props"
-            />
-          </VuiFlex>
+          <DemoInput />
         </div>
       </div>
 
@@ -99,44 +72,7 @@
           VuiLoading
         </div>
         <div class="vui-item-example vui-flex-auto">
-          <VuiFlex spacing="10px">
-            <VuiSelect
-              v-model="loadingColor"
-              label="Color"
-            >
-              <option />
-              <option>red</option>
-              <option>green</option>
-              <option>#666</option>
-            </VuiSelect>
-            <VuiSelect
-              v-model="loadingSize"
-              label="Size"
-            >
-              <option />
-              <option>s</option>
-              <option>m</option>
-              <option>l</option>
-            </VuiSelect>
-            <VuiCheckbox v-model="loadingFast">
-              Fast
-            </VuiCheckbox>
-            <VuiCheckbox v-model="loadingCenter">
-              Center
-            </VuiCheckbox>
-            <VuiCheckbox v-model="loadingVisible">
-              Visible
-            </VuiCheckbox>
-          </VuiFlex>
-          <div style="height: 80px; position: relative; border: 1px solid #eee; margin-top: 5px;">
-            <VuiLoading
-              :size="loadingSize"
-              :color="loadingColor"
-              :fast="loadingFast"
-              :center="loadingCenter"
-              :visible="loadingVisible"
-            />
-          </div>
+          <DemoLoading />
         </div>
       </div>
 
@@ -145,9 +81,7 @@
           VuiModal
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiButton @click.native="openModal">
-            Open Modal
-          </VuiButton>
+          <DemoModal />
         </div>
       </div>
 
@@ -156,169 +90,7 @@
           VuiPopover
         </div>
         <div class="vui-item-example vui-flex-auto vui-popover-example">
-          <VuiFlex spacing="20px">
-            <VuiButton @click.native="openPopover">
-              Open Popover
-            </VuiButton>
-            <VuiButton @click.native="openPopover">
-              Open Popover
-            </VuiButton>
-            <div class="vui-flex-empty" />
-            <VuiButton @click.native="openPopover">
-              Open Popover
-            </VuiButton>
-            <VuiButton @click.native="openPopover">
-              Open Popover
-            </VuiButton>
-          </VuiFlex>
-
-          <div style="background: #f5f5f5; margin-top: 10px;">
-            <div class="vui-popup-arrow-example" />
-          </div>
-
-          <div style="position: relative; width: 520px; height: 360px; border: 1px solid #ccc; margin-top: 10px;">
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="bottom-right"
-              :target="{left:20,top:10}"
-              :width="100"
-            >
-              bottom-right {{ inputText }}
-            </VuiPopover>
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="bottom-center"
-              :target="{left:260,top:10}"
-              :width="100"
-            >
-              bottom-center
-            </VuiPopover>
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="bottom-left"
-              :target="{left:500,top:10}"
-              :width="100"
-            >
-              bottom-left
-            </VuiPopover>
-
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="left-bottom"
-              :target="{left:510,top:90}"
-              :width="100"
-            >
-              left-bottom
-            </VuiPopover>
-
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="left-center"
-              :target="{left:510,top:180}"
-              :width="100"
-            >
-              left-center
-            </VuiPopover>
-
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="left-top"
-              :target="{left:510,top:270}"
-              :width="100"
-            >
-              left-top
-            </VuiPopover>
-
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="top-left"
-              :target="{left:500,top:350}"
-              :width="100"
-            >
-              top-left
-            </VuiPopover>
-
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="top-center"
-              :target="{left:260,top:350}"
-              :width="100"
-            >
-              top-center
-            </VuiPopover>
-
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="top-right"
-              :target="{left:20,top:350}"
-              :width="100"
-            >
-              top-right
-            </VuiPopover>
-
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="right-top"
-              :target="{left:10,top:270}"
-              :width="100"
-            >
-              right-top
-            </VuiPopover>
-
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="right-center"
-              :target="{left:10,top:180}"
-              :width="100"
-            >
-              right-center
-            </VuiPopover>
-
-            <VuiPopover
-              :attach-to-body="false"
-              :auto-close="false"
-              :bind-resize="false"
-              :bind-scroll="false"
-              positions="right-bottom"
-              :target="{left:10,top:90}"
-              :width="100"
-            >
-              right-bottom
-            </VuiPopover>
-          </div>
+          <DemoPopover />
         </div>
       </div>
 
@@ -327,26 +99,7 @@
           VuiProgress
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10px">
-            <VuiProgress />
-            <VuiProgress percentage="100%" />
-            <VuiProgress
-              percentage="50"
-              height="10px"
-              width="200px"
-            />
-
-            <VuiProgress
-              percentage="10"
-              color="firebrick"
-              border-color="darkred"
-            />
-            <VuiProgress
-              percentage="80"
-              color="green"
-              border-color="darkgreen"
-            />
-          </VuiFlex>
+          <DemoProgress />
         </div>
       </div>
 
@@ -355,51 +108,7 @@
           VuiRadio
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10px">
-            <VuiRadio
-              v-model="radioValue"
-              name="radioName"
-              value="1"
-            >
-              Radio 1
-            </VuiRadio>
-
-            <VuiRadio
-              v-model="radioValue"
-              name="radioName"
-              value="2"
-            >
-              Radio 2 {{ inputText }}
-            </VuiRadio>
-
-            <VuiRadio
-              checked
-              name="radioDisabledName"
-              value="3"
-            />
-
-            <VuiRadio
-              v-model="radioValue"
-              disabled
-              name="radioDisabledName"
-              value="1"
-            >
-              Disabled {{ radioValue }}
-            </VuiRadio>
-
-            <VuiRadio
-              v-model="radioValue"
-              checked
-              disabled
-              name="radioDisabledName"
-              value="2"
-              :label="'Props ' + radioValue"
-            />
-
-            <VuiRadio name="radioDisabledName">
-              this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long!
-            </VuiRadio>
-          </VuiFlex>
+          <DemoRadio />
         </div>
       </div>
 
@@ -408,106 +117,7 @@
           VuiSelect
         </div>
         <div class="vui-item-example vui-flex-auto">
-          <VuiFlex spacing="15px">
-            <VuiSelect
-              v-model="selectValue"
-              label="My List:"
-              :options="selectOptions"
-            />
-
-            <VuiSelect label="selected:">
-              <option>option 1</option>
-              <option>option 2</option>
-              <option>option 3</option>
-              <option selected>
-                One
-              </option>
-              <option>Two</option>
-            </VuiSelect>
-
-            <VuiSelect
-              v-model="selectValue"
-              disabled
-              label="Disabled:"
-            >
-              <option>option 1</option>
-              <option>option 2</option>
-              <option>option 3</option>
-            </VuiSelect>
-
-            <VuiSelect label="empty list:" />
-
-            <VuiSelect label="empty value:">
-              <div />
-            </VuiSelect>
-          </VuiFlex>
-
-          <VuiFlex
-            spacing="10px"
-            style="margin-top: 10px;"
-          >
-            <VuiSelect
-              v-model="selectValue"
-              label="Select:"
-              :options="selectList"
-            />
-            <VuiSelect
-              v-model="selectValue"
-              label="200 width:"
-              width="200"
-              :options="selectList"
-            />
-            <VuiSelect
-              v-model="selectValue"
-              label="Disabled:"
-              :options="selectList"
-              disabled
-            />
-            <div class="vui-flex-empty" />
-            <VuiSelect
-              v-model="selectValue"
-              label="Slot Options:"
-            >
-              <option />
-              <option>5</option>
-              <option>10</option>
-              <option>15</option>
-              <option>20</option>
-            </VuiSelect>
-
-            <VuiSelect
-              v-model="selectValue"
-              label="Slot Options:"
-            >
-              <option />
-              <option>dddddddddd ddddddddddddddddd ddddddddddddd5</option>
-              <option>10ddddd ddddddddddd</option>
-              <option>15ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</option>
-              <option>20ddddddd ddddddddddd</option>
-            </VuiSelect>
-          </VuiFlex>
-
-          <VuiFlex
-            spacing="10px"
-            style="margin-top: 10px;"
-          >
-            <VuiSelect
-              v-model="selectValue"
-              label="Input:"
-              :options="selectResults"
-              :searchable="true"
-              @search="onSelectSearch"
-              @remove="onSelectRemove"
-            />
-            <VuiSelect
-              v-model="selectValue"
-              label="100 width:"
-              width="100"
-              :options="selectResults"
-              :searchable="true"
-              @remove="onSelectRemove"
-            />
-          </VuiFlex>
+          <DemoSelect />
         </div>
       </div>
 
@@ -516,40 +126,7 @@
           VuiSwitch
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <VuiFlex spacing="10px">
-            <VuiSwitch v-model="switchValue">
-              switch:
-            </VuiSwitch>
-            <VuiSwitch checked>
-              checked:
-            </VuiSwitch>
-            <VuiSwitch disabled>
-              disabled:
-            </VuiSwitch>
-
-            <VuiSwitch
-              colors="darkred, green"
-            >
-              colors:
-            </VuiSwitch>
-
-            <VuiSwitch
-              v-model="switchValue"
-              width="28px"
-              height="16px"
-              colors=",green"
-            >
-              small:
-            </VuiSwitch>
-
-            <VuiSwitch
-              width="45px"
-              height="24px"
-              checked
-            >
-              large:
-            </VuiSwitch>
-          </VuiFlex>
+          <DemoSwitch />
         </div>
       </div>
 
@@ -558,61 +135,7 @@
           VuiTab
         </div>
         <div class="vui-item-example vui-flex-auto">
-          <VuiTab
-            v-model="tabActive"
-            position="left"
-            @change="onTabChange"
-          >
-            <template #toolbar>
-              <div class="vui-flex-auto" />
-              <div
-                class="vui-tab-icon vui-tab-icon-plus"
-                tooltip="This is toolbar tooltip"
-              >
-                Left Toolbar Slot {{ inputText }}
-              </div>
-            </template>
-            <template #tabs>
-              <div>
-                Tab 1 {{ inputText }}
-              </div>
-              <div>Tab 2</div>
-
-              <div
-                class="vui-tab-icon vui-tab-icon-tools"
-                tooltip="This is tab tooltip"
-              >
-                Tab 3
-              </div>
-
-              <div>
-                Tab 4 Max Width Long Text Long Text Long Text
-              </div>
-              <div>Tab 5</div>
-              <span />
-            </template>
-            <template #panes>
-              <div>Pane 1 </div>
-              <div style="height: 100px;">
-                Pane 2 100px height {{ inputText }}
-              </div>
-              <div>Pane 3</div>
-              <VuiButton>
-                Button Pane 4
-              </VuiButton>
-              <div>Pane 5</div>
-              <span />
-            </template>
-          </VuiTab>
-          <div class="vui-vs-10" />
-          <VuiTab
-            v-model="tabActive"
-            position="right"
-            :toolbar="'Right Toolbar Props ' + inputText"
-            :tabs="['Tab 1', 'Tab 2', 'Tab 3']"
-            :panes="tabPanes"
-            @change="onTabChange"
-          />
+          <DemoTab />
         </div>
       </div>
 
@@ -624,27 +147,7 @@
           VuiTooltip
         </div>
         <div class="vui-item-example vui-flex-auto">
-          <VuiFlex spacing="20px">
-            <VuiButton tooltip="This is VuiTooltip left This is VuiTooltip left">
-              Hover Tooltip
-            </VuiButton>
-
-            <div class="vui-flex-auto">
-              <VuiButton tooltip="This is VuiTooltip left">
-                Hover Tooltip
-              </VuiButton>
-              <VuiButton tooltip="This is VuiTooltip center">
-                Hover Tooltip
-              </VuiButton>
-            </div>
-
-            <VuiButton tooltip="This is VuiTooltip center">
-              Hover Tooltip
-            </VuiButton>
-            <VuiButton tooltip="This is VuiTooltip right">
-              Hover Tooltip
-            </VuiButton>
-          </VuiFlex>
+          <DemoTooltip />
         </div>
       </div>
     </div>
@@ -655,28 +158,22 @@ import DemoButton from './demo/button.vue';
 import DemoCheckbox from './demo/checkbox.vue';
 import DemoFlex from './demo/flex.vue';
 import DemoFlyover from './demo/flyover.vue';
-
+import DemoInput from './demo/input.vue';
+import DemoLoading from './demo/loading.vue';
+import DemoModal from './demo/modal.vue';
+import DemoPopover from './demo/popover.vue';
+import DemoProgress from './demo/progress.vue';
+import DemoRadio from './demo/radio.vue';
+import DemoSelect from './demo/select.vue';
+import DemoSwitch from './demo/switch.vue';
+import DemoTab from './demo/tab.vue';
+import DemoTooltip from './demo/tooltip.vue';
 
 import { components, createComponent } from 'vine-ui';
 
 console.log('components', components);
 
-const {
-    VuiButton,
-    VuiCheckbox,
-    VuiFlex,
-    VuiFlyover,
-    VuiInput,
-    VuiLoading,
-    VuiModal,
-    VuiPopover,
-    VuiProgress,
-    VuiRadio,
-    VuiSelect,
-    VuiSwitch,
-    VuiTab,
-    VuiTooltip
-} = components;
+const { VuiFlex } = components;
 
 const App = {
 
@@ -687,182 +184,17 @@ const App = {
         DemoCheckbox,
         DemoFlex,
         DemoFlyover,
-        VuiButton,
-        VuiCheckbox,
-        VuiFlex,
-        VuiFlyover,
-        VuiInput,
-        VuiLoading,
-        VuiModal,
-        VuiPopover,
-        VuiProgress,
-        VuiRadio,
-        VuiSelect,
-        VuiSwitch,
-        VuiTab,
-        VuiTooltip
-    },
-
-    data() {
-        return {
-            inputText: '',
-            radioValue: '',
-
-            tabActive: 1,
-            tabPanes: ['Pane 1', 'Pane 2', function(h) {
-                return h(VuiButton, {
-                    label: 'Label'
-                });
-            }],
-
-            loadingColor: '',
-            loadingSize: 'l',
-            loadingFast: false,
-            loadingCenter: true,
-            loadingVisible: true,
-            switchValue: false,
-            selectValue: 'STG',
-            selectOptions: [{
-                label: 'One'
-            }, {
-                label: 'Two'
-            }, {
-                label: 'Three'
-            }],
-            selectList: [
-                '',
-                'DEV',
-                'QA',
-                'STG',
-                'LOCAL'
-            ],
-            selectResults: [
-                '',
-                'Short',
-                'Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long',
-                "I'm a really long string that I'm going to use to test the ellipsis functionality",
-                'QA'
-            ]
-        };
-    },
-
-    mounted() {
-        this.initTooltip();
-    },
-
-    methods: {
-
-        onSelectSearch(e) {
-
-            //console.log(e);
-            const value = e.target.value;
-
-            const len = Math.ceil(30 * Math.random());
-            const results = [];
-            let i = 0;
-            while (i < len) {
-                const ls = [value];
-                ls.length = Math.ceil(12 * Math.random());
-                const str = ls.join(' Text');
-                results.push({
-                    label: `${i + 1}, ${str}`,
-                    removable: true
-                });
-                i++;
-            }
-            this.selectResults = results;
-
-            //console.log(v);
-        },
-
-        onSelectRemove(item, e) {
-            console.log('onSelectRemove', item, e);
-        },
-
-        openModal() {
-            VuiModal.createComponent({
-                title: 'Modal Title'
-            }, (h) => {
-                return {
-                    default: () => {
-                        return [h(VuiCheckbox, {
-                            label: 'Modal Checkbox'
-                        }), h(VuiButton, {
-                            label: 'Modal Button'
-                        })];
-                    }
-                };
-            });
-        },
-
-        openPopover: function(e) {
-            VuiPopover.createComponent({
-                target: e.target,
-                title: 'Popover Title'
-            }, (h) => {
-                return {
-                    default: () => {
-                        return [h(VuiCheckbox, {
-                            label: 'Popover Checkbox 1'
-                        }), h(VuiCheckbox, {
-                            label: 'Popover Checkbox 2'
-                        }), h(VuiCheckbox, {
-                            label: 'Popover Checkbox 3'
-                        })];
-                    }
-                };
-            });
-        },
-
-        initTooltip() {
-            setTimeout(() => {
-                const tooltips = Array.from(document.querySelectorAll('[tooltip]'));
-                tooltips.forEach((item) => {
-                    item.addEventListener('click', () => {
-                        this.pinTooltip(item);
-                    });
-                    item.addEventListener('mouseenter', () => {
-                        this.showTooltip(item);
-                    });
-                    item.addEventListener('mouseleave', () => {
-                        this.hideTooltip(item);
-                    });
-                });
-            }, 100);
-        },
-
-        showTooltip: function(elem) {
-            this.hideTooltip(elem);
-            if (elem.$tooltip) {
-                return;
-            }
-            elem.$tooltip = VuiTooltip.createComponent({
-                target: elem,
-                html: `<div>${elem.getAttribute('tooltip')}</div>`
-            });
-        },
-
-        hideTooltip: function(elem) {
-            if (!elem.$tooltip) {
-                return;
-            }
-            if (elem.$tooltip.disabled) {
-                return;
-            }
-            elem.$tooltip.unmount();
-            elem.$tooltip = null;
-        },
-
-        pinTooltip: function(elem) {
-            if (!elem.$tooltip || elem.nodeName !== 'BUTTON') {
-                return;
-            }
-            elem.$tooltip.disabled = !elem.$tooltip.disabled;
-        },
-
-        onTabChange(index) {
-            console.log(`tab change: ${index}`);
-        }
+        DemoInput,
+        DemoLoading,
+        DemoModal,
+        DemoPopover,
+        DemoProgress,
+        DemoRadio,
+        DemoSelect,
+        DemoSwitch,
+        DemoTab,
+        DemoTooltip,
+        VuiFlex
     }
 };
 
@@ -944,33 +276,6 @@ body {
 .vui-item-example {
     border-left: 1px solid #ccc;
     padding: 5px 5px 5px 10px;
-}
-
-.vui-popover-example .vui-popover-content {
-    text-align: center;
-}
-
-.vui-popup-arrow-example {
-    height: 54px;
-    background-repeat: no-repeat;
-    background-image: url("../../../packages/vine-ui/src/base/images/popup-arrow.svg");
-    background-size: 54px 54px;
-}
-
-.vui-tab-icon {
-    padding-left: 25px;
-    background-repeat: no-repeat;
-    background-position: 2px center;
-    background-size: 18px 18px;
-    padding-right: 8px;
-}
-
-.vui-tab-icon-tools {
-    background-image: url("images/tools.svg");
-}
-
-.vui-tab-icon-plus {
-    background-image: url("images/plus.svg");
 }
 
 </style>

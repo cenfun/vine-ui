@@ -54,13 +54,12 @@ onMounted(() => {
         return {
             default: () => h('div', {
                 style: 'padding:10px;'
-            }, {
-                default: () => h(VuiButton, {
-                    onclick() {
-                        flyover.visible = !flyover.visible;
-                    }
-                }, 'Close')
-            })
+            }, h(VuiButton, {
+                label: 'Close',
+                onClick() {
+                    flyover.visible = !flyover.visible;
+                }
+            }))
         };
     });
 });
