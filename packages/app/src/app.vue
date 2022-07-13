@@ -30,7 +30,7 @@
         <div class="vui-item-name">
           {{ item.name }}
         </div>
-        <div class="vui-item-example vui-flex-auto vui-flex-row">
+        <div class="vui-item-example vui-flex-auto">
           <component :is="item.Demo" />
         </div>
       </div>
