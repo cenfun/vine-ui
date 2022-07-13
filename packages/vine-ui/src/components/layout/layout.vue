@@ -11,6 +11,9 @@
 
 <script>
 import Base from '../../base/base.vue';
+import {
+    unbindEvents, bindEvents, preventDefault
+} from '../../util/util.js';
 
 export default {
 
@@ -73,28 +76,185 @@ export default {
 
     mounted() {
         const children = Array.from(this.$el.children);
-        console.log(children);
+        // console.log(children);
         if (children.length < 2) {
             return;
         }
         children.length -= 1;
-        const gutterList = [];
         children.forEach((child, i) => {
             const gutter = document.createElement('div');
             gutter.className = 'vui-layout-gutter';
             child.insertAdjacentElement('afterend', gutter);
-            gutterList.push(gutter);
         });
 
+        this.bindEvents();
 
+    },
+
+    methods: {
+        bindEvents() {
+            this.mousedownEvents = {
+                mousedown: {
+                    handler: (e) => {
+                        this.startHandler(e);
+                    }
+                }
+            };
+            bindEvents(this.mousedownEvents, this.$el);
+        },
+
+        startHandler(e) {
+
+            const cl = e.target.classList;
+            if (!cl.contains('vui-layout-gutter')) {
+                return;
+            }
+
+            cl.add('vui-layout-active');
+            this.$el.classList.add('vui-layout-moving');
+
+            this.initNodes(e);
+
+            this.option = {
+                startX: e.pageX,
+                startY: e.pageY,
+                offsetX: 0,
+                offsetY: 0
+            };
+
+            //stop nested layout event
+            e.stopImmediatePropagation();
+            //console.log('start');
+
+            this.windowEvents = {
+                mousemove: {
+                    handler: (ee) => {
+                        this.iframeHandler(ee);
+                        this.mouseMoveHandler(ee);
+                    },
+                    options: true
+                },
+                mouseup: {
+                    handler: (ee) => {
+                        cl.remove('vui-layout-active');
+                        this.mouseUpHandler(ee);
+                    },
+                    options: {
+                        once: true
+                    }
+                }
+            };
+            bindEvents(this.windowEvents, window);
+        },
+
+        initNodes(e) {
+            this.prevNode = null;
+            this.nextNode = null;
+
+            const prevNode = e.target.previousElementSibling;
+            const nextNode = e.target.nextElementSibling;
+
+            //const prevStyle = getComputedStyle(prevNode);
+            //const nextStyle = getComputedStyle(nextNode);
+            //console.log('prev:', prevStyle.flex, 'next:', nextStyle.flex);
+
+            const sizeKey = this.direction === 'row' ? 'clientWidth' : 'clientHeight';
+
+            if (prevNode) {
+                this.prevSize = prevNode[sizeKey];
+                this.prevNode = prevNode;
+            }
+
+            if (nextNode) {
+                this.nextSize = nextNode[sizeKey];
+                this.nextNode = nextNode;
+            }
+        },
+
+        clean() {
+            unbindEvents(this.windowEvents);
+            this.windowEvents = null;
+            if (this.previousIframe) {
+                this.previousIframe.classList.remove('iframe-pointer-events-none');
+                this.previousIframe = null;
+            }
+            this.$el.classList.remove('vui-layout-moving');
+            this.prevNode = null;
+            this.nextNode = null;
+        },
+
+        iframeHandler: function(e) {
+            const target = e.target;
+            if (target.nodeName !== 'IFRAME') {
+                return;
+            }
+            if (target === this.previousIframe) {
+                return;
+            }
+            if (this.previousIframe) {
+                this.previousIframe.classList.remove('iframe-pointer-events-none');
+            }
+            target.classList.add('iframe-pointer-events-none');
+            this.previousIframe = target;
+        },
+
+        mouseMoveHandler: function(e) {
+            preventDefault(e);
+            const o = this.option;
+            o.offsetX = e.pageX - o.startX;
+            o.offsetY = e.pageY - o.startY;
+            this.updateHandler(e);
+        },
+
+        mouseUpHandler: function(e) {
+            preventDefault(e);
+            this.clean();
+        },
+
+        updateHandler(e) {
+            let offset = this.option.offsetX;
+            if (this.direction === 'column') {
+                offset = this.option.offsetY;
+            }
+            //console.log(offset);
+            //console.log(this.prevNode, this.nextNode);
+            if (this.prevNode) {
+                this.prevNode.style.flexBasis = `${this.prevSize + offset}px`;
+            }
+            if (this.nextNode) {
+                this.nextNode.style.flexBasis = `${this.nextSize - offset}px`;
+            }
+
+        },
+
+        beforeUnmount() {
+            this.clean();
+            unbindEvents(this.mousedownEvents);
+            this.mousedownEvents = null;
+        }
     }
 };
 
 </script>
 
 <style lang="scss">
+.iframe-pointer-events-none {
+    pointer-events: none;
+}
+
 .vui-layout {
     position: relative;
+}
+
+.vui-layout-moving > {
+    * {
+        pointer-events: none;
+    }
+
+    .vui-layout-active {
+        background-color: #0077cf;
+        pointer-events: auto;
+    }
 }
 
 .vui-layout-row > * {
@@ -107,6 +267,7 @@ export default {
 
 .vui-layout-gutter {
     position: relative;
+    z-index: 100;
 }
 
 .vui-layout-gutter:hover {

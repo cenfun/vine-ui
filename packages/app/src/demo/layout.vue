@@ -9,7 +9,10 @@
     >
       left
     </div>
-    <div class="vui-layout-item vui-flex-auto">
+    <div
+      class="vui-layout-item vui-flex-auto"
+      style="min-width: 200px;"
+    >
       <VuiLayout
         height="100%"
         direction="column"
@@ -21,7 +24,9 @@
         >
           top
         </div>
-        <div class="vui-layout-item vui-flex-auto">
+        <div
+          class="vui-layout-item vui-flex-auto"
+        >
           middle
         </div>
         <div
@@ -31,6 +36,12 @@
           bottom
         </div>
       </VuiLayout>
+    </div>
+    <div
+      class="vui-layout-item"
+      style="width: 100px;"
+    >
+      column
     </div>
     <div
       class="vui-layout-item"

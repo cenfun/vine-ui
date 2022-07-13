@@ -74,6 +74,36 @@ export const clamp = function(value, min, max) {
     return Math.max(min, Math.min(max, value));
 };
 
+export const unbindEvents = function(events) {
+    if (!events) {
+        return;
+    }
+    Object.keys(events).forEach((type) => {
+        const item = events[type];
+        if (item.target) {
+            item.target.removeEventListener(type, item.handler, item.options);
+        }
+    });
+};
+
+export const bindEvents = function(events, target) {
+    if (!events) {
+        return;
+    }
+    unbindEvents(events);
+    Object.keys(events).forEach((type) => {
+        const item = events[type];
+        item.target = item.target || target;
+        item.target.addEventListener(type, item.handler, item.options);
+    });
+};
+
+export const preventDefault = function(e) {
+    if (e && typeof e.preventDefault === 'function' && e.cancelable) {
+        e.preventDefault();
+    }
+};
+
 export const pascalToKebabCase = function(text) {
     return (`${text}`).trim()
         .replace(/([a-z])([A-Z])/g, '$1-$2')
@@ -91,5 +121,8 @@ export default {
     token,
     getValue,
     clamp,
+    unbindEvents,
+    bindEvents,
+    preventDefault,
     pascalToKebabCase
 };
