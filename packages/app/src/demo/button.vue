@@ -1,5 +1,5 @@
 <template>
-  <VuiFlex spacing="5px">
+  <VuiFlex spacing="10px">
     <VuiButton label="Label" />
 
     <VuiButton :label="'Props ' + text" />

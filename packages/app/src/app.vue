@@ -22,179 +22,60 @@
       </div>
     </div>
     <div class="vui-body vui-flex-auto">
-      <div class="vui-item vui-flex-row">
+      <div
+        v-for="(item, i) in list"
+        :key="i"
+        class="vui-item vui-flex-row"
+      >
         <div class="vui-item-name">
-          VuiButton
+          {{ item.name }}
         </div>
         <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <DemoButton />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiCheckbox
-        </div>
-        <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <DemoCheckbox />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiFlex
-        </div>
-        <div class="vui-item-example vui-flex-auto">
-          <DemoFlex />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiFlyover
-        </div>
-        <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <DemoFlyover />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiInput
-        </div>
-        <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <DemoInput />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiLoading
-        </div>
-        <div class="vui-item-example vui-flex-auto">
-          <DemoLoading />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiModal
-        </div>
-        <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <DemoModal />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiPopover
-        </div>
-        <div class="vui-item-example vui-flex-auto vui-popover-example">
-          <DemoPopover />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiProgress
-        </div>
-        <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <DemoProgress />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiRadio
-        </div>
-        <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <DemoRadio />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiSelect
-        </div>
-        <div class="vui-item-example vui-flex-auto">
-          <DemoSelect />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiSwitch
-        </div>
-        <div class="vui-item-example vui-flex-auto vui-flex-row">
-          <DemoSwitch />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div class="vui-item-name">
-          VuiTab
-        </div>
-        <div class="vui-item-example vui-flex-auto">
-          <DemoTab />
-        </div>
-      </div>
-
-      <div class="vui-item vui-flex-row">
-        <div
-          class="vui-item-name"
-          tooltip="This is VuiTooltip left This is VuiTooltip left"
-        >
-          VuiTooltip
-        </div>
-        <div class="vui-item-example vui-flex-auto">
-          <DemoTooltip />
+          <component :is="item.Demo" />
         </div>
       </div>
     </div>
   </VuiFlex>
 </template>
 <script>
-import DemoButton from './demo/button.vue';
-import DemoCheckbox from './demo/checkbox.vue';
-import DemoFlex from './demo/flex.vue';
-import DemoFlyover from './demo/flyover.vue';
-import DemoInput from './demo/input.vue';
-import DemoLoading from './demo/loading.vue';
-import DemoModal from './demo/modal.vue';
-import DemoPopover from './demo/popover.vue';
-import DemoProgress from './demo/progress.vue';
-import DemoRadio from './demo/radio.vue';
-import DemoSelect from './demo/select.vue';
-import DemoSwitch from './demo/switch.vue';
-import DemoTab from './demo/tab.vue';
-import DemoTooltip from './demo/tooltip.vue';
-
 import { components, createComponent } from 'vine-ui';
 
 console.log('components', components);
 
 const { VuiFlex } = components;
 
+const context = require.context('./demo', true, /\.vue$/);
+const demos = {};
+const list = [];
+const paths = context.keys();
+paths.forEach((path) => {
+    //console.log(path);
+    const fileName = path.split('/').pop();
+    const demoName = fileName.split('.').shift();
+    const N = demoName.slice(0, 1).toUpperCase() + demoName.slice(1).toLowerCase();
+    const Demo = context(path).default;
+    demos[`Demo${N}`] = Demo;
+    list.push({
+        name: `Vui${N}`,
+        Demo
+    });
+});
+
+console.log('demos', demos);
+
 const App = {
 
     createComponent,
 
     components: {
-        DemoButton,
-        DemoCheckbox,
-        DemoFlex,
-        DemoFlyover,
-        DemoInput,
-        DemoLoading,
-        DemoModal,
-        DemoPopover,
-        DemoProgress,
-        DemoRadio,
-        DemoSelect,
-        DemoSwitch,
-        DemoTab,
-        DemoTooltip,
-        VuiFlex
+        VuiFlex,
+        ... demos
+    },
+
+    setup: () => {
+        return {
+            list
+        };
     }
 };
 
@@ -267,7 +148,7 @@ body {
 }
 
 .vui-item-name {
-    width: 90px;
+    width: 99px;
     padding: 5px 5px 5px 0;
     overflow: hidden;
     color: #000;
