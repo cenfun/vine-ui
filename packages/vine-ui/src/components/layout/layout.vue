@@ -14,7 +14,7 @@ import Base from '../../base/base.vue';
 
 export default {
 
-    name: 'VuiFlex',
+    name: 'VuiLayout',
 
     extends: Base,
 
@@ -34,17 +34,8 @@ export default {
                 return ['row', 'column'].includes(value);
             }
         },
-        center: {
-            type: Boolean,
-            default: false
-        },
         content: {
             validator: (v) => true,
-            default: ''
-        },
-
-        spacing: {
-            type: String,
             default: ''
         }
     },
@@ -53,15 +44,9 @@ export default {
         classList() {
             const ls = [
                 'vui',
-                'vui-flex',
+                'vui-layout',
                 `vui-flex-${this.direction}`
             ];
-            if (this.center) {
-                ls.push('vui-flex-center');
-            }
-            if (this.spacing) {
-                ls.push('vui-flex-spacing');
-            }
             ls.push(this.cid);
             return ls;
         },
@@ -74,9 +59,6 @@ export default {
             if (this.height) {
                 st.height = this.height;
             }
-            if (this.spacing) {
-                st['--vui-flex-spacing'] = this.spacing;
-            }
             return st;
         }
     }
@@ -85,60 +67,8 @@ export default {
 </script>
 
 <style lang="scss">
-.vui-flex {
-    --vui-flex-spacing: 0;
-}
-
-.vui-flex-auto {
-    flex: 1 1 0%;
-    overflow: hidden;
-}
-
-.vui-flex-empty {
-    flex: 1 1 0%;
-    overflow: hidden;
-    margin: 0;
-}
-
-.vui-flex-center {
-    justify-content: center;
-}
-
-.vui-flex-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.vui-layout {
     position: relative;
-}
-
-.vui-flex-column {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.vui-flex-spacing > .vui-flex-empty,
-.vui-flex-spacing > .vui-flex-empty + * {
-    margin-left: 0;
-    margin-top: 0;
-}
-
-.vui-flex-spacing {
-    &.vui-flex-column > * {
-        margin-top: var(--vui-flex-spacing);
-    }
-
-    &.vui-flex-row > * {
-        margin-left: var(--vui-flex-spacing);
-    }
-
-    &.vui-flex-column > *:first-child {
-        margin-top: 0;
-    }
-
-    &.vui-flex-row > *:first-child {
-        margin-left: 0;
-    }
 }
 
 </style>
