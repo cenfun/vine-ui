@@ -254,14 +254,22 @@ export default {
     position: relative;
 }
 
-.vui-layout-moving > {
-    * {
+.vui-layout-moving {
+    > * {
         pointer-events: none;
     }
 
-    .vui-layout-active {
+    > .vui-layout-active {
         background-color: #0077cf;
         pointer-events: auto;
+    }
+
+    &.vui-layout-row {
+        cursor: ew-resize;
+    }
+
+    &.vui-layout-column {
+        cursor: ns-resize;
     }
 }
 
