@@ -170,9 +170,9 @@ const iframeHandler = function(e) {
         return;
     }
     if (previousIframe) {
-        previousIframe.classList.remove('iframe-pointer-events-none');
+        previousIframe.classList.remove('vui-pointer-events-none');
     }
-    target.classList.add('iframe-pointer-events-none');
+    target.classList.add('vui-pointer-events-none');
     previousIframe = target;
 };
 
@@ -213,7 +213,7 @@ const updateHandler = (e) => {
 const clean = () => {
     Util.unbindEvents(windowEvents);
     if (previousIframe) {
-        previousIframe.classList.remove('iframe-pointer-events-none');
+        previousIframe.classList.remove('vui-pointer-events-none');
         previousIframe = null;
     }
     $el.classList.remove('vui-layout-moving');
@@ -246,10 +246,6 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss">
-.iframe-pointer-events-none {
-    pointer-events: none;
-}
-
 .vui-layout {
     position: relative;
 }

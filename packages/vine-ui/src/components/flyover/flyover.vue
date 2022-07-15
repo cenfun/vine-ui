@@ -64,15 +64,6 @@ const styleList = computed(() => {
 
 const el = ref(null);
 let $el;
-onMounted(() => {
-    $el = el.value;
-    onStart();
-});
-
-onUnmounted(() => {
-    unbindEvents();
-    lockBody(false);
-});
 
 const getBodyClass = () => {
     if (props.position === 'left') {
@@ -157,6 +148,16 @@ watchEffect(() => {
         onStart();
     }
     dataVisible.value = props.visible;
+});
+
+onMounted(() => {
+    $el = el.value;
+    onStart();
+});
+
+onUnmounted(() => {
+    unbindEvents();
+    lockBody(false);
 });
 
 </script>
