@@ -1,7 +1,7 @@
 ![](/scripts/vine.jpg)
 
 # Vine UI
-- Lightweight UI components based on [Vue 3](https://github.com/vuejs/core)
+- Lightweight UI components based on [Vue 3.x](https://github.com/vuejs/core)
 - {placeholder-size}
 
 ## Preview Online

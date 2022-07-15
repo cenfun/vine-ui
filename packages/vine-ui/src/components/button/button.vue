@@ -1,49 +1,50 @@
 <template>
   <button
-    :type="type"
+    :type="props.type"
     :class="classList"
-    :disabled="disabled"
+    :disabled="props.disabled"
   >
     <slot>
-      <BaseRender :content="label" />
+      <BaseRender :content="props.label" />
     </slot>
   </button>
 </template>
-<script>
-import Base from '../../base/base.vue';
+<script setup>
+import { computed } from 'vue';
+import { useBase, BaseRender } from '../../base/base.js';
 
-export default {
-
-    name: 'VuiButton',
-
-    extends: Base,
-
-    props: {
-        primary: {
-            type: Boolean,
-            default: false
-        },
-        type: {
-            type: String,
-            default: 'button'
-        }
+const props = defineProps({
+    label: {
+        type: String,
+        default: ''
     },
-
-    computed: {
-        classList() {
-            const ls = [
-                'vui',
-                'vui-button'
-            ];
-            if (this.primary) {
-                ls.push('vui-button-primary');
-            }
-            ls.push(this.cid);
-            return ls;
-        }
+    primary: {
+        type: Boolean,
+        default: false
+    },
+    type: {
+        type: String,
+        default: 'button'
+    },
+    disabled: {
+        type: Boolean,
+        default: false
     }
+});
 
-};
+const { cid } = useBase('VuiButton');
+
+const classList = computed(() => {
+    const ls = [
+        'vui',
+        'vui-button'
+    ];
+    if (props.primary) {
+        ls.push('vui-button-primary');
+    }
+    ls.push(cid);
+    return ls;
+});
 
 </script>
 <style lang="scss">
@@ -108,5 +109,4 @@ export default {
         }
     }
 }
-
 </style>

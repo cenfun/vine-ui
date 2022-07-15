@@ -4,12 +4,15 @@
       Checkbox
     </VuiCheckbox>
 
-    <VuiCheckbox checked>
-      Checked {{ inputText }}
+    <VuiCheckbox
+      :checked="checkboxChecked"
+      @change="onChange"
+    >
+      checked {{ checkboxChecked }}
     </VuiCheckbox>
 
     <VuiCheckbox v-model="checkboxChecked">
-      Checkbox v-model
+      v-model
     </VuiCheckbox>
 
     <VuiCheckbox
@@ -21,7 +24,7 @@
 
     <VuiCheckbox />
 
-    <VuiCheckbox :label="'label '+checkboxChecked" />
+    <VuiCheckbox :label="'Label ' + checkboxChecked" />
 
     <VuiCheckbox>
       this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long!
@@ -38,6 +41,8 @@ const {
 } = components;
 
 const checkboxChecked = ref(true);
-const inputText = 'Input Text';
+const onChange = (e) => {
+    checkboxChecked.value = e.target.checked;
+};
 
 </script>

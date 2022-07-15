@@ -1,11 +1,12 @@
 <template>
   <VuiFlex spacing="10px">
-    <VuiButton label="Label" />
+    <VuiButton
+      :label="'Label ' + count"
+      @click="onClick"
+    />
 
-    <VuiButton :label="'Props ' + text" />
-
-    <VuiButton>
-      <b>Slot</b> {{ text }}
+    <VuiButton @click="onClick">
+      <b>Slot</b> {{ count }}
     </VuiButton>
 
     <VuiButton disabled>
@@ -23,11 +24,16 @@
 
 <script setup>
 import { components } from 'vine-ui';
+import { ref } from 'vue';
 const {
     VuiButton,
     VuiFlex
 } = components;
 
-const text = 'Text';
+const count = ref(0);
+
+const onClick = (e) => {
+    count.value += 1;
+};
 
 </script>

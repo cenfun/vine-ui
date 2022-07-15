@@ -2,41 +2,60 @@
   <div :class="['vui','vui-checkbox', cid]">
     <input
       :id="cid"
-      v-model="dataModelValue"
-      :disabled="disabled"
+      v-model="value"
+      :disabled="props.disabled"
       type="checkbox"
     >
     <label :for="cid">
       <slot>
-        <BaseRender :content="label" />
+        <BaseRender :content="props.label" />
       </slot>
     </label>
   </div>
 </template>
-<script>
-import Base from '../../base/base.vue';
-import Util from '../../util/util.js';
-export default {
 
-    name: 'VuiCheckbox',
+<script setup>
 
-    extends: Base,
+import { computed } from 'vue';
+import { useBase, BaseRender } from '../../base/base.js';
 
-    props: {
-        checked: {
-            type: Boolean,
-            default: false
-        }
+const { cid } = useBase('VuiCheckbox');
+
+const props = defineProps({
+    label: {
+        type: String,
+        default: ''
     },
-
-    created() {
-        if (Util.isInvalid(this.dataModelValue)) {
-            this.dataModelValue = this.checked;
-        }
+    checked: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
+        type: Boolean,
+        default: false
+    },
+    modelValue: {
+        type: Boolean,
+        default: null
     }
-};
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const value = computed({
+    get() {
+        if (props.modelValue === null) {
+            return props.checked;
+        }
+        return props.modelValue;
+    },
+    set(v) {
+        emit('update:modelValue', v);
+    }
+});
 
 </script>
+
 <style lang="scss">
 .vui-checkbox {
     position: relative;
