@@ -6,7 +6,7 @@
         viewBox="0 0 16 16"
       ><path
         d="M1,8 A7 7 0 1 1 8 15"
-        :stroke="color||'#999'"
+        :stroke="props.color||'#999'"
         stroke-width="2"
         stroke-linecap="round"
         fill="none"
@@ -14,63 +14,59 @@
     </div>
   </div>
 </template>
-<script>
-import Base from '../../base/base.vue';
+<script setup>
+import { computed } from 'vue';
+import { useBase } from '../../base/base.js';
 
-export default {
+const { cid } = useBase('VuiLoading');
 
-    name: 'VuiLoading',
-
-    extends: Base,
-
-    props: {
-        center: {
-            type: Boolean,
-            default: false
-        },
-        fast: {
-            type: Boolean,
-            default: false
-        },
-        color: {
-            type: String,
-            default: '#999'
-        },
-        size: {
-            type: String,
-            default: 'm',
-            validator(value) {
-                return ['', 's', 'm', 'l'].includes(value);
-            }
-        },
-        theme: {
-            type: String,
-            default: ''
-        }
-        // percent: {
-        //     type: String,
-        //     default: ''
-        // }
+const props = defineProps({
+    center: {
+        type: Boolean,
+        default: false
     },
-
-    computed: {
-        classList() {
-            const ls = ['vui-loading'];
-            if (this.center) {
-                ls.push('vui-loading-center');
-            }
-            if (this.fast) {
-                ls.push('vui-loading-fast');
-            }
-            ls.push(`vui-loading-${this.size || 'm'}`);
-            if (this.visible) {
-                ls.push('vui-loading-show');
-            }
-            ls.push(this.cid);
-            return ls;
+    fast: {
+        type: Boolean,
+        default: false
+    },
+    color: {
+        type: String,
+        default: '#999'
+    },
+    size: {
+        type: String,
+        default: 'm',
+        validator(value) {
+            return ['', 's', 'm', 'l'].includes(value);
         }
+    },
+    theme: {
+        type: String,
+        default: ''
+    },
+    visible: {
+        type: Boolean,
+        default: true
     }
-};
+
+});
+
+const classList = computed(() => {
+    const ls = ['vui-loading'];
+    if (props.center) {
+        ls.push('vui-loading-center');
+    }
+    if (props.fast) {
+        ls.push('vui-loading-fast');
+    }
+    ls.push(`vui-loading-${props.size || 'm'}`);
+    if (props.visible) {
+        ls.push('vui-loading-show');
+    }
+    ls.push(cid);
+    return ls;
+});
+
 
 </script>
 <style lang="scss">
