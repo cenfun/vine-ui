@@ -1,158 +1,158 @@
 <template>
   <div
+    ref="el"
     :class="classList"
     :style="styleList"
   >
     <slot>
-      <BaseRender :content="content" />
+      <BaseRender :content="props.content" />
     </slot>
   </div>
 </template>
 
-<script>
-import Base from '../../base/base.vue';
+<script setup>
+import {
+    ref, computed, watchEffect, onMounted
+} from 'vue';
+import { useBase, BaseRender } from '../../base/base.js';
 
-export default {
+const { cid } = useBase('VuiFlyover');
 
-    name: 'VuiFlyover',
-
-    extends: Base,
-
-    props: {
-        width: {
-            type: String,
-            default: '50%'
-        },
-        position: {
-            type: String,
-            default: 'right',
-            validator(value) {
-                return ['right', 'left'].includes(value);
-            }
-        },
-        content: {
-            validator: (v) => true,
-            default: ''
-        },
-        attachToBody: {
-            type: Boolean,
-            default: true
+const props = defineProps({
+    width: {
+        type: String,
+        default: '50%'
+    },
+    position: {
+        type: String,
+        default: 'right',
+        validator(value) {
+            return ['right', 'left'].includes(value);
         }
     },
-
-    data: function() {
-        return {
-            dataWidth: this.width
-        };
+    content: {
+        validator: (v) => true,
+        default: ''
     },
-
-    computed: {
-        classList() {
-
-            return [
-                'vui',
-                'vui-flyover',
-                `vui-flyover-${this.position}`,
-                this.cid
-            ];
-        },
-        styleList() {
-            return {
-                width: this.dataWidth
-            };
-        },
-        bodyClass() {
-            if (this.position === 'left') {
-                return '';
-            }
-            if (this.attachToBody || !this.$el.parentNode) {
-                return 'vui-flyover-overflow-hidden';
-            }
-            return '';
-        }
+    visible: {
+        type: Boolean,
+        default: true
     },
+    attachToBody: {
+        type: Boolean,
+        default: true
+    }
+});
 
-    watch: {
-        dataVisible(nv, ov) {
-            this.onStart(nv, ov);
-        },
-        width() {
-            this.dataWidth = this.width;
-        }
-    },
+const classList = computed(() => {
+    return [
+        'vui',
+        'vui-flyover',
+        `vui-flyover-${props.position}`,
+        cid
+    ];
+});
 
-    created() {
-        this.animationHandler = () => {
-            this.onEnd(this.dataVisible);
-        };
-    },
+const dataWidth = ref(props.width);
+const dataVisible = ref(props.visible);
 
-    mounted() {
-        // if (this.attachToBody || !this.$el.parentNode) {
-        //     document.body.appendChild(this.$el);
-        // }
-    },
+const styleList = computed(() => {
+    return {
+        width: dataWidth.value
+    };
+});
 
-    beforeUnmount() {
-        this.unbindEvents();
-        this.lockBody(false);
-    },
+const el = ref(null);
+let $el;
+onMounted(() => {
+    $el = el.value;
+    onStart();
+});
 
-    methods: {
+const getBodyClass = () => {
+    if (props.position === 'left') {
+        return '';
+    }
+    if (props.attachToBody || !$el.parentNode) {
+        return 'vui-flyover-overflow-hidden';
+    }
+    return '';
+};
 
-        lockBody(lock) {
-            if (!this.bodyClass) {
-                return;
-            }
-            //for body hide scrollbar when animation
-            const cl = document.body.classList;
-            if (lock) {
-                cl.add(this.bodyClass);
-            } else {
-                cl.remove(this.bodyClass);
-            }
-        },
-
-        onStart(nv, ov) {
-            if (this.hasStarted) {
-                this.onEnd(ov);
-            }
-            this.lockBody(true);
-            this.unbindEvents();
-            const cl = this.$el.classList;
-            if (nv) {
-                cl.add(`vui-slide-in-${this.position}`, 'vui-flyover-show');
-                this.dataWidth = this.width;
-            } else {
-                cl.add(`vui-slide-out-${this.position}`);
-            }
-            this.hasStarted = true;
-            this.bindEvents();
-        },
-
-        onEnd(v) {
-            this.hasStarted = false;
-            this.lockBody(false);
-            this.unbindEvents();
-            const cl = this.$el.classList;
-            if (v) {
-                cl.remove(`vui-slide-in-${this.position}`);
-            } else {
-                cl.remove(`vui-slide-out-${this.position}`, 'vui-flyover-show');
-                this.dataWidth = '0px';
-            }
-        },
-
-        bindEvents() {
-            this.$el.addEventListener('animationend', this.animationHandler);
-        },
-
-        unbindEvents() {
-            this.$el.removeEventListener('animationend', this.animationHandler);
-        }
-
+const lockBody = (lock) => {
+    const bc = getBodyClass();
+    if (!bc) {
+        return;
+    }
+    //for body hide scrollbar when animation
+    const cl = document.body.classList;
+    if (lock) {
+        cl.add(bc);
+    } else {
+        cl.remove(bc);
     }
 };
+
+
+const animationHandler = () => {
+    onEnd(dataVisible.value);
+};
+
+const bindEvents = () => {
+    if ($el) {
+        $el.addEventListener('animationend', animationHandler);
+    }
+};
+
+const unbindEvents = () => {
+    if ($el) {
+        $el.removeEventListener('animationend', animationHandler);
+    }
+};
+
+
+let hasStarted = false;
+const onStart = () => {
+
+    const nv = props.visible;
+    const ov = dataVisible.value;
+
+    if (hasStarted) {
+        onEnd(ov);
+    }
+    lockBody(true);
+    unbindEvents();
+    const cl = $el.classList;
+    if (nv) {
+        cl.add(`vui-slide-in-${props.position}`, 'vui-flyover-show');
+        dataWidth.value = props.width;
+    } else {
+        cl.add(`vui-slide-out-${props.position}`);
+    }
+    hasStarted = true;
+    bindEvents();
+};
+
+const onEnd = (v) => {
+    hasStarted = false;
+    lockBody(false);
+    unbindEvents();
+    const cl = $el.classList;
+    if (v) {
+        cl.remove(`vui-slide-in-${props.position}`);
+    } else {
+        cl.remove(`vui-slide-out-${props.position}`, 'vui-flyover-show');
+        dataWidth.value = '0px';
+    }
+};
+
+watchEffect(() => {
+    dataWidth.value = props.width;
+    if ($el) {
+        onStart();
+    }
+    dataVisible.value = props.visible;
+});
 
 </script>
 
