@@ -1,7 +1,5 @@
 import Util from './util/util.js';
-import VuiBase from './base/base.vue';
-import createComponent from './util/create-component.js';
-
+import { createComponent } from './base/base.js';
 import generateComponents from './util/generate-components.js';
 
 const context = require.context('./components', true, /\.vue$/);
@@ -11,7 +9,6 @@ const components = generateComponents(context);
 export {
     components,
     Util,
-    VuiBase,
     createComponent
 };
 

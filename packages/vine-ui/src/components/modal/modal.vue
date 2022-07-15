@@ -1,15 +1,18 @@
 <template>
-  <div :class="['vui','vui-modal', cid]">
+  <div
+    ref="el"
+    :class="classList"
+  >
     <div
       class="vui-modal-main vui-flex-column"
       :style="styleMain"
     >
       <div :class="classHeader">
-        <BaseRender :content="title" />
+        <BaseRender :content="props.title" />
       </div>
       <div class="vui-modal-content vui-flex-auto">
         <slot>
-          <BaseRender :content="content" />
+          <BaseRender :content="props.content" />
         </slot>
       </div>
     </div>
@@ -19,73 +22,91 @@
   </div>
 </template>
 
-<script>
-import Base from '../../base/base.vue';
+<script setup>
+import {
+    computed, onMounted, ref, onUnmounted
+} from 'vue';
+import {
+    useBase, BaseRender, getComponent
+} from '../../base/base.js';
 
 import IconX from '../../base/images/icon-x.vue';
+import { Util } from '../../index.js';
 
-export default {
+const { cid } = useBase('VuiModal');
 
-    name: 'VuiModal',
+const classList = ['vui', 'vui-modal', cid];
 
-    components: {
-        IconX
+const props = defineProps({
+    title: {
+        type: String,
+        default: ''
     },
-
-    extends: Base,
-
-    props: {
-        content: {
-            validator: (v) => true,
-            default: ''
-        },
-        padding: {
-            type: String,
-            default: '20%'
-        },
-        headerSpacing: {
-            type: Boolean,
-            default: true
-        }
+    content: {
+        validator: (v) => true,
+        default: ''
     },
-
-    computed: {
-        classHeader() {
-            const ls = ['vui-modal-header'];
-            if (this.headerSpacing) {
-                ls.push('vui-modal-header-spacing');
-            }
-            return ls;
-        },
-        styleMain: function() {
-            return {
-                left: this.padding,
-                right: this.padding,
-                top: this.padding,
-                bottom: this.padding
-            };
-        }
+    padding: {
+        type: String,
+        default: '20%'
     },
+    headerSpacing: {
+        type: Boolean,
+        default: true
+    }
+});
 
-    mounted() {
 
-        //close event handler
-        const bindEvents = (e) => {
-            const $main = this.$el.querySelector('.vui-modal-main');
+const classHeader = computed(() => {
+    const ls = ['vui-modal-header'];
+    if (props.headerSpacing) {
+        ls.push('vui-modal-header-spacing');
+    }
+    return ls;
+});
+
+const styleMain = computed(() => {
+    return {
+        left: props.padding,
+        right: props.padding,
+        top: props.padding,
+        bottom: props.padding
+    };
+});
+
+
+const el = ref(null);
+let $el;
+
+const documentEvents = {
+    click: {
+        handler: (e) => {
+            const $main = $el.querySelector('.vui-modal-main');
             if ($main === e.target || $main.contains(e.target)) {
                 return;
             }
-            document.removeEventListener('click', bindEvents);
-            this.destroy();
-        };
+            Util.unbindEvents(documentEvents);
 
-        setTimeout(() => {
-            document.addEventListener('click', bindEvents);
-        }, 100);
+            const app = getComponent($el);
+            if (app) {
+                app.unmount();
+            }
 
+        }
     }
-
 };
+
+onMounted(() => {
+    $el = el.value;
+    setTimeout(() => {
+        Util.bindEvents(documentEvents, document);
+    }, 100);
+});
+
+onUnmounted(() => {
+    Util.unbindEvents(documentEvents);
+});
+
 
 </script>
 <style lang="scss">

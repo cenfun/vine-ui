@@ -1,4 +1,4 @@
-import createComponent from './create-component.js';
+import { createComponent } from '../base/base.js';
 
 export default function(context) {
 
