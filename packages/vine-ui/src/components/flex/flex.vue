@@ -4,83 +4,76 @@
     :style="styleList"
   >
     <slot>
-      <BaseRender :content="content" />
+      <BaseRender :content="props.content" />
     </slot>
   </div>
 </template>
 
-<script>
-import Base from '../../base/base.vue';
+<script setup>
+import { computed } from 'vue';
+import { useBase, BaseRender } from '../../base/base.js';
 
-export default {
+const { cid } = useBase('VuiFlex');
 
-    name: 'VuiFlex',
-
-    extends: Base,
-
-    props: {
-        width: {
-            type: String,
-            default: ''
-        },
-        height: {
-            type: String,
-            default: ''
-        },
-        direction: {
-            type: String,
-            default: 'row',
-            validator(value) {
-                return ['row', 'column'].includes(value);
-            }
-        },
-        center: {
-            type: Boolean,
-            default: false
-        },
-        content: {
-            validator: (v) => true,
-            default: ''
-        },
-
-        spacing: {
-            type: String,
-            default: ''
+const props = defineProps({
+    width: {
+        type: String,
+        default: ''
+    },
+    height: {
+        type: String,
+        default: ''
+    },
+    direction: {
+        type: String,
+        default: 'row',
+        validator(value) {
+            return ['row', 'column'].includes(value);
         }
     },
-
-    computed: {
-        classList() {
-            const ls = [
-                'vui',
-                'vui-flex',
-                `vui-flex-${this.direction}`
-            ];
-            if (this.center) {
-                ls.push('vui-flex-center');
-            }
-            if (this.spacing) {
-                ls.push('vui-flex-spacing');
-            }
-            ls.push(this.cid);
-            return ls;
-        },
-
-        styleList() {
-            const st = {};
-            if (this.width) {
-                st.width = this.width;
-            }
-            if (this.height) {
-                st.height = this.height;
-            }
-            if (this.spacing) {
-                st['--vui-flex-spacing'] = this.spacing;
-            }
-            return st;
-        }
+    center: {
+        type: Boolean,
+        default: false
+    },
+    content: {
+        validator: (v) => true,
+        default: ''
+    },
+    spacing: {
+        type: String,
+        default: ''
     }
-};
+});
+
+const classList = computed(() => {
+    const ls = [
+        'vui',
+        'vui-flex',
+        `vui-flex-${props.direction}`
+    ];
+    if (props.center) {
+        ls.push('vui-flex-center');
+    }
+    if (props.spacing) {
+        ls.push('vui-flex-spacing');
+    }
+    ls.push(cid);
+    return ls;
+});
+
+const styleList = computed(() => {
+    const st = {};
+    if (props.width) {
+        st.width = props.width;
+    }
+    if (props.height) {
+        st.height = props.height;
+    }
+    if (props.spacing) {
+        st['--vui-flex-spacing'] = props.spacing;
+    }
+    return st;
+});
 
 </script>
 
