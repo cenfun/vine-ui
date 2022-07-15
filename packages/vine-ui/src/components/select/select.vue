@@ -55,7 +55,12 @@
 <script>
 import { Util } from '../..';
 import Base from '../../base/base.vue';
-import selectOnFocus from '../../util/select-on-focus.js';
+
+
+import {
+    //useBase, BaseRender,
+    vSelectOnFocus
+} from '../../base/base.js';
 
 import IconX from '../../base/images/icon-x.vue';
 
@@ -67,7 +72,7 @@ export default {
     name: 'VuiSelect',
 
     directives: {
-        select: selectOnFocus
+        select: vSelectOnFocus
     },
 
     components: {

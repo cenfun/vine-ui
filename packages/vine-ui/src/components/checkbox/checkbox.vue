@@ -26,11 +26,11 @@ const props = defineProps({
         type: String,
         default: ''
     },
-    checked: {
+    disabled: {
         type: Boolean,
         default: false
     },
-    disabled: {
+    checked: {
         type: Boolean,
         default: false
     },

@@ -42,8 +42,19 @@ export const BaseRender = {
 
 };
 
+export const vSelectOnFocus = function(el) {
+    el.addEventListener('focus', (e) => {
+        if (el.getAttribute('readonly')) {
+            return;
+        }
+        el.select();
+    });
+};
+
 
 export default {
     useBase,
-    BaseRender
+    BaseRender,
+
+    vSelectOnFocus
 };

@@ -12,7 +12,7 @@
 
 <script setup>
 import {
-    ref, computed, watchEffect, onMounted
+    ref, computed, watchEffect, onMounted, onUnmounted
 } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
 
@@ -67,6 +67,11 @@ let $el;
 onMounted(() => {
     $el = el.value;
     onStart();
+});
+
+onUnmounted(() => {
+    unbindEvents();
+    lockBody(false);
 });
 
 const getBodyClass = () => {

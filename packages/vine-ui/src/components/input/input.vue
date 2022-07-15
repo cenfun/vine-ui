@@ -1,58 +1,89 @@
 <template>
-  <div :class="['vui','vui-input', cid]">
+  <div :class="classMap">
     <label v-if="labelContent">
       <slot>
-        <BaseRender :content="label" />
+        <BaseRender :content="props.label" />
       </slot>
     </label>
     <input
-      v-model="dataModelValue"
-      v-select
-      :disabled="disabled"
-      :placeholder="placeholder"
-      :type="type"
-      :style="{ width: width }"
-      :title="title"
+      v-model="value"
+      v-select-on-focus
+      :disabled="props.disabled"
+      :placeholder="props.placeholder"
+      :type="props.type"
+      :style="styleMap"
+      :title="props.title"
     >
   </div>
 </template>
-<script>
-import Base from '../../base/base.vue';
-import selectOnFocus from '../../util/select-on-focus.js';
-export default {
+<script setup>
+import { computed, useSlots } from 'vue';
+import {
+    useBase, BaseRender, vSelectOnFocus
+} from '../../base/base.js';
 
-    name: 'VuiInput',
+const { cid } = useBase('VuiInput');
 
-    directives: {
-        select: selectOnFocus
+const classMap = ['vui', 'vui-input', cid];
+const styleMap = computed(() => {
+    return {
+        width: props.width
+    };
+});
+
+const props = defineProps({
+    label: {
+        type: String,
+        default: ''
+    },
+    disabled: {
+        type: Boolean,
+        default: false
     },
 
-    extends: Base,
-
-    props: {
-        placeholder: {
-            type: String,
-            default: ''
-        },
-        type: {
-            type: String,
-            default: 'text'
-        },
-        width: {
-            type: String,
-            default: '80px'
-        }
+    type: {
+        type: String,
+        default: 'text'
+    },
+    placeholder: {
+        type: String,
+        default: ''
+    },
+    width: {
+        type: String,
+        default: '80px'
     },
 
-    computed: {
-
-        labelContent() {
-            return this.label || this.$slots.default;
-        }
-
+    value: {
+        type: String,
+        default: ''
+    },
+    modelValue: {
+        type: String,
+        default: null
     }
+});
 
-};
+const emit = defineEmits(['update:modelValue']);
+
+const value = computed({
+    get() {
+        if (props.modelValue === null) {
+            return props.value;
+        }
+        return props.modelValue;
+    },
+    set(v) {
+        emit('update:modelValue', v);
+    }
+});
+
+const slots = useSlots();
+
+const labelContent = computed(() => {
+    return props.label || slots.default;
+});
+
 
 </script>
 <style lang="scss">

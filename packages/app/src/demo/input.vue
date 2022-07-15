@@ -7,7 +7,7 @@
 
     <VuiInput
       v-model="inputText"
-      placeholder="no label placeholder"
+      placeholder="no label"
       width="150px"
     />
 
@@ -24,7 +24,7 @@
 
     <VuiInput
       :label="inputText"
-      placeholder="props"
+      placeholder="label"
     />
   </VuiFlex>
 </template>
