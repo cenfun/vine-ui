@@ -45,6 +45,9 @@ export const BaseRender = {
 
 const componentMap = new WeakMap();
 export const unmountComponent = function($el) {
+    if (!$el) {
+        return;
+    }
     const app = componentMap.get($el);
     if (app) {
         app.unmount();

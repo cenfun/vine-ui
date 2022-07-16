@@ -1,6 +1,7 @@
 <template>
   <div
-    v-if="dataVisible"
+    v-show="data.visible"
+    ref="el"
     :class="classList"
     :style="styleList"
   >
@@ -21,217 +22,264 @@
   </div>
 </template>
 
-<script>
-import Popup from '../../base/base-popup.vue';
+<script setup>
 
-export default {
+import {
+    computed, onMounted, onUnmounted, reactive, ref, watchEffect, nextTick
+} from 'vue';
+import {
+    useBase, BaseRender, unmountComponent
+} from '../../base/base.js';
 
-    name: 'VuiTooltip',
+import {
+    getDefaultPositions, getBestPosition, getRect, getElement
+} from '../../base/base-popup.js';
 
-    extends: Popup,
+const { cid } = useBase('VuiTooltip');
 
-    props: {
+const props = defineProps({
 
-        text: {
-            type: String,
-            default: ''
-        },
-
-        html: {
-            type: String,
-            default: ''
-        },
-
-        maxWidth: {
-            type: Number,
-            default: 320
-        }
-
+    text: {
+        type: String,
+        default: ''
     },
 
-    data() {
-        return {
-            cid: '',
-            //calculation info
-            position: 'top',
-            align: 'center',
-            top: 0,
-            left: 0
-        };
+    html: {
+        type: String,
+        default: ''
     },
 
-    computed: {
-        classList() {
-            return [
-                'vui',
-                'vui-popup',
-                `vui-popup-${this.position}-${this.align}`,
-                'vui-tooltip',
-                this.cid
-            ];
-        },
-
-        styleList() {
-            return {
-                top: `${this.top}px`,
-                left: `${this.left}px`,
-                'max-width': `${this.maxWidth}px`
-            };
-        }
-
+    maxWidth: {
+        type: Number,
+        default: 320
     },
 
+    target: {
+        validator: (v) => true,
+        default: ''
+    },
 
-    created() {
-        if (this.bindTarget) {
-            this.dataVisible = false;
+    bindTarget: {
+        type: Boolean,
+        default: false
+    },
+
+    positions: {
+        type: [String, Array],
+        default: () => {
+            return getDefaultPositions();
         }
     },
 
-    mounted() {
-        if (!this.$el.parentNode) {
-            document.body.appendChild(this.$el);
-        }
-
-        //console.log(this.html);
-        if (this.html) {
-            this.$refs.content.innerHTML = this.html;
-        }
-
-        this.bindEvents();
-        this.update();
+    content: {
+        validator: (v) => true,
+        default: ''
     },
 
-    beforeUnmount() {
-        this.unbindEvents();
-        this.$emit('close');
+    container: {
+        validator: (v) => true,
+        default: ''
     },
 
-    methods: {
-        bindEvents() {
-            this.bindTargetEvent();
-            //after mounted
-            this.$watch('dataVisible', this.visibleHandler);
-        },
+    visible: {
+        type: Boolean,
+        default: true
+    },
 
-        unbindEvents() {
-            this.unbindTargetEvent();
-        },
+    disabled: {
+        type: Boolean,
+        default: false
+    }
 
-        visibleHandler() {
-            if (this.dataVisible) {
-                this.$nextTick(() => {
-                    this.update();
-                });
-            } else {
-                this.$emit('close');
-            }
-        },
+});
 
-        //=============================================================================
+const data = reactive({
+    visible: false,
+    position: 'top',
+    align: 'center',
+    top: 0,
+    left: 0
+});
 
-        bindTargetEvent() {
-            if (!this.bindTarget) {
-                return;
-            }
-            const $target = this.getElement(this.target);
-            if ($target) {
-                this.$target = $target;
-                this.$target.addEventListener('mouseenter', this.openHandler);
-                this.$target.addEventListener('focus', this.openHandler);
-                this.$target.addEventListener('mouseleave', this.closeHandler);
-                this.$target.addEventListener('blur', this.closeHandler);
-            }
-        },
+const classList = computed(() => {
+    return [
+        'vui',
+        'vui-popup',
+        `vui-popup-${data.position}-${data.align}`,
+        'vui-tooltip',
+        cid
+    ];
+});
 
-        unbindTargetEvent() {
-            if (this.$target) {
-                this.$target.removeEventListener('mouseenter', this.openHandler);
-                this.$target.removeEventListener('focus', this.openHandler);
-                this.$target.removeEventListener('mouseleave', this.closeHandler);
-                this.$target.removeEventListener('blur', this.closeHandler);
-                this.$target = null;
-            }
-        },
+const styleList = computed(() => {
+    return {
+        top: `${data.top}px`,
+        left: `${data.left}px`,
+        'max-width': `${props.maxWidth}px`
+    };
+});
 
-        openHandler() {
-            if (this.dataVisible) {
-                return;
-            }
-            if (this.disabled) {
-                return;
-            }
-            this.dataVisible = true;
-        },
+const el = ref(null);
+let $el;
+const content = ref(null);
+let $target;
 
-        closeHandler() {
-            if (!this.dataVisible) {
-                return;
-            }
-            if (this.disabled) {
-                return;
-            }
-            if (this.$target) {
-                this.dataVisible = false;
-            } else {
-                this.destroy();
-            }
-        },
+const emit = defineEmits(['update', 'close']);
 
-        //=============================================================================
+//====================================================================================================
 
-        update() {
-            this.$nextTick(() => {
-                this.updateSync();
-            });
-            return this;
-        },
+watchEffect(() => {
+    data.visible = props.visible;
+    if (props.bindTarget) {
+        data.visible = false;
+    }
+    if ($el) {
+        visibleHandler();
+    }
+});
 
-        updateSync() {
-            if (!this.dataVisible) {
-                return this;
-            }
-            const containerRect = this.getRect(this.container || window);
-            const targetRect = this.getRect(this.target);
 
-            //fix for arrow size
-            const arrowSize = 10;
-            targetRect.left -= arrowSize;
-            targetRect.top -= arrowSize;
-            targetRect.width += arrowSize * 2;
-            targetRect.height += arrowSize * 2;
+const bindEvents = () => {
+    bindTargetEvent();
+};
 
-            const rect = this.getRect(`.${this.cid}`);
+const unbindEvents = () => {
+    unbindTargetEvent();
+};
 
-            //console.log(containerRect, targetRect, rect);
-
-            this.positionInfo = this.getBestPosition(
-                containerRect,
-                targetRect,
-                rect,
-                this.positions
-            );
-
-            //no change
-            if (this.position === this.positionInfo.position
-            && this.align === this.positionInfo.align
-            && this.top === this.positionInfo.top
-            && this.left === this.positionInfo.left) {
-                return this;
-            }
-
-            //console.log(this.positionInfo);
-
-            this.position = this.positionInfo.position;
-            this.align = this.positionInfo.align;
-            this.top = this.positionInfo.top;
-            this.left = this.positionInfo.left;
-
-            this.$emit('update');
-            return this;
-        }
+const visibleHandler = () => {
+    if (data.visible) {
+        nextTick(() => {
+            update();
+        });
+    } else {
+        emit('close');
     }
 };
+
+//=============================================================================
+
+const bindTargetEvent = () => {
+    if (!props.bindTarget) {
+        return;
+    }
+    $target = getElement(props.target);
+    if ($target) {
+        $target.addEventListener('mouseenter', openHandler);
+        $target.addEventListener('focus', openHandler);
+        $target.addEventListener('mouseleave', closeHandler);
+        $target.addEventListener('blur', closeHandler);
+    }
+};
+
+const unbindTargetEvent = () => {
+    if ($target) {
+        $target.removeEventListener('mouseenter', openHandler);
+        $target.removeEventListener('focus', openHandler);
+        $target.removeEventListener('mouseleave', closeHandler);
+        $target.removeEventListener('blur', closeHandler);
+        $target = null;
+    }
+};
+
+const openHandler = () => {
+    if (data.visible) {
+        return;
+    }
+    if (props.disabled) {
+        return;
+    }
+    data.visible = true;
+};
+
+const closeHandler = () => {
+    if (!data.visible) {
+        return;
+    }
+    if (props.disabled) {
+        return;
+    }
+    if ($target) {
+        data.visible = false;
+    } else {
+        unmountComponent($el);
+    }
+};
+
+//=============================================================================
+
+const update = () => {
+    nextTick(() => {
+        updateSync();
+    });
+};
+
+const updateSync = () => {
+    if (!data.visible) {
+        return;
+    }
+    const containerRect = getRect(props.container || window);
+    const targetRect = getRect(props.target);
+
+    //fix for arrow size
+    const arrowSize = 10;
+    targetRect.left -= arrowSize;
+    targetRect.top -= arrowSize;
+    targetRect.width += arrowSize * 2;
+    targetRect.height += arrowSize * 2;
+
+    const rect = getRect(`.${cid}`);
+
+    //console.log(containerRect, targetRect, rect);
+
+    const positionInfo = getBestPosition(
+        containerRect,
+        targetRect,
+        rect,
+        props.positions
+    );
+
+    //no change
+    if (data.position === positionInfo.position
+            && data.align === positionInfo.align
+            && data.top === positionInfo.top
+            && data.left === positionInfo.left) {
+        return;
+    }
+
+    //console.log(positionInfo);
+
+    data.position = positionInfo.position;
+    data.align = positionInfo.align;
+    data.top = positionInfo.top;
+    data.left = positionInfo.left;
+
+    emit('update');
+};
+
+
+//====================================================================================================
+
+
+onMounted(() => {
+    $el = el.value;
+    if (!$el.parentNode) {
+        document.body.appendChild($el);
+    }
+
+    //console.log(html);
+    if (props.html) {
+        content.value.innerHTML = props.html;
+    }
+
+    bindEvents();
+    update();
+});
+
+onUnmounted(() => {
+    unbindEvents();
+    emit('close');
+});
 
 </script>
 
