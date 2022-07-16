@@ -1,8 +1,8 @@
 <template>
-  <div :class="['vui','vui-checkbox', cid]">
+  <div :class="classList">
     <input
       :id="cid"
-      v-model="value"
+      v-model="modelChecked"
       :disabled="props.disabled"
       type="checkbox"
     >
@@ -20,6 +20,8 @@ import { computed } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
 
 const { cid } = useBase('VuiCheckbox');
+
+const classList = ['vui', 'vui-checkbox', cid];
 
 const props = defineProps({
     label: {
@@ -42,7 +44,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const value = computed({
+const modelChecked = computed({
     get() {
         if (props.modelValue === null) {
             return props.checked;

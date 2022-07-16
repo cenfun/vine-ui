@@ -1,57 +1,68 @@
 <template>
-  <div :class="['vui','vui-radio', cid]">
+  <div :class="classList">
     <input
       :id="cid"
-      :checked="dataModelValue === value"
-      :disabled="disabled"
-      :name="name"
+      v-model="modelData"
+      :disabled="props.disabled"
+      :name="props.name"
+      :value="props.value"
       type="radio"
-      @change="onChange"
     >
     <label :for="cid">
       <slot>
-        <BaseRender :content="label" />
+        <BaseRender :content="props.label" />
       </slot>
     </label>
   </div>
 </template>
-<script>
-import Base from '../../base/base.vue';
-import Util from '../../util/util.js';
-export default {
+<script setup>
+import { computed } from 'vue';
+import { useBase, BaseRender } from '../../base/base.js';
 
-    name: 'VuiRadio',
+const { cid } = useBase('VuiRadio');
 
-    extends: Base,
+const classList = ['vui', 'vui-radio', cid];
 
-    props: {
-        name: {
-            type: String,
-            default: ''
-        },
-        checked: {
-            type: Boolean,
-            default: false
-        }
+const props = defineProps({
+    label: {
+        type: String,
+        default: ''
     },
-
-    created() {
-        if (Util.isInvalid(this.dataModelValue)) {
-            if (this.checked) {
-                this.dataModelValue = this.value;
-            }
-        }
+    name: {
+        type: String,
+        default: ''
     },
-
-    methods: {
-        onChange: function(e) {
-            const checked = e.target.checked;
-            if (checked) {
-                this.dataModelValue = this.value;
-            }
-        }
+    disabled: {
+        type: Boolean,
+        default: false
+    },
+    checked: {
+        type: Boolean,
+        default: false
+    },
+    value: {
+        type: String,
+        default: ''
+    },
+    modelValue: {
+        type: String,
+        default: null
     }
-};
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const modelData = computed({
+    get() {
+        if (props.checked) {
+            return props.value;
+        }
+        return props.modelValue;
+    },
+    set(v) {
+        emit('update:modelValue', v);
+    }
+});
 
 </script>
 <style lang="scss">
