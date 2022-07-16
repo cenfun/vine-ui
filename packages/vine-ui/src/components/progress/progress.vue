@@ -4,69 +4,62 @@
     :style="styleList"
   />
 </template>
-<script>
-import Base from '../../base/base.vue';
+<script setup>
+import { computed } from 'vue';
+import { useBase } from '../../base/base.js';
 
-export default {
+const { cid } = useBase('VuiProgress');
 
-    name: 'VuiProgress',
-
-    extends: Base,
-
-    props: {
-        percentage: {
-            type: [Number, String],
-            default: 0
-        },
-        width: {
-            type: String,
-            default: '100px'
-        },
-        height: {
-            type: String,
-            default: '15px'
-        },
-        radius: {
-            type: String,
-            default: '3px'
-        },
-        color: {
-            type: String,
-            default: '#ccc'
-        },
-        borderColor: {
-            type: String,
-            default: '#aaa'
-        }
+const props = defineProps({
+    percentage: {
+        type: [Number, String],
+        default: 0
     },
-
-    computed: {
-        classList() {
-            const ls = [
-                'vui',
-                'vui-progress'
-            ];
-            ls.push(this.cid);
-            return ls;
-        },
-
-        styleList() {
-            let per = this.percentage;
-            if (typeof per === 'string') {
-                per = parseFloat(per);
-            }
-
-            const st = {
-                'width': this.width,
-                'height': this.height,
-                'border-radius': this.radius,
-                'border-color': this.borderColor,
-                'background': `linear-gradient(${this.color} 0 0) 0/${per}% no-repeat`
-            };
-            return st;
-        }
+    width: {
+        type: String,
+        default: '100px'
+    },
+    height: {
+        type: String,
+        default: '15px'
+    },
+    radius: {
+        type: String,
+        default: '3px'
+    },
+    color: {
+        type: String,
+        default: '#ccc'
+    },
+    borderColor: {
+        type: String,
+        default: '#aaa'
     }
-};
+});
+
+const classList = computed(() => {
+    const ls = [
+        'vui',
+        'vui-progress'
+    ];
+    ls.push(cid);
+    return ls;
+});
+
+const styleList = computed(() => {
+    let per = props.percentage;
+    if (typeof per === 'string') {
+        per = parseFloat(per);
+    }
+    const st = {
+        'width': props.width,
+        'height': props.height,
+        'border-radius': props.radius,
+        'border-color': props.borderColor,
+        'background': `linear-gradient(${props.color} 0 0) 0/${per}% no-repeat`
+    };
+    return st;
+});
 
 </script>
 <style lang="scss">

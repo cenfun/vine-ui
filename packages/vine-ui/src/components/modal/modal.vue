@@ -27,7 +27,7 @@ import {
     computed, onMounted, ref, onUnmounted
 } from 'vue';
 import {
-    useBase, BaseRender, unmountComponent
+    useBase, BaseRender, destroyComponent
 } from '../../base/base.js';
 
 import IconX from '../../base/images/icon-x.vue';
@@ -86,7 +86,7 @@ const documentEvents = {
                 return;
             }
             Util.unbindEvents(documentEvents);
-            unmountComponent($el);
+            destroyComponent($el);
         }
     }
 };

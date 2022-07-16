@@ -40,7 +40,7 @@ import {
     computed, onMounted, onUnmounted, reactive, ref, watchEffect, nextTick
 } from 'vue';
 import {
-    useBase, BaseRender, unmountComponent
+    useBase, BaseRender, destroyComponent
 } from '../../base/base.js';
 
 import {
@@ -370,7 +370,7 @@ const close = () => {
     if ($target) {
         data.visible = false;
     } else {
-        unmountComponent($el);
+        destroyComponent($el);
     }
 };
 
