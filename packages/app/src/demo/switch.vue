@@ -6,7 +6,10 @@
     <VuiSwitch checked>
       checked:
     </VuiSwitch>
-    <VuiSwitch disabled>
+    <VuiSwitch
+      v-model="switchValue"
+      disabled
+    >
       disabled:
     </VuiSwitch>
 
@@ -25,12 +28,14 @@
       small:
     </VuiSwitch>
 
+    <VuiSwitch v-model="switchValue" />
+
     <VuiSwitch
       width="45px"
       height="24px"
       checked
     >
-      large:
+      large: {{ switchValue }}
     </VuiSwitch>
   </VuiFlex>
 </template>

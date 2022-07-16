@@ -5,7 +5,7 @@
       class="vui-switch-label"
     >
       <slot>
-        <BaseRender :content="label" />
+        <BaseRender :content="props.label" />
       </slot>
     </div>
     <div
@@ -20,99 +20,107 @@
     </div>
   </div>
 </template>
-<script>
-import Base from '../../base/base.vue';
-import Util from '../../util/util.js';
+<script setup>
+import {
+    computed, reactive, watchEffect
+} from 'vue';
+import {
+    useBase, BaseRender, getSlot
+} from '../../base/base.js';
+
+const { cid } = useBase('VuiSwitch');
+
+const classList = ['vui', 'vui-switch', cid];
 
 const defaultColors = ['#aaaaaa', '#1890ff'];
 
-export default {
-
-    name: 'VuiSwitch',
-
-    extends: Base,
-
-    props: {
-        checked: {
-            type: Boolean,
-            default: false
-        },
-        colors: {
-            type: String,
-            default: '#aaaaaa,#1890ff'
-        },
-        width: {
-            type: String,
-            default: '35px'
-        },
-        height: {
-            type: String,
-            default: '20px'
-        }
+const props = defineProps({
+    label: {
+        type: String,
+        default: ''
     },
-
-    data() {
-        return {
-            buttonColors: defaultColors
-        };
+    colors: {
+        type: String,
+        default: '#aaaaaa,#1890ff'
     },
-
-    computed: {
-        classList() {
-            const ls = [
-                'vui',
-                'vui-switch'
-            ];
-            ls.push(this.cid);
-            return ls;
-        },
-
-        buttonClassList() {
-            return {
-                'vui-switch-button': true,
-                'vui-switch-checked': this.dataModelValue,
-                'vui-switch-disabled': this.disabled
-            };
-        },
-
-        buttonStyleList() {
-            return {
-                'width': this.width,
-                'height': this.height,
-                'border-radius': this.height,
-                'background-color': this.dataModelValue ? this.buttonColors[1] : this.buttonColors[0]
-            };
-        },
-
-        iconStyleList() {
-            return {
-                width: `calc(${this.height} - 4px)`,
-                right: this.dataModelValue ? '2px' : `calc(${this.width} - ${this.height} + 2px)`
-            };
-        },
-
-        labelContent() {
-            return this.label || this.$slots.default;
-        }
+    width: {
+        type: String,
+        default: '35px'
     },
-
-    created() {
-        const ls = `${this.colors}`.split(',').map((it) => it.trim());
-        this.buttonColors = [ls[0] || defaultColors[0], ls[1] || defaultColors[1]];
-
-        if (Util.isInvalid(this.dataModelValue)) {
-            this.dataModelValue = this.checked;
-        }
+    height: {
+        type: String,
+        default: '20px'
     },
-
-    methods: {
-        clickHandler() {
-            if (this.disabled) {
-                return;
-            }
-            this.dataModelValue = !this.dataModelValue;
-        }
+    disabled: {
+        type: Boolean,
+        default: false
+    },
+    checked: {
+        type: Boolean,
+        default: false
+    },
+    modelValue: {
+        type: Boolean,
+        default: null
     }
+});
+
+const data = reactive({
+    buttonColors: defaultColors,
+    checked: false
+});
+
+
+const buttonClassList = computed(() => {
+    return {
+        'vui-switch-button': true,
+        'vui-switch-checked': data.checked,
+        'vui-switch-disabled': props.disabled
+    };
+});
+
+const buttonStyleList = computed(() => {
+    return {
+        'width': props.width,
+        'height': props.height,
+        'border-radius': props.height,
+        'background-color': data.checked ? data.buttonColors[1] : data.buttonColors[0]
+    };
+});
+
+const iconStyleList = computed(() => {
+    return {
+        width: `calc(${props.height} - 4px)`,
+        right: data.checked ? '2px' : `calc(${props.width} - ${props.height} + 2px)`
+    };
+});
+
+const labelContent = computed(() => {
+    return props.label || getSlot('default');
+});
+
+watchEffect(() => {
+    const ls = `${props.colors}`.split(',').map((it) => it.trim());
+    data.buttonColors = [ls[0] || defaultColors[0], ls[1] || defaultColors[1]];
+
+    if (props.modelValue === null) {
+        data.checked = props.checked;
+    } else {
+        data.checked = props.modelValue;
+    }
+
+});
+
+
+const emit = defineEmits(['update:modelValue']);
+
+const clickHandler = () => {
+    if (props.disabled) {
+        return;
+    }
+    data.checked = !data.checked;
+    emit('update:modelValue', data.checked);
+
 };
 
 </script>

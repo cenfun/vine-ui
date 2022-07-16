@@ -15,7 +15,6 @@
 </template>
 
 <script setup>
-
 import { computed } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
 
