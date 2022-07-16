@@ -1,12 +1,12 @@
 <template>
-  <div :class="['vui','vui-tab', cid]">
+  <div :class="classList">
     <div class="vui-tab-header vui-flex-row">
       <div
-        v-if="position==='right'"
+        v-if="props.position==='right'"
         class="vui-tab-toolbar vui-flex-auto vui-flex-row"
       >
         <slot name="toolbar">
-          <BaseRender :content="toolbar" />
+          <BaseRender :content="props.toolbar" />
         </slot>
       </div>
 
@@ -17,22 +17,20 @@
         <TabItem
           v-for="(item, i) in tabList"
           :key="i"
-          v-model="dataModelValue"
           :content="item"
-          :index="i"
-          :selected="dataModelValue===i"
-          :position="position"
-          @change="onChange"
+          :selected="modelData===i"
+          :position="props.position"
+          @click="clickHandler(i)"
         />
       </div>
 
 
       <div
-        v-if="position==='left'"
+        v-if="props.position==='left'"
         class="vui-tab-toolbar vui-flex-auto vui-flex-row"
       >
         <slot name="toolbar">
-          <BaseRender :content="toolbar" />
+          <BaseRender :content="props.toolbar" />
         </slot>
       </div>
     </div>
@@ -44,72 +42,74 @@
         v-for="(item, i) in paneList"
         :key="i"
         :content="item"
-        :selected="dataModelValue===i"
+        :selected="modelData===i"
       />
     </div>
   </div>
 </template>
-<script>
-import Base from '../../base/base.vue';
-//import Util from '../../util/util.js';
+<script setup>
+import { computed } from 'vue';
+import {
+    useBase, BaseRender, getSlot
+} from '../../base/base.js';
+
 import TabItem from './tab-item.vue';
 import TabPane from './tab-pane.vue';
 
-export default {
+const { cid } = useBase('VuiTab');
 
-    name: 'VuiTab',
+const classList = ['vui', 'vui-tab', cid];
 
-    components: {
-        TabItem,
-        TabPane
-    },
-
-    extends: Base,
-
-    props: {
-        // theme: {
-        //     type: String,
-        //     default: '',
-        //     validator(value) {
-        //         return ['', ''].includes(value);
-        //     }
-        // },
-        position: {
-            type: String,
-            default: 'left',
-            validator(value) {
-                return ['left', 'right'].includes(value);
-            }
-        },
-        toolbar: {
-            validator: (v) => true,
-            default: ''
-        },
-        tabs: {
-            type: Array,
-            default: () => null
-        },
-        panes: {
-            type: Array,
-            default: () => null
+const props = defineProps({
+    position: {
+        type: String,
+        default: 'left',
+        validator(value) {
+            return ['left', 'right'].includes(value);
         }
     },
-
-    computed: {
-        tabList() {
-            return this.tabs || this.getSlot('tabs') || [];
-        },
-        paneList() {
-            return this.panes || this.getSlot('panes') || this.getSlot('default') || [];
-        }
+    toolbar: {
+        validator: (v) => true,
+        default: ''
     },
-
-    methods: {
-        onChange(index) {
-            this.$emit('change', index);
-        }
+    tabs: {
+        type: Array,
+        default: () => null
+    },
+    panes: {
+        type: Array,
+        default: () => null
+    },
+    modelValue: {
+        type: Number,
+        default: null
     }
+});
+
+
+const tabList = computed(() => {
+    return props.tabs || getSlot('tabs') || [];
+});
+
+const paneList = computed(() => {
+    return props.panes || getSlot('panes') || getSlot('default') || [];
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const modelData = computed({
+    get() {
+        return props.modelValue;
+    },
+    set(v) {
+        emit('update:modelValue', v);
+    }
+});
+
+const clickHandler = (index) => {
+    modelData.value = index;
 };
+
 
 </script>
 <style lang="scss">

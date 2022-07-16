@@ -6,7 +6,6 @@
     <VuiTab
       v-model="tabActive"
       position="left"
-      @change="onTabChange"
     >
       <template #toolbar>
         <div class="vui-flex-auto" />
@@ -14,12 +13,12 @@
           class="vui-tab-icon vui-tab-icon-plus"
           tooltip="This is toolbar tooltip"
         >
-          Left Toolbar Slot {{ inputText }}
+          Left Toolbar Slot {{ tabActive }}
         </div>
       </template>
       <template #tabs>
         <div>
-          Tab 1 {{ inputText }}
+          Tab 1 {{ tabActive }}
         </div>
         <div>Tab 2</div>
 
@@ -39,7 +38,7 @@
       <template #panes>
         <div>Pane 1 </div>
         <div style="height: 100px;">
-          Pane 2 100px height {{ inputText }}
+          Pane 2 100px height {{ tabActive }}
         </div>
         <div>Pane 3</div>
         <VuiButton>
@@ -52,10 +51,9 @@
     <VuiTab
       v-model="tabActive"
       position="right"
-      :toolbar="'Right Toolbar Props ' + inputText"
+      :toolbar="'Right Toolbar Props ' + tabActive"
       :tabs="['Tab 1', 'Tab 2', 'Tab 3']"
       :panes="tabPanes"
-      @change="onTabChange"
     />
   </VuiFlex>
 </template>
@@ -70,19 +68,12 @@ const {
 } = components;
 
 const tabActive = ref(1);
-const inputText = ref(1);
 
 const tabPanes = ref(['Pane 1', 'Pane 2', function(h) {
     return h(VuiButton, {
         label: 'Label'
     });
 }]);
-
-const onTabChange = (index) => {
-    inputText.value = index;
-    console.log(`tab change: ${index}`);
-};
-
 
 </script>
 <style>

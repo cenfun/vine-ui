@@ -52,8 +52,10 @@
     </div>
   </div>
 </template>
+
 <script>
-import { Util } from '../..';
+
+import Util from '../../util/util.js';
 import Base from '../../base/base.vue';
 
 

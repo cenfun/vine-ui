@@ -1,39 +1,33 @@
 <template>
   <div :class="classList">
-    <BaseRender :content="content" />
+    <BaseRender :content="props.content" />
   </div>
 </template>
-<script>
-import Base from '../../base/base.vue';
+<script setup>
+import { computed } from 'vue';
+import { BaseRender } from '../../base/base.js';
 
-export default {
-
-    name: 'VuiTabPane',
-
-    extends: Base,
-
-    props: {
-        content: {
-            validator: (v) => true,
-            default: ''
-        },
-        selected: {
-            type: Boolean,
-            default: false
-        }
+const props = defineProps({
+    content: {
+        validator: (v) => true,
+        default: ''
     },
-    computed: {
-        classList() {
-            const ls = ['vui-tab-pane'];
-            if (this.selected) {
-                ls.push('selected');
-            }
-            return ls;
-        }
+    selected: {
+        type: Boolean,
+        default: false
     }
-};
+});
+
+const classList = computed(() => {
+    const ls = ['vui-tab-pane'];
+    if (props.selected) {
+        ls.push('vui-tab-selected');
+    }
+    return ls;
+});
 
 </script>
+
 <style lang="scss">
 .vui-tab-pane {
     position: relative;
@@ -44,7 +38,7 @@ export default {
     overflow: hidden;
 }
 
-.vui-tab-pane.selected {
+.vui-tab-pane.vui-tab-selected {
     display: block;
 }
 

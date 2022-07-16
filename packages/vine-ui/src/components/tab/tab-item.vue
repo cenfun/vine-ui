@@ -1,61 +1,41 @@
 <template>
-  <div
-    :class="classList"
-    @click="clickHandler"
-  >
-    <BaseRender :content="content" />
+  <div :class="classList">
+    <BaseRender :content="props.content" />
   </div>
 </template>
-<script>
-import Base from '../../base/base.vue';
-export default {
+<script setup>
+import { computed } from 'vue';
+import { BaseRender } from '../../base/base.js';
 
-    name: 'VuiTabItem',
-
-    extends: Base,
-
-    props: {
-        position: {
-            type: String,
-            default: 'left'
-        },
-        content: {
-            validator: (v) => true,
-            default: ''
-        },
-        index: {
-            type: Number,
-            default: 0
-        },
-        selected: {
-            type: Boolean,
-            default: false
-        }
+const props = defineProps({
+    position: {
+        type: String,
+        default: 'left'
     },
-    computed: {
-        classList() {
-            const ls = [
-                'vui-tab-item',
-                `vui-tab-${this.position}`,
-                'vui-flex-row'
-            ];
-            if (this.selected) {
-                ls.push('selected');
-            }
-            return ls;
-        }
+    content: {
+        validator: (v) => true,
+        default: ''
     },
-
-    methods: {
-        clickHandler(e) {
-            //console.log(e);
-            this.dataModelValue = this.index;
-            this.$emit('change', this.index);
-        }
+    selected: {
+        type: Boolean,
+        default: false
     }
-};
+});
+
+const classList = computed(() => {
+    const ls = [
+        'vui-tab-item',
+        `vui-tab-${props.position}`,
+        'vui-flex-row'
+    ];
+    if (props.selected) {
+        ls.push('vui-tab-selected');
+    }
+    return ls;
+});
 
 </script>
+
 <style lang="scss">
 .vui-tab-item {
     position: relative;
@@ -118,14 +98,14 @@ export default {
     background-image: url("./images/hover-after.svg");
 }
 
-.vui-tab-item.selected {
+.vui-tab-item.vui-tab-selected {
     background-color: #fff;
     position: relative;
     z-index: 3;
 }
 
-.vui-tab-item.selected::before,
-.vui-tab-item.selected::after {
+.vui-tab-item.vui-tab-selected::before,
+.vui-tab-item.vui-tab-selected::after {
     background-repeat: no-repeat;
     background-color: transparent;
     position: absolute;
@@ -138,11 +118,11 @@ export default {
     content: "";
 }
 
-.vui-tab-item.selected::before {
+.vui-tab-item.vui-tab-selected::before {
     background-image: url("./images/selected-before.svg");
 }
 
-.vui-tab-item.selected::after {
+.vui-tab-item.vui-tab-selected::after {
     left: 100%;
     background-image: url("./images/selected-after.svg");
 }

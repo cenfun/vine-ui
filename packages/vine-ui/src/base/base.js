@@ -1,4 +1,6 @@
-import { createApp, h } from 'vue';
+import {
+    createApp, h, useSlots
+} from 'vue';
 
 import Util from '../util/util.js';
 import './base.scss';
@@ -97,6 +99,24 @@ export const createComponent = function(props, slots, container) {
 
 };
 
+export const getSlot = function(name) {
+    const slots = useSlots();
+
+    //console.log('slots', slots);
+
+    const fun = slots[name];
+    if (!fun) {
+        return;
+    }
+    let ls = fun();
+    //console.log(ls);
+
+    ls = ls.filter((it) => it.type);
+
+    //console.log(ls);
+    return ls;
+};
+
 export const vSelectOnFocus = function(el) {
     el.addEventListener('focus', (e) => {
         if (el.getAttribute('readonly')) {
@@ -113,6 +133,8 @@ export default {
 
     destroyComponent,
     createComponent,
+
+    getSlot,
 
     vSelectOnFocus
 };
