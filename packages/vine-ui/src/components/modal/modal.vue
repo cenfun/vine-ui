@@ -4,13 +4,13 @@
     :class="classList"
   >
     <div
-      class="vui-modal-main vui-flex-column"
+      class="vui-modal-main"
       :style="styleMain"
     >
       <div :class="classHeader">
         <BaseRender :content="props.title" />
       </div>
-      <div class="vui-modal-content vui-flex-auto">
+      <div class="vui-modal-content">
         <slot>
           <BaseRender :content="props.content" />
         </slot>
