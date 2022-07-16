@@ -44,8 +44,11 @@ export const BaseRender = {
 };
 
 const componentMap = new WeakMap();
-export const getComponent = function($el) {
-    return componentMap.get($el);
+export const unmountComponent = function($el) {
+    const app = componentMap.get($el);
+    if (app) {
+        app.unmount();
+    }
 };
 
 export const createComponent = function(props, slots, container) {
@@ -105,7 +108,7 @@ export default {
     useBase,
     BaseRender,
 
-    getComponent,
+    unmountComponent,
     createComponent,
 
     vSelectOnFocus

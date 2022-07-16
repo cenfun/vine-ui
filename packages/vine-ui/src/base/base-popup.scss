@@ -1,54 +1,3 @@
-<script>
-import Base from './base.vue';
-import {
-    getDefaultPositions, getBestPosition, getRect, getElement, toRect
-} from '../util/popup-helper.js';
-
-export default {
-    extends: Base,
-
-    props: {
-
-        target: {
-            validator: (v) => true,
-            default: ''
-        },
-
-        bindTarget: {
-            type: Boolean,
-            default: false
-        },
-
-        positions: {
-            type: [String, Array],
-            default: () => {
-                return getDefaultPositions();
-            }
-        },
-
-        content: {
-            validator: (v) => true,
-            default: ''
-        },
-
-        container: {
-            validator: (v) => true,
-            default: ''
-        }
-
-    },
-
-    methods: {
-        getDefaultPositions,
-        getBestPosition,
-        getRect,
-        getElement,
-        toRect
-    }
-
-};
-</script>
-<style lang="scss">
 .vui-popup {
     border: 1px solid #ccc;
     background-color: #fff;
@@ -181,4 +130,3 @@ export default {
         }
     }
 }
-</style>

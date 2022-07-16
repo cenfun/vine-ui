@@ -89,7 +89,7 @@ export default {
     },
 
     mounted() {
-        if (this.attachToBody || !this.$el.parentNode) {
+        if (!this.$el.parentNode) {
             document.body.appendChild(this.$el);
         }
 

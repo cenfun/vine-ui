@@ -37,10 +37,6 @@ const props = defineProps({
     visible: {
         type: Boolean,
         default: true
-    },
-    attachToBody: {
-        type: Boolean,
-        default: true
     }
 });
 
@@ -69,7 +65,7 @@ const getBodyClass = () => {
     if (props.position === 'left') {
         return '';
     }
-    if (props.attachToBody || !$el.parentNode) {
+    if (!$el.parentNode) {
         return 'vui-flyover-overflow-hidden';
     }
     return '';

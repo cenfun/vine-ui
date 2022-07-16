@@ -22,7 +22,6 @@
 
     <div style="position: relative; width: 520px; height: 360px; border: 1px solid #ccc; margin-top: 10px;">
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
@@ -33,7 +32,6 @@
         bottom-right {{ inputText }}
       </VuiPopover>
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
@@ -44,7 +42,6 @@
         bottom-center
       </VuiPopover>
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
@@ -56,7 +53,6 @@
       </VuiPopover>
 
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
@@ -68,7 +64,6 @@
       </VuiPopover>
 
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
@@ -80,7 +75,6 @@
       </VuiPopover>
 
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
@@ -92,7 +86,6 @@
       </VuiPopover>
 
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
@@ -104,7 +97,6 @@
       </VuiPopover>
 
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
@@ -116,7 +108,6 @@
       </VuiPopover>
 
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
@@ -128,7 +119,6 @@
       </VuiPopover>
 
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
@@ -140,7 +130,6 @@
       </VuiPopover>
 
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
@@ -152,7 +141,6 @@
       </VuiPopover>
 
       <VuiPopover
-        :attach-to-body="false"
         :auto-close="false"
         :bind-resize="false"
         :bind-scroll="false"
