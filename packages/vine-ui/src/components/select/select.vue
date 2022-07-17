@@ -129,7 +129,7 @@ const data = reactive({
     //label for view display
     selectedLabel: '',
     //value for selected item class
-    selectedValue: '',
+    selectedValue: null,
     //for search input
     searchValue: null
 });
@@ -169,13 +169,16 @@ const listStyle = computed(() => {
 
 const initSelectedItem = (list) => {
     const dv = props.modelValue === null ? props.value : props.modelValue;
+
+    //console.log('dv', dv);
+
     const item = list.find((it) => it.value === dv);
     if (item) {
         data.selectedLabel = item.label;
         data.selectedValue = item.value;
     } else {
         data.selectedLabel = '';
-        data.selectedValue = '';
+        data.selectedValue = null;
     }
 
 };
@@ -385,8 +388,6 @@ const layout = () => {
     if (left + listRect.width > bodyRect.width) {
         left = bodyRect.width - listRect.width;
     }
-    console.log(viewRect, bodyRect);
-    console.log(left);
 
     const st = $list.style;
     st.left = `${left}px`;
@@ -514,7 +515,7 @@ const initWidth = () => {
     if (listRect.width > 2) {
         const iconWidth = 15;
         const viewMinWidth = 50;
-        const viewMaxWidth = 300;
+        const viewMaxWidth = 350;
         //no padding because list have same padding
         const w = Util.clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
         data.width = `${w}px`;

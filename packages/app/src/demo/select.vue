@@ -57,6 +57,20 @@
         :options="selectList"
         disabled
       />
+
+      <div class="vui-flex-empty" />
+
+      <VuiSelect
+        v-model="selectValue"
+        width="60px"
+        label="Right width 60:"
+      >
+        <option />
+        <option>5</option>
+        <option>10</option>
+        <option>long test long test long test long</option>
+        <option>long test long test long test long test long test</option>
+      </VuiSelect>
     </VuiFlex>
 
     <VuiFlex spacing="10px">

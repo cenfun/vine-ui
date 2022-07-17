@@ -122,7 +122,7 @@ export const getSlot = function(name) {
 
 export const vSelectOnFocus = function(el) {
     el.addEventListener('focus', (e) => {
-        if (el.getAttribute('readonly') || !el.value) {
+        if (el.getAttribute('readonly') !== null || !el.value) {
             return;
         }
         el.select();
