@@ -1,19 +1,17 @@
 <template>
   <VuiFlex spacing="10px">
-    <VuiSelect
-      v-model="flyover.width"
-      label="width:"
-    >
+    <div
+      v-if="flyover.position==='left'"
+      class="vui-flex-empty"
+    />
+    <VuiSelect v-model="flyover.width">
       <option>30%</option>
       <option>50%</option>
       <option>60%</option>
       <option>100px</option>
     </VuiSelect>
 
-    <VuiSelect
-      v-model="flyover.position"
-      label="position:"
-    >
+    <VuiSelect v-model="flyover.position">
       <option>right</option>
       <option>left</option>
     </VuiSelect>
@@ -29,6 +27,11 @@
     <VuiButton @click.native="flyover.visible=false">
       Hide
     </VuiButton>
+
+    <div
+      v-if="flyover.position==='right'"
+      class="vui-flex-empty"
+    />
   </VuiFlex>
 </template>
 
