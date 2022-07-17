@@ -1,13 +1,13 @@
 {
     "name": "vine-ui-app",
-    "version": "3.0.4",
+    "version": "3.0.5",
     "main": "dist/vine-ui-app.js",
     "private": true,
     "files": [
         "dist"
     ],
     "dependencies": {
-        "vine-ui": "~3.0.4"
+        "vine-ui": "~3.0.5"
     },
     "devDependencies": {}
 }
