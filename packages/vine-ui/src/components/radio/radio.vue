@@ -148,6 +148,12 @@ const modelData = computed({
             }
         }
 
+        &:not(:disabled, :checked, :focus) {
+            ~ label:hover::before {
+                border-color: #888;
+            }
+        }
+
         &:focus:not(:checked) {
             ~ label::before {
                 border-color: #80bdff;
@@ -163,12 +169,6 @@ const modelData = computed({
                 &::after {
                     background-color: rgb(0 123 255 / 50%);
                 }
-            }
-        }
-
-        &:not(:disabled, :checked, :focus) {
-            ~ label:hover::before {
-                border-color: #888;
             }
         }
     }

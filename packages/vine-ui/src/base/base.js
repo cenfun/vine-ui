@@ -77,25 +77,28 @@ export const createComponent = function(props, slots, container) {
     });
 
     // instance proxy
-    let instance;
+    let component;
 
     if (container) {
-        instance = app.mount(container);
+        component = app.mount(container);
     } else {
         const temp = document.createElement('div');
         document.body.appendChild(temp);
-        instance = app.mount(temp);
-        document.body.appendChild(instance.$el);
+        component = app.mount(temp);
+        document.body.appendChild(component.$el);
         temp.remove();
     }
 
     //console.log(instance);
 
-    componentMap.set(instance.$el, app);
+    componentMap.set(component.$el, app);
 
     //console.log('app', app);
+    component.unmount = () => {
+        app.unmount();
+    };
 
-    return app;
+    return component;
 
 };
 

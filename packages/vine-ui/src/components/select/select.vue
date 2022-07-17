@@ -1,463 +1,472 @@
 <template>
   <div
+    ref="el"
     :class="classList"
   >
-    <label v-if="label">
-      <BaseRender :content="label" />
+    <label v-if="props.label">
+      <BaseRender :content="props.label" />
     </label>
+
     <input
-      ref="view"
-      v-model="viewValue"
-      v-select
+      v-select-on-focus
       type="text"
+      :value="data.selectedLabel"
       :class="viewClass"
       :style="viewStyle"
-      :disabled="disabled"
-      :readonly="!searchable"
+      :disabled="props.disabled"
+      :readonly="!props.searchable"
       @click.stop="onClick"
       @input.stop="onInput"
       @focus="onFocus"
       @blur="onBlur"
     >
-    <div
-      ref="options"
-      class="vui-select-options"
-    >
+    <div class="vui-select-slots">
       <slot />
     </div>
-    <div
-      ref="list"
-      class="vui vui-select-list"
-    >
+
+    <div class="vui-select-holder">
       <div
-        v-for="(item, index) in list"
-        :key="index"
-        class="vui-select-item"
-        :class="item.value === dataModelValue ? 'selected':''"
-        @mousedown="onItemClick(item)"
+        class="vui vui-select-list"
+        :style="listStyle"
       >
         <div
-          class="vui-select-item-label"
+          v-for="(item, index) in list"
+          :key="index"
+          :class="getItemClass(item)"
+          @mousedown="onItemClick(item)"
         >
-          {{ item.label }}
-        </div>
-        <div
-          v-if="item.removable"
-          class="vui-select-item-remove"
-          @mousedown.stop="onItemRemove(item)"
-        >
-          <IconX />
+          <div class="vui-select-item-label">
+            {{ item.label }}
+          </div>
+          <div
+            v-if="item.removable"
+            class="vui-select-item-remove"
+            @mousedown.stop="onItemRemove(item)"
+          >
+            <IconX />
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-
-import Util from '../../util/util.js';
-import Base from '../../base/base.vue';
-
-
+<script setup>
 import {
-    //useBase, BaseRender,
-    vSelectOnFocus
+    computed, nextTick, onMounted, reactive, ref
+} from 'vue';
+import {
+    useBase, BaseRender, vSelectOnFocus
 } from '../../base/base.js';
 
+import Util from '../../util/util.js';
 import IconX from '../../base/images/icon-x.vue';
+
+const { cid } = useBase('VuiSelect');
+
+const classList = ['vui', 'vui-select', cid];
 
 const viewMinWidth = 50;
 const viewMaxWidth = 300;
 
-export default {
-
-    name: 'VuiSelect',
-
-    directives: {
-        select: vSelectOnFocus
+const props = defineProps({
+    label: {
+        type: String,
+        default: ''
     },
 
-    components: {
-        IconX
+    disabled: {
+        type: Boolean,
+        default: false
     },
 
-    extends: Base,
-
-    props: {
-        options: {
-            type: Array,
-            default: null
-        },
-
-        width: {
-            type: String,
-            default: ''
-        },
-
-        searchable: {
-            type: Boolean,
-            default: false
-        }
+    options: {
+        type: Array,
+        default: null
     },
 
-    data() {
+    width: {
+        type: String,
+        default: ''
+    },
+
+    searchable: {
+        type: Boolean,
+        default: false
+    },
+
+    value: {
+        type: String,
+        default: ''
+    },
+    modelValue: {
+        type: String,
+        default: null
+    }
+});
+
+const el = ref(null);
+let $el;
+let $view;
+let $list;
+let isOpen;
+let timeout_close;
+
+const viewClass = computed(() => {
+    const ls = ['vui-select-view'];
+    if (props.searchable) {
+        ls.push('vui-select-search');
+    }
+    return ls;
+});
+
+const emit = defineEmits(['search', 'remove', 'update:modelValue']);
+
+const data = reactive({
+    //for list computed
+    slotsReady: false,
+    //for view width
+    width: props.width,
+    //label for view display
+    selectedLabel: '',
+    //value for selected item class
+    selectedValue: ''
+});
+
+const viewStyle = computed(() => {
+    if (data.width) {
         return {
-            slotOptions: null,
-
-            viewValue: '',
-
-            viewWidth: this.width
-
+            'width': `${data.width}`
         };
-    },
-
-    computed: {
-        classList() {
-            return [
-                'vui',
-                'vui-select',
-                this.cid
-            ];
-        },
-
-        viewClass() {
-            const ls = ['vui-select-view'];
-            if (this.searchable) {
-                ls.push('vui-select-search');
-            }
-            return ls;
-        },
-
-        viewStyle() {
-            if (this.viewWidth) {
-                let w = this.viewWidth;
-                if ((/^\d+$/).test(this.viewWidth)) {
-                    w += 'px';
-                }
-                return {
-                    'width': `${w}`
-                };
-            }
-            return {};
-        },
-
-        list() {
-            //props first
-            if (this.options) {
-                const list = this.options.map(function(item) {
-                    if (item && typeof item === 'object') {
-                        return {
-                            ... item,
-                            label: item.label || item.value,
-                            value: item.value || item.label
-                        };
-                    }
-                    return {
-                        label: `${item}`,
-                        value: `${item}`
-                    };
-                });
-
-                //console.log(list);
-
-                return list;
-            }
-            // slot options next
-            if (this.slotOptions) {
-                return this.slotOptions;
-            }
-
-            return [];
-        }
-
-    },
-
-    watch: {
-        list() {
-            this.updateViewValue();
-        },
-        dataModelValue() {
-            //do not update when input now
-            if (this.searchable && this.isOpen) {
-                return;
-            }
-            this.updateViewValue();
-        }
-    },
-
-    created() {
-        this.init();
-    },
-
-    mounted() {
-
-        //this.$refs.options
-
-        const $options = Array.from(this.$refs.options.childNodes).filter((it) => it.nodeType === 1);
-        //this.log($options);
-
-        if ($options.length) {
-            this.slotOptions = $options.map((elem) => {
-
-                const label = elem.innerText;
-                //value could be (empty)
-                let value = elem.getAttribute('value');
-                if (value === null) {
-                    value = label;
-                }
-
-                const option = {
-                    label,
-                    value
-                };
-
-                //selected only has key
-                const selected = elem.getAttribute('selected');
-                const removable = elem.getAttribute('removable');
-                if (selected !== null) {
-                    option.selected = true;
-                }
-                if (removable !== null) {
-                    option.removable = true;
-                }
-
-                return option;
-            });
-
-        }
-
-        this.updateViewValue();
-
-        this.$list = this.$refs.list;
-        this.$view = this.$refs.view;
-
-        //this.log('mounted');
-        this.updateViewWidth('mounted');
-
-    },
-
-    updated() {
-        if (this.searchable) {
-            //if list is up, need update list top when list height changed by search results
-            this.layout();
-        }
-        //this.log('updated');
-        this.updateViewWidth('updated');
-    },
-
-    methods: {
-
-        init: function() {
-
-            this.resizeHandler = (e) => {
-                //console.log('resizeHandler');
-                this.close();
-            };
-
-            this.scrollHandler = (e) => {
-                //console.log('scrollHandler');
-                if (this.isSelectInner(e.target)) {
-                    return;
-                }
-                if (!this.isViewParent(e.target)) {
-                    return;
-                }
-                this.close();
-            };
-
-        },
-
-        unbindEvents: function() {
-            //console.log('unbindEvents');
-            window.removeEventListener('resize', this.resizeHandler);
-            window.removeEventListener('scroll', this.scrollHandler, true);
-        },
-
-        bindEvents: function() {
-            this.unbindEvents();
-            window.addEventListener('resize', this.resizeHandler);
-            window.addEventListener('scroll', this.scrollHandler, true);
-        },
-
-
-        open: function() {
-
-            if (this.isOpen) {
-                return;
-            }
-
-            if (this.disabled) {
-                return;
-            }
-
-            if (!this.list.length) {
-                return;
-            }
-
-            document.body.appendChild(this.$list);
-
-            this.$list.style.visibility = 'visible';
-
-            this.isOpen = true;
-
-            this.layout();
-
-            this.bindEvents();
-
-        },
-
-        layout: function() {
-            if (!this.isOpen) {
-                return;
-            }
-
-            if (!this.$view) {
-                return;
-            }
-
-            const viewRect = this.$view.getBoundingClientRect();
-            const listRect = this.$list.getBoundingClientRect();
-            const bodyRect = document.body.getBoundingClientRect();
-
-            const top = this.getListTop(viewRect, listRect, bodyRect);
-
-            let left = Math.max(viewRect.left, 0);
-            if (left + listRect.width > bodyRect.width) {
-                left = bodyRect.width - listRect.width;
-            }
-
-            const st = this.$list.style;
-            st.left = `${left}px`;
-            st.top = `${top}px`;
-            st.minWidth = `${viewRect.width}px`;
-
-            //selected element.scrollIntoView();
-            const $selected = this.$list.querySelector('.vui-select-item.selected');
-            if ($selected) {
-                $selected.scrollIntoView();
-            }
-
-        },
-
-        getListTop(viewRect, listRect, bodyRect) {
-            const spacing = 2;
-
-            const topDown = viewRect.top + viewRect.height + spacing;
-            const topUp = viewRect.top - listRect.height - spacing;
-            const isDownOk = topDown + listRect.height <= bodyRect.height;
-
-            if (isDownOk) {
-                return topDown;
-            }
-
-            return topUp;
-        },
-
-        updateViewWidth(step) {
-            if (this.viewWidth) {
-                return;
-            }
-            if (!this.list.length) {
-                this.viewWidth = viewMinWidth;
-                return;
-            }
-
-            const listRect = this.$list.getBoundingClientRect();
-            //this.log(step, listRect);
-            //border is 2 if empty
-            if (listRect.width > 2) {
-                const iconWidth = 15;
-                //no padding because list have same padding
-                this.viewWidth = Util.clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
-            }
-        },
-
-        updateViewValue() {
-            const dv = this.dataModelValue;
-            const item = this.list.find((it) => it.value === dv);
-            //this.log(item);
-            if (item) {
-                this.viewValue = dv;
-            }
-        },
-
-        closeAsync() {
-            clearTimeout(this.timeout_close);
-            this.timeout_close = setTimeout(() => {
-                this.close();
-            }, 100);
-        },
-
-        close() {
-            this.isOpen = false;
-            this.unbindEvents();
-            this.$list.remove();
-        },
-
-        onItemClick(item) {
-            //this.log('onItemClick', item);
-            this.dataModelValue = item.value;
-            this.updateViewValue();
-            this.close();
-        },
-
-        onItemRemove(item) {
-            //this.log('remove', item);
-            this.$emit('remove', item);
-        },
-
-        onClick(e) {
-            //this.log('onClick');
-            this.open();
-        },
-
-        onInput(e) {
-            //this.log(e);
-            // e.preventDefault();
-            // e.stopImmediatePropagation();
-            this.$emit('search', e);
-        },
-
-        onFocus(e) {
-            //console.log('onFocus', this.cid);
-            this.open();
-        },
-
-        onBlur(e) {
-            //console.log('onBlur', this.cid);
-            this.closeAsync();
-        },
-
-        isSelectInner(elem) {
-            if (this.$list === elem) {
-                return true;
-            }
-            let inner = false;
-            try {
-                inner = this.$list.contains(elem);
-            } catch (e) {
-                //empty
-            }
-            return inner;
-        },
-
-        isViewParent(elem) {
-            const targetElement = this.$view;
-            let parent = targetElement.parentNode;
-            while (parent) {
-                if (parent === elem) {
-                    return true;
-                }
-                parent = parent.parentNode;
-            }
-            return false;
-        }
-
+    }
+    return {};
+});
+
+const listStyle = computed(() => {
+    if (data.width) {
+        return {
+            'min-width': `${data.width}`
+        };
+    }
+    return {};
+});
+
+
+//=========================================================================================================
+
+const initSelectedItem = (list) => {
+    const dv = props.modelValue === null ? props.value : props.modelValue;
+    const item = list.find((it) => it.value === dv);
+    if (item) {
+        data.selectedLabel = item.label;
+        data.selectedValue = item.value;
+    } else {
+        data.selectedLabel = '';
+        data.selectedValue = '';
     }
 
 };
 
+
+const getListByPropOptions = () => {
+    const list = props.options.map(function(item) {
+        if (item && typeof item === 'object') {
+            return {
+                ... item,
+                label: item.label || item.value,
+                value: item.value || item.label
+            };
+        }
+        return {
+            label: `${item}`,
+            value: `${item}`
+        };
+    });
+
+    initSelectedItem(list);
+
+    return list;
+
+};
+
+const getListBySlotOptions = () => {
+
+    const $options = Array.from($el.querySelector('.vui-select-slots').children);
+
+    if (!$options.length) {
+        return [];
+    }
+
+    const list = $options.map((elem) => {
+
+        const label = elem.getAttribute('label') || elem.innerText;
+        // //value could be (empty)
+        let value = elem.getAttribute('value');
+        if (value === null) {
+            value = label;
+        }
+
+        const option = {
+            label,
+            value
+        };
+
+        //selected only has key
+        const selected = elem.getAttribute('selected');
+        const removable = elem.getAttribute('removable');
+        if (selected !== null) {
+            option.selected = true;
+        }
+        if (removable !== null) {
+            option.removable = true;
+        }
+
+        return option;
+    });
+
+    initSelectedItem(list);
+
+    return list;
+
+};
+
+const list = computed(() => {
+    if (props.options) {
+        return getListByPropOptions();
+    }
+    if (data.slotsReady) {
+        return getListBySlotOptions();
+    }
+    return [];
+});
+
+//=========================================================================================================
+
+const resizeHandler = (e) => {
+    //console.log('resizeHandler');
+    close();
+};
+
+const isSelectInner = (elem) => {
+    if ($list === elem) {
+        return true;
+    }
+    let inner = false;
+    try {
+        inner = $list.contains(elem);
+    } catch (e) {
+        //empty
+    }
+    return inner;
+};
+
+const isViewParent = (elem) => {
+    const targetElement = $view;
+    let parent = targetElement.parentNode;
+    while (parent) {
+        if (parent === elem) {
+            return true;
+        }
+        parent = parent.parentNode;
+    }
+    return false;
+};
+
+const scrollHandler = (e) => {
+    //console.log('scrollHandler');
+    if (isSelectInner(e.target)) {
+        return;
+    }
+    if (!isViewParent(e.target)) {
+        return;
+    }
+    close();
+};
+
+
+const unbindEvents = function() {
+    //console.log('unbindEvents');
+    window.removeEventListener('resize', resizeHandler);
+    window.removeEventListener('scroll', scrollHandler, true);
+};
+
+const bindEvents = function() {
+    unbindEvents();
+    window.addEventListener('resize', resizeHandler);
+    window.addEventListener('scroll', scrollHandler, true);
+};
+
+//=========================================================================================================
+
+const showList = () => {
+    document.body.appendChild($list);
+    $list.style.visibility = 'visible';
+    isOpen = true;
+};
+
+const hideList = () => {
+    isOpen = false;
+    $list.remove();
+};
+
+//=========================================================================================================
+
+const close = () => {
+    hideList();
+    unbindEvents();
+};
+
+const closeAsync = () => {
+    clearTimeout(timeout_close);
+    timeout_close = setTimeout(() => {
+        close();
+    }, 100);
+};
+
+//=========================================================================================================
+
+const getListTop = (viewRect, listRect, bodyRect) => {
+    const spacing = 2;
+
+    const topDown = viewRect.top + viewRect.height + spacing;
+    const topUp = viewRect.top - listRect.height - spacing;
+    const isDownOk = topDown + listRect.height <= bodyRect.height;
+
+    if (isDownOk) {
+        return topDown;
+    }
+
+    return topUp;
+};
+
+const layout = function() {
+    const viewRect = $view.getBoundingClientRect();
+    const listRect = $list.getBoundingClientRect();
+    const bodyRect = document.body.getBoundingClientRect();
+
+    const top = getListTop(viewRect, listRect, bodyRect);
+
+    let left = Math.max(viewRect.left, 0);
+    if (left + listRect.width > bodyRect.width) {
+        left = bodyRect.width - listRect.width;
+    }
+
+    const st = $list.style;
+    st.left = `${left}px`;
+    st.top = `${top}px`;
+
+    //selected element.scrollIntoView();
+    const $selected = $list.querySelector('.vui-select-item.selected');
+    if ($selected) {
+        $selected.scrollIntoView();
+    }
+
+};
+
+const open = function() {
+    if (isOpen) {
+        return;
+    }
+    if (props.disabled) {
+        return;
+    }
+    if (!list.value.length) {
+        return;
+    }
+
+    showList();
+    layout();
+    bindEvents();
+};
+
+//=========================================================================================================
+
+const onClick = (e) => {
+    //log('onClick');
+    open();
+};
+
+const onInput = (e) => {
+    //log(e);
+    // e.preventDefault();
+    // e.stopImmediatePropagation();
+    emit('search', e);
+};
+
+const onFocus = (e) => {
+    //console.log('onFocus', cid);
+    open();
+};
+
+const onBlur = (e) => {
+    //console.log('onBlur', cid);
+    closeAsync();
+};
+
+
+//=========================================================================================================
+
+
+const getItemClass = (item) => {
+    const ls = ['vui-select-item'];
+    if (item.value === data.selectedValue) {
+        ls.push('selected');
+    }
+    return ls;
+};
+
+const onItemClick = (item) => {
+    data.selectedLabel = item.label;
+    data.selectedValue = item.value;
+    emit('update:modelValue', item.value);
+    close();
+};
+
+const onItemRemove = (item) => {
+    //log('remove', item);
+    emit('remove', item);
+};
+
+
+//=========================================================================================================
+
+const initWidth = () => {
+
+    if (data.width) {
+        return;
+    }
+
+    const listRect = $list.getBoundingClientRect();
+    //border is 2 if empty
+    if (listRect.width > 2) {
+        const iconWidth = 15;
+        //no padding because list have same padding
+        const w = Util.clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
+        data.width = `${w}px`;
+    }
+};
+
+
+onMounted(() => {
+    $el = el.value;
+
+    $view = $el.querySelector('.vui-select-view');
+    $list = $el.querySelector('.vui-select-list');
+
+    //trigger computed list
+    data.slotsReady = true;
+
+    if (props.options) {
+        initWidth();
+    } else {
+        nextTick(() => {
+            initWidth();
+        });
+    }
+});
+
 </script>
+
 <style lang="scss">
 .vui-select {
     position: relative;
@@ -484,6 +493,7 @@ export default {
     padding: 0 20px 0 5px;
     border-radius: 5px;
     width: 50px;
+    min-width: 50px;
     height: 30px;
     border: 1px solid #aaa;
     user-select: none;
@@ -510,12 +520,19 @@ export default {
     cursor: text;
 }
 
-.vui-select-options {
+.vui-select-slots {
     display: none;
 }
 
+/* holder for width computed */
+.vui-select-holder {
+    position: absolute;
+    width: 500px;
+}
+
 .vui-select-list {
-    position: fixed;
+    position: absolute;
+    visibility: hidden;
     background-color: #fff;
     z-index: 10000;
     border: 1px solid #aaa;
@@ -525,12 +542,11 @@ export default {
     overflow-x: hidden;
     overflow-y: auto;
     box-shadow: 0 2px 3px 0 rgb(0 0 0 / 20%);
-    visibility: hidden;
 }
 
 .vui-select-item-label {
     min-height: 1rem;
-    flex: 1;
+    flex: 1 1 0%;
     overflow: hidden;
 }
 
@@ -583,5 +599,4 @@ export default {
         background: #555;
     }
 }
-
 </style>

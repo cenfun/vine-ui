@@ -1,16 +1,22 @@
 <template>
-  <div>
-    <VuiFlex spacing="15px">
+  <VuiFlex
+    spacing="10px"
+    direction="column"
+  >
+    <VuiFlex spacing="10px">
       <VuiSelect
         v-model="selectValue"
-        label="My List:"
+        label="prop options:"
         :options="selectOptions"
       />
 
-      <VuiSelect label="selected:">
+      <VuiSelect label="slot options:">
         <option>option 1</option>
         <option>option 2</option>
-        <option>option 3</option>
+        <option value="3">
+          option 3
+        </option>
+        <option><b>bold</b> text</option>
         <option selected>
           One
         </option>
@@ -34,10 +40,7 @@
       </VuiSelect>
     </VuiFlex>
 
-    <VuiFlex
-      spacing="10px"
-      style="margin-top: 10px;"
-    >
+    <VuiFlex spacing="10px">
       <VuiSelect
         v-model="selectValue"
         label="Select:"
@@ -46,7 +49,7 @@
       <VuiSelect
         v-model="selectValue"
         label="200 width:"
-        width="200"
+        width="200px"
         :options="selectList"
       />
       <VuiSelect
@@ -55,34 +58,35 @@
         :options="selectList"
         disabled
       />
-      <div class="vui-flex-empty" />
-      <VuiSelect
-        v-model="selectValue"
-        label="Slot Options:"
-      >
-        <option />
-        <option>5</option>
-        <option>10</option>
-        <option>15</option>
-        <option>20</option>
-      </VuiSelect>
+    </VuiFlex>
 
+    <VuiFlex spacing="10px">
       <VuiSelect
         v-model="selectValue"
-        label="Slot Options:"
+        label="max width:"
       >
         <option />
         <option>dddddddddd ddddddddddddddddd ddddddddddddd5</option>
         <option>10ddddd ddddddddddd</option>
         <option>15ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</option>
-        <option>20ddddddd ddddddddddd</option>
+        <option>20ddddddd ddddddddddd long test long test long test long test long test long test long test</option>
+      </VuiSelect>
+
+      <div class="vui-flex-empty" />
+
+      <VuiSelect
+        v-model="selectValue"
+        label="Right:"
+      >
+        <option />
+        <option>5</option>
+        <option>10</option>
+        <option>long test long test long test long</option>
+        <option>long test long test long test long test long test</option>
       </VuiSelect>
     </VuiFlex>
 
-    <VuiFlex
-      spacing="10px"
-      style="margin-top: 10px;"
-    >
+    <VuiFlex spacing="10px">
       <VuiSelect
         v-model="selectValue"
         label="Input:"
@@ -94,13 +98,13 @@
       <VuiSelect
         v-model="selectValue"
         label="100 width:"
-        width="100"
+        width="100px"
         :options="selectResults"
         :searchable="true"
         @remove="onSelectRemove"
       />
     </VuiFlex>
-  </div>
+  </VuiFlex>
 </template>
 
 <script setup>

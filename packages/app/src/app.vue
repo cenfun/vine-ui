@@ -118,7 +118,7 @@ body {
     color: #666;
     height: 30px;
     line-height: 30px;
-    flex: 1;
+    flex: 1 1 0%;
 }
 
 .icon-github {

@@ -158,7 +158,6 @@
 
 <script setup>
 import { components } from 'vine-ui';
-import Flex from 'vine-ui/src/components/flex/flex.vue';
 const {
     VuiButton,
     VuiCheckbox,
