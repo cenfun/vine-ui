@@ -110,7 +110,9 @@ let $el;
 let $view;
 let $list;
 let isOpen;
+let shouldOpen;
 let timeout_display;
+let lastDirection = 'down';
 
 const viewClass = computed(() => {
     const ls = ['vui-select-view'];
@@ -326,9 +328,14 @@ const hideList = () => {
 //=========================================================================================================
 
 const close = () => {
+
+    //align with open
+    shouldOpen = false;
+
     if (!isOpen) {
         return;
     }
+    lastDirection = 'down';
     hideList();
     unbindEvents();
 };
@@ -345,15 +352,29 @@ const closeAsync = () => {
 const getListTop = (viewRect, listRect, bodyRect) => {
     const spacing = 2;
 
-    const topDown = viewRect.top + viewRect.height + spacing;
-    const topUp = viewRect.top - listRect.height - spacing;
-    const isDownOk = topDown + listRect.height <= bodyRect.height;
+    const top = {
+        down: viewRect.top + viewRect.height + spacing,
+        up: viewRect.top - listRect.height - spacing
+    };
 
-    if (isDownOk) {
-        return topDown;
+    const ok = {
+        down: top.down + listRect.height <= bodyRect.height,
+        up: top.up > 0
+    };
+
+    //console.log(top, ok);
+
+    if (ok[lastDirection]) {
+        return top[lastDirection];
     }
 
-    return topUp;
+    if (ok.down) {
+        lastDirection = 'down';
+        return top.down;
+    }
+
+    lastDirection = 'up';
+    return top.up;
 };
 
 const layout = () => {
@@ -382,11 +403,22 @@ const layout = () => {
 };
 
 const layoutAsync = () => {
-    if (!isOpen) {
+    if (props.disabled) {
         return;
     }
 
     if (!$el) {
+        return;
+    }
+
+    if (shouldOpen && !isOpen) {
+        nextTick(() => {
+            open();
+        });
+        return;
+    }
+
+    if (!isOpen) {
         return;
     }
 
@@ -397,12 +429,16 @@ const layoutAsync = () => {
 };
 
 const open = () => {
-    if (isOpen) {
-        return;
-    }
     if (props.disabled) {
         return;
     }
+
+    shouldOpen = true;
+
+    if (isOpen) {
+        return;
+    }
+
     if (!list.value.length) {
         return;
     }
@@ -424,14 +460,10 @@ const openAsync = () => {
 //=========================================================================================================
 
 const onClick = (e) => {
-    //log('onClick');
     open();
 };
 
 const onInput = (e) => {
-    //log(e);
-    // e.preventDefault();
-    // e.stopImmediatePropagation();
     emit('search', e);
 };
 
@@ -467,7 +499,6 @@ const onItemClick = (item) => {
 };
 
 const onItemRemove = (item) => {
-    //log('remove', item);
     emit('remove', item);
 };
 

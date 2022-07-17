@@ -28,9 +28,8 @@
         disabled
         label="Disabled:"
       >
-        <option>option 1</option>
-        <option>option 2</option>
-        <option>option 3</option>
+        <option>Two</option>
+        <option>STG</option>
       </VuiSelect>
 
       <VuiSelect label="empty list:" />
@@ -158,6 +157,7 @@ const onSelectSearch = (e) => {
         ls.length = Math.ceil(12 * Math.random());
         const str = ls.join(' Text');
         results.push({
+            //only label
             label: `${i + 1}, ${str}`,
             removable: true
         });
@@ -168,8 +168,16 @@ const onSelectSearch = (e) => {
     //console.log(v);
 };
 
-const onSelectRemove = (item, e) => {
-    console.log('onSelectRemove', item, e);
+const onSelectRemove = (item) => {
+    console.log('onSelectRemove', item);
+    const v = item.value;
+    selectResults.value = selectResults.value.filter((it) => {
+        //no value here
+        if (it.label === v) {
+            return false;
+        }
+        return true;
+    });
 };
 
 
