@@ -65,7 +65,7 @@ const getBodyClass = () => {
     if (props.position === 'left') {
         return '';
     }
-    if (!$el.parentNode) {
+    if ($el.parentNode) {
         return 'vui-flyover-overflow-hidden';
     }
     return '';
