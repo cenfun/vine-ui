@@ -146,6 +146,9 @@ const onSelectSearch = (e) => {
 
     //console.log(e);
     const value = e.target.value;
+    if (!value) {
+        return;
+    }
 
     const len = Math.ceil(30 * Math.random());
     const results = [];

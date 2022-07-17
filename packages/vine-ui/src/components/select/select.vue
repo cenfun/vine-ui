@@ -8,9 +8,9 @@
     </label>
 
     <input
+      v-model="viewValue"
       v-select-on-focus
       type="text"
-      :value="data.selectedLabel"
       :class="viewClass"
       :style="viewStyle"
       :disabled="props.disabled"
@@ -53,7 +53,7 @@
 
 <script setup>
 import {
-    computed, nextTick, onMounted, reactive, ref
+    computed, nextTick, onMounted, reactive, ref, watch
 } from 'vue';
 import {
     useBase, BaseRender, vSelectOnFocus
@@ -110,7 +110,7 @@ let $el;
 let $view;
 let $list;
 let isOpen;
-let timeout_close;
+let timeout_display;
 
 const viewClass = computed(() => {
     const ls = ['vui-select-view'];
@@ -130,7 +130,9 @@ const data = reactive({
     //label for view display
     selectedLabel: '',
     //value for selected item class
-    selectedValue: ''
+    selectedValue: '',
+    //for search input
+    searchValue: null
 });
 
 const viewStyle = computed(() => {
@@ -140,6 +142,18 @@ const viewStyle = computed(() => {
         };
     }
     return {};
+});
+
+const viewValue = computed({
+    get() {
+        if (props.searchable && data.searchValue !== null) {
+            return data.searchValue;
+        }
+        return data.selectedLabel;
+    },
+    set(v) {
+        data.searchValue = v;
+    }
 });
 
 const listStyle = computed(() => {
@@ -169,7 +183,7 @@ const initSelectedItem = (list) => {
 
 
 const getListByPropOptions = () => {
-    const list = props.options.map(function(item) {
+    const list = props.options.map((item) => {
         if (item && typeof item === 'object') {
             return {
                 ... item,
@@ -284,13 +298,13 @@ const scrollHandler = (e) => {
 };
 
 
-const unbindEvents = function() {
+const unbindEvents = () => {
     //console.log('unbindEvents');
     window.removeEventListener('resize', resizeHandler);
     window.removeEventListener('scroll', scrollHandler, true);
 };
 
-const bindEvents = function() {
+const bindEvents = () => {
     unbindEvents();
     window.addEventListener('resize', resizeHandler);
     window.addEventListener('scroll', scrollHandler, true);
@@ -312,13 +326,16 @@ const hideList = () => {
 //=========================================================================================================
 
 const close = () => {
+    if (!isOpen) {
+        return;
+    }
     hideList();
     unbindEvents();
 };
 
 const closeAsync = () => {
-    clearTimeout(timeout_close);
-    timeout_close = setTimeout(() => {
+    clearTimeout(timeout_display);
+    timeout_display = setTimeout(() => {
         close();
     }, 100);
 };
@@ -339,7 +356,8 @@ const getListTop = (viewRect, listRect, bodyRect) => {
     return topUp;
 };
 
-const layout = function() {
+const layout = () => {
+
     const viewRect = $view.getBoundingClientRect();
     const listRect = $list.getBoundingClientRect();
     const bodyRect = document.body.getBoundingClientRect();
@@ -363,7 +381,22 @@ const layout = function() {
 
 };
 
-const open = function() {
+const layoutAsync = () => {
+    if (!isOpen) {
+        return;
+    }
+
+    if (!$el) {
+        return;
+    }
+
+    nextTick(() => {
+        layout();
+    });
+
+};
+
+const open = () => {
     if (isOpen) {
         return;
     }
@@ -377,6 +410,15 @@ const open = function() {
     showList();
     layout();
     bindEvents();
+};
+
+//when opened list and click out side browser will blur
+//then click body will trigger focus and blur, that not make sense
+const openAsync = () => {
+    clearTimeout(timeout_display);
+    timeout_display = setTimeout(() => {
+        open();
+    }, 100);
 };
 
 //=========================================================================================================
@@ -395,11 +437,12 @@ const onInput = (e) => {
 
 const onFocus = (e) => {
     //console.log('onFocus', cid);
-    open();
+    openAsync();
 };
 
 const onBlur = (e) => {
     //console.log('onBlur', cid);
+    data.searchValue = null;
     closeAsync();
 };
 
@@ -416,6 +459,7 @@ const getItemClass = (item) => {
 };
 
 const onItemClick = (item) => {
+    data.searchValue = null;
     data.selectedLabel = item.label;
     data.selectedValue = item.value;
     emit('update:modelValue', item.value);
@@ -445,6 +489,10 @@ const initWidth = () => {
         data.width = `${w}px`;
     }
 };
+
+watch(list, () => {
+    layoutAsync();
+});
 
 
 onMounted(() => {
