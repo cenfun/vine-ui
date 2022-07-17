@@ -4,20 +4,22 @@
     :class="classList"
   >
     <div
-      class="vui-modal-main"
-      :style="styleMain"
+      class="vui-modal-window"
+      :style="styleWindow"
     >
-      <div :class="classHeader">
-        <BaseRender :content="props.title" />
+      <div class="vui-modal-close">
+        <IconX />
       </div>
-      <div class="vui-modal-content">
-        <slot>
-          <BaseRender :content="props.content" />
-        </slot>
+      <div class="vui-modal-main vui-flex-column">
+        <div :class="classHeader">
+          <BaseRender :content="props.title" />
+        </div>
+        <div class="vui-modal-content vui-flex-auto">
+          <slot>
+            <BaseRender :content="props.content" />
+          </slot>
+        </div>
       </div>
-    </div>
-    <div class="vui-modal-close">
-      <IconX />
     </div>
   </div>
 </template>
@@ -65,12 +67,9 @@ const classHeader = computed(() => {
     return ls;
 });
 
-const styleMain = computed(() => {
+const styleWindow = computed(() => {
     return {
-        left: props.padding,
-        right: props.padding,
-        top: props.padding,
-        bottom: props.padding
+        inset: props.padding
     };
 });
 
@@ -117,8 +116,8 @@ onUnmounted(() => {
 
 .vui-modal-close {
     position: absolute;
-    top: 20%;
-    right: 20%;
+    top: 0;
+    right: 0;
     width: 40px;
     height: 40px;
     border-radius: 20px;
@@ -131,6 +130,7 @@ onUnmounted(() => {
     line-height: 40px;
 
     svg {
+        pointer-events: none;
         display: block;
         width: 24px;
         height: 24px;
@@ -143,13 +143,23 @@ onUnmounted(() => {
     }
 }
 
-.vui-modal-main {
+.vui-modal-window {
     position: absolute;
     background: #fff;
     border-radius: 10px;
-    overflow: hidden;
     padding: 20px;
     box-sizing: border-box;
+    min-width: 300px;
+    min-height: 200px;
+    max-width: 1920px;
+    max-height: 1080px;
+}
+
+.vui-modal-main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 .vui-modal-header {
@@ -166,6 +176,7 @@ onUnmounted(() => {
 .vui-modal-content {
     width: 100%;
     position: relative;
+    overflow: auto;
 }
 
 </style>
