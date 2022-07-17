@@ -66,9 +66,6 @@ const { cid } = useBase('VuiSelect');
 
 const classList = ['vui', 'vui-select', cid];
 
-const viewMinWidth = 50;
-const viewMaxWidth = 300;
-
 const props = defineProps({
     label: {
         type: String,
@@ -316,7 +313,6 @@ const bindEvents = () => {
 
 const showList = () => {
     document.body.appendChild($list);
-    $list.style.visibility = 'visible';
     isOpen = true;
 };
 
@@ -389,6 +385,8 @@ const layout = () => {
     if (left + listRect.width > bodyRect.width) {
         left = bodyRect.width - listRect.width;
     }
+    console.log(viewRect, bodyRect);
+    console.log(left);
 
     const st = $list.style;
     st.left = `${left}px`;
@@ -515,6 +513,8 @@ const initWidth = () => {
     //border is 2 if empty
     if (listRect.width > 2) {
         const iconWidth = 15;
+        const viewMinWidth = 50;
+        const viewMaxWidth = 300;
         //no padding because list have same padding
         const w = Util.clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
         data.width = `${w}px`;
@@ -607,11 +607,14 @@ onMounted(() => {
 .vui-select-holder {
     position: absolute;
     width: 500px;
+    visibility: hidden;
 }
 
+/* top/left -500px will not caused body size change */
 .vui-select-list {
     position: absolute;
-    visibility: hidden;
+    top: -500px;
+    left: -500px;
     background-color: #fff;
     z-index: 10000;
     border: 1px solid #aaa;

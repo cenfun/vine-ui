@@ -96,7 +96,7 @@
       />
       <VuiSelect
         v-model="selectValue"
-        label="100 width:"
+        label="100 width (no @search):"
         width="100px"
         :options="selectResults"
         :searchable="true"
