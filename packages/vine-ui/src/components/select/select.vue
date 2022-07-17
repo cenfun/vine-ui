@@ -59,7 +59,7 @@ import {
     useBase, BaseRender, vSelectOnFocus
 } from '../../base/base.js';
 
-import Util from '../../util/util.js';
+import { clamp } from '../../util/util.js';
 import IconX from '../../base/images/icon-x.vue';
 
 const { cid } = useBase('VuiSelect');
@@ -517,7 +517,7 @@ const initWidth = () => {
         const viewMinWidth = 50;
         const viewMaxWidth = 350;
         //no padding because list have same padding
-        const w = Util.clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
+        const w = clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
         data.width = `${w}px`;
     }
 };

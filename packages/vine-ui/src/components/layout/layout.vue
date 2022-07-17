@@ -16,7 +16,9 @@ import {
 } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
 
-import Util from '../../util/util.js';
+import {
+    bindEvents, unbindEvents, preventDefault
+} from '../../util/util.js';
 
 const { cid } = useBase('VuiLayout');
 
@@ -134,7 +136,7 @@ const startHandler = (e) => {
     //stop nested layout event
     e.stopImmediatePropagation();
     //console.log('start');
-    Util.bindEvents(windowEvents, window);
+    bindEvents(windowEvents, window);
 };
 
 const initNodes = (e) => {
@@ -177,14 +179,14 @@ const iframeHandler = function(e) {
 };
 
 const mouseMoveHandler = function(e) {
-    Util.preventDefault(e);
+    preventDefault(e);
     option.offsetX = e.pageX - option.startX;
     option.offsetY = e.pageY - option.startY;
     updateHandler(e);
 };
 
 const mouseUpHandler = function(e) {
-    Util.preventDefault(e);
+    preventDefault(e);
     clean();
 };
 
@@ -211,7 +213,7 @@ const updateHandler = (e) => {
 };
 
 const clean = () => {
-    Util.unbindEvents(windowEvents);
+    unbindEvents(windowEvents);
     if (previousIframe) {
         previousIframe.classList.remove('vui-pointer-events-none');
         previousIframe = null;
@@ -235,12 +237,12 @@ onMounted(() => {
         child.insertAdjacentElement('afterend', gutter);
     });
 
-    Util.bindEvents(mousedownEvents, $el);
+    bindEvents(mousedownEvents, $el);
 });
 
 onUnmounted(() => {
     clean();
-    Util.unbindEvents(mousedownEvents);
+    unbindEvents(mousedownEvents);
 });
 
 </script>

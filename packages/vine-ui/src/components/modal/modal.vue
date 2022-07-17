@@ -33,7 +33,7 @@ import {
 } from '../../base/base.js';
 
 import IconX from '../../base/images/icon-x.vue';
-import { Util } from '../../index.js';
+import { bindEvents, unbindEvents } from '../../util/util.js';
 
 const { cid } = useBase('VuiModal');
 
@@ -84,7 +84,7 @@ const documentEvents = {
             if ($main === e.target || $main.contains(e.target)) {
                 return;
             }
-            Util.unbindEvents(documentEvents);
+            unbindEvents(documentEvents);
             destroyComponent($el);
         }
     }
@@ -93,12 +93,12 @@ const documentEvents = {
 onMounted(() => {
     $el = el.value;
     setTimeout(() => {
-        Util.bindEvents(documentEvents, document);
+        bindEvents(documentEvents, document);
     }, 100);
 });
 
 onUnmounted(() => {
-    Util.unbindEvents(documentEvents);
+    unbindEvents(documentEvents);
 });
 
 

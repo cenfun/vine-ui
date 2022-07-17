@@ -1,4 +1,4 @@
-import Util from './util/util.js';
+
 import { createComponent } from './base/base.js';
 import generateComponents from './util/generate-components.js';
 
@@ -8,7 +8,6 @@ const components = generateComponents(context);
 
 export {
     components,
-    Util,
     createComponent
 };
 

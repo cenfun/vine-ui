@@ -2,7 +2,7 @@ import {
     createApp, h, useSlots
 } from 'vue';
 
-import Util from '../util/util.js';
+import { pascalToKebabCase } from '../util/util.js';
 import './base.scss';
 
 
@@ -11,7 +11,7 @@ export const useBase = (name) => {
     //unique id
     const uid = `${_uid++}`;
     //component id, instance id, rui-name-uid
-    const kebab = Util.pascalToKebabCase(name);
+    const kebab = pascalToKebabCase(name);
     const cid = `${kebab}-${uid}`;
 
     return {

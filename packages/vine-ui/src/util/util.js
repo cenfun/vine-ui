@@ -112,17 +112,3 @@ export const pascalToKebabCase = function(text) {
         .replace(/-{2,}/g, '-')
         .toLowerCase();
 };
-
-export default {
-    isInvalid,
-    toNum,
-    isList,
-    toList,
-    token,
-    getValue,
-    clamp,
-    unbindEvents,
-    bindEvents,
-    preventDefault,
-    pascalToKebabCase
-};
