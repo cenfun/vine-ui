@@ -10,10 +10,7 @@
         </slot>
       </div>
 
-      <div
-        ref="tabs"
-        class="vui-tab-tabs vui-flex-row"
-      >
+      <div class="vui-tab-tabs vui-flex-row">
         <TabItem
           v-for="(item, i) in tabList"
           :key="i"
@@ -34,10 +31,7 @@
         </slot>
       </div>
     </div>
-    <div
-      ref="panes"
-      class="vui-tab-panes"
-    >
+    <div class="vui-tab-panes">
       <TabPane
         v-for="(item, i) in paneList"
         :key="i"

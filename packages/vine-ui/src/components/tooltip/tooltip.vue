@@ -10,10 +10,7 @@
       mode="out-in"
       name="vui-fade"
     >
-      <div
-        ref="content"
-        class="vui-tooltip-content"
-      >
+      <div class="vui-tooltip-content">
         <slot>
           <BaseRender :content="text" />
         </slot>
@@ -121,7 +118,6 @@ const styleList = computed(() => {
 
 const el = ref(null);
 let $el;
-const content = ref(null);
 let $target;
 
 const emit = defineEmits(['update', 'close']);
@@ -270,7 +266,8 @@ onMounted(() => {
 
     //console.log(html);
     if (props.html) {
-        content.value.innerHTML = props.html;
+        const $content = $el.querySelector('.vui-tooltip-content');
+        $content.innerHTML = props.html;
     }
 
     bindEvents();
