@@ -121,35 +121,6 @@ export const defaultPositions = {
 
     //===========================================================================================
 
-    'right-center': {
-        direction: 'v',
-        calculate: (info, containerRect, targetRect, rect) => {
-            info.spacePosition = containerRect.width - targetRect.left - targetRect.width - rect.width;
-            info.top = Math.round(targetRect.top + targetRect.height * 0.5 - rect.height * 0.5);
-            info.left = targetRect.left + targetRect.width;
-        }
-    },
-
-    'right-bottom': {
-        direction: 'v',
-        calculate: (info, containerRect, targetRect, rect) => {
-            info.spacePosition = containerRect.width - targetRect.left - targetRect.width - rect.width;
-            info.top = Math.round(targetRect.top + targetRect.height * 0.5);
-            info.left = targetRect.left + targetRect.width;
-        }
-    },
-
-    'right-top': {
-        direction: 'v',
-        calculate: (info, containerRect, targetRect, rect) => {
-            info.spacePosition = containerRect.width - targetRect.left - targetRect.width - rect.width;
-            info.top = Math.round(targetRect.top + targetRect.height * 0.5 - rect.height);
-            info.left = targetRect.left + targetRect.width;
-        }
-    },
-
-    //===========================================================================================
-
     'top-center': {
         direction: 'h',
         calculate: (info, containerRect, targetRect, rect) => {
@@ -174,6 +145,35 @@ export const defaultPositions = {
             info.spacePosition = targetRect.top - rect.height;
             info.top = targetRect.top - rect.height;
             info.left = Math.round(targetRect.left + targetRect.width * 0.5 - rect.width);
+        }
+    },
+
+    //===========================================================================================
+
+    'right-center': {
+        direction: 'v',
+        calculate: (info, containerRect, targetRect, rect) => {
+            info.spacePosition = containerRect.width - targetRect.left - targetRect.width - rect.width;
+            info.top = Math.round(targetRect.top + targetRect.height * 0.5 - rect.height * 0.5);
+            info.left = targetRect.left + targetRect.width;
+        }
+    },
+
+    'right-bottom': {
+        direction: 'v',
+        calculate: (info, containerRect, targetRect, rect) => {
+            info.spacePosition = containerRect.width - targetRect.left - targetRect.width - rect.width;
+            info.top = Math.round(targetRect.top + targetRect.height * 0.5);
+            info.left = targetRect.left + targetRect.width;
+        }
+    },
+
+    'right-top': {
+        direction: 'v',
+        calculate: (info, containerRect, targetRect, rect) => {
+            info.spacePosition = containerRect.width - targetRect.left - targetRect.width - rect.width;
+            info.top = Math.round(targetRect.top + targetRect.height * 0.5 - rect.height);
+            info.left = targetRect.left + targetRect.width;
         }
     },
 
@@ -207,8 +207,34 @@ export const defaultPositions = {
     }
 };
 
-export const getDefaultPositions = () => {
-    return Object.keys(defaultPositions);
+export const getDefaultPositions = (sortKeys) => {
+    const list = Object.keys(defaultPositions);
+
+    if (sortKeys) {
+        list.sort((a, b) => {
+            // part left
+            const al = a.split('-');
+            const bl = b.split('-');
+            let av = al.shift();
+            let bv = bl.shift();
+            let ai = sortKeys.indexOf(av);
+            let bi = sortKeys.indexOf(bv);
+            ai = ai === -1 ? 4 : ai;
+            bi = bi === -1 ? 4 : bi;
+            if (ai === bi) {
+                //right part
+                av = al.shift();
+                bv = bl.shift();
+                ai = sortKeys.indexOf(av);
+                bi = sortKeys.indexOf(bv);
+                ai = ai === -1 ? 4 : ai;
+                bi = bi === -1 ? 4 : bi;
+            }
+            return ai - bi;
+        });
+    }
+
+    return list;
 };
 
 //===========================================================================================
@@ -314,6 +340,7 @@ const getTypeList = (positions, defaultList) => {
 };
 
 export const getBestPosition = (containerRect, targetRect, rect, positions, previousInfo) => {
+
     const defaultList = getDefaultPositions();
     let withDefaultPositions = false;
     let typeList = getTypeList(positions, defaultList);

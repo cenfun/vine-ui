@@ -4,7 +4,10 @@
     class="vui-app"
   >
     <div class="vui-header vui-flex-row">
-      <div class="vui-title">
+      <div
+        class="vui-title"
+        tooltip="Lightweight UI components"
+      >
         Vine UI
       </div>
       <div class="vui-sub">
@@ -18,6 +21,7 @@
           href="https://github.com/cenfun/vine-ui"
           target="_blank"
           class="icon-github"
+          tooltip="Github"
         />
       </div>
     </div>

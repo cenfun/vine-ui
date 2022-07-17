@@ -412,6 +412,7 @@ const updateSync = () => {
     updateContentHeight();
 
     const rect = getRect(`.${cid}`);
+    const positions = props.positions;
 
     //console.log(containerRect, targetRect, rect);
 
@@ -419,7 +420,7 @@ const updateSync = () => {
         containerRect,
         targetRect,
         rect,
-        props.positions,
+        positions,
         //previous position info for keeping position if has animation (dynamic size)
         positionInfo
     );

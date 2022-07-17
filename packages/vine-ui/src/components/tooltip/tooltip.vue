@@ -67,7 +67,7 @@ const props = defineProps({
     positions: {
         type: [String, Array],
         default: () => {
-            return getDefaultPositions();
+            return getDefaultPositions(['center', 'top', 'bottom', 'right']);
         }
     },
 
@@ -229,6 +229,7 @@ const updateSync = () => {
     targetRect.height += arrowSize * 2;
 
     const rect = getRect(`.${cid}`);
+    const positions = props.positions;
 
     //console.log(containerRect, targetRect, rect);
 
@@ -236,7 +237,7 @@ const updateSync = () => {
         containerRect,
         targetRect,
         rect,
-        props.positions
+        positions
     );
 
     //no change

@@ -17,6 +17,7 @@
       percentage="80"
       color="green"
       border-color="darkgreen"
+      tooltip="This is progress tooltip"
     />
   </VuiFlex>
 </template>

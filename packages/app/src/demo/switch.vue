@@ -28,7 +28,10 @@
       small:
     </VuiSwitch>
 
-    <VuiSwitch v-model="switchValue" />
+    <VuiSwitch
+      v-model="switchValue"
+      tooltip="This is switch tooltip"
+    />
 
     <VuiSwitch
       width="45px"

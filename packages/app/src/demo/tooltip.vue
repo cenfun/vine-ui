@@ -1,6 +1,6 @@
 <template>
   <VuiFlex spacing="20px">
-    <VuiButton tooltip="This is VuiTooltip left This is VuiTooltip left">
+    <VuiButton tooltip="This is tooltip left This is tooltip left This is tooltip left">
       Hover Tooltip
     </VuiButton>
 
@@ -9,19 +9,19 @@
         spacing="50px"
         center
       >
-        <VuiButton tooltip="This is VuiTooltip left">
+        <VuiButton tooltip="This is tooltip center left">
           Hover Tooltip
         </VuiButton>
-        <VuiButton tooltip="This is VuiTooltip center">
+        <VuiButton tooltip="This is tooltip center right">
           Hover Tooltip
         </VuiButton>
       </VuiFlex>
     </div>
 
-    <VuiButton tooltip="This is VuiTooltip center">
+    <VuiButton tooltip="This is tooltip right center">
       Hover Tooltip
     </VuiButton>
-    <VuiButton tooltip="This is VuiTooltip right">
+    <VuiButton tooltip="This is tooltip right long text">
       Hover Tooltip
     </VuiButton>
   </VuiFlex>
@@ -37,13 +37,17 @@ const {
 } = components;
 
 const showTooltip = function(elem) {
+    const text = elem.getAttribute('tooltip');
+    if (!text) {
+        return;
+    }
     hideTooltip(elem);
     if (elem.$tooltip) {
         return;
     }
     elem.$tooltip = VuiTooltip.createComponent({
         target: elem,
-        html: `<div>${elem.getAttribute('tooltip')}</div>`
+        html: `<div>${text}</div>`
     });
 };
 
