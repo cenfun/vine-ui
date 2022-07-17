@@ -98,6 +98,7 @@ const modelData = computed({
             content: "";
             background: #fff;
             border: #adb5bd solid 1px;
+            box-sizing: border-box;
         }
 
         &::after {
@@ -111,6 +112,7 @@ const modelData = computed({
             border-radius: 50%;
             content: "";
             background: #0077cf;
+            box-sizing: border-box;
         }
     }
 

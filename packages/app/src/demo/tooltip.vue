@@ -5,12 +5,17 @@
     </VuiButton>
 
     <div class="vui-flex-auto">
-      <VuiButton tooltip="This is VuiTooltip left">
-        Hover Tooltip
-      </VuiButton>
-      <VuiButton tooltip="This is VuiTooltip center">
-        Hover Tooltip
-      </VuiButton>
+      <VuiFlex
+        spacing="50px"
+        center
+      >
+        <VuiButton tooltip="This is VuiTooltip left">
+          Hover Tooltip
+        </VuiButton>
+        <VuiButton tooltip="This is VuiTooltip center">
+          Hover Tooltip
+        </VuiButton>
+      </VuiFlex>
     </div>
 
     <VuiButton tooltip="This is VuiTooltip center">
