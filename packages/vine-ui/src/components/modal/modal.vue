@@ -116,6 +116,7 @@ onUnmounted(() => {
 
 .vui-modal-close {
     position: absolute;
+    z-index: 10;
     top: 0;
     right: 0;
     width: 40px;
@@ -147,7 +148,6 @@ onUnmounted(() => {
     position: absolute;
     background: #fff;
     border-radius: 10px;
-    padding: 20px;
     box-sizing: border-box;
     min-width: 300px;
     min-height: 200px;
@@ -157,6 +157,7 @@ onUnmounted(() => {
 
 .vui-modal-main {
     position: relative;
+    padding: 20px;
     width: 100%;
     height: 100%;
     overflow: hidden;
