@@ -17,13 +17,14 @@
     </VuiFlex>
 
     <VuiFlex spacing="10px">
-      <div style="position: relative; width: 520px; height: 360px; border: 1px solid #ccc; margin-top: 10px;">
+      <div>12 positions:</div>
+      <div style="position: relative; width: 520px; height: 360px; border: 1px solid #999;">
         <VuiPopover
           :auto-close="false"
           :bind-resize="false"
           :bind-scroll="false"
           positions="bottom-right"
-          :target="{left:20,top:10}"
+          :target="{left:10,top:10}"
           :width="100"
           :border-color="borderColor"
           :bg-color="bgColor"
@@ -47,7 +48,7 @@
           :bind-resize="false"
           :bind-scroll="false"
           positions="bottom-left"
-          :target="{left:500,top:10}"
+          :target="{left:510,top:10}"
           :width="100"
           :border-color="borderColor"
           :bg-color="bgColor"
@@ -99,7 +100,7 @@
           :bind-resize="false"
           :bind-scroll="false"
           positions="top-left"
-          :target="{left:500,top:350}"
+          :target="{left:510,top:350}"
           :width="100"
           :border-color="borderColor"
           :bg-color="bgColor"
@@ -125,7 +126,7 @@
           :bind-resize="false"
           :bind-scroll="false"
           positions="top-right"
-          :target="{left:20,top:350}"
+          :target="{left:10,top:350}"
           :width="100"
           :border-color="borderColor"
           :bg-color="bgColor"
@@ -234,6 +235,10 @@ const openPopover = function(e) {
 
 </script>
 <style>
+.vui-popover-example > *:first-child {
+    margin-bottom: 10px;
+}
+
 .vui-popover-example .vui-popover-content {
     text-align: center;
 }
