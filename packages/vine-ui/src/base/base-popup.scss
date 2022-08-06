@@ -14,6 +14,7 @@
 
 .vui-popup::before,
 .vui-popup::after {
+    pointer-events: none;
     content: "";
     position: absolute;
     width: 0;

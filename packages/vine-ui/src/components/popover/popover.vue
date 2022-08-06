@@ -109,6 +109,16 @@ const props = defineProps({
         }
     },
 
+    borderColor: {
+        type: String,
+        default: ''
+    },
+
+    bgColor: {
+        type: String,
+        default: ''
+    },
+
     content: {
         validator: (v) => true,
         default: ''
@@ -153,12 +163,21 @@ const classList = computed(() => {
 });
 
 const styleList = computed(() => {
-    return {
+    const st = {
         top: `${data.info.top}px`,
         left: `${data.info.left}px`,
         width: `${data.info.width}px`,
         height: `${data.info.height}px`
     };
+
+    if (props.borderColor) {
+        st['--vui-popup-border-color'] = props.borderColor;
+    }
+    if (props.bgColor) {
+        st['--vui-popup-bg-color'] = props.bgColor;
+    }
+
+    return st;
 });
 
 const styleBody = computed(() => {
@@ -401,14 +420,8 @@ const updateSync = () => {
         return;
     }
     const containerRect = getRect(props.container || window);
-    const targetRect = getRect(props.target);
-
-    //fix for arrow size
     const arrowSize = 10;
-    targetRect.left -= arrowSize;
-    targetRect.top -= arrowSize;
-    targetRect.width += arrowSize * 2;
-    targetRect.height += arrowSize * 2;
+    const targetRect = getRect(props.target, arrowSize);
 
     updateContentHeight();
 

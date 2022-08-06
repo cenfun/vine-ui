@@ -25,6 +25,8 @@
           positions="bottom-right"
           :target="{left:20,top:10}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           bottom-right
         </VuiPopover>
@@ -35,6 +37,8 @@
           positions="bottom-center"
           :target="{left:260,top:10}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           bottom-center
         </VuiPopover>
@@ -45,6 +49,8 @@
           positions="bottom-left"
           :target="{left:500,top:10}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           bottom-left
         </VuiPopover>
@@ -56,6 +62,8 @@
           positions="left-bottom"
           :target="{left:510,top:90}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           left-bottom
         </VuiPopover>
@@ -67,6 +75,8 @@
           positions="left-center"
           :target="{left:510,top:180}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           left-center
         </VuiPopover>
@@ -78,6 +88,8 @@
           positions="left-top"
           :target="{left:510,top:270}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           left-top
         </VuiPopover>
@@ -89,6 +101,8 @@
           positions="top-left"
           :target="{left:500,top:350}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           top-left
         </VuiPopover>
@@ -100,6 +114,8 @@
           positions="top-center"
           :target="{left:260,top:350}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           top-center
         </VuiPopover>
@@ -111,6 +127,8 @@
           positions="top-right"
           :target="{left:20,top:350}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           top-right
         </VuiPopover>
@@ -122,6 +140,8 @@
           positions="right-top"
           :target="{left:10,top:270}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           right-top
         </VuiPopover>
@@ -133,6 +153,8 @@
           positions="right-center"
           :target="{left:10,top:180}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           right-center
         </VuiPopover>
@@ -144,27 +166,57 @@
           positions="right-bottom"
           :target="{left:10,top:90}"
           :width="100"
+          :border-color="borderColor"
+          :bg-color="bgColor"
         >
           right-bottom
         </VuiPopover>
       </div>
+
+      <VuiSelect
+        v-model="borderColor"
+        label="border color:"
+      >
+        <option />
+        <option>gray</option>
+        <option>green</option>
+        <option>red</option>
+        <option>#000</option>
+      </VuiSelect>
+
+      <VuiSelect
+        v-model="bgColor"
+        label="bg color:"
+      >
+        <option />
+        <option>gray</option>
+        <option>green</option>
+        <option>red</option>
+      </VuiSelect>
     </VuiFlex>
   </div>
 </template>
 
 <script setup>
 import { components } from 'vine-ui';
+import { ref } from 'vue';
 const {
     VuiButton,
     VuiCheckbox,
     VuiFlex,
-    VuiPopover
+    VuiPopover,
+    VuiSelect
 } = components;
+
+const borderColor = ref('');
+const bgColor = ref('');
 
 const openPopover = function(e) {
     VuiPopover.createComponent({
         target: e.target,
-        title: 'Popover Title'
+        title: 'Popover Title',
+        borderColor: borderColor.value,
+        bgColor: bgColor.value
     }, (h) => {
         return {
             default: () => {

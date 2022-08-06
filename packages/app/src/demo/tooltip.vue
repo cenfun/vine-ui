@@ -4,6 +4,27 @@
       Hover Tooltip
     </VuiButton>
 
+    <VuiSelect
+      v-model="borderColor"
+      label="border color:"
+    >
+      <option />
+      <option>gray</option>
+      <option>green</option>
+      <option>red</option>
+      <option>#000</option>
+    </VuiSelect>
+
+    <VuiSelect
+      v-model="bgColor"
+      label="bg color:"
+    >
+      <option />
+      <option>gray</option>
+      <option>green</option>
+      <option>red</option>
+    </VuiSelect>
+
     <div class="vui-flex-auto">
       <VuiFlex
         spacing="50px"
@@ -29,12 +50,16 @@
 
 <script setup>
 import { components } from 'vine-ui';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 const {
     VuiButton,
     VuiFlex,
+    VuiSelect,
     VuiTooltip
 } = components;
+
+const borderColor = ref('');
+const bgColor = ref('');
 
 const showTooltip = function(elem) {
     const text = elem.getAttribute('tooltip');
@@ -47,6 +72,8 @@ const showTooltip = function(elem) {
     }
     elem.$tooltip = VuiTooltip.createComponent({
         target: elem,
+        borderColor: borderColor.value,
+        bgColor: bgColor.value,
         html: `<div>${text}</div>`
     });
 };

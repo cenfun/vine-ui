@@ -68,6 +68,16 @@ const props = defineProps({
         }
     },
 
+    borderColor: {
+        type: String,
+        default: ''
+    },
+
+    bgColor: {
+        type: String,
+        default: ''
+    },
+
     content: {
         validator: (v) => true,
         default: ''
@@ -110,11 +120,19 @@ const classList = computed(() => {
 });
 
 const styleList = computed(() => {
-    return {
+    const st = {
         top: `${data.top}px`,
         left: `${data.left}px`,
         'max-width': `${props.maxWidth}px`
     };
+    if (props.borderColor) {
+        st['--vui-popup-border-color'] = props.borderColor;
+    }
+    if (props.bgColor) {
+        st['--vui-popup-bg-color'] = props.bgColor;
+    }
+
+    return st;
 });
 
 const el = ref(null);
