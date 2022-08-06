@@ -161,8 +161,6 @@ const {
     VuiPopover
 } = components;
 
-const inputText = 'Text';
-
 const openPopover = function(e) {
     VuiPopover.createComponent({
         target: e.target,
