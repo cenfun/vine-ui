@@ -145,6 +145,7 @@ const classList = computed(() => {
     return [
         'vui',
         'vui-popup',
+        `vui-popup-${data.info.position}`,
         `vui-popup-${data.info.position}-${data.info.align}`,
         'vui-popover',
         cid
@@ -476,7 +477,6 @@ onUnmounted(() => {
     opacity: 1;
     margin: 0;
     padding: 16px;
-    box-shadow: 0 2px 3px 0 rgb(0 0 0 / 20%);
     transition: opacity 0.2s linear, visibility 0.2s linear;
 
     .vui-popover-header {

@@ -102,6 +102,7 @@ const classList = computed(() => {
     return [
         'vui',
         'vui-popup',
+        `vui-popup-${data.position}`,
         `vui-popup-${data.position}-${data.align}`,
         'vui-tooltip',
         cid
@@ -289,7 +290,6 @@ onUnmounted(() => {
     z-index: 1000;
     opacity: 1;
     margin: 0;
-    box-shadow: 0 2px 3px 0 rgb(0 0 0 / 20%);
     transition: opacity 0.2s linear, visibility 0.2s linear;
 
     .vui-tooltip-content {

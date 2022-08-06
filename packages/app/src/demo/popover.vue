@@ -17,10 +17,6 @@
     </VuiFlex>
 
     <VuiFlex spacing="10px">
-      <div style="background: #f5f5f5; margin-top: 10px;">
-        <div class="vui-popup-arrow-example" />
-      </div>
-
       <div style="position: relative; width: 520px; height: 360px; border: 1px solid #ccc; margin-top: 10px;">
         <VuiPopover
           :auto-close="false"
@@ -30,7 +26,7 @@
           :target="{left:20,top:10}"
           :width="100"
         >
-          bottom-right {{ inputText }}
+          bottom-right
         </VuiPopover>
         <VuiPopover
           :auto-close="false"
@@ -192,11 +188,4 @@ const openPopover = function(e) {
     text-align: center;
 }
 
-.vui-popup-arrow-example {
-    width: 54px;
-    height: 54px;
-    background-repeat: no-repeat;
-    background-image: url("../../../vine-ui/src/base/images/popup-arrow.svg");
-    background-size: 54px 54px;
-}
 </style>
