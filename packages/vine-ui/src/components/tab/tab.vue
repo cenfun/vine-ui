@@ -80,15 +80,12 @@ const props = defineProps({
     }
 });
 
-const slotTabs = getSlot('tabs');
 const tabList = computed(() => {
-    return props.tabs || slotTabs || [];
+    return props.tabs || getSlot('tabs') || [];
 });
 
-const slotPanes = getSlot('panes');
-const slotDefault = getSlot();
 const paneList = computed(() => {
-    return props.panes || slotPanes || slotDefault || [];
+    return props.panes || getSlot('panes') || getSlot() || [];
 });
 
 const emit = defineEmits(['update:modelValue']);

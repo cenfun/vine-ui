@@ -78,9 +78,8 @@ const value = computed({
     }
 });
 
-const slotDefault = getSlot();
 const labelContent = computed(() => {
-    return props.label || slotDefault;
+    return props.label || getSlot();
 });
 
 

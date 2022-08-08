@@ -241,7 +241,9 @@ const getListBySlotOptions = (ls) => {
     return ls;
 };
 
+//TODO vue bug here, only can put it here not in computed
 const slotDefault = getSlot();
+
 const list = computed(() => {
     if (props.options) {
         return getListByPropOptions(props.options);
