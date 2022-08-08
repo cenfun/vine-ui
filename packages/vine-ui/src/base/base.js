@@ -104,20 +104,10 @@ export const createComponent = function(props, slots, container) {
 
 export const getSlot = function(name) {
     const slots = useSlots();
-
-    //console.log('slots', slots);
-
-    const fun = slots[name];
-    if (!fun) {
-        return;
+    const fun = slots[name || 'default'];
+    if (typeof fun === 'function') {
+        return fun();
     }
-    let ls = fun();
-    //console.log(ls);
-
-    ls = ls.filter((it) => it.type);
-
-    //console.log(ls);
-    return ls;
 };
 
 export const vSelectOnFocus = function(el) {

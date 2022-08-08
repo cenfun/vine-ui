@@ -95,8 +95,9 @@ const iconStyleList = computed(() => {
     };
 });
 
+const slotDefault = getSlot();
 const labelContent = computed(() => {
-    return props.label || getSlot('default');
+    return props.label || slotDefault;
 });
 
 watchEffect(() => {

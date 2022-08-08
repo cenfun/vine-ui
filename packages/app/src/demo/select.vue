@@ -10,13 +10,21 @@
         :options="selectOptions"
       />
 
-      <VuiSelect label="slot options:">
+      <VuiSelect
+        label="slot options:"
+        @remove="onSelectRemove"
+      >
         <option>option 1</option>
         <option>option 2</option>
         <option value="3">
           option 3
         </option>
         <option><b>bold</b> text</option>
+        <option
+          label="attr removable"
+          value="attr"
+          removable
+        />
         <option selected>
           One
         </option>

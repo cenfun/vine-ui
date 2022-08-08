@@ -7,7 +7,7 @@
         "dist"
     ],
     "dependencies": {
-        "vine-ui": "~3.0.7"
+        "vine-ui": ""
     },
     "devDependencies": {}
 }

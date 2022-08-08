@@ -17,9 +17,9 @@
   </div>
 </template>
 <script setup>
-import { computed, useSlots } from 'vue';
+import { computed } from 'vue';
 import {
-    useBase, BaseRender, vSelectOnFocus
+    useBase, BaseRender, vSelectOnFocus, getSlot
 } from '../../base/base.js';
 
 const { cid } = useBase('VuiInput');
@@ -78,10 +78,9 @@ const value = computed({
     }
 });
 
-const slots = useSlots();
-
+const slotDefault = getSlot();
 const labelContent = computed(() => {
-    return props.label || slots.default;
+    return props.label || slotDefault;
 });
 
 

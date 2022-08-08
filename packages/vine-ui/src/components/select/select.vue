@@ -20,9 +20,6 @@
       @focus="onFocus"
       @blur="onBlur"
     >
-    <div class="vui-select-slots">
-      <slot />
-    </div>
 
     <div class="vui-select-holder">
       <div
@@ -56,10 +53,12 @@ import {
     computed, nextTick, onMounted, reactive, ref, watch
 } from 'vue';
 import {
-    useBase, BaseRender, vSelectOnFocus
+    useBase, BaseRender, vSelectOnFocus, getSlot
 } from '../../base/base.js';
 
-import { clamp } from '../../util/util.js';
+import {
+    hasOwn, clamp, isList
+} from '../../util/util.js';
 import IconX from '../../base/images/icon-x.vue';
 
 const { cid } = useBase('VuiSelect');
@@ -122,8 +121,6 @@ const viewClass = computed(() => {
 const emit = defineEmits(['search', 'remove', 'update:modelValue']);
 
 const data = reactive({
-    //for list computed
-    slotsReady: false,
     //for view width
     width: props.width,
     //label for view display
@@ -167,12 +164,12 @@ const listStyle = computed(() => {
 
 //=========================================================================================================
 
-const initSelectedItem = (list) => {
+const initSelectedItem = (ls) => {
     const dv = props.modelValue === null ? props.value : props.modelValue;
 
     //console.log('dv', dv);
 
-    const item = list.find((it) => it.value === dv);
+    const item = ls.find((it) => it.value === dv);
     if (item) {
         data.selectedLabel = item.label;
         data.selectedValue = item.value;
@@ -184,8 +181,8 @@ const initSelectedItem = (list) => {
 };
 
 
-const getListByPropOptions = () => {
-    const list = props.options.map((item) => {
+const getListByPropOptions = (ls) => {
+    ls = ls.map((item) => {
         if (item && typeof item === 'object') {
             return {
                 ... item,
@@ -199,61 +196,57 @@ const getListByPropOptions = () => {
         };
     });
 
-    initSelectedItem(list);
+    initSelectedItem(ls);
 
-    return list;
+    return ls;
 
 };
 
-const getListBySlotOptions = () => {
-
-    const $options = Array.from($el.querySelector('.vui-select-slots').children);
-
-    if (!$options.length) {
+const getListBySlotOptions = (ls) => {
+    if (!isList(ls)) {
         return [];
     }
 
-    const list = $options.map((elem) => {
-
-        const label = elem.getAttribute('label') || elem.innerText;
-        // //value could be (empty)
-        let value = elem.getAttribute('value');
-        if (value === null) {
-            value = label;
+    const getChildrenLabel = (children) => {
+        if (typeof children === 'string') {
+            return children;
         }
-
-        const option = {
-            label,
-            value
-        };
-
-        //selected only has key
-        const selected = elem.getAttribute('selected');
-        const removable = elem.getAttribute('removable');
-        if (selected !== null) {
-            option.selected = true;
+        if (isList(children)) {
+            return children.map((c) => {
+                return getChildrenLabel(c.children);
+            }).join('');
         }
-        if (removable !== null) {
-            option.removable = true;
-        }
+        return children || '';
+    };
 
-        return option;
+    ls = ls.map((vn) => {
+        const item = vn.props || {};
+        if (!item.label) {
+            item.label = getChildrenLabel(vn.children);
+        }
+        if (!item.value) {
+            item.value = item.label;
+        }
+        if (hasOwn(item, 'selected')) {
+            item.selected = true;
+        }
+        if (hasOwn(item, 'removable')) {
+            item.removable = true;
+        }
+        return item;
     });
 
-    initSelectedItem(list);
+    initSelectedItem(ls);
 
-    return list;
-
+    return ls;
 };
 
+const slotDefault = getSlot();
 const list = computed(() => {
     if (props.options) {
-        return getListByPropOptions();
+        return getListByPropOptions(props.options);
     }
-    if (data.slotsReady) {
-        return getListBySlotOptions();
-    }
-    return [];
+    return getListBySlotOptions(slotDefault);
 });
 
 //=========================================================================================================
@@ -512,14 +505,17 @@ const initWidth = () => {
 
     const listRect = $list.getBoundingClientRect();
     //border is 2 if empty
-    if (listRect.width > 2) {
-        const iconWidth = 15;
-        const viewMinWidth = 50;
-        const viewMaxWidth = 350;
-        //no padding because list have same padding
-        const w = clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
-        data.width = `${w}px`;
+    if (listRect.width <= 2) {
+        return;
     }
+
+    const iconWidth = 15;
+    const viewMinWidth = 50;
+    const viewMaxWidth = 350;
+    //no padding because list have same padding
+    const w = clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
+    data.width = `${w}px`;
+
 };
 
 watch(list, () => {
@@ -533,16 +529,7 @@ onMounted(() => {
     $view = $el.querySelector('.vui-select-view');
     $list = $el.querySelector('.vui-select-list');
 
-    //trigger computed list
-    data.slotsReady = true;
-
-    if (props.options) {
-        initWidth();
-    } else {
-        nextTick(() => {
-            initWidth();
-        });
-    }
+    initWidth();
 });
 
 </script>
@@ -598,10 +585,6 @@ onMounted(() => {
 
 .vui-select-search {
     cursor: text;
-}
-
-.vui-select-slots {
-    display: none;
 }
 
 /* holder for width computed */
