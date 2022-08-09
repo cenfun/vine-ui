@@ -5,9 +5,9 @@
     "private": true,
     "main": "",
     "scripts": {
-        "build": "sf lint && sf b -m",
+        "build": "sf lint && sf b -p",
         "patch": "npm run build && sf publish patch",
-        "pack": "sf lint && sf pack -m -p docs -q v={version}"
+        "pack": "sf lint && sf pack -o docs -q v={version}"
     },
     "repository": {
         "type": "git",
