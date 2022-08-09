@@ -28,10 +28,6 @@ import {
     useBase, BaseRender, getSlot
 } from '../../base/base.js';
 
-const { cid } = useBase('VuiSwitch');
-
-const classList = ['vui', 'vui-switch', cid];
-
 const defaultColors = ['#aaaaaa', '#1890ff'];
 
 const props = defineProps({
@@ -65,11 +61,13 @@ const props = defineProps({
     }
 });
 
+const { cid } = useBase('VuiSwitch');
+
+const classList = ['vui', 'vui-switch', cid];
+
 const data = reactive({
-    buttonColors: defaultColors,
     checked: false
 });
-
 
 const buttonClassList = computed(() => {
     return {
@@ -80,11 +78,22 @@ const buttonClassList = computed(() => {
 });
 
 const buttonStyleList = computed(() => {
+
+    let bgc = data.checked ? defaultColors[1] : defaultColors[0];
+    if (props.colors) {
+        const ls = `${props.colors}`.split(',').map((it) => it.trim());
+        if (data.checked && ls[1]) {
+            bgc = ls[1];
+        } else if (ls[0]) {
+            bgc = ls[0];
+        }
+    }
+
     return {
         'width': props.width,
         'height': props.height,
         'border-radius': props.height,
-        'background-color': data.checked ? data.buttonColors[1] : data.buttonColors[0]
+        'background-color': bgc
     };
 });
 
@@ -99,19 +108,6 @@ const labelContent = computed(() => {
     return props.label || getSlot();
 });
 
-watchEffect(() => {
-    const ls = `${props.colors}`.split(',').map((it) => it.trim());
-    data.buttonColors = [ls[0] || defaultColors[0], ls[1] || defaultColors[1]];
-
-    if (props.modelValue === null) {
-        data.checked = props.checked;
-    } else {
-        data.checked = props.modelValue;
-    }
-
-});
-
-
 const emit = defineEmits(['update:modelValue']);
 
 const clickHandler = () => {
@@ -120,8 +116,15 @@ const clickHandler = () => {
     }
     data.checked = !data.checked;
     emit('update:modelValue', data.checked);
-
 };
+
+watchEffect(() => {
+    if (props.modelValue === null) {
+        data.checked = props.checked;
+    } else {
+        data.checked = props.modelValue;
+    }
+});
 
 </script>
 <style lang="scss">
