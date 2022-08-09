@@ -1,12 +1,12 @@
 <template>
   <VuiFlex spacing="10px">
     <VuiButton
-      :label="'Label ' + count"
-      @click="onClick"
+      :label="'Label + ' + count"
+      @click="onClick(1)"
     />
 
-    <VuiButton @click="onClick">
-      <b>Slot</b> {{ count }}
+    <VuiButton @click="onClick(-1)">
+      <b>Slot</b> - {{ count }}
     </VuiButton>
 
     <VuiButton disabled>
@@ -32,8 +32,8 @@ const {
 
 const count = ref(0);
 
-const onClick = (e) => {
-    count.value += 1;
+const onClick = (v, e) => {
+    count.value += v;
 };
 
 </script>
