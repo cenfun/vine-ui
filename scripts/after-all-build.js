@@ -12,7 +12,7 @@ module.exports = (o, Util) => {
 
     //console.log(item);
 
-    if (!item.minify) {
+    if (!item.production) {
         return 0;
     }
 
@@ -21,7 +21,7 @@ module.exports = (o, Util) => {
     const size = Util.BF(asset.size);
     const gzip = Util.BF(asset.sizeGzip);
 
-    const minified = Boolean(item.minify);
+    const minified = Boolean(item.production);
 
     const sizeStr = `Dist size (js minified: ${minified}): ${size} / gzip: ${gzip}`;
 
@@ -44,7 +44,7 @@ module.exports = (o, Util) => {
     fs.writeFileSync(path.resolve(__dirname, '../README.md'), readme);
     fs.writeFileSync(path.resolve(__dirname, '../packages/vine-ui/README.md'), readme);
 
-    console.log('updated README.md');
+    Util.logGreen('updated README.md');
 
     return 0;
 };
