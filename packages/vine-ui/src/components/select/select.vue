@@ -371,11 +371,23 @@ const getListTop = (viewRect, listRect, bodyRect) => {
     return top.up;
 };
 
+const getRect = (elem) => {
+    const br = elem.getBoundingClientRect();
+    const rect = {
+        left: br.left + window.pageXOffset,
+        top: br.top + window.pageYOffset,
+        width: elem.offsetWidth,
+        height: elem.offsetHeight
+    };
+
+    return rect;
+};
+
 const layout = () => {
 
-    const viewRect = $view.getBoundingClientRect();
-    const listRect = $list.getBoundingClientRect();
-    const bodyRect = document.body.getBoundingClientRect();
+    const viewRect = getRect($view);
+    const listRect = getRect($list);
+    const bodyRect = getRect(document.body);
 
     const top = getListTop(viewRect, listRect, bodyRect);
 
@@ -384,6 +396,8 @@ const layout = () => {
         left = bodyRect.width - listRect.width;
     }
 
+    //console.log('left', left, 'top', top);
+
     const st = $list.style;
     st.left = `${left}px`;
     st.top = `${top}px`;
@@ -391,7 +405,9 @@ const layout = () => {
     //selected element.scrollIntoView();
     const $selected = $list.querySelector('.vui-select-item.selected');
     if ($selected) {
-        $selected.scrollIntoView();
+        //scrollIntoView cased whole page scroll if body scrollable
+        //$selected.scrollIntoView();
+        $selected.parentNode.scrollTop = $selected.offsetTop;
     }
 
 };
@@ -462,7 +478,7 @@ const onInput = (e) => {
 };
 
 const onFocus = (e) => {
-    //console.log('onFocus', cid);
+    console.log('onFocus', cid);
     openAsync();
 };
 
