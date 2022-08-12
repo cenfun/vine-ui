@@ -26,7 +26,7 @@
 
 <script setup>
 import {
-    computed, onMounted, ref, onUnmounted
+    computed, onMounted, ref, onUnmounted, reactive
 } from 'vue';
 import {
     useBase, BaseRender, destroyComponent
@@ -34,10 +34,6 @@ import {
 
 import IconX from '../../base/images/icon-x.vue';
 import { bindEvents, unbindEvents } from '../../util/util.js';
-
-const { cid } = useBase('VuiModal');
-
-const classList = ['vui', 'vui-modal', cid];
 
 const props = defineProps({
     title: {
@@ -58,6 +54,15 @@ const props = defineProps({
     }
 });
 
+const { cid } = useBase('VuiModal');
+
+const classList = ['vui', 'vui-modal', cid];
+
+const el = ref(null);
+
+const state = reactive({
+    $el: null
+});
 
 const classHeader = computed(() => {
     const ls = ['vui-modal-header'];
@@ -73,25 +78,21 @@ const styleWindow = computed(() => {
     };
 });
 
-
-const el = ref(null);
-let $el;
-
 const documentEvents = {
     click: {
         handler: (e) => {
-            const $main = $el.querySelector('.vui-modal-main');
+            const $main = state.$el.querySelector('.vui-modal-main');
             if ($main === e.target || $main.contains(e.target)) {
                 return;
             }
             unbindEvents(documentEvents);
-            destroyComponent($el);
+            destroyComponent(state.$el);
         }
     }
 };
 
 onMounted(() => {
-    $el = el.value;
+    state.$el = el.value;
     setTimeout(() => {
         bindEvents(documentEvents, document);
     }, 100);
@@ -101,6 +102,9 @@ onUnmounted(() => {
     unbindEvents(documentEvents);
 });
 
+defineExpose({
+    cid
+});
 
 </script>
 <style lang="scss">

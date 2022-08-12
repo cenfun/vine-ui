@@ -12,11 +12,9 @@
 
 <script setup>
 import {
-    ref, computed, watchEffect, onMounted, onUnmounted
+    ref, computed, watchEffect, onMounted, onUnmounted, reactive
 } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
-
-const { cid } = useBase('VuiFlyover');
 
 const props = defineProps({
     width: {
@@ -40,6 +38,8 @@ const props = defineProps({
     }
 });
 
+const { cid } = useBase('VuiFlyover');
+
 const classList = computed(() => {
     return [
         'vui',
@@ -49,8 +49,15 @@ const classList = computed(() => {
     ];
 });
 
+const el = ref(null);
+
+const state = reactive({
+    hasStarted: false,
+    $el: null,
+    visible: props.visible
+});
+
 const dataWidth = ref(props.width);
-const dataVisible = ref(props.visible);
 
 const styleList = computed(() => {
     return {
@@ -58,14 +65,11 @@ const styleList = computed(() => {
     };
 });
 
-const el = ref(null);
-let $el;
-
 const getBodyClass = () => {
     if (props.position === 'left') {
         return '';
     }
-    if ($el.parentNode) {
+    if (state.$el.parentNode) {
         return 'vui-flyover-overflow-hidden';
     }
     return '';
@@ -85,51 +89,52 @@ const lockBody = (lock) => {
     }
 };
 
-
 const animationHandler = () => {
-    onEnd(dataVisible.value);
+    onEnd(state.visible);
 };
 
 const bindEvents = () => {
-    if ($el) {
-        $el.addEventListener('animationend', animationHandler);
+    if (state.$el) {
+        state.$el.addEventListener('animationend', animationHandler);
     }
 };
 
 const unbindEvents = () => {
-    if ($el) {
-        $el.removeEventListener('animationend', animationHandler);
+    if (state.$el) {
+        state.$el.removeEventListener('animationend', animationHandler);
     }
 };
 
-
-let hasStarted = false;
 const onStart = () => {
 
     const nv = props.visible;
-    const ov = dataVisible.value;
+    const ov = state.visible;
 
-    if (hasStarted) {
+    if (nv === ov) {
+        return;
+    }
+
+    if (state.hasStarted) {
         onEnd(ov);
     }
     lockBody(true);
     unbindEvents();
-    const cl = $el.classList;
+    const cl = state.$el.classList;
     if (nv) {
         cl.add(`vui-slide-in-${props.position}`, 'vui-flyover-show');
         dataWidth.value = props.width;
     } else {
         cl.add(`vui-slide-out-${props.position}`);
     }
-    hasStarted = true;
+    state.hasStarted = true;
     bindEvents();
 };
 
 const onEnd = (v) => {
-    hasStarted = false;
-    lockBody(false);
+    state.hasStarted = false;
+    //lockBody(false);
     unbindEvents();
-    const cl = $el.classList;
+    const cl = state.$el.classList;
     if (v) {
         cl.remove(`vui-slide-in-${props.position}`);
     } else {
@@ -140,20 +145,24 @@ const onEnd = (v) => {
 
 watchEffect(() => {
     dataWidth.value = props.width;
-    if ($el) {
+    if (state.$el) {
         onStart();
     }
-    dataVisible.value = props.visible;
+    state.visible = props.visible;
 });
 
 onMounted(() => {
-    $el = el.value;
+    state.$el = el.value;
     onStart();
 });
 
 onUnmounted(() => {
     unbindEvents();
     lockBody(false);
+});
+
+defineExpose({
+    cid
 });
 
 </script>

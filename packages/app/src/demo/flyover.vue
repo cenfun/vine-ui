@@ -16,16 +16,20 @@
       <option>left</option>
     </VuiSelect>
 
-    <VuiButton @click.native="flyover.visible=!flyover.visible">
+    <VuiButton @click.native="toggleFlyover()">
       Toggle
     </VuiButton>
 
-    <VuiButton @click.native="flyover.visible=true">
+    <VuiButton @click.native="showFlyover(true)">
       Show
     </VuiButton>
 
-    <VuiButton @click.native="flyover.visible=false">
+    <VuiButton @click.native="showFlyover(false)">
       Hide
+    </VuiButton>
+
+    <VuiButton @click.native="destroyFlyover()">
+      Destroy
     </VuiButton>
 
     <div
@@ -36,7 +40,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { reactive } from 'vue';
 
 import { components } from 'vine-ui';
 const {
@@ -52,19 +56,44 @@ const flyover = reactive({
     visible: false
 });
 
-onMounted(() => {
-    VuiFlyover.createComponent(flyover, (h) => {
+
+const createFlyover = () => {
+    return VuiFlyover.createComponent(flyover, (h) => {
         return {
             default: () => h('div', {
                 style: 'padding:10px;'
             }, h(VuiButton, {
                 label: 'Close',
                 onClick() {
-                    flyover.visible = !flyover.visible;
+                    flyover.visible = false;
                 }
             }))
         };
     });
-});
+};
+
+let instance;
+const showFlyover = (v) => {
+    if (!instance) {
+        instance = createFlyover();
+    }
+    flyover.visible = v;
+};
+
+const toggleFlyover = () => {
+    let v = !flyover.visible;
+    if (!instance) {
+        v = true;
+    }
+    showFlyover(v);
+};
+
+const destroyFlyover = () => {
+    if (instance) {
+        instance.unmount();
+        instance = null;
+    }
+    flyover.visible = false;
+};
 
 </script>

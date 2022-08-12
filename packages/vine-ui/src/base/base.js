@@ -5,6 +5,8 @@ import {
 import { pascalToKebabCase } from '../util/util.js';
 import './base.scss';
 
+import Portal from './portal.vue';
+
 
 let _uid = 1;
 export const useBase = (name) => {
@@ -50,9 +52,12 @@ export const destroyComponent = function($el) {
     if (!$el) {
         return;
     }
-    const app = componentMap.get($el);
-    if (app) {
-        app.unmount();
+    if (typeof $el === 'string') {
+        $el = document.querySelector($el);
+    }
+    const component = componentMap.get($el);
+    if (component) {
+        component.unmount();
     }
 };
 
@@ -70,33 +75,50 @@ export const createComponent = function(props, slots, container) {
     //  children?: Children | Slot | Slots
     // ): VNode
 
+    //container state
+    const hasContainer = Boolean(container);
+
+    let instance;
+    const instanceRender = () => {
+        instance = h(Component, props, slots);
+        return instance;
+    };
+
     const app = createApp({
         setup() {
-            return () => h(Component, props, slots);
+            //async
+            if (hasContainer) {
+                return instanceRender;
+            }
+            return () => h(Portal, {}, {
+                default: instanceRender
+            });
         }
     });
 
-    // instance proxy
-    let component;
-
-    if (container) {
-        component = app.mount(container);
-    } else {
-        const temp = document.createElement('div');
-        document.body.appendChild(temp);
-        component = app.mount(temp);
-        document.body.appendChild(component.$el);
-        temp.remove();
+    let portalContainer;
+    if (!hasContainer) {
+        portalContainer = document.createElement('div');
+        container = portalContainer;
     }
 
-    //console.log(instance);
+    const component = app.mount(container);
 
-    componentMap.set(component.$el, app);
-
-    //console.log('app', app);
+    //custom unmount for component
     component.unmount = () => {
         app.unmount();
+        if (portalContainer) {
+            portalContainer.remove();
+            portalContainer = null;
+        }
     };
+
+    //component.$el is componentContainer.firstChild
+    //console.log(component.$el, componentContainer.firstChild);
+
+    //console.log(instance.el);
+
+    componentMap.set(instance.el, component);
 
     return component;
 

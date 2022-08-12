@@ -1,5 +1,5 @@
 
-import { createComponent } from './base/base.js';
+import { createComponent, destroyComponent } from './base/base.js';
 import generateComponents from './util/generate-components.js';
 
 const context = require.context('./components', true, /\.vue$/);
@@ -8,7 +8,8 @@ const components = generateComponents(context);
 
 export {
     components,
-    createComponent
+    createComponent,
+    destroyComponent
 };
 
 export default components;
