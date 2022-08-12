@@ -28,10 +28,6 @@ const props = defineProps({
             return ['right', 'left'].includes(value);
         }
     },
-    lockBody: {
-        type: Boolean,
-        default: false
-    },
     content: {
         validator: (v) => true,
         default: ''
@@ -69,34 +65,6 @@ const styleList = computed(() => {
         width: dataWidth.value
     };
 });
-
-const lockBodyHandler = (lock = false) => {
-
-    const bc = 'vui-flyover-lock-body';
-    //for body hide scrollbar when animation
-    const cl = document.body.classList;
-
-    if (!props.lockBody) {
-
-        if (state.locked) {
-            cl.remove(bc);
-        }
-
-        return;
-    }
-
-    if (lock === state.locked) {
-        return;
-    }
-
-    if (lock) {
-        cl.add(bc);
-    } else {
-        cl.remove(bc);
-    }
-    state.locked = lock;
-
-};
 
 const animationHandler = () => {
     onEnd(state.visible);
@@ -136,7 +104,6 @@ const onStart = () => {
     }
     state.hasStarted = true;
     bindEvents();
-    lockBodyHandler(props.visible);
 };
 
 const onEnd = (v) => {
@@ -157,7 +124,6 @@ watchEffect(() => {
         onStart();
     }
     state.visible = props.visible;
-    lockBodyHandler(props.visible);
 });
 
 onMounted(() => {
@@ -167,7 +133,6 @@ onMounted(() => {
 
 onUnmounted(() => {
     unbindEvents();
-    lockBodyHandler(false);
 });
 
 defineExpose({
@@ -220,10 +185,6 @@ defineExpose({
 .vui-flyover-left.vui-flyover-show::before {
     left: 100%;
     background-image: linear-gradient(to right, rgb(0 0 0 / 20%), rgb(0 0 0 / 0%));
-}
-
-.vui-flyover-lock-body {
-    overflow: hidden;
 }
 
 @keyframes vui-slide-in-right {

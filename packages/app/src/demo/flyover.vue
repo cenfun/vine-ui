@@ -16,10 +16,6 @@
       <option>left</option>
     </VuiSelect>
 
-    <VuiSwitch v-model="flyover.lockBody">
-      lockBody
-    </VuiSwitch>
-
     <VuiButton @click.native="toggleFlyover()">
       Toggle
     </VuiButton>
@@ -50,7 +46,6 @@ import { components } from 'vine-ui';
 const {
     VuiButton,
     VuiFlex,
-    VuiSwitch,
     VuiFlyover,
     VuiSelect
 } = components;
@@ -58,7 +53,6 @@ const {
 const flyover = reactive({
     width: '30%',
     position: 'right',
-    lockBody: false,
     visible: false
 });
 
