@@ -28,6 +28,10 @@ const props = defineProps({
             return ['right', 'left'].includes(value);
         }
     },
+    lockBody: {
+        type: Boolean,
+        default: false
+    },
     content: {
         validator: (v) => true,
         default: ''
@@ -53,6 +57,7 @@ const el = ref(null);
 
 const state = reactive({
     hasStarted: false,
+    locked: false,
     $el: null,
     visible: props.visible
 });
@@ -65,28 +70,32 @@ const styleList = computed(() => {
     };
 });
 
-const getBodyClass = () => {
-    if (props.position === 'left') {
-        return '';
-    }
-    if (state.$el.parentNode) {
-        return 'vui-flyover-overflow-hidden';
-    }
-    return '';
-};
+const lockBodyHandler = (lock = false) => {
 
-const lockBody = (lock) => {
-    const bc = getBodyClass();
-    if (!bc) {
-        return;
-    }
+    const bc = 'vui-flyover-lock-body';
     //for body hide scrollbar when animation
     const cl = document.body.classList;
+
+    if (!props.lockBody) {
+
+        if (state.locked) {
+            cl.remove(bc);
+        }
+
+        return;
+    }
+
+    if (lock === state.locked) {
+        return;
+    }
+
     if (lock) {
         cl.add(bc);
     } else {
         cl.remove(bc);
     }
+    state.locked = lock;
+
 };
 
 const animationHandler = () => {
@@ -117,7 +126,6 @@ const onStart = () => {
     if (state.hasStarted) {
         onEnd(ov);
     }
-    lockBody(true);
     unbindEvents();
     const cl = state.$el.classList;
     if (nv) {
@@ -128,11 +136,11 @@ const onStart = () => {
     }
     state.hasStarted = true;
     bindEvents();
+    lockBodyHandler(props.visible);
 };
 
 const onEnd = (v) => {
     state.hasStarted = false;
-    //lockBody(false);
     unbindEvents();
     const cl = state.$el.classList;
     if (v) {
@@ -149,6 +157,7 @@ watchEffect(() => {
         onStart();
     }
     state.visible = props.visible;
+    lockBodyHandler(props.visible);
 });
 
 onMounted(() => {
@@ -158,7 +167,7 @@ onMounted(() => {
 
 onUnmounted(() => {
     unbindEvents();
-    lockBody(false);
+    lockBodyHandler(false);
 });
 
 defineExpose({
@@ -169,7 +178,7 @@ defineExpose({
 
 <style lang="scss">
 .vui-flyover {
-    position: absolute;
+    position: fixed;
     top: 0;
     z-index: 1000;
     height: 100%;
@@ -213,7 +222,7 @@ defineExpose({
     background-image: linear-gradient(to right, rgb(0 0 0 / 20%), rgb(0 0 0 / 0%));
 }
 
-.vui-flyover-overflow-hidden {
+.vui-flyover-lock-body {
     overflow: hidden;
 }
 
