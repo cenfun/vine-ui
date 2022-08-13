@@ -34,11 +34,11 @@
 
 <script setup>
 import { ref } from 'vue';
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 const {
     VuiCheckbox,
     VuiFlex
-} = components;
+} = VineUI;
 
 const checkboxChecked = ref(true);
 const onChange = (e) => {

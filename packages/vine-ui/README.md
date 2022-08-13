@@ -17,8 +17,8 @@ npm i vine-ui
 
 ## Usage
 ```
-import { components } from "vine-ui";
-const { VuiButton, VuiInput } = components;
+import VineUI from "vine-ui";
+const { VuiButton, VuiInput } = VineUI;
 export default {
     components: {
         VuiButton,

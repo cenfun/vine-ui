@@ -42,14 +42,14 @@
 </template>
 
 <script setup>
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 import { reactive } from 'vue';
 const {
     VuiCheckbox,
     VuiFlex,
     VuiLoading,
     VuiSelect
-} = components;
+} = VineUI;
 
 const loading = reactive({
     color: '',

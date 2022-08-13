@@ -49,12 +49,12 @@
 </template>
 
 <script setup>
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 import { ref } from 'vue';
 const {
     VuiRadio,
     VuiFlex
-} = components;
+} = VineUI;
 
 const radioValue = ref('');
 

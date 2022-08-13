@@ -23,10 +23,10 @@
 </template>
 
 <script setup>
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 const {
     VuiProgress,
     VuiFlex
-} = components;
+} = VineUI;
 
 </script>

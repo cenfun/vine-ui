@@ -41,8 +41,8 @@
 </template>
 
 <script setup>
-import { components } from 'vine-ui';
-const { VuiLayout } = components;
+import VineUI from 'vine-ui';
+const { VuiLayout } = VineUI;
 
 </script>
 <style>

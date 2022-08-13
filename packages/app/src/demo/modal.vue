@@ -10,13 +10,13 @@
 </template>
 
 <script setup>
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 const {
     VuiButton,
     VuiCheckbox,
     VuiFlex,
     VuiModal
-} = components;
+} = VineUI;
 
 const openModal = (scroll) => {
     VuiModal.createComponent({

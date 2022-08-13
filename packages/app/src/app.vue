@@ -42,11 +42,11 @@
   </VuiFlex>
 </template>
 <script>
-import { components, createComponent } from 'vine-ui';
+import VineUI, { createComponent } from 'vine-ui';
 
-console.log('components', components);
+console.log('components', VineUI);
 
-const { VuiFlex } = components;
+const { VuiFlex } = VineUI;
 
 const context = require.context('./demo', true, /\.vue$/);
 const demos = {};

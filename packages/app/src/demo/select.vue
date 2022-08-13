@@ -129,12 +129,12 @@
 </template>
 
 <script setup>
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 import { reactive, ref } from 'vue';
 const {
     VuiSelect,
     VuiFlex
-} = components;
+} = VineUI;
 
 
 const selectValue = ref('STG');

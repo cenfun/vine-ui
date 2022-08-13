@@ -90,13 +90,13 @@
 
 <script setup>
 import { reactive } from 'vue';
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 const {
     VuiButton,
     VuiFlex,
     VuiSelect,
     VuiSwitch
-} = components;
+} = VineUI;
 
 const flex = reactive({
     direction: 'column',

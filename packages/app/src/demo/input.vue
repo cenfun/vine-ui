@@ -31,11 +31,11 @@
 
 <script setup>
 import { ref } from 'vue';
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 const {
     VuiInput,
     VuiFlex
-} = components;
+} = VineUI;
 
 const inputText = ref('Text');
 

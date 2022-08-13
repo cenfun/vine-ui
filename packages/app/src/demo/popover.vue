@@ -199,7 +199,7 @@
 </template>
 
 <script setup>
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 import { ref } from 'vue';
 const {
     VuiButton,
@@ -207,7 +207,7 @@ const {
     VuiFlex,
     VuiPopover,
     VuiSelect
-} = components;
+} = VineUI;
 
 const borderColor = ref('');
 const bgColor = ref('');

@@ -42,13 +42,13 @@
 <script setup>
 import { reactive } from 'vue';
 
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 const {
     VuiButton,
     VuiFlex,
     VuiFlyover,
     VuiSelect
-} = components;
+} = VineUI;
 
 const flyover = reactive({
     width: '30%',

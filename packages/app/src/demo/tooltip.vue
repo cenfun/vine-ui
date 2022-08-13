@@ -49,14 +49,14 @@
 </template>
 
 <script setup>
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 import { onMounted, ref } from 'vue';
 const {
     VuiButton,
     VuiFlex,
     VuiSelect,
     VuiTooltip
-} = components;
+} = VineUI;
 
 const borderColor = ref('');
 const bgColor = ref('');

@@ -59,13 +59,13 @@
 </template>
 
 <script setup>
-import { components } from 'vine-ui';
+import VineUI from 'vine-ui';
 import { ref } from 'vue';
 const {
     VuiButton,
     VuiFlex,
     VuiTab
-} = components;
+} = VineUI;
 
 const tabActive = ref(1);
 
