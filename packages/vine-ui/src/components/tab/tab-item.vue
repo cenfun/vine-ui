@@ -8,10 +8,6 @@ import { computed } from 'vue';
 import { BaseRender } from '../../base/base.js';
 
 const props = defineProps({
-    position: {
-        type: String,
-        default: 'left'
-    },
     content: {
         validator: (v) => true,
         default: ''
@@ -25,7 +21,6 @@ const props = defineProps({
 const classList = computed(() => {
     const ls = [
         'vui-tab-item',
-        `vui-tab-${props.position}`,
         'vui-flex-row'
     ];
     if (props.selected) {
@@ -41,17 +36,13 @@ const classList = computed(() => {
     position: relative;
     padding: 0 15px;
     max-width: 200px;
-    height: 36px;
-    line-height: 36px;
+    height: var(--vui-tab-height);
+    line-height: var(--vui-tab-height);
     cursor: pointer;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     user-select: none;
     color: #002b36;
-}
-
-.vui-tab-right.vui-tab-item {
-    margin-left: -1px;
 }
 
 .vui-tab-item::after {
@@ -66,8 +57,8 @@ const classList = computed(() => {
     z-index: 0;
 }
 
-.vui-tab-right.vui-tab-item::after {
-    left: 0;
+.vui-tab-item:last-child::after {
+    display: none;
 }
 
 .vui-tab-item:hover {
