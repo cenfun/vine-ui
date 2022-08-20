@@ -1,71 +1,91 @@
 <template>
-  <VuiLayout
-    width="100%"
-    height="300px"
-  >
-    <div class="vui-layout-item vui-layout-left">
-      left
-      width: 200px;
-      min-width: 50px;
-      max-width: 300px;
-    </div>
-    <div class="vui-layout-item vui-flex-auto">
+  <div>
+    <VuiFlex>
       <VuiLayout
-        height="100%"
-        direction="column"
-        size="10px"
+        width="50%"
+        height="300px"
       >
-        <div class="vui-layout-item vui-layout-top">
-          top
-          height: 50px;
-          min-height: 50px;
+        <div size="200px">
+          row left size: 200px
         </div>
-        <div
-          class="vui-layout-item vui-flex-auto"
-        >
-          middle
-        </div>
-        <div class="vui-layout-item">
-          bottom
+        <div>
+          row right auto
         </div>
       </VuiLayout>
-    </div>
-    <div class="vui-layout-item">
-      middle-right
-    </div>
-    <div class="vui-layout-item vui-layout-right">
-      right
-      width: 200px;
-    </div>
-  </VuiLayout>
+      <VuiLayout
+        width="50%"
+        height="300px"
+        direction="column"
+      >
+        <div>
+          column top auto
+        </div>
+        <div size="100px">
+          column bottom size: 100px
+        </div>
+      </VuiLayout>
+    </VuiFlex>
+    <VuiLayout
+      width="100%"
+      height="300px"
+    >
+      <div
+        size="200px"
+        class="vui-layout-left"
+      >
+        left
+        size: 200px
+        min-width: 50px
+      </div>
+      <div>
+        <VuiLayout
+          height="100%"
+          direction="column"
+          size="3px"
+        >
+          <div
+            size="50px"
+            class="vui-layout-top"
+          >
+            top
+            height: 50px;
+            min-height: 50px;
+          </div>
+          <div>
+            middle
+          </div>
+          <div size="100px">
+            bottom
+          </div>
+        </VuiLayout>
+      </div>
+      <div>
+        middle-right
+      </div>
+      <div size="200px">
+        right
+        size: 200px
+      </div>
+    </VuiLayout>
+  </div>
 </template>
 
 <script setup>
 import VineUI from 'vine-ui';
-const { VuiLayout } = VineUI;
+const { VuiLayout, VuiFlex } = VineUI;
 
 </script>
 <style>
 .vui-layout-item {
-    padding: 5px;
     border: thin solid #eee;
-    overflow: hidden;
 }
 
 .vui-layout-left {
-    width: 200px;
     min-width: 50px;
-    max-width: 300px;
-    white-space: pre-line;
 }
 
 .vui-layout-top {
-    height: 50px;
     min-height: 50px;
-}
-
-.vui-layout-right {
-    width: 200px;
 }
 </style>
 
