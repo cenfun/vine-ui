@@ -58,7 +58,8 @@
         <VuiLayout
           height="100%"
           direction="column"
-          gutter-size="5px"
+          gutter-size="10px"
+          gutter-hover-size="4px"
         >
           <div
             size="50px"

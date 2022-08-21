@@ -36,10 +36,16 @@ const props = defineProps({
             return ['row', 'column'].includes(value);
         }
     },
-    gutterSize: {
+
+    gutterHoverSize: {
         type: String,
         default: '2px'
     },
+    gutterSize: {
+        type: String,
+        default: '4px'
+    },
+
     content: {
         validator: (v) => true,
         default: ''
@@ -72,6 +78,9 @@ const styleList = computed(() => {
     }
     if (props.height) {
         st.height = props.height;
+    }
+    if (props.gutterHoverSize) {
+        st['--vui-gutter-hover-size'] = props.gutterHoverSize;
     }
     if (props.gutterSize) {
         st['--vui-gutter-size'] = props.gutterSize;
@@ -539,7 +548,8 @@ onUnmounted(() => {
 
 <style lang="scss">
 .vui-layout {
-    --vui-gutter-size: 2px;
+    --vui-gutter-hover-size: 2px;
+    --vui-gutter-size: 4px;
 
     overflow: hidden;
     position: relative;
@@ -574,8 +584,17 @@ onUnmounted(() => {
     flex: none;
 }
 
-.vui-layout-gutter:hover {
+.vui-layout-gutter::before {
+    content: "";
+    position: absolute;
     background-color: #0077cf;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.vui-layout-gutter:hover::before {
+    display: block;
 }
 
 .vui-layout-gutter::after {
@@ -595,6 +614,12 @@ onUnmounted(() => {
         cursor: ew-resize;
     }
 
+    .vui-layout-gutter::before {
+        width: var(--vui-gutter-hover-size);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
     .vui-layout-gutter::after {
         width: calc(100% + 8px);
         transform: translateX(-4px);
@@ -605,6 +630,12 @@ onUnmounted(() => {
     .vui-layout-gutter {
         height: var(--vui-gutter-size);
         cursor: ns-resize;
+    }
+
+    .vui-layout-gutter::before {
+        height: var(--vui-gutter-hover-size);
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     .vui-layout-gutter::after {
@@ -620,8 +651,11 @@ onUnmounted(() => {
     }
 
     .vui-layout-active {
-        background-color: #0077cf;
         pointer-events: auto;
+
+        &::before {
+            display: block;
+        }
     }
 
     &.vui-layout-row {
