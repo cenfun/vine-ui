@@ -1,6 +1,6 @@
 {
     "name": "vine-ui-app",
-    "version": "3.0.10",
+    "version": "3.0.11",
     "main": "dist/vine-ui-app.js",
     "private": true,
     "files": [
@@ -8,7 +8,7 @@
     ],
     "dependencies": {
         "fps-detector": "^1.0.3",
-        "vine-ui": "~3.0.10"
+        "vine-ui": "~3.0.11"
     },
     "devDependencies": {}
 }
