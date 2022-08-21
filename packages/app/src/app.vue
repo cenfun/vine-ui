@@ -16,14 +16,15 @@
           target="_blank"
         >Vue 3.x</a>
       </div>
-      <div>
+      <VuiFlex spacing="10px">
+        <div class="fps-detector" />
         <a
           href="https://github.com/cenfun/vine-ui"
           target="_blank"
           class="icon-github"
           tooltip="Github"
         />
-      </div>
+      </VuiFlex>
     </div>
     <div class="vui-body vui-flex-auto">
       <div
@@ -41,8 +42,10 @@
     </div>
   </VuiFlex>
 </template>
-<script>
-import VineUI, { createComponent } from 'vine-ui';
+<script setup>
+import VineUI from 'vine-ui';
+import FPSDetector from 'fps-detector';
+import { onMounted } from 'vue';
 
 console.log('components', VineUI);
 
@@ -67,23 +70,10 @@ paths.forEach((path) => {
 
 console.log('demos', demos);
 
-const App = {
+onMounted(() => {
+    new FPSDetector('.fps-detector');
+});
 
-    createComponent,
-
-    components: {
-        VuiFlex,
-        ... demos
-    },
-
-    setup: () => {
-        return {
-            list
-        };
-    }
-};
-
-export default App;
 </script>
 <style lang="scss">
 html,

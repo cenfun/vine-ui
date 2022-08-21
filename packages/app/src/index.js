@@ -1,5 +1,9 @@
 import App from './app.vue';
 
+import { createComponent } from 'vine-ui';
+
+App.createComponent = createComponent;
+
 // const container = document.createElement('div');
 // container.className = 'vui-app-container';
 // document.body.appendChild(container);

@@ -478,7 +478,7 @@ const onInput = (e) => {
 };
 
 const onFocus = (e) => {
-    console.log('onFocus', cid);
+    //console.log('onFocus', cid);
     openAsync();
 };
 

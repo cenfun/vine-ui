@@ -7,6 +7,7 @@
         "dist"
     ],
     "dependencies": {
+        "fps-detector": "^1.0.3",
         "vine-ui": "~3.0.10"
     },
     "devDependencies": {}
