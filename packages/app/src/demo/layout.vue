@@ -26,9 +26,29 @@
         width="50%"
         height="300px"
         direction="column"
+        :gutter-hover-size="gutterHoverSize"
+        :gutter-size="gutterSize"
       >
         <div>
           column top auto
+          <VuiSelect
+            v-model="gutterHoverSize"
+            label="gutterHoverSize"
+          >
+            <option>2px</option>
+            <option>4px</option>
+            <option>6px</option>
+          </VuiSelect>
+          <VuiSelect
+            v-model="gutterSize"
+            label="gutterSize"
+          >
+            <option>2px</option>
+            <option>4px</option>
+            <option>6px</option>
+            <option>10px</option>
+            <option>15px</option>
+          </VuiSelect>
         </div>
         <div size="100px">
           column bottom size: 100px
@@ -58,8 +78,7 @@
         <VuiLayout
           height="100%"
           direction="column"
-          gutter-size="10px"
-          gutter-hover-size="4px"
+          class="vui-layout-custom-gutter"
         >
           <div
             size="50px"
@@ -68,7 +87,7 @@
             top
             height: 50px;
             min-height: 50px;
-            gutter-size: 5px
+            custom gutter
           </div>
           <div>
             middle
@@ -97,6 +116,9 @@ const {
 } = VineUI;
 
 const layoutModel = ref('200px,auto');
+
+const gutterHoverSize = ref('2px');
+const gutterSize = ref('6px');
 
 const layoutNested = ref('20%,auto,auto,20%');
 
@@ -140,6 +162,21 @@ const layoutNested = ref('20%,auto,auto,20%');
 
 .vui-layout-top {
     min-height: 50px;
+}
+
+.vui-layout-custom-gutter {
+    .vui-layout-gutter {
+        background-image: url("../images/gutter.svg");
+        background-size: 16px 16px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        height: 10px;
+    }
+
+    .vui-layout-gutter:hover::before,
+    .vui-layout-active::before {
+        display: none;
+    }
 }
 </style>
 

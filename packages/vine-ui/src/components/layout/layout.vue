@@ -510,7 +510,7 @@ const initLayout = (ls) => {
 
 };
 
-watch(props, () => {
+watch(() => props.modelValue, () => {
 
     state.layout = initLayout(props.modelValue);
 
@@ -593,10 +593,6 @@ onUnmounted(() => {
     display: none;
 }
 
-.vui-layout-gutter:hover::before {
-    display: block;
-}
-
 .vui-layout-gutter::after {
     content: "";
     position: absolute;
@@ -652,10 +648,6 @@ onUnmounted(() => {
 
     .vui-layout-active {
         pointer-events: auto;
-
-        &::before {
-            display: block;
-        }
     }
 
     &.vui-layout-row {
@@ -665,6 +657,11 @@ onUnmounted(() => {
     &.vui-layout-column {
         cursor: ns-resize;
     }
+}
+
+.vui-layout-gutter:hover::before,
+.vui-layout-active::before {
+    display: block;
 }
 
 </style>
