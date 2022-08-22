@@ -617,8 +617,8 @@ onUnmounted(() => {
     }
 
     .vui-layout-gutter::after {
-        width: calc(100% + 8px);
-        transform: translateX(-4px);
+        width: calc(100% + 6px);
+        transform: translateX(-3px);
     }
 }
 
