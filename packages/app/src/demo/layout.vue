@@ -35,14 +35,19 @@
             v-model="gutterHoverSize"
             label="gutterHoverSize"
           >
+            <option>0</option>
+            <option>1px</option>
             <option>2px</option>
+            <option>3px</option>
             <option>4px</option>
+            <option>5px</option>
             <option>6px</option>
           </VuiSelect>
           <VuiSelect
             v-model="gutterSize"
             label="gutterSize"
           >
+            <option>0</option>
             <option>2px</option>
             <option>4px</option>
             <option>6px</option>
@@ -79,6 +84,8 @@
           height="100%"
           direction="column"
           class="vui-layout-custom-gutter"
+          gutter-hover-size="0"
+          gutter-size="10px"
         >
           <div
             size="50px"
@@ -170,12 +177,6 @@ const layoutNested = ref('20%,auto,auto,20%');
         background-size: 16px 16px;
         background-repeat: no-repeat;
         background-position: center center;
-        height: 10px;
-    }
-
-    .vui-layout-gutter:hover::before,
-    .vui-layout-active::before {
-        display: none;
     }
 }
 </style>
