@@ -11,9 +11,13 @@
       />
 
       <VuiSelect
+        v-model="selectValue"
         label="slot options:"
         @remove="onSelectRemove"
       >
+        <option value="">
+          empty value
+        </option>
         <option>option 1</option>
         <option>option 2</option>
         <option value="3">
@@ -34,7 +38,7 @@
       <VuiSelect
         v-model="selectValue"
         disabled
-        label="Disabled:"
+        label="disabled:"
       >
         <option>Two</option>
         <option>STG</option>
@@ -42,15 +46,18 @@
 
       <VuiSelect label="empty list:" />
 
-      <VuiSelect label="empty value:">
-        <div />
+      <VuiSelect
+        v-model="selectValue"
+        label="null value:"
+      >
+        <option />
       </VuiSelect>
     </VuiFlex>
 
     <VuiFlex spacing="10px">
       <VuiSelect
         v-model="selectValue"
-        label="Select:"
+        label="select:"
         :options="selectList"
       />
       <VuiSelect
@@ -61,17 +68,27 @@
       />
       <VuiSelect
         v-model="selectValue"
-        label="Disabled:"
+        label="disabled:"
         :options="selectList"
         disabled
       />
+
+      <VuiSelect
+        v-model="selectValue"
+        label="last l:"
+      >
+        <option value="">
+          Symbol
+        </option>
+        <option>WC</option>
+      </VuiSelect>
 
       <div class="vui-flex-empty" />
 
       <VuiSelect
         v-model="selectValue"
         width="60px"
-        label="Right width 60:"
+        label="right width 60:"
       >
         <option />
         <option>5</option>
@@ -97,7 +114,7 @@
 
       <VuiSelect
         v-model="selectValue"
-        label="Right:"
+        label="right:"
       >
         <option />
         <option>5</option>
@@ -110,7 +127,7 @@
     <VuiFlex spacing="10px">
       <VuiSelect
         v-model="selectValue"
-        label="Input:"
+        label="input:"
         :options="selectResults"
         :searchable="true"
         @search="onSelectSearch"
@@ -145,14 +162,18 @@ const selectOptions = reactive([{
     label: 'Two'
 }, {
     label: 'Three'
-}]);
+}, {
+    label: 'null',
+    value: null
+}, 'Label', 'Symbol']);
 
 const selectList = reactive([
     '',
     'DEV',
     'QA',
     'STG',
-    'LOCAL'
+    'LOCAL',
+    'Symbol'
 ]);
 
 const selectResults = ref([

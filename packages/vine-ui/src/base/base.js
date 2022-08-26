@@ -16,9 +16,12 @@ export const useBase = (name) => {
     const kebab = pascalToKebabCase(name);
     const cid = `${kebab}-${uid}`;
 
+    let undef;
+
     return {
         uid,
-        cid
+        cid,
+        undef
     };
 };
 
@@ -140,7 +143,6 @@ export const vSelectOnFocus = function(el) {
         el.select();
     });
 };
-
 
 export default {
     useBase,
