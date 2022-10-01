@@ -16,19 +16,19 @@
       <option>left</option>
     </VuiSelect>
 
-    <VuiButton @click.native="toggleFlyover()">
+    <VuiButton @click="toggleFlyover()">
       Toggle
     </VuiButton>
 
-    <VuiButton @click.native="showFlyover(true)">
+    <VuiButton @click="showFlyover(true)">
       Show
     </VuiButton>
 
-    <VuiButton @click.native="showFlyover(false)">
+    <VuiButton @click="showFlyover(false)">
       Hide
     </VuiButton>
 
-    <VuiButton @click.native="destroyFlyover()">
+    <VuiButton @click="destroyFlyover()">
       Destroy
     </VuiButton>
 
@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { shallowReactive } from 'vue';
 
 import VineUI from 'vine-ui';
 const {
@@ -50,10 +50,16 @@ const {
     VuiSelect
 } = VineUI;
 
-const flyover = reactive({
+const flyover = shallowReactive({
     width: '30%',
     position: 'right',
-    visible: false
+    visible: false,
+    onStart: (v) => {
+        console.log(`flyover start: ${v}`);
+    },
+    onEnd: (v) => {
+        console.log(`flyover end: ${v}`);
+    }
 });
 
 

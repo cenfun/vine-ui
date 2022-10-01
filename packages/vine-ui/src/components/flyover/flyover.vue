@@ -38,6 +38,8 @@ const props = defineProps({
     }
 });
 
+const emit = defineEmits(['start', 'end']);
+
 const { cid } = useBase('VuiFlyover');
 
 const classList = computed(() => {
@@ -104,6 +106,7 @@ const onStart = () => {
     }
     state.hasStarted = true;
     bindEvents();
+    emit('start', nv);
 };
 
 const onEnd = (v) => {
@@ -116,6 +119,7 @@ const onEnd = (v) => {
         cl.remove(`vui-slide-out-${props.position}`, 'vui-flyover-show');
         dataWidth.value = '0px';
     }
+    emit('end', v);
 };
 
 watchEffect(() => {
