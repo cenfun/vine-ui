@@ -2,10 +2,10 @@
     "name": "vine-ui-app-bundle",
     "version": "3.0.14",
     "main": "dist/vine-ui-app-bundle.js",
-    "private": true,
     "files": [
         "dist"
     ],
     "dependencies": {},
-    "devDependencies": {}
+    "devDependencies": {},
+    "private": true
 }
