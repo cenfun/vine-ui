@@ -141,7 +141,7 @@ let $target;
 
 const emit = defineEmits(['update', 'close']);
 
-//====================================================================================================
+// ====================================================================================================
 
 watchEffect(() => {
     data.visible = props.visible;
@@ -172,7 +172,7 @@ const visibleHandler = () => {
     }
 };
 
-//=============================================================================
+// =============================================================================
 
 const bindTargetEvent = () => {
     if (!props.bindTarget) {
@@ -221,7 +221,7 @@ const closeHandler = () => {
     }
 };
 
-//=============================================================================
+// =============================================================================
 
 const update = () => {
     nextTick(() => {
@@ -236,7 +236,7 @@ const updateSync = () => {
     const containerRect = getRect(props.container || window);
     const targetRect = getRect(props.target);
 
-    //fix for arrow size
+    // fix for arrow size
     const arrowSize = 10;
     targetRect.left -= arrowSize;
     targetRect.top -= arrowSize;
@@ -246,7 +246,7 @@ const updateSync = () => {
     const rect = getRect(`.${cid}`);
     const positions = props.positions;
 
-    //console.log(containerRect, targetRect, rect);
+    // console.log(containerRect, targetRect, rect);
 
     const positionInfo = getBestPosition(
         containerRect,
@@ -255,7 +255,7 @@ const updateSync = () => {
         positions
     );
 
-    //no change
+    // no change
     if (data.position === positionInfo.position
             && data.align === positionInfo.align
             && data.top === positionInfo.top
@@ -263,7 +263,7 @@ const updateSync = () => {
         return;
     }
 
-    //console.log(positionInfo);
+    // console.log(positionInfo);
 
     data.position = positionInfo.position;
     data.align = positionInfo.align;
@@ -274,7 +274,7 @@ const updateSync = () => {
 };
 
 
-//====================================================================================================
+// ====================================================================================================
 
 
 onMounted(() => {
@@ -283,7 +283,7 @@ onMounted(() => {
         document.body.appendChild($el);
     }
 
-    //console.log(html);
+    // console.log(html);
     if (props.html) {
         const $content = $el.querySelector('.vui-tooltip-content');
         $content.innerHTML = props.html;

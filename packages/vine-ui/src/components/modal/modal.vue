@@ -1,5 +1,6 @@
 <template>
   <div
+    v-show="state.visible"
     ref="el"
     :class="classList"
   >
@@ -26,10 +27,10 @@
 
 <script setup>
 import {
-    computed, onMounted, ref, onUnmounted, reactive
+    computed, onMounted, ref, onUnmounted, reactive, watchEffect, watch
 } from 'vue';
 import {
-    useBase, BaseRender, destroyComponent
+    useBase, BaseRender, getComponent, destroyComponent
 } from '../../base/base.js';
 
 import IconX from '../../base/images/icon-x.vue';
@@ -51,6 +52,15 @@ const props = defineProps({
     headerSpacing: {
         type: Boolean,
         default: true
+    },
+
+    visible: {
+        type: Boolean,
+        default: true
+    },
+    modelValue: {
+        type: Boolean,
+        default: null
     }
 });
 
@@ -60,8 +70,11 @@ const classList = ['vui', 'vui-modal', cid];
 
 const el = ref(null);
 
+const emit = defineEmits(['update:modelValue']);
+
 const state = reactive({
-    $el: null
+    $el: null,
+    visible: true
 });
 
 const classHeader = computed(() => {
@@ -78,6 +91,23 @@ const styleWindow = computed(() => {
     };
 });
 
+const close = () => {
+
+    const component = getComponent(state.$el);
+    if (component) {
+        destroyComponent(state.$el);
+        return;
+    }
+
+    if (!state.visible) {
+        return;
+    }
+
+    state.visible = false;
+    emit('update:modelValue', state.visible);
+
+};
+
 const documentEvents = {
     click: {
         handler: (e) => {
@@ -86,16 +116,36 @@ const documentEvents = {
                 return;
             }
             unbindEvents(documentEvents);
-            destroyComponent(state.$el);
+            close();
         }
     }
 };
 
+const eventHandler = () => {
+    if (state.visible) {
+        setTimeout(() => {
+            bindEvents(documentEvents, document);
+        }, 100);
+    } else {
+        unbindEvents(documentEvents);
+    }
+};
+
+watchEffect(() => {
+    if (props.modelValue === null) {
+        state.visible = props.visible;
+    } else {
+        state.visible = props.modelValue;
+    }
+});
+
+watch(() => state.visible, () => {
+    eventHandler();
+});
+
 onMounted(() => {
     state.$el = el.value;
-    setTimeout(() => {
-        bindEvents(documentEvents, document);
-    }, 100);
+    eventHandler();
 });
 
 onUnmounted(() => {

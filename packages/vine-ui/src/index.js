@@ -4,7 +4,7 @@ import generateComponents from './util/generate-components.js';
 
 const context = require.context('./components', true, /\.vue$/);
 const components = generateComponents(context);
-//console.log(components);
+// console.log(components);
 
 export {
     components,

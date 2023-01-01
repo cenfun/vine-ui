@@ -1,22 +1,40 @@
 <template>
   <VuiFlex spacing="10px">
-    <VuiButton @click.native="openModal()">
+    <VuiButton @click="openModal()">
       Open Modal
     </VuiButton>
-    <VuiButton @click.native="openModal(true)">
+    <VuiButton @click="openModal(true)">
       Open Modal Scrollbar
     </VuiButton>
+
+    <VuiButton @click="state.modalVisible=!state.modalVisible">
+      Open Modal Visible
+    </VuiButton>
+
+    <VuiModal
+      v-model="state.modalVisible"
+      title="Modal Visible"
+    >
+      <VuiButton @click="state.modalVisible=false">
+        CLose
+      </VuiButton>
+    </VuiModal>
   </VuiFlex>
 </template>
 
 <script setup>
 import VineUI from 'vine-ui';
+import { reactive } from 'vue';
 const {
     VuiButton,
     VuiCheckbox,
     VuiFlex,
     VuiModal
 } = VineUI;
+
+const state = reactive({
+    modalVisible: false
+});
 
 const openModal = (scroll) => {
     VuiModal.createComponent({

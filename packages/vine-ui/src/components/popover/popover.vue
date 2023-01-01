@@ -140,7 +140,7 @@ const data = reactive({
     visible: false,
     headerVisible: true,
     contentOverflow: false,
-    //calculation info
+    // calculation info
     info: {
         position: 'bottom',
         align: 'center',
@@ -182,7 +182,7 @@ const styleList = computed(() => {
 
 const styleBody = computed(() => {
     return {
-        //TODO px
+        // TODO px
         width: `${props.width}px`
     };
 });
@@ -197,7 +197,7 @@ const classContent = computed(() => {
     return list;
 });
 
-//====================================================================================================
+// ====================================================================================================
 
 const el = ref(null);
 let $el;
@@ -208,7 +208,7 @@ let positionInfo;
 let $target;
 let timeout_close;
 
-//====================================================================================================
+// ====================================================================================================
 watchEffect(() => {
     data.headerVisible = props.hasHeader;
     if (data.headerVisible && !props.title) {
@@ -250,7 +250,7 @@ const unbindEvents = () => {
     unbindCloseEvent();
 };
 
-//=============================================================================
+// =============================================================================
 
 const bindTargetEvent = () => {
     if (!props.bindTarget) {
@@ -276,7 +276,7 @@ const openHandler = () => {
     data.visible = true;
 };
 
-//=============================================================================
+// =============================================================================
 
 const bindResizeEvent = () => {
     if (!props.bindResize) {
@@ -298,7 +298,7 @@ const resizeHandler = () => {
     update();
 };
 
-//=============================================================================
+// =============================================================================
 
 const bindScrollEvent = () => {
     if (!props.bindScroll) {
@@ -326,7 +326,7 @@ const scrollHandler = (e) => {
     update();
 };
 
-//=============================================================================
+// =============================================================================
 
 const bindCloseEvent = () => {
     unbindCloseEvent();
@@ -351,14 +351,14 @@ const clickHandler = (e) => {
 };
 
 const keydownHandler = (e) => {
-    //ESC
+    // ESC
     if (e.keyCode !== 27) {
         return;
     }
     close();
 };
 
-//=============================================================================
+// =============================================================================
 
 const isInnerElement = (elem) => {
     if ($el === elem) {
@@ -394,7 +394,7 @@ const close = () => {
     }
 };
 
-//=============================================================================
+// =============================================================================
 const updateContentHeight = () => {
     $el.style.height = 'auto';
     const elem = $el.querySelector('.vui-popover-content');
@@ -405,7 +405,7 @@ const updateContentHeight = () => {
     const ch = rect.height;
 
     data.contentOverflow = false;
-    //fix for min/max height
+    // fix for min/max height
     if (ch > props.maxHeight) {
         elem.style.height = `${props.maxHeight}px`;
         data.contentOverflow = true;
@@ -428,14 +428,14 @@ const updateSync = () => {
     const rect = getRect(`.${cid}`);
     const positions = props.positions;
 
-    //console.log(containerRect, targetRect, rect);
+    // console.log(containerRect, targetRect, rect);
 
     positionInfo = getBestPosition(
         containerRect,
         targetRect,
         rect,
         positions,
-        //previous position info for keeping position if has animation (dynamic size)
+        // previous position info for keeping position if has animation (dynamic size)
         positionInfo
     );
 
@@ -462,7 +462,7 @@ const update = () => {
     });
 };
 
-//====================================================================================================
+// ====================================================================================================
 
 onMounted(() => {
     $el = el.value;

@@ -10,9 +10,9 @@ import Portal from './portal.vue';
 
 let _uid = 1;
 export const useBase = (name) => {
-    //unique id
+    // unique id
     const uid = `${_uid++}`;
-    //component id, instance id, rui-name-uid
+    // component id, instance id, rui-name-uid
     const kebab = pascalToKebabCase(name);
     const cid = `${kebab}-${uid}`;
 
@@ -36,14 +36,14 @@ export const BaseRender = {
 
     setup(props, ctx) {
 
-        //render function
+        // render function
         if (typeof props.content === 'function') {
             return () => {
                 return props.content.call(ctx, h, ctx);
             };
         }
 
-        //text node
+        // text node
         return () => props.content;
 
     }
@@ -51,18 +51,23 @@ export const BaseRender = {
 };
 
 const componentMap = new WeakMap();
-export const destroyComponent = function($el) {
+export const getComponent = function($el) {
     if (!$el) {
         return;
     }
     if (typeof $el === 'string') {
         $el = document.querySelector($el);
     }
-    const component = componentMap.get($el);
+    return componentMap.get($el);
+};
+
+export const destroyComponent = function($el) {
+    const component = getComponent($el);
     if (component) {
         component.unmount();
     }
 };
+
 
 export const createComponent = function(props, slots, container) {
     const Component = this;
@@ -78,7 +83,7 @@ export const createComponent = function(props, slots, container) {
     //  children?: Children | Slot | Slots
     // ): VNode
 
-    //container state
+    // container state
     const hasContainer = Boolean(container);
 
     let instance;
@@ -89,7 +94,7 @@ export const createComponent = function(props, slots, container) {
 
     const app = createApp({
         setup() {
-            //async
+            // async
             if (hasContainer) {
                 return instanceRender;
             }
@@ -107,7 +112,7 @@ export const createComponent = function(props, slots, container) {
 
     const component = app.mount(container);
 
-    //custom unmount for component
+    // custom unmount for component
     component.unmount = () => {
         app.unmount();
         if (portalContainer) {
@@ -116,10 +121,10 @@ export const createComponent = function(props, slots, container) {
         }
     };
 
-    //component.$el is componentContainer.firstChild
-    //console.log(component.$el, componentContainer.firstChild);
+    // component.$el is componentContainer.firstChild
+    // console.log(component.$el, componentContainer.firstChild);
 
-    //console.log(instance.el);
+    // console.log(instance.el);
 
     componentMap.set(instance.el, component);
 
@@ -148,6 +153,7 @@ export default {
     useBase,
     BaseRender,
 
+    getComponent,
     destroyComponent,
     createComponent,
 

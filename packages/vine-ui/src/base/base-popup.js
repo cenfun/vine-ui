@@ -69,13 +69,13 @@ export const getRect = (target, padding = 0) => {
     const br = elem.getBoundingClientRect();
     const rect = toRect(br);
 
-    //fix offset
+    // fix offset
     rect.left += window.pageXOffset;
     rect.top += window.pageYOffset;
     rect.width = elem.offsetWidth;
     rect.height = elem.offsetHeight;
 
-    //fix padding
+    // fix padding
     if (padding) {
         rect.left -= padding;
         rect.top -= padding;
@@ -83,12 +83,12 @@ export const getRect = (target, padding = 0) => {
         rect.height += padding * 2;
     }
 
-    //console.log(elem.tagName, rect);
+    // console.log(elem.tagName, rect);
 
     return rect;
 };
 
-//===========================================================================================
+// ===========================================================================================
 
 export const defaultPositions = {
 
@@ -119,7 +119,7 @@ export const defaultPositions = {
         }
     },
 
-    //===========================================================================================
+    // ===========================================================================================
 
     'top-center': {
         direction: 'h',
@@ -148,7 +148,7 @@ export const defaultPositions = {
         }
     },
 
-    //===========================================================================================
+    // ===========================================================================================
 
     'right-center': {
         direction: 'v',
@@ -177,7 +177,7 @@ export const defaultPositions = {
         }
     },
 
-    //===========================================================================================
+    // ===========================================================================================
 
     'left-center': {
         direction: 'v',
@@ -222,7 +222,7 @@ export const getDefaultPositions = (sortKeys) => {
             ai = ai === -1 ? 4 : ai;
             bi = bi === -1 ? 4 : bi;
             if (ai === bi) {
-                //right part
+                // right part
                 av = al.shift();
                 bv = bl.shift();
                 ai = sortKeys.indexOf(av);
@@ -237,7 +237,7 @@ export const getDefaultPositions = (sortKeys) => {
     return list;
 };
 
-//===========================================================================================
+// ===========================================================================================
 
 const getSpaceAlign = (containerStart, containerSize, start, size) => {
     const s = start - containerStart;
@@ -269,7 +269,7 @@ const calculateChange = (info, previousInfo) => {
     if (!previousInfo) {
         return info;
     }
-    //no change if type no change with previous
+    // no change if type no change with previous
     if (info.type === previousInfo.type) {
         return info;
     }
@@ -364,7 +364,7 @@ export const getBestPosition = (containerRect, targetRect, rect, positions, prev
         return a.index - b.index;
     });
 
-    //console.table(infoList);
+    // console.table(infoList);
 
     return infoList[0];
 };
