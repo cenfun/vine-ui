@@ -69,42 +69,42 @@ const modelChecked = computed({
     label {
         position: relative;
         display: block;
-        padding-left: 25px;
-        margin-left: -22px;
-        min-height: 30px;
         min-width: 22px;
         max-width: 500px;
+        min-height: 30px;
+        margin-left: -22px;
+        padding-left: 25px;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
 
         &::before {
             position: absolute;
-            left: 0;
             top: 50%;
-            transform: translate(3px, -50%);
+            left: 0;
+            content: "";
             display: block;
             width: 16px;
             height: 16px;
-            content: "";
-            background-color: #fff;
             border: #adb5bd solid 1px;
             border-radius: 3px;
+            background-color: #fff;
+            transform: translate(3px, -50%);
         }
 
         &::after {
             position: absolute;
-            left: 0;
             top: 50%;
-            transform: translate(3px, -50%);
+            left: 0;
+            content: "";
             display: block;
             width: 16px;
             height: 16px;
-            content: "";
-            background-position: center center;
             background-repeat: no-repeat;
+            background-position: center center;
             background-size: 10px 10px;
             background-clip: border-box;
+            transform: translate(3px, -50%);
         }
     }
 
@@ -112,57 +112,43 @@ const modelChecked = computed({
         display: block;
         width: 22px;
         height: 22px;
-        opacity: 0;
-        padding: 0;
         margin: 0;
+        padding: 0;
+        opacity: 0;
 
-        &:checked {
-            ~ label {
-                &::before {
-                    color: #fff;
-                    border-color: #0077cf;
-                    background-color: #0077cf;
-                }
-
-                &::after {
-                    background-image: url("./images/checkbox.svg");
-                }
-            }
+        &:focus ~ label::before {
+            box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
         }
 
-        &:disabled {
-            ~ label {
-                color: #6c757d;
-            }
-
-            ~ label::before {
-                background-color: #e9ecef;
-            }
+        &:disabled ~ label {
+            color: #6c757d;
         }
 
-        &:focus {
-            ~ label::before {
-                box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
-            }
+        &:disabled ~ label::before {
+            background-color: #e9ecef;
         }
 
-        &:not(:disabled, :checked, :focus) {
-            ~ label:hover::before {
-                border-color: #888;
-            }
+        &:checked ~ label::before {
+            color: #fff;
+            border-color: #0077cf;
+            background-color: #0077cf;
         }
 
-        &:focus:not(:checked) {
-            ~ label::before {
-                border-color: #80bdff;
-            }
+        &:checked ~ label::after {
+            background-image: url("./images/checkbox.svg");
         }
 
-        &:disabled:checked {
-            ~ label::before {
-                background-color: rgb(0 123 255 / 50%);
-                border-color: #80bdff;
-            }
+        &:checked:disabled ~ label::before {
+            border-color: #80bdff;
+            background-color: rgb(0 123 255 / 50%);
+        }
+
+        &:not(:checked):focus ~ label::before {
+            border-color: #80bdff;
+        }
+
+        &:not(:disabled, :checked, :focus) ~ label:hover::before {
+            border-color: #888;
         }
     }
 }
