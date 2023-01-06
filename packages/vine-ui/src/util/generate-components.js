@@ -5,17 +5,17 @@ export default function(context) {
     const components = {};
 
     const paths = context.keys();
-    //console.log(paths);
+    // console.log(paths);
 
     paths.forEach((path) => {
 
-        //console.log(path);
+        // console.log(path);
 
-        //get folder name
-        //kebab case, custom element names must contain a hyphen.
+        // get folder name
+        // kebab case, custom element names must contain a hyphen.
         const list = path.toLowerCase().split('/');
 
-        //file and folder should be same
+        // file and folder should be same
         const fileName = list.pop();
         const folderName = list.pop();
 
@@ -23,16 +23,16 @@ export default function(context) {
 
         // entry file name must be same with folder name
         if (fileName !== `${folderName}.vue`) {
-            //console.log(`ignore ${path}`);
+            // console.log(`ignore ${path}`);
             return;
         }
 
         const N = folderName.slice(0, 1).toUpperCase() + folderName.slice(1).toLowerCase();
         const componentName = `Vui${N}`;
 
-        //esModule default
+        // esModule default
         const Component = context(path).default;
-        //console.log(context(path));
+        // console.log(context(path));
 
         Component.createComponent = createComponent;
 
@@ -44,6 +44,6 @@ export default function(context) {
         components[componentName] = Component;
     });
 
-    //console.log(components);
+    // console.log(components);
     return components;
 }
