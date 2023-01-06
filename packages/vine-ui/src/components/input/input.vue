@@ -91,35 +91,35 @@ const labelContent = computed(() => {
     align-items: center;
 
     label {
-        padding-right: 5px;
         display: inline-block;
+        max-width: 200px;
+        padding-right: 5px;
         white-space: nowrap;
         text-overflow: ellipsis;
-        max-width: 200px;
         overflow: hidden;
     }
 
     input {
         display: inline-block;
         padding: 5px;
-        font-weight: 400;
         color: #495057;
-        background-color: #fff;
-        background-clip: padding-box;
+        font-weight: 400;
         border: 1px solid #aaa;
         border-radius: 5px;
+        background-color: #fff;
+        background-clip: padding-box;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
         &:disabled {
-            border: 1px solid #ccc;
             color: gray;
+            border: 1px solid #ccc;
         }
 
-        &:hover:not(:disabled) {
+        &:not(:disabled):hover {
             border: 1px solid #888;
         }
 
-        &:focus:not(:disabled) {
+        &:not(:disabled):focus {
             border-color: #80bdff;
             outline: 0;
             box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);

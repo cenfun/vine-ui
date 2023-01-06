@@ -89,8 +89,8 @@ const styleList = computed(() => {
 
 .vui-flex-empty {
     flex: 1 1 0%;
-    overflow: hidden;
     margin: 0;
+    overflow: hidden;
 }
 
 .vui-flex-center {
@@ -98,22 +98,22 @@ const styleList = computed(() => {
 }
 
 .vui-flex-row {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
-    position: relative;
 }
 
 .vui-flex-column {
+    position: relative;
     display: flex;
     flex-direction: column;
-    position: relative;
 }
 
 .vui-flex-spacing > .vui-flex-empty,
 .vui-flex-spacing > .vui-flex-empty + * {
-    margin-left: 0;
     margin-top: 0;
+    margin-left: 0;
 }
 
 .vui-flex-spacing {

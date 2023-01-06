@@ -56,7 +56,7 @@ const demos = {};
 const list = [];
 const paths = context.keys();
 paths.forEach((path) => {
-    //console.log(path);
+    // console.log(path);
     const fileName = path.split('/').pop();
     const demoName = fileName.split('.').shift();
     const N = demoName.slice(0, 1).toUpperCase() + demoName.slice(1).toLowerCase();
@@ -78,52 +78,52 @@ onMounted(() => {
 <style lang="scss">
 html,
 body {
-    margin: 0;
-    padding: 0;
     width: 100%;
     height: 100%;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    margin: 0;
+    padding: 0;
     color: #333;
+    font-size: 14px;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 .vui-app {
+    position: relative;
     width: 100%;
     height: 100%;
-    position: relative;
 }
 
 .vui-header {
     padding: 5px 10px;
-    background: #f5f5f5;
-    border-bottom: 1px solid #ccc;
     box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+    background: #f5f5f5;
 }
 
 .vui-title {
     height: 30px;
-    line-height: 30px;
-    font-size: 16px;
     font-weight: bold;
+    font-size: 16px;
+    line-height: 30px;
 }
 
 .vui-sub {
+    flex: 1 1 0%;
+    height: 30px;
     padding-left: 10px;
     color: #666;
-    height: 30px;
     line-height: 30px;
-    flex: 1 1 0%;
 }
 
 .icon-github {
     display: block;
-    margin-right: 5px;
     width: 26px;
     height: 26px;
+    margin-right: 5px;
+    background-image: url("images/github.svg");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 26px 26px;
-    background-image: url("images/github.svg");
     opacity: 0.6;
 }
 
@@ -132,25 +132,25 @@ body {
 }
 
 .vui-body {
-    overflow-y: auto;
     padding: 10px;
+    overflow-y: auto;
 }
 
 .vui-item {
-    border-bottom: 1px dotted #ccc;
     padding: 5px;
+    border-bottom: 1px dotted #ccc;
 }
 
 .vui-item-name {
     width: 99px;
     padding: 5px 5px 5px 0;
-    overflow: hidden;
     color: #000;
+    overflow: hidden;
 }
 
 .vui-item-example {
-    border-left: 1px solid #ccc;
     padding: 5px 5px 5px 10px;
+    border-left: 1px solid #ccc;
 }
 
 </style>

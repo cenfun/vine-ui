@@ -96,7 +96,7 @@ const state = shallowReactive({
     layout: [],
     autoNum: 0,
 
-    //offset include border, but client not
+    // offset include border, but client not
     sizeKey: props.direction === 'row' ? 'offsetWidth' : 'offsetHeight',
     clientKey: props.direction === 'row' ? 'clientWidth' : 'clientHeight',
     offsetKey: props.direction === 'row' ? 'offsetX' : 'offsetY',
@@ -143,7 +143,7 @@ const windowEvents = {
     }
 };
 
-//=======================================================================================
+// =======================================================================================
 
 const isAutoSize = (size) => {
     if (!size) {
@@ -205,7 +205,7 @@ const updateTotalSize = () => {
     state.totalSize = getSize(state.$el);
 };
 
-//=======================================================================================
+// =======================================================================================
 
 const startHandler = (e) => {
 
@@ -214,7 +214,7 @@ const startHandler = (e) => {
         return;
     }
 
-    //stop nested layout event
+    // stop nested layout event
     e.stopImmediatePropagation();
 
     state.moveGutter = null;
@@ -246,12 +246,12 @@ const initMoveInfo = (e, prevNode, nextNode) => {
         offsetY: 0
     };
 
-    //console.log('start');
+    // console.log('start');
     bindEvents(windowEvents, window);
 
-    //for percent
+    // for percent
     updateTotalSize();
-    //console.log(state.totalSize);
+    // console.log(state.totalSize);
 
     const prevInfo = {
         node: prevNode
@@ -260,13 +260,13 @@ const initMoveInfo = (e, prevNode, nextNode) => {
         node: nextNode
     };
 
-    //min
+    // min
     prevInfo.min = getBorderSize(prevNode);
     nextInfo.min = getBorderSize(nextNode);
 
-    //max
+    // max
     const maxSize = getSize(prevNode, nextNode);
-    //console.log('maxSize', maxSize);
+    // console.log('maxSize', maxSize);
 
     const nextMax = getMax(nextNode, 'nextElementSibling');
     const prevMax = getMax(prevNode, 'previousElementSibling');
@@ -274,18 +274,18 @@ const initMoveInfo = (e, prevNode, nextNode) => {
     prevInfo.max = maxSize + nextMax - nextInfo.min;
     nextInfo.max = maxSize + prevMax - prevInfo.min;
 
-    //size
+    // size
     prevInfo.size = getSize(prevNode);
     nextInfo.size = getSize(nextNode);
 
-    //console.log(prevInfo, nextInfo);
+    // console.log(prevInfo, nextInfo);
 
     initNodeInfo(prevNode, nextNode, prevInfo, nextInfo);
 
 };
 
 const removeAuto = ($elem, index) => {
-    //at least one auto could be left
+    // at least one auto could be left
     if (state.autoNum < 2) {
         return;
     }
@@ -350,7 +350,7 @@ const mouseUpHandler = function(e) {
 const updateHandler = (e) => {
 
     const offset = state.moveInfo[state.offsetKey];
-    //console.log(offset);
+    // console.log(offset);
 
     updateNodeInfo(state.prevInfo, offset);
     updateNodeInfo(state.nextInfo, -offset);
@@ -483,13 +483,13 @@ const initLayout = (ls) => {
         return [];
     }
 
-    //console.log(cid, ls);
+    // console.log(cid, ls);
 
     if (!Array.isArray(ls)) {
         ls = `${ls}`.split(',');
     }
 
-    //console.log(cid, ls);
+    // console.log(cid, ls);
 
     let autoNum = 0;
 
@@ -502,7 +502,7 @@ const initLayout = (ls) => {
         return item;
     });
 
-    //console.log(cid, ls);
+    // console.log(cid, ls);
 
     state.autoNum = autoNum;
 
@@ -514,7 +514,7 @@ watch(() => props.modelValue, () => {
 
     state.layout = initLayout(props.modelValue);
 
-    //console.log(cid, 'watch props.modelValue', state.layout);
+    // console.log(cid, 'watch props.modelValue', state.layout);
 
     updateTotalSize();
     setChildrenLayout(true);
@@ -551,10 +551,10 @@ onUnmounted(() => {
     --vui-gutter-hover-size: 2px;
     --vui-gutter-size: 4px;
 
-    overflow: hidden;
     position: relative;
     display: flex;
     align-items: stretch;
+    overflow: hidden;
 }
 
 .vui-layout-row {
@@ -567,11 +567,11 @@ onUnmounted(() => {
 
 .vui-layout-item {
     position: relative;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
     overflow: hidden;
-    padding: 0;
-    margin: 0;
-    flex: 0 0 auto;
 }
 
 .vui-layout-auto {
@@ -585,23 +585,23 @@ onUnmounted(() => {
 }
 
 .vui-layout-gutter::before {
-    content: "";
     position: absolute;
-    background-color: #0077cf;
+    content: "";
+    display: none;
     width: 100%;
     height: 100%;
-    display: none;
+    background-color: #0077cf;
 }
 
 .vui-layout-gutter::after {
-    content: "";
     position: absolute;
+    content: "";
+    z-index: 2;
     display: block;
-    background-color: black;
-    opacity: 0;
     width: 100%;
     height: 100%;
-    z-index: 2;
+    background-color: black;
+    opacity: 0;
 }
 
 .vui-layout-row > {
@@ -611,8 +611,8 @@ onUnmounted(() => {
     }
 
     .vui-layout-gutter::before {
-        width: var(--vui-gutter-hover-size);
         left: 50%;
+        width: var(--vui-gutter-hover-size);
         transform: translateX(-50%);
     }
 
@@ -629,8 +629,8 @@ onUnmounted(() => {
     }
 
     .vui-layout-gutter::before {
-        height: var(--vui-gutter-hover-size);
         top: 50%;
+        height: var(--vui-gutter-hover-size);
         transform: translateY(-50%);
     }
 

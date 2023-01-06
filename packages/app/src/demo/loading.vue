@@ -29,7 +29,7 @@
         Visible
       </VuiCheckbox>
     </VuiFlex>
-    <div style="height: 80px; position: relative; border: 1px solid #eee; margin-top: 5px;">
+    <div style=" position: relative;height: 80px; margin-top: 5px; border: 1px solid #eee;">
       <VuiLoading
         :size="loading.size"
         :color="loading.color"

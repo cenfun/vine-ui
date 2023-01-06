@@ -143,18 +143,18 @@ watchEffect(() => {
 }
 
 .vui-switch-button {
+    position: relative;
     cursor: pointer;
     transition: background-color 0.1s;
-    position: relative;
 }
 
 .vui-switch-icon {
-    border-radius: 50%;
-    background-color: #fff;
-    transition: right 0.1s ease-in-out;
     position: absolute;
     top: 2px;
     height: calc(100% - 4px);
+    border-radius: 50%;
+    background-color: #fff;
+    transition: right 0.1s ease-in-out;
 }
 
 .vui-switch-checked {

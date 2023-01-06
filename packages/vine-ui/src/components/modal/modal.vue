@@ -162,66 +162,66 @@ defineExpose({
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 1000;
     width: 100%;
     height: 100%;
     background-color: rgb(0 0 0 / 20%);
-    z-index: 1000;
 }
 
 .vui-modal-close {
     position: absolute;
-    z-index: 10;
     top: 0;
     right: 0;
+    z-index: 10;
     width: 40px;
     height: 40px;
+    margin-top: -15px;
+    margin-right: -15px;
+    font-size: 20px;
+    line-height: 40px;
+    text-align: center;
     border-radius: 20px;
     background: #fff;
     cursor: pointer;
-    font-size: 20px;
-    text-align: center;
-    margin-top: -15px;
-    margin-right: -15px;
-    line-height: 40px;
 
     svg {
-        pointer-events: none;
         display: block;
         width: 24px;
         height: 24px;
         margin: 8px 0 0 8px;
         opacity: 0.6;
+        pointer-events: none;
     }
+}
 
-    &:hover svg {
-        opacity: 1;
-    }
+.vui-modal-close:hover svg {
+    opacity: 1;
 }
 
 .vui-modal-window {
     position: absolute;
-    background: #fff;
-    border-radius: 10px;
-    box-sizing: border-box;
     min-width: 300px;
-    min-height: 200px;
     max-width: 1920px;
+    min-height: 200px;
     max-height: 1080px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background: #fff;
 }
 
 .vui-modal-main {
     position: relative;
-    padding: 20px;
     width: 100%;
     height: 100%;
+    padding: 20px;
     overflow: hidden;
 }
 
 .vui-modal-header {
-    border-bottom: 2px solid #333;
     padding-bottom: 10px;
-    font-size: 18px;
     font-weight: bold;
+    font-size: 18px;
+    border-bottom: 2px solid #333;
 }
 
 .vui-modal-header-spacing {
@@ -229,8 +229,8 @@ defineExpose({
 }
 
 .vui-modal-content {
-    width: 100%;
     position: relative;
+    width: 100%;
     overflow: auto;
 }
 

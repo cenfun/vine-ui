@@ -64,9 +64,9 @@ const styleList = computed(() => {
 </script>
 <style lang="scss">
 .vui-progress {
-    border-width: thin;
-    border-style: solid;
-    box-sizing: border-box;
     position: relative;
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: thin;
 }
 </style>

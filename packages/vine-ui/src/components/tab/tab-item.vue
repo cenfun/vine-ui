@@ -34,27 +34,27 @@ const classList = computed(() => {
 <style lang="scss">
 .vui-tab-item {
     position: relative;
-    padding: 0 15px;
-    max-width: 200px;
     height: var(--vui-tab-height);
+    max-width: 200px;
+    padding: 0 15px;
+    color: #002b36;
     line-height: var(--vui-tab-height);
-    cursor: pointer;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    cursor: pointer;
     user-select: none;
-    color: #002b36;
 }
 
 .vui-tab-item::after {
-    background-color: #a4a7ab;
-    display: block;
     position: absolute;
-    bottom: 8px;
     left: 100%;
-    width: 1px;
-    height: 20px;
+    bottom: 8px;
     content: "";
     z-index: 0;
+    display: block;
+    width: 1px;
+    height: 20px;
+    background-color: #a4a7ab;
 }
 
 .vui-tab-item:last-child::after {
@@ -62,22 +62,22 @@ const classList = computed(() => {
 }
 
 .vui-tab-item:hover {
-    background-color: #ebecef;
     z-index: 2;
+    background-color: #ebecef;
 }
 
 .vui-tab-item:hover::before,
 .vui-tab-item:hover::after {
-    background-repeat: no-repeat;
-    background-color: transparent;
     position: absolute;
-    bottom: 0;
     left: -10px;
+    bottom: 0;
+    content: "";
     display: block;
     width: 10px;
     height: 10px;
+    background-color: transparent;
+    background-repeat: no-repeat;
     pointer-events: none;
-    content: "";
 }
 
 .vui-tab-item:hover::before {
@@ -90,23 +90,23 @@ const classList = computed(() => {
 }
 
 .vui-tab-item.vui-tab-selected {
-    background-color: #fff;
     position: relative;
     z-index: 3;
+    background-color: #fff;
 }
 
 .vui-tab-item.vui-tab-selected::before,
 .vui-tab-item.vui-tab-selected::after {
-    background-repeat: no-repeat;
-    background-color: transparent;
     position: absolute;
-    bottom: 0;
     left: -10px;
+    bottom: 0;
+    content: "";
     display: block;
     width: 10px;
     height: 10px;
+    background-color: transparent;
+    background-repeat: no-repeat;
     pointer-events: none;
-    content: "";
 }
 
 .vui-tab-item.vui-tab-selected::before {
@@ -119,7 +119,7 @@ const classList = computed(() => {
 }
 
 .vui-tab-item > * {
-    overflow: hidden;
     text-overflow: ellipsis;
+    overflow: hidden;
 }
 </style>

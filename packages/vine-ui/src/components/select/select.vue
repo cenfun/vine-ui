@@ -118,13 +118,13 @@ const state = shallowReactive({
     timeout_display: null,
     lastDirection: 'down',
 
-    //for view width
+    // for view width
     width: props.width,
-    //label for view display
+    // label for view display
     selectedLabel: '',
-    //value for selected item class
+    // value for selected item class
     selectedValue: undef,
-    //for search input
+    // for search input
     searchValue: undef
 
 });
@@ -171,12 +171,12 @@ const listStyle = computed(() => {
 });
 
 
-//=========================================================================================================
+// =========================================================================================================
 
 const initSelectedItem = (ls) => {
     const dv = props.modelValue === undef ? props.value : props.modelValue;
 
-    //console.log(props.label, 'dv', dv);
+    // console.log(props.label, 'dv', dv);
 
     const item = ls.find((it) => it.value === dv);
     if (item) {
@@ -187,7 +187,7 @@ const initSelectedItem = (ls) => {
         state.selectedValue = undef;
     }
 
-    //console.log(props.label, 'initSelectedItem', dv, state.selectedLabel);
+    // console.log(props.label, 'initSelectedItem', dv, state.selectedLabel);
 
 };
 
@@ -257,7 +257,7 @@ const getListBySlotOptions = (ls) => {
     return ls;
 };
 
-//TODO vue bug here, only can put it here not in computed
+// TODO vue bug here, only can put it here not in computed
 const slotDefault = getSlot();
 
 const list = computed(() => {
@@ -267,10 +267,10 @@ const list = computed(() => {
     return getListBySlotOptions(slotDefault);
 });
 
-//=========================================================================================================
+// =========================================================================================================
 
 const resizeHandler = (e) => {
-    //console.log('resizeHandler');
+    // console.log('resizeHandler');
     close();
 };
 
@@ -282,7 +282,7 @@ const isSelectInner = (elem) => {
     try {
         inner = state.$list.contains(elem);
     } catch (e) {
-        //empty
+        // empty
     }
     return inner;
 };
@@ -300,7 +300,7 @@ const isViewParent = (elem) => {
 };
 
 const scrollHandler = (e) => {
-    //console.log('scrollHandler');
+    // console.log('scrollHandler');
     if (isSelectInner(e.target)) {
         return;
     }
@@ -312,7 +312,7 @@ const scrollHandler = (e) => {
 
 
 const unbindEvents = () => {
-    //console.log('unbindEvents');
+    // console.log('unbindEvents');
     window.removeEventListener('resize', resizeHandler);
     window.removeEventListener('scroll', scrollHandler, true);
 };
@@ -323,7 +323,7 @@ const bindEvents = () => {
     window.addEventListener('scroll', scrollHandler, true);
 };
 
-//=========================================================================================================
+// =========================================================================================================
 
 const showList = () => {
     document.body.appendChild(state.$list);
@@ -335,11 +335,11 @@ const hideList = () => {
     state.$list.remove();
 };
 
-//=========================================================================================================
+// =========================================================================================================
 
 const close = () => {
 
-    //align with open
+    // align with open
     state.shouldOpen = false;
 
     if (!state.isOpen) {
@@ -357,7 +357,7 @@ const closeAsync = () => {
     }, 100);
 };
 
-//=========================================================================================================
+// =========================================================================================================
 
 const getListTop = (viewRect, listRect, bodyRect) => {
     const spacing = 2;
@@ -372,7 +372,7 @@ const getListTop = (viewRect, listRect, bodyRect) => {
         up: top.up > 0
     };
 
-    //console.log(top, ok);
+    // console.log(top, ok);
 
     if (ok[state.lastDirection]) {
         return top[state.lastDirection];
@@ -412,17 +412,17 @@ const layout = () => {
         left = bodyRect.width - listRect.width;
     }
 
-    //console.log('left', left, 'top', top);
+    // console.log('left', left, 'top', top);
 
     const st = state.$list.style;
     st.left = `${left}px`;
     st.top = `${top}px`;
 
-    //selected element.scrollIntoView();
+    // selected element.scrollIntoView();
     const $selected = state.$list.querySelector('.vui-select-item.selected');
     if ($selected) {
-        //scrollIntoView cased whole page scroll if body scrollable
-        //$selected.scrollIntoView();
+        // scrollIntoView cased whole page scroll if body scrollable
+        // $selected.scrollIntoView();
         $selected.parentNode.scrollTop = $selected.offsetTop;
     }
 
@@ -474,8 +474,8 @@ const open = () => {
     bindEvents();
 };
 
-//when opened list and click out side browser will blur
-//then click body will trigger focus and blur, that not make sense
+// when opened list and click out side browser will blur
+// then click body will trigger focus and blur, that not make sense
 const openAsync = () => {
     clearTimeout(state.timeout_display);
     state.timeout_display = setTimeout(() => {
@@ -483,7 +483,7 @@ const openAsync = () => {
     }, 100);
 };
 
-//=========================================================================================================
+// =========================================================================================================
 
 const onClick = (e) => {
     open();
@@ -494,18 +494,18 @@ const onInput = (e) => {
 };
 
 const onFocus = (e) => {
-    //console.log('onFocus', cid);
+    // console.log('onFocus', cid);
     openAsync();
 };
 
 const onBlur = (e) => {
-    //console.log('onBlur', cid);
+    // console.log('onBlur', cid);
     state.searchValue = undef;
     closeAsync();
 };
 
 
-//=========================================================================================================
+// =========================================================================================================
 
 
 const getItemClass = (item) => {
@@ -522,7 +522,7 @@ const onItemClick = (item) => {
     state.selectedLabel = item.label;
     state.selectedValue = item.value;
 
-    //console.log(props.label, 'onItemClick', item, state.selectedLabel);
+    // console.log(props.label, 'onItemClick', item, state.selectedLabel);
 
     emit('update:modelValue', item.value);
     close();
@@ -533,7 +533,7 @@ const onItemRemove = (item) => {
 };
 
 
-//=========================================================================================================
+// =========================================================================================================
 
 const initWidth = () => {
 
@@ -542,16 +542,16 @@ const initWidth = () => {
     }
 
     const listRect = state.$list.getBoundingClientRect();
-    //border is 2 if empty
+    // border is 2 if empty
     if (listRect.width <= 2) {
         return;
     }
 
-    //Symbol, last latter is l will be cut, so + 1
+    // Symbol, last latter is l will be cut, so + 1
     const iconWidth = 15 + 1;
     const viewMinWidth = 50;
     const viewMaxWidth = 350;
-    //no padding because list have same padding
+    // no padding because list have same padding
     const w = clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
     state.width = `${w}px`;
 
@@ -582,40 +582,40 @@ onMounted(() => {
 
     label {
         position: relative;
+        display: inline-block;
         padding-right: 5px;
         white-space: nowrap;
         text-overflow: ellipsis;
-        display: inline-block;
     }
 }
 
 .vui-select-view {
-    cursor: default;
     position: relative;
+    width: 50px;
+    height: 30px;
+    min-width: 50px;
+    padding: 0 20px 0 5px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
     background-image: url("./images/select.svg");
     background-repeat: no-repeat;
-    background-size: 8px 10px;
     background-position: right 7px center;
-    padding: 0 20px 0 5px;
-    border-radius: 5px;
-    width: 50px;
-    min-width: 50px;
-    height: 30px;
-    border: 1px solid #aaa;
+    background-size: 8px 10px;
+    cursor: default;
     user-select: none;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
     &:disabled {
-        border: 1px solid #ccc;
         color: gray;
+        border: 1px solid #ccc;
         background-image: url("./images/select-disabled.svg");
     }
 
-    &:hover:not(:disabled) {
+    &:not(:disabled):hover {
         border: 1px solid #888;
     }
 
-    &:focus:not(:disabled) {
+    &:not(:disabled):focus {
         border-color: #80bdff;
         outline: 0;
         box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
@@ -638,30 +638,30 @@ onMounted(() => {
     position: absolute;
     top: -500px;
     left: -500px;
-    background-color: #fff;
     z-index: 10000;
-    border: 1px solid #aaa;
-    border-radius: 5px;
     max-width: 350px;
     max-height: 300px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 3px 0 rgb(0 0 0 / 20%);
     overflow-x: hidden;
     overflow-y: auto;
-    box-shadow: 0 2px 3px 0 rgb(0 0 0 / 20%);
 }
 
 .vui-select-item-label {
-    min-height: 1rem;
     flex: 1 1 0%;
+    min-height: 1rem;
     overflow: hidden;
 }
 
 .vui-select-item-remove {
     position: relative;
-    cursor: pointer;
     width: 25px;
     height: 20px;
-    visibility: hidden;
     color: #000;
+    visibility: hidden;
+    cursor: pointer;
     opacity: 0.6;
 
     &:hover {
@@ -670,33 +670,33 @@ onMounted(() => {
 }
 
 .vui-select-item {
-    padding: 8px 5px;
     position: relative;
-    cursor: pointer;
-    border-bottom: 1px solid #eee;
-    color: #555;
     display: flex;
     flex-direction: row;
     align-items: center;
-
-    &:nth-last-child(1) {
-        border-bottom: none;
-    }
-
-    &.selected {
-        background: #666;
-        color: #fff;
-
-        .vui-select-item-remove {
-            color: #fff;
-        }
-    }
+    padding: 8px 5px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
 
     &:hover {
         background: #e8e8e8;
 
         .vui-select-item-remove {
             visibility: visible;
+        }
+    }
+
+    &:nth-last-child(1) {
+        border-bottom: none;
+    }
+
+    &.selected {
+        color: #fff;
+        background: #666;
+
+        .vui-select-item-remove {
+            color: #fff;
         }
     }
 

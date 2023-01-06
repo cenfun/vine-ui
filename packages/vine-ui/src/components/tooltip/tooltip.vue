@@ -304,21 +304,21 @@ onUnmounted(() => {
 .vui-tooltip {
     //pointer-events: none;
     position: absolute;
-    visibility: visible;
     z-index: 1000;
-    opacity: 1;
     margin: 0;
+    visibility: visible;
+    opacity: 1;
     transition: opacity 0.2s linear, visibility 0.2s linear;
 
     .vui-tooltip-content {
-        padding: 10px;
         display: inline-block;
+        padding: 10px;
         font-size: 14px;
+        //IE https://caniuse.com/#feat=wordwrap
+        word-wrap: break-word;
         //https://developer.mozilla.org/zh-CN/docs/Web/CSS/word-break
         word-break: break-word;
         overflow-wrap: break-word;
-        //IE https://caniuse.com/#feat=wordwrap
-        word-wrap: break-word;
     }
 
     .vui-fade-enter-active,

@@ -485,29 +485,29 @@ onUnmounted(() => {
 <style lang="scss">
 .vui-popover {
     position: absolute;
-    visibility: visible;
     z-index: 1000;
-    opacity: 1;
     margin: 0;
     padding: 16px;
+    visibility: visible;
+    opacity: 1;
     transition: opacity 0.2s linear, visibility 0.2s linear;
 
     .vui-popover-header {
+        margin-bottom: 5px;
         padding-bottom: 5px;
         border-bottom: 1px solid #333;
-        margin-bottom: 5px;
 
         .vui-popover-title {
-            font-size: 16px;
             font-weight: bold;
+            font-size: 16px;
         }
     }
 
     .vui-popover-content {
         margin: 0;
         padding: 0;
-        overflow: hidden;
         text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .vui-popover-content-overflow {

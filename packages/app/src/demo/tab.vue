@@ -117,11 +117,11 @@ const tabPanes = ref(['Pane 1', 'Pane 2', function(h) {
 </script>
 <style lang="scss">
 .vui-tab-icon {
+    padding-right: 8px;
     padding-left: 25px;
     background-repeat: no-repeat;
     background-position: 2px center;
     background-size: 18px 18px;
-    padding-right: 8px;
 }
 
 .vui-tab-icon-tools {
@@ -138,15 +138,15 @@ const tabPanes = ref(['Pane 1', 'Pane 2', function(h) {
 
 .vui-fixed-pane {
     height: 100%;
+    padding: 10px;
     border: 1px solid #ccc;
     border-top: none;
-    padding: 10px;
 }
 
 .vui-tab-header-title {
-    font-size: 18px;
-    font-weight: bold;
     padding: 10px;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 .vui-tab-header-left,

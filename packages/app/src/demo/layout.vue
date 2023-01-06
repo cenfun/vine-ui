@@ -136,19 +136,19 @@ const layoutNested = ref('20%,auto,auto,20%');
 }
 
 .vui-layout-iframe {
+    position: relative;
     width: 100px;
     height: 300px;
     margin-right: 5px;
-    position: relative;
 
     &::after {
-        pointer-events: none;
         position: absolute;
-        content: "iframe mouseup area";
-        left: 50%;
         top: 50%;
-        transform: translate(-50%, -50%);
+        left: 50%;
+        content: "iframe mouseup area";
         z-index: 2;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
     }
 
     iframe {
@@ -174,9 +174,9 @@ const layoutNested = ref('20%,auto,auto,20%');
 .vui-layout-custom-gutter {
     .vui-layout-gutter {
         background-image: url("../images/gutter.svg");
-        background-size: 16px 16px;
         background-repeat: no-repeat;
         background-position: center center;
+        background-size: 16px 16px;
     }
 }
 </style>

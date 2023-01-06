@@ -186,7 +186,7 @@ const selectResults = ref([
 
 const onSelectSearch = (e) => {
 
-    //console.log(e);
+    // console.log(e);
     const value = e.target.value;
     if (!value) {
         return;
@@ -200,7 +200,7 @@ const onSelectSearch = (e) => {
         ls.length = Math.ceil(12 * Math.random());
         const str = ls.join(' Text');
         results.push({
-            //only label
+            // only label
             label: `${i + 1}, ${str}`,
             removable: true
         });
@@ -208,14 +208,14 @@ const onSelectSearch = (e) => {
     }
     selectResults.value = results;
 
-    //console.log(v);
+    // console.log(v);
 };
 
 const onSelectRemove = (item) => {
     console.log('onSelectRemove', item);
     const v = item.value;
     selectResults.value = selectResults.value.filter((it) => {
-        //no value here
+        // no value here
         if (it.label === v) {
             return false;
         }

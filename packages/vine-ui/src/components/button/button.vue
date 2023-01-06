@@ -50,22 +50,22 @@ const classList = computed(() => {
 <style lang="scss">
 .vui-button {
     display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    vertical-align: middle;
-    user-select: none;
-    background-color: #f5f5f5;
-    border: 1px solid transparent;
-    padding: 5px 8px;
-    border-radius: 5px;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-    color: #6c757d;
-    border-color: #6c757d;
     min-width: 50px;
     max-width: 200px;
+    padding: 5px 8px;
+    color: #6c757d;
+    font-weight: 400;
     white-space: nowrap;
-    overflow: hidden;
+    text-align: center;
     text-overflow: ellipsis;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    border-color: #6c757d;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    overflow: hidden;
+    user-select: none;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 
     &:focus {
         outline: 0;
@@ -82,19 +82,19 @@ const classList = computed(() => {
 
     &:not(:disabled):hover {
         color: #fff;
-        background-color: #6c757d;
         border-color: #6c757d;
+        background-color: #6c757d;
     }
 
     &.vui-button-primary {
         color: #fff;
-        background-color: #007bff;
         border-color: #007bff;
+        background-color: #007bff;
 
         &:hover {
             color: #fff;
-            background-color: #0069d9;
             border-color: #0062cc;
+            background-color: #0069d9;
         }
 
         &:focus {
@@ -102,10 +102,10 @@ const classList = computed(() => {
         }
 
         &:disabled {
-            opacity: 0.65;
             color: #fff;
-            background-color: #6c757d;
             border-color: #6c757d;
+            background-color: #6c757d;
+            opacity: 0.65;
         }
     }
 }

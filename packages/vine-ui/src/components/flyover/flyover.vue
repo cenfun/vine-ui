@@ -150,9 +150,9 @@ defineExpose({
     position: fixed;
     top: 0;
     z-index: 1000;
-    height: 100%;
-    width: 0;
     display: none;
+    width: 0;
+    height: 100%;
     background-color: #fff;
     animation-duration: 0.2s;
     animation-fill-mode: both;
@@ -171,14 +171,14 @@ defineExpose({
 }
 
 .vui-flyover-show::before {
-    pointer-events: none;
-    content: "";
     position: absolute;
     top: 0;
+    content: "";
     z-index: 10;
     display: block;
-    height: 100%;
     width: 10px;
+    height: 100%;
+    pointer-events: none;
 }
 
 .vui-flyover-right.vui-flyover-show::before {
@@ -193,8 +193,8 @@ defineExpose({
 
 @keyframes vui-slide-in-right {
     from {
-        transform: translate3d(100%, 0, 0);
         visibility: visible;
+        transform: translate3d(100%, 0, 0);
     }
 
     to {
@@ -223,8 +223,8 @@ defineExpose({
 
 @keyframes vui-slide-in-left {
     from {
-        transform: translate3d(-100%, 0, 0);
         visibility: visible;
+        transform: translate3d(-100%, 0, 0);
     }
 
     to {

@@ -72,10 +72,10 @@ const classList = computed(() => {
 <style lang="scss">
 .vui-loading {
     position: relative;
-    pointer-events: none;
+    z-index: 1000;
     display: none;
     overflow: hidden;
-    z-index: 1000;
+    pointer-events: none;
 }
 
 .vui-loading-show {
@@ -118,8 +118,8 @@ const classList = computed(() => {
 
 .vui-loading-center {
     position: absolute;
-    left: 50%;
     top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
 }
 

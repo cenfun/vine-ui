@@ -133,28 +133,28 @@ const clickHandler = (index) => {
     --vui-tab-height: 36px;
 
     position: relative;
-    width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    height: 100%;
 
     .vui-tab-header {
         position: relative;
-        background: var(--vui-tab-background);
-        width: 100%;
         z-index: 10;
+        width: 100%;
         white-space: nowrap;
+        background: var(--vui-tab-background);
         overflow: hidden;
     }
 
     .vui-tab-header-left,
     .vui-tab-header-right {
-        overflow: hidden;
         text-overflow: ellipsis;
+        overflow: hidden;
 
         > * {
-            overflow: hidden;
             text-overflow: ellipsis;
+            overflow: hidden;
         }
     }
 
@@ -182,17 +182,17 @@ const clickHandler = (index) => {
 
     .vui-tab-tabs {
         position: relative;
+        align-items: flex-end;
+        align-self: flex-end;
         height: 100%;
         margin: 0 10px;
-        align-items: flex-end;
         padding-top: 5px;
-        align-self: flex-end;
     }
 
     .vui-tab-panes {
         position: relative;
-        overflow: hidden;
         flex: auto;
+        overflow: hidden;
     }
 }
 </style>
