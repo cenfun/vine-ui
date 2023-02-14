@@ -71,10 +71,12 @@ const showTooltip = function(elem) {
         return;
     }
     elem.$tooltip = VuiTooltip.createComponent({
-        target: elem,
-        borderColor: borderColor.value,
-        bgColor: bgColor.value,
-        html: `<div>${text}</div>`
+        props: {
+            target: elem,
+            borderColor: borderColor.value,
+            bgColor: bgColor.value,
+            html: `<div>${text}</div>`
+        }
     });
 };
 

@@ -38,26 +38,29 @@ const state = reactive({
 
 const openModal = (scroll) => {
     VuiModal.createComponent({
-        title: 'Modal Title'
-    }, (h) => {
+        props: {
+            title: 'Modal Title'
+        },
+        slots: (h) => {
 
-        const list = [h(VuiCheckbox, {
-            label: 'Modal Checkbox'
-        }), h(VuiButton, {
-            label: 'Modal Button'
-        })];
+            const list = [h(VuiCheckbox, {
+                label: 'Modal Checkbox'
+            }), h(VuiButton, {
+                label: 'Modal Button'
+            })];
 
-        if (scroll) {
-            list.push(h('div', {
-                style: 'width:1000px; height: 1000px; background:#f5f5f5'
-            }));
-        }
-
-        return {
-            default: () => {
-                return list;
+            if (scroll) {
+                list.push(h('div', {
+                    style: 'width:1000px; height: 1000px; background:#f5f5f5'
+                }));
             }
-        };
+
+            return {
+                default: () => {
+                    return list;
+                }
+            };
+        }
     });
 };
 

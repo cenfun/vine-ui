@@ -69,7 +69,13 @@ export const destroyComponent = function($el) {
 };
 
 
-export const createComponent = function(props, slots, container) {
+export const createComponent = function(options = {}) {
+
+    const props = options.props;
+    let slots = options.slots;
+    let container = options.container;
+    const beforeMount = options.beforeMount;
+
     const Component = this;
 
     if (typeof slots === 'function') {
@@ -108,6 +114,11 @@ export const createComponent = function(props, slots, container) {
     if (!hasContainer) {
         portalContainer = document.createElement('div');
         container = portalContainer;
+    }
+
+    // for app.use()
+    if (typeof beforeMount === 'function') {
+        beforeMount(app, container);
     }
 
     const component = app.mount(container);

@@ -7,6 +7,6 @@ App.createComponent = createComponent.bind(App);
 // const container = document.createElement('div');
 // container.className = 'vui-app-container';
 // document.body.appendChild(container);
-// App.createComponent({}, null, container);
+// App.createComponent({ container });
 
 App.createComponent();

@@ -214,22 +214,25 @@ const bgColor = ref('');
 
 const openPopover = function(e) {
     VuiPopover.createComponent({
-        target: e.target,
-        title: 'Popover Title',
-        borderColor: borderColor.value,
-        bgColor: bgColor.value
-    }, (h) => {
-        return {
-            default: () => {
-                return [h(VuiCheckbox, {
-                    label: 'Popover Checkbox 1'
-                }), h(VuiCheckbox, {
-                    label: 'Popover Checkbox 2'
-                }), h(VuiCheckbox, {
-                    label: 'Popover Checkbox 3'
-                })];
-            }
-        };
+        props: {
+            target: e.target,
+            title: 'Popover Title',
+            borderColor: borderColor.value,
+            bgColor: bgColor.value
+        },
+        slots: (h) => {
+            return {
+                default: () => {
+                    return [h(VuiCheckbox, {
+                        label: 'Popover Checkbox 1'
+                    }), h(VuiCheckbox, {
+                        label: 'Popover Checkbox 2'
+                    }), h(VuiCheckbox, {
+                        label: 'Popover Checkbox 3'
+                    })];
+                }
+            };
+        }
     });
 };
 

@@ -64,17 +64,20 @@ const flyover = shallowReactive({
 
 
 const createFlyover = () => {
-    return VuiFlyover.createComponent(flyover, (h) => {
-        return {
-            default: () => h('div', {
-                style: 'padding:10px;'
-            }, h(VuiButton, {
-                label: 'Close',
-                onClick() {
-                    flyover.visible = false;
-                }
-            }))
-        };
+    return VuiFlyover.createComponent({
+        props: flyover,
+        slots: (h) => {
+            return {
+                default: () => h('div', {
+                    style: 'padding:10px;'
+                }, h(VuiButton, {
+                    label: 'Close',
+                    onClick() {
+                        flyover.visible = false;
+                    }
+                }))
+            };
+        }
     });
 };
 
