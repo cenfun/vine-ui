@@ -572,6 +572,7 @@ onUnmounted(() => {
     padding: 0;
     box-sizing: border-box;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .vui-layout-auto {
