@@ -8,11 +8,18 @@
       class="vui-modal-window"
       :style="styleWindow"
     >
-      <div class="vui-modal-close">
+      <div
+        v-if="props.closeButton"
+        class="vui-modal-close"
+        @click="onCloseClick"
+      >
         <IconX />
       </div>
       <div class="vui-modal-main vui-flex-column">
-        <div :class="classHeader">
+        <div
+          v-if="props.title"
+          class="vui-modal-header"
+        >
           <BaseRender :content="props.title" />
         </div>
         <div class="vui-modal-content vui-flex-auto">
@@ -41,15 +48,23 @@ const props = defineProps({
         type: String,
         default: ''
     },
+
     content: {
         validator: (v) => true,
         default: ''
     },
+
     padding: {
         type: String,
         default: '20%'
     },
-    headerSpacing: {
+
+    closeButton: {
+        type: Boolean,
+        default: true
+    },
+
+    closeOnClickOut: {
         type: Boolean,
         default: true
     },
@@ -77,13 +92,6 @@ const state = reactive({
     visible: true
 });
 
-const classHeader = computed(() => {
-    const ls = ['vui-modal-header'];
-    if (props.headerSpacing) {
-        ls.push('vui-modal-header-spacing');
-    }
-    return ls;
-});
 
 const styleWindow = computed(() => {
     return {
@@ -108,6 +116,10 @@ const close = () => {
 
 };
 
+const onCloseClick = () => {
+    close();
+};
+
 const documentEvents = {
     click: {
         handler: (e) => {
@@ -122,7 +134,7 @@ const documentEvents = {
 };
 
 const eventHandler = () => {
-    if (state.visible) {
+    if (state.visible && props.closeOnClickOut) {
         setTimeout(() => {
             bindEvents(documentEvents, document);
         }, 100);
@@ -218,14 +230,11 @@ defineExpose({
 }
 
 .vui-modal-header {
+    margin-bottom: 10px;
     padding-bottom: 10px;
     font-weight: bold;
     font-size: 18px;
     border-bottom: 2px solid #333;
-}
-
-.vui-modal-header-spacing {
-    margin-bottom: 10px;
 }
 
 .vui-modal-content {

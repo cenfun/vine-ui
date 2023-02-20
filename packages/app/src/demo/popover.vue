@@ -18,7 +18,7 @@
 
     <VuiFlex spacing="10px">
       <div>12 positions:</div>
-      <div style="position: relative; width: 520px; height: 360px; border: 1px solid #999;">
+      <div class="vui-popover-positions">
         <VuiPopover
           :auto-close="false"
           :bind-resize="false"
@@ -244,6 +244,14 @@ const openPopover = function(e) {
 
 .vui-popover-example .vui-popover-content {
     text-align: center;
+}
+
+.vui-popover-positions {
+    position: relative;
+    z-index: 0;
+    width: 520px;
+    height: 360px;
+    border: 1px solid #999;
 }
 
 </style>

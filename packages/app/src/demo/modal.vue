@@ -3,8 +3,13 @@
     <VuiButton @click="openModal()">
       Open Modal
     </VuiButton>
-    <VuiButton @click="openModal(true)">
-      Open Modal Scrollbar
+
+    <VuiButton @click="openModalScrollbar('Modal With Scrollbar')">
+      With Scrollbar
+    </VuiButton>
+
+    <VuiButton @click="openModalScrollbar()">
+      Without Title
     </VuiButton>
 
     <VuiButton @click="state.modalVisible=!state.modalVisible">
@@ -14,6 +19,7 @@
     <VuiModal
       v-model="state.modalVisible"
       title="Modal Visible"
+      :close-button="false"
     >
       <VuiButton @click="state.modalVisible=false">
         CLose
@@ -36,8 +42,8 @@ const state = reactive({
     modalVisible: false
 });
 
-const openModal = (scroll) => {
-    VuiModal.createComponent({
+const openModal = () => {
+    const modal = VuiModal.createComponent({
         props: {
             title: 'Modal Title'
         },
@@ -46,14 +52,32 @@ const openModal = (scroll) => {
             const list = [h(VuiCheckbox, {
                 label: 'Modal Checkbox'
             }), h(VuiButton, {
-                label: 'Modal Button'
+                label: 'CLose',
+                onClick: () => {
+                    modal.unmount();
+                }
             })];
 
-            if (scroll) {
-                list.push(h('div', {
-                    style: 'width:1000px; height: 1000px; background:#f5f5f5'
-                }));
-            }
+            return {
+                default: () => {
+                    return list;
+                }
+            };
+        }
+    });
+};
+
+const openModalScrollbar = (title) => {
+    VuiModal.createComponent({
+        props: {
+            title,
+            closeOnClickOut: false
+        },
+        slots: (h) => {
+
+            const list = [h('div', {
+                style: 'width:1000px; height: 1000px; background:#f5f5f5'
+            })];
 
             return {
                 default: () => {

@@ -53,7 +53,7 @@ const props = defineProps({
         default: ''
     },
 
-    fastClose: {
+    closeOnClickOut: {
         type: Boolean,
         default: true
     },
@@ -124,7 +124,7 @@ const documentEvents = {
 };
 
 const eventHandler = () => {
-    if (state.visible && props.fastClose) {
+    if (state.visible && props.closeOnClickOut) {
         setTimeout(() => {
             bindEvents(documentEvents, document);
         }, 100);
