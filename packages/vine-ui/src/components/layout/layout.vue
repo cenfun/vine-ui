@@ -568,11 +568,11 @@ onUnmounted(() => {
 .vui-layout-item {
     position: relative;
     flex: 0 0 auto;
+    flex-shrink: 0;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     overflow: hidden;
-    flex-shrink: 0;
 }
 
 .vui-layout-auto {

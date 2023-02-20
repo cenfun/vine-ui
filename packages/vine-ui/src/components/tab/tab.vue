@@ -141,11 +141,11 @@ const clickHandler = (index) => {
     .vui-tab-header {
         position: relative;
         z-index: 10;
+        flex-shrink: 0;
         width: 100%;
         white-space: nowrap;
         background: var(--vui-tab-background);
         overflow: hidden;
-        flex-shrink: 0;
     }
 
     .vui-tab-header-left,

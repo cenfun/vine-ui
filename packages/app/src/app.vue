@@ -30,12 +30,12 @@
       <div
         v-for="(item, i) in list"
         :key="i"
-        class="vui-item vui-flex-row"
+        class="vui-item"
       >
         <div class="vui-item-name">
           {{ item.name }}
         </div>
-        <div class="vui-item-example vui-flex-auto">
+        <div class="vui-item-example">
           <component :is="item.Demo" />
         </div>
       </div>
@@ -132,25 +132,19 @@ body {
 }
 
 .vui-body {
-    padding: 10px;
     overflow-y: auto;
 }
 
 .vui-item {
-    padding: 5px;
-    border-bottom: 1px dotted #ccc;
+    padding: 10px;
+    border-bottom: 1px solid #999;
 }
 
 .vui-item-name {
-    width: 99px;
-    padding: 5px 5px 5px 0;
+    padding: 10px 0;
     color: #000;
-    overflow: hidden;
-}
-
-.vui-item-example {
-    padding: 5px 5px 5px 10px;
-    border-left: 1px solid #ccc;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 </style>
