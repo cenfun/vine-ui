@@ -2,6 +2,7 @@
   <button
     :type="props.type"
     :class="classList"
+    :style="styleMap"
     :disabled="props.disabled"
   >
     <slot>
@@ -26,6 +27,10 @@ const props = defineProps({
         type: String,
         default: 'button'
     },
+    width: {
+        type: String,
+        default: ''
+    },
     disabled: {
         type: Boolean,
         default: false
@@ -44,6 +49,14 @@ const classList = computed(() => {
     }
     ls.push(cid);
     return ls;
+});
+
+const styleMap = computed(() => {
+    const st = {};
+    if (props.width) {
+        st.width = props.width;
+    }
+    return st;
 });
 
 </script>

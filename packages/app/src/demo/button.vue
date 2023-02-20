@@ -19,6 +19,10 @@
     >
       Button Primary
     </VuiButton>
+
+    <VuiButton width="120px">
+      width: 120px Button
+    </VuiButton>
   </VuiFlex>
 </template>
 
