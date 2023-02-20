@@ -145,6 +145,7 @@ const clickHandler = (index) => {
         white-space: nowrap;
         background: var(--vui-tab-background);
         overflow: hidden;
+        flex-shrink: 0;
     }
 
     .vui-tab-header-left,
