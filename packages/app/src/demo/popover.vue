@@ -195,33 +195,41 @@
         <option>red</option>
       </VuiSelect>
     </VuiFlex>
+
+
     <VuiFlex spacing="20px">
       <VuiButton
         class="target1"
-        @click="onPopoverVisibleClick(1)"
+        @click="onPopoverVisibleClick1"
       >
         Popover v-modal 1
       </VuiButton>
       <div class="vui-flex-empty" />
       <VuiButton
         class="target2"
-        @click="onPopoverVisibleClick(2)"
+        @click="onPopoverVisibleClick2"
       >
         Popover v-modal 2
       </VuiButton>
     </VuiFlex>
-    <VuiPopover
-      v-model="state.popoverVisible1"
-      target=".target1"
-    >
-      Popover v-modal 1
-    </VuiPopover>
-    <VuiPopover
-      v-model="state.popoverVisible2"
-      target=".target2"
-    >
-      Popover v-modal 2
-    </VuiPopover>
+
+    <div class="vui-popover-no-margin">
+      <VuiPopover
+        v-model="state.popoverVisible1"
+        target=".target1"
+      >
+        Popover v-modal 1
+      </VuiPopover>
+      <VuiPopover
+        v-model="state.popoverVisible2"
+        target=".target2"
+        title="Popover Title"
+      >
+        <VuiCheckbox>Popover Checkbox 1</VuiCheckbox>
+        <VuiCheckbox>Popover Checkbox 2</VuiCheckbox>
+        <VuiCheckbox>Popover Checkbox 3</VuiCheckbox>
+      </VuiPopover>
+    </div>
   </div>
 </template>
 
@@ -247,16 +255,8 @@ const state = reactive({
 let popover;
 let popoverTarget;
 const openPopover = function(e) {
-    if (popover) {
-        popover.unmount();
-        popover = null;
-
-        // console.log('popoverTarget', popoverTarget, e.target);
-
-        if (popoverTarget === e.target) {
-            popoverTarget = null;
-            return;
-        }
+    if (popover && popoverTarget === e.target) {
+        return;
     }
 
     popoverTarget = e.target;
@@ -266,8 +266,12 @@ const openPopover = function(e) {
             title: 'Popover Title',
             borderColor: state.borderColor,
             bgColor: state.bgColor,
+            onBeforeClose: () => {
+                console.log('before close');
+            },
             onClose: () => {
                 popover = null;
+                popoverTarget = null;
             }
         },
         slots: (h) => {
@@ -286,14 +290,23 @@ const openPopover = function(e) {
     });
 };
 
-const onPopoverVisibleClick = (i) => {
-    state[`popoverVisible${i}`] = !state[`popoverVisible${i}`];
+const onPopoverVisibleClick1 = (e) => {
+    state.popoverVisible1 = !state.popoverVisible1;
+};
+
+const onPopoverVisibleClick2 = (e) => {
+    state.popoverVisible2 = !state.popoverVisible2;
+    // openPopover(e);
 };
 
 </script>
 <style>
 .vui-popover-example > *:not(:first-child) {
     margin-top: 10px;
+}
+
+.vui-popover-no-margin {
+    margin: 0;
 }
 
 .vui-popover-example .vui-popover-content {

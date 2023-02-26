@@ -136,7 +136,7 @@ const props = defineProps({
 
 });
 
-const emit = defineEmits(['update:modelValue', 'update', 'close']);
+const emit = defineEmits(['update:modelValue', 'update', 'beforeClose', 'close']);
 
 const modelVisible = computed({
     get() {
@@ -306,14 +306,14 @@ const bindCloseEvent = () => {
     unbindCloseEvent();
     if (props.autoClose && data.visible) {
         timeout_close = setTimeout(() => {
-            window.addEventListener('click', clickHandler);
+            window.addEventListener('click', clickHandler, true);
             window.addEventListener('keydown', keydownHandler);
         }, 10);
     }
 };
 
 const unbindCloseEvent = () => {
-    window.removeEventListener('click', clickHandler);
+    window.removeEventListener('click', clickHandler, true);
     window.removeEventListener('keydown', keydownHandler);
 };
 
@@ -321,7 +321,12 @@ const clickHandler = (e) => {
     if (isInnerElement(e.target)) {
         return;
     }
-    close();
+    emit('beforeClose');
+
+    // async to make sure get previous visible outside
+    setTimeout(() => {
+        close();
+    });
 };
 
 const keydownHandler = (e) => {
@@ -405,7 +410,9 @@ const updateSync = () => {
     const rect = getRect(`.${cid}`);
     const positions = props.positions;
 
-    // console.log(containerRect, targetRect, rect);
+    // console.log('containerRect', containerRect);
+    // console.log('targetRect', targetRect);
+    // console.log('rect', rect);
 
     positionInfo = getBestPosition(
         containerRect,
@@ -415,6 +422,8 @@ const updateSync = () => {
         // previous position info for keeping position if has animation (dynamic size)
         positionInfo
     );
+
+    // console.log('positionInfo', positionInfo);
 
     let noChange = true;
     for (const k in data.info) {
