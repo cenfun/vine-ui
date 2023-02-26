@@ -2,7 +2,7 @@
   <div :class="classList">
     <input
       :id="cid"
-      v-model="modelChecked"
+      v-model="data.checked"
       :disabled="props.disabled"
       type="checkbox"
     >
@@ -15,7 +15,9 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import {
+    reactive, watch, watchEffect
+} from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
 
 const { cid } = useBase('VuiCheckbox');
@@ -23,18 +25,22 @@ const { cid } = useBase('VuiCheckbox');
 const classList = ['vui', 'vui-checkbox', cid];
 
 const props = defineProps({
+
     label: {
         type: String,
         default: ''
     },
+
     disabled: {
         type: Boolean,
         default: false
     },
+
     checked: {
         type: Boolean,
         default: false
     },
+
     modelValue: {
         type: Boolean,
         default: null
@@ -43,16 +49,16 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const modelChecked = computed({
-    get() {
-        if (props.modelValue === null) {
-            return props.checked;
-        }
-        return props.modelValue;
-    },
-    set(v) {
-        emit('update:modelValue', v);
-    }
+const data = reactive({
+    checked: false
+});
+
+watchEffect(() => {
+    data.checked = props.modelValue === null ? props.checked : props.modelValue;
+});
+
+watch(() => data.checked, () => {
+    emit('update:modelValue', data.checked);
 });
 
 </script>
