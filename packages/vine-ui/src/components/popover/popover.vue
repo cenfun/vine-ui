@@ -114,6 +114,11 @@ const props = defineProps({
         default: ''
     },
 
+    color: {
+        type: String,
+        default: ''
+    },
+
     content: {
         validator: (v) => true,
         default: ''
@@ -196,6 +201,9 @@ const styleList = computed(() => {
     }
     if (props.bgColor) {
         st['--vui-popup-bg-color'] = props.bgColor;
+    }
+    if (props.color) {
+        st['--vui-popup-color'] = props.color;
     }
 
     return st;

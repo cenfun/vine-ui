@@ -28,6 +28,7 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           bottom-right
         </VuiPopover>
@@ -40,6 +41,7 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           bottom-center
         </VuiPopover>
@@ -52,6 +54,7 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           bottom-left
         </VuiPopover>
@@ -65,6 +68,7 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           left-bottom
         </VuiPopover>
@@ -78,6 +82,7 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           left-center
         </VuiPopover>
@@ -91,6 +96,7 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           left-top
         </VuiPopover>
@@ -104,6 +110,7 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           top-left
         </VuiPopover>
@@ -117,6 +124,7 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           top-center
         </VuiPopover>
@@ -130,6 +138,7 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           top-right
         </VuiPopover>
@@ -143,6 +152,7 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           right-top
         </VuiPopover>
@@ -156,6 +166,7 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           right-center
         </VuiPopover>
@@ -169,31 +180,45 @@
           :width="100"
           :border-color="state.borderColor"
           :bg-color="state.bgColor"
+          :color="state.color"
         >
           right-bottom
         </VuiPopover>
       </div>
 
-      <VuiSelect
-        v-model="state.borderColor"
-        label="border color:"
+      <VuiFlex
+        direction="column"
+        spacing="10px"
       >
-        <option />
-        <option>gray</option>
-        <option>green</option>
-        <option>red</option>
-        <option>#000</option>
-      </VuiSelect>
+        <VuiSelect v-model="state.borderColor">
+          <option value="">
+            borderColor
+          </option>
+          <option>gray</option>
+          <option>green</option>
+          <option>red</option>
+          <option>#000</option>
+        </VuiSelect>
 
-      <VuiSelect
-        v-model="state.bgColor"
-        label="bg color:"
-      >
-        <option />
-        <option>gray</option>
-        <option>green</option>
-        <option>red</option>
-      </VuiSelect>
+        <VuiSelect v-model="state.bgColor">
+          <option value="">
+            bgColor
+          </option>
+          <option>gray</option>
+          <option>green</option>
+          <option>red</option>
+        </VuiSelect>
+
+        <VuiSelect v-model="state.color">
+          <option value="">
+            color
+          </option>
+          <option>#ffffff</option>
+          <option>gray</option>
+          <option>green</option>
+          <option>red</option>
+        </VuiSelect>
+      </VuiFlex>
     </VuiFlex>
 
 
@@ -247,6 +272,7 @@ const {
 const state = reactive({
     borderColor: '',
     bgColor: '',
+    color: '',
 
     popoverVisible1: false,
     popoverVisible2: false
@@ -266,6 +292,7 @@ const openPopover = function(e) {
             title: 'Popover Title',
             borderColor: state.borderColor,
             bgColor: state.bgColor,
+            color: state.color,
             onBeforeClose: () => {
                 console.log('before close');
             },

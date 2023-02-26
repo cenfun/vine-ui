@@ -1,13 +1,10 @@
-
+import components from './components.js';
+import bindTooltips from './util/bind-tooltips.js';
 import { createComponent, destroyComponent } from './base/base.js';
-import generateComponents from './util/generate-components.js';
-
-const context = require.context('./components', true, /\.vue$/);
-const components = generateComponents(context);
-// console.log(components);
 
 export {
     components,
+    bindTooltips,
     createComponent,
     destroyComponent
 };

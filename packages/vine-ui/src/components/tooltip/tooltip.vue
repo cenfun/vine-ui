@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="data.visible"
+    v-show="modelVisible"
     ref="el"
     :class="classList"
     :style="styleList"
@@ -22,14 +22,12 @@
 <script setup>
 
 import {
-    computed, onMounted, onUnmounted, reactive, ref, watchEffect, nextTick
+    computed, onMounted, onUnmounted, reactive, ref, nextTick, watch
 } from 'vue';
-import {
-    useBase, BaseRender, destroyComponent
-} from '../../base/base.js';
+import { useBase, BaseRender } from '../../base/base.js';
 
 import {
-    getDefaultPositions, getBestPosition, getRect, getElement
+    getDefaultPositions, getBestPosition, getRect
 } from '../../base/base-popup.js';
 
 const { cid } = useBase('VuiTooltip');
@@ -56,11 +54,6 @@ const props = defineProps({
         default: ''
     },
 
-    bindTarget: {
-        type: Boolean,
-        default: false
-    },
-
     positions: {
         type: [String, Array],
         default: () => {
@@ -78,6 +71,11 @@ const props = defineProps({
         default: ''
     },
 
+    color: {
+        type: String,
+        default: ''
+    },
+
     content: {
         validator: (v) => true,
         default: ''
@@ -88,20 +86,42 @@ const props = defineProps({
         default: ''
     },
 
+    disabled: {
+        type: Boolean,
+        default: false
+    },
+
     visible: {
         type: Boolean,
         default: true
     },
 
-    disabled: {
+    modelValue: {
         type: Boolean,
-        default: false
+        default: null
     }
 
 });
 
+const emit = defineEmits(['update:modelValue', 'update', 'close']);
+
+const modelVisible = computed({
+    get() {
+        if (props.modelValue === null) {
+            return props.visible;
+        }
+        return props.modelValue;
+    },
+    set(v) {
+        emit('update:modelValue', v);
+    }
+});
+
+const el = ref(null);
+let $el;
+
 const data = reactive({
-    visible: false,
+    visible: modelVisible,
     position: 'top',
     align: 'center',
     top: 0,
@@ -131,103 +151,27 @@ const styleList = computed(() => {
     if (props.bgColor) {
         st['--vui-popup-bg-color'] = props.bgColor;
     }
+    if (props.color) {
+        st['--vui-popup-color'] = props.color;
+    }
 
     return st;
 });
 
-const el = ref(null);
-let $el;
-let $target;
-
-const emit = defineEmits(['update', 'close']);
-
 // ====================================================================================================
 
-watchEffect(() => {
-    data.visible = props.visible;
-    if (props.bindTarget) {
-        data.visible = false;
+watch(() => data.visible, () => {
+    if (!$el) {
+        return;
     }
-    if ($el) {
-        visibleHandler();
-    }
-});
 
-
-const bindEvents = () => {
-    bindTargetEvent();
-};
-
-const unbindEvents = () => {
-    unbindTargetEvent();
-};
-
-const visibleHandler = () => {
     if (data.visible) {
-        nextTick(() => {
-            update();
-        });
+        update();
     } else {
         emit('close');
     }
-};
+});
 
-// =============================================================================
-
-const bindTargetEvent = () => {
-    if (!props.bindTarget) {
-        return;
-    }
-    $target = getElement(props.target);
-    if ($target) {
-        $target.addEventListener('mouseenter', openHandler);
-        $target.addEventListener('focus', openHandler);
-        $target.addEventListener('mouseleave', closeHandler);
-        $target.addEventListener('blur', closeHandler);
-    }
-};
-
-const unbindTargetEvent = () => {
-    if ($target) {
-        $target.removeEventListener('mouseenter', openHandler);
-        $target.removeEventListener('focus', openHandler);
-        $target.removeEventListener('mouseleave', closeHandler);
-        $target.removeEventListener('blur', closeHandler);
-        $target = null;
-    }
-};
-
-const openHandler = () => {
-    if (data.visible) {
-        return;
-    }
-    if (props.disabled) {
-        return;
-    }
-    data.visible = true;
-};
-
-const closeHandler = () => {
-    if (!data.visible) {
-        return;
-    }
-    if (props.disabled) {
-        return;
-    }
-    if ($target) {
-        data.visible = false;
-    } else {
-        destroyComponent($el);
-    }
-};
-
-// =============================================================================
-
-const update = () => {
-    nextTick(() => {
-        updateSync();
-    });
-};
 
 const updateSync = () => {
     if (!data.visible) {
@@ -273,9 +217,13 @@ const updateSync = () => {
     emit('update');
 };
 
+const update = () => {
+    nextTick(() => {
+        updateSync();
+    });
+};
 
 // ====================================================================================================
-
 
 onMounted(() => {
     $el = el.value;
@@ -289,12 +237,11 @@ onMounted(() => {
         $content.innerHTML = props.html;
     }
 
-    bindEvents();
     update();
+
 });
 
 onUnmounted(() => {
-    unbindEvents();
     emit('close');
 });
 
