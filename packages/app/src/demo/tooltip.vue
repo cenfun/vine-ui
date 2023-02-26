@@ -57,9 +57,7 @@
         v-model="state.tooltipVisible"
         target=".tooltip-target1"
       >
-        <VuiSwitch checked>
-          slots in tooltip
-        </VuiSwitch>
+        <b>slots in tooltip</b>
       </VuiTooltip>
     </div>
   </div>
@@ -73,7 +71,6 @@ const {
     VuiButton,
     VuiFlex,
     VuiSelect,
-    VuiSwitch,
     VuiTooltip
 } = components;
 

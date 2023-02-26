@@ -21,7 +21,9 @@
   </div>
 </template>
 <script setup>
-import { computed, reactive } from 'vue';
+import {
+    computed, reactive, watch, watchEffect
+} from 'vue';
 import {
     useBase, BaseRender, getSlot
 } from '../../base/base.js';
@@ -73,36 +75,32 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const data = reactive({
-    checked: props.checked
+    checked: false
 });
 
-const modelChecked = computed({
-    get() {
-        if (props.modelValue === null) {
-            return data.checked;
-        }
-        return props.modelValue;
-    },
-    set(v) {
-        data.checked = v;
-        emit('update:modelValue', v);
-    }
+watchEffect(() => {
+    data.checked = props.modelValue === null ? props.checked : props.modelValue;
 });
+
+watch(() => data.checked, () => {
+    emit('update:modelValue', data.checked);
+});
+
 
 const buttonClassList = computed(() => {
     return {
         'vui-switch-button': true,
-        'vui-switch-checked': modelChecked.value,
+        'vui-switch-checked': data.checked,
         'vui-switch-disabled': props.disabled
     };
 });
 
 const buttonStyleList = computed(() => {
 
-    let bgc = modelChecked.value ? defaultColors[1] : defaultColors[0];
+    let bgc = data.checked ? defaultColors[1] : defaultColors[0];
     if (props.colors) {
         const ls = `${props.colors}`.split(',').map((it) => it.trim());
-        if (modelChecked.value && ls[1]) {
+        if (data.checked && ls[1]) {
             bgc = ls[1];
         } else if (ls[0]) {
             bgc = ls[0];
@@ -120,7 +118,7 @@ const buttonStyleList = computed(() => {
 const iconStyleList = computed(() => {
     return {
         width: `calc(${props.height} - 4px)`,
-        right: modelChecked.value ? '2px' : `calc(${props.width} - ${props.height} + 2px)`
+        right: data.checked ? '2px' : `calc(${props.width} - ${props.height} + 2px)`
     };
 });
 
@@ -132,7 +130,7 @@ const clickHandler = () => {
     if (props.disabled) {
         return;
     }
-    modelChecked.value = !modelChecked.value;
+    data.checked = !data.checked;
 };
 
 </script>
