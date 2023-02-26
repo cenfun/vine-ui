@@ -18,6 +18,10 @@ export const toNum = function(num, toInt) {
     return num;
 };
 
+export const clamp = function(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+};
+
 export const isList = function(data) {
     if (data && data instanceof Array && data.length > 0) {
         return true;
@@ -70,8 +74,15 @@ export const getValue = function(data, dotPathStr, defaultValue) {
     return defaultValue;
 };
 
-export const clamp = function(value, min, max) {
-    return Math.max(min, Math.min(max, value));
+export const toCssUnit = function(value) {
+    if (typeof value === 'undefined' || value === null) {
+        return value;
+    }
+    const s = `${value}`.trim();
+    if (parseInt(s).toString() === s) {
+        return `${s}px`;
+    }
+    return s;
 };
 
 export const unbindEvents = function(events) {

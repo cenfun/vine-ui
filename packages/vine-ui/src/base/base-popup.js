@@ -32,19 +32,19 @@ export const toRect = (obj) => {
 };
 
 export const getElement = (selector) => {
-    if (typeof selector !== 'string') {
-        if (isDocument(selector)) {
-            return selector.body;
+    if (typeof selector === 'string' && selector) {
+        if (selector.startsWith('#')) {
+            return document.getElementById(selector.slice(1));
         }
-        if (isElement(selector)) {
-            return selector;
-        }
-        return;
+        return document.querySelector(selector);
     }
-    if (selector.startsWith('#')) {
-        return document.getElementById(selector.substr(1));
+
+    if (isDocument(selector)) {
+        return selector.body;
     }
-    return document.querySelector(selector);
+    if (isElement(selector)) {
+        return selector;
+    }
 };
 
 export const getRect = (target, padding = 0) => {
@@ -342,10 +342,16 @@ const getTypeList = (positions, defaultList) => {
 export const getBestPosition = (containerRect, targetRect, rect, positions, previousInfo) => {
 
     const defaultList = getDefaultPositions();
+
+    let withOrder = true;
     let typeList = getTypeList(positions, defaultList);
     if (!typeList) {
         typeList = defaultList;
+        withOrder = false;
     }
+
+    // console.log('typeList', typeList);
+    // console.log('withOrder', withOrder);
 
     const infoList = typeList.map((type, i) => {
         return calculatePositionInfo(defaultPositions[type], i, type, containerRect, targetRect, rect, previousInfo);
@@ -357,6 +363,9 @@ export const getBestPosition = (containerRect, targetRect, rect, positions, prev
         }
         if (previousInfo && a.priority === 2) {
             return a.change - b.change;
+        }
+        if (withOrder) {
+            return a.index - b.index;
         }
         if (a.space !== b.space) {
             return b.space - a.space;

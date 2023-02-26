@@ -28,7 +28,10 @@
       Hide
     </VuiButton>
 
-    <VuiButton @click="destroyFlyover()">
+    <VuiButton
+      tooltip="Destroy Flyover"
+      @click="destroyFlyover()"
+    >
       Destroy
     </VuiButton>
 

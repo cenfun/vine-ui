@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="data.visible"
+    v-show="modelVisible"
     ref="el"
     :class="classList"
     :style="styleList"
@@ -15,7 +15,7 @@
         :style="styleBody"
       >
         <div
-          v-if="data.headerVisible"
+          v-if="props.title"
           class="vui-popover-header"
         >
           <slot name="header">
@@ -37,15 +37,17 @@
 
 <script setup>
 import {
-    computed, onMounted, onUnmounted, reactive, ref, watchEffect, nextTick
+    computed, onMounted, onUnmounted, reactive, ref, nextTick, watch
 } from 'vue';
 import {
     useBase, BaseRender, destroyComponent
 } from '../../base/base.js';
 
 import {
-    getDefaultPositions, getBestPosition, getRect, getElement, toRect
+    getBestPosition, getRect, getElement, toRect
 } from '../../base/base-popup.js';
+
+import { toCssUnit } from '../../util/util.js';
 
 const { cid } = useBase('VuiPopover');
 
@@ -57,12 +59,17 @@ const props = defineProps({
         default: ''
     },
 
+    target: {
+        validator: (v) => true,
+        default: ''
+    },
+
     autoClose: {
         type: Boolean,
         default: true
     },
 
-    hasHeader: {
+    autoDestroy: {
         type: Boolean,
         default: true
     },
@@ -78,7 +85,7 @@ const props = defineProps({
     },
 
     width: {
-        type: Number,
+        type: [Number, String],
         default: 200
     },
 
@@ -92,21 +99,9 @@ const props = defineProps({
         default: 800
     },
 
-    target: {
-        validator: (v) => true,
-        default: ''
-    },
-
-    bindTarget: {
-        type: Boolean,
-        default: false
-    },
-
     positions: {
         type: [String, Array],
-        default: () => {
-            return getDefaultPositions();
-        }
+        default: null
     },
 
     borderColor: {
@@ -132,13 +127,37 @@ const props = defineProps({
     visible: {
         type: Boolean,
         default: true
+    },
+
+    modelValue: {
+        type: Boolean,
+        default: null
     }
 
 });
 
+const emit = defineEmits(['update:modelValue', 'update', 'close']);
+
+const modelVisible = computed({
+    get() {
+        if (props.modelValue === null) {
+            return props.visible;
+        }
+        return props.modelValue;
+    },
+    set(v) {
+        emit('update:modelValue', v);
+    }
+});
+
+const el = ref(null);
+let $el;
+
+let positionInfo;
+let timeout_close;
+
 const data = reactive({
-    visible: false,
-    headerVisible: true,
+    visible: modelVisible,
     contentOverflow: false,
     // calculation info
     info: {
@@ -150,6 +169,8 @@ const data = reactive({
         height: 'auto'
     }
 });
+
+// ====================================================================================================
 
 const classList = computed(() => {
     return [
@@ -182,8 +203,7 @@ const styleList = computed(() => {
 
 const styleBody = computed(() => {
     return {
-        // TODO px
-        width: `${props.width}px`
+        width: toCssUnit(props.width)
     };
 });
 
@@ -199,29 +219,11 @@ const classContent = computed(() => {
 
 // ====================================================================================================
 
-const el = ref(null);
-let $el;
-
-const emit = defineEmits(['update', 'close']);
-
-let positionInfo;
-let $target;
-let timeout_close;
-
-// ====================================================================================================
-watchEffect(() => {
-    data.headerVisible = props.hasHeader;
-    if (data.headerVisible && !props.title) {
-        data.headerVisible = false;
+watch(() => data.visible, () => {
+    if (!$el) {
+        return;
     }
-    data.visible = props.visible;
-    if ($el) {
-        visibleHandler();
-    }
-});
 
-
-const visibleHandler = () => {
     if (data.visible) {
         bindResizeEvent();
         bindScrollEvent();
@@ -234,46 +236,18 @@ const visibleHandler = () => {
         positionInfo = null;
         emit('close');
     }
-};
+});
 
 const bindEvents = () => {
-    bindTargetEvent();
     bindResizeEvent();
     bindScrollEvent();
     bindCloseEvent();
 };
 
 const unbindEvents = () => {
-    unbindTargetEvent();
     unbindResizeEvent();
     unbindScrollEvent();
     unbindCloseEvent();
-};
-
-// =============================================================================
-
-const bindTargetEvent = () => {
-    if (!props.bindTarget) {
-        return;
-    }
-    $target = getElement(props.target);
-    if ($target) {
-        $target.addEventListener('click', openHandler);
-    }
-};
-
-const unbindTargetEvent = () => {
-    if ($target) {
-        $target.removeEventListener('click', openHandler);
-        $target = null;
-    }
-};
-
-const openHandler = () => {
-    if (data.visible) {
-        return;
-    }
-    data.visible = true;
 };
 
 // =============================================================================
@@ -332,14 +306,14 @@ const bindCloseEvent = () => {
     unbindCloseEvent();
     if (props.autoClose && data.visible) {
         timeout_close = setTimeout(() => {
-            window.addEventListener('mousedown', clickHandler);
+            window.addEventListener('click', clickHandler);
             window.addEventListener('keydown', keydownHandler);
         }, 10);
     }
 };
 
 const unbindCloseEvent = () => {
-    window.removeEventListener('mousedown', clickHandler);
+    window.removeEventListener('click', clickHandler);
     window.removeEventListener('keydown', keydownHandler);
 };
 
@@ -361,10 +335,10 @@ const keydownHandler = (e) => {
 // =============================================================================
 
 const isInnerElement = (elem) => {
-    if ($el === elem) {
+    if ($el === elem || $el.contains(elem)) {
         return true;
     }
-    return $el.contains(elem);
+    return false;
 };
 
 const isParentElement = (elem) => {
@@ -383,13 +357,16 @@ const isParentElement = (elem) => {
     return false;
 };
 
+// =============================================================================
+
 const close = () => {
     if (!data.visible) {
         return;
     }
-    if ($target) {
-        data.visible = false;
-    } else {
+    data.visible = false;
+
+    // if not create by createComponent API will be not destroy because no $el keep
+    if (props.autoDestroy) {
         destroyComponent($el);
     }
 };

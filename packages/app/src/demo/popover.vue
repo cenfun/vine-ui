@@ -1,17 +1,17 @@
 <template>
   <div class="vui-popover-example">
     <VuiFlex spacing="20px">
-      <VuiButton @click.native="openPopover">
+      <VuiButton @click="openPopover">
         Open Popover
       </VuiButton>
-      <VuiButton @click.native="openPopover">
+      <VuiButton @click="openPopover">
         Open Popover
       </VuiButton>
       <div class="vui-flex-empty" />
-      <VuiButton @click.native="openPopover">
+      <VuiButton @click="openPopover">
         Open Popover
       </VuiButton>
-      <VuiButton @click.native="openPopover">
+      <VuiButton @click="openPopover">
         Open Popover
       </VuiButton>
     </VuiFlex>
@@ -26,8 +26,8 @@
           positions="bottom-right"
           :target="{left:10,top:10}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           bottom-right
         </VuiPopover>
@@ -38,8 +38,8 @@
           positions="bottom-center"
           :target="{left:260,top:10}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           bottom-center
         </VuiPopover>
@@ -50,8 +50,8 @@
           positions="bottom-left"
           :target="{left:510,top:10}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           bottom-left
         </VuiPopover>
@@ -63,8 +63,8 @@
           positions="left-bottom"
           :target="{left:510,top:90}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           left-bottom
         </VuiPopover>
@@ -76,8 +76,8 @@
           positions="left-center"
           :target="{left:510,top:180}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           left-center
         </VuiPopover>
@@ -89,8 +89,8 @@
           positions="left-top"
           :target="{left:510,top:270}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           left-top
         </VuiPopover>
@@ -102,8 +102,8 @@
           positions="top-left"
           :target="{left:510,top:350}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           top-left
         </VuiPopover>
@@ -115,8 +115,8 @@
           positions="top-center"
           :target="{left:260,top:350}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           top-center
         </VuiPopover>
@@ -128,8 +128,8 @@
           positions="top-right"
           :target="{left:10,top:350}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           top-right
         </VuiPopover>
@@ -141,8 +141,8 @@
           positions="right-top"
           :target="{left:10,top:270}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           right-top
         </VuiPopover>
@@ -154,8 +154,8 @@
           positions="right-center"
           :target="{left:10,top:180}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           right-center
         </VuiPopover>
@@ -167,15 +167,15 @@
           positions="right-bottom"
           :target="{left:10,top:90}"
           :width="100"
-          :border-color="borderColor"
-          :bg-color="bgColor"
+          :border-color="state.borderColor"
+          :bg-color="state.bgColor"
         >
           right-bottom
         </VuiPopover>
       </div>
 
       <VuiSelect
-        v-model="borderColor"
+        v-model="state.borderColor"
         label="border color:"
       >
         <option />
@@ -186,7 +186,7 @@
       </VuiSelect>
 
       <VuiSelect
-        v-model="bgColor"
+        v-model="state.bgColor"
         label="bg color:"
       >
         <option />
@@ -195,12 +195,39 @@
         <option>red</option>
       </VuiSelect>
     </VuiFlex>
+    <VuiFlex spacing="20px">
+      <VuiButton
+        class="target1"
+        @click="onPopoverVisibleClick(1)"
+      >
+        Popover v-modal 1
+      </VuiButton>
+      <div class="vui-flex-empty" />
+      <VuiButton
+        class="target2"
+        @click="onPopoverVisibleClick(2)"
+      >
+        Popover v-modal 2
+      </VuiButton>
+    </VuiFlex>
+    <VuiPopover
+      v-model="state.popoverVisible1"
+      target=".target1"
+    >
+      Popover v-modal 1
+    </VuiPopover>
+    <VuiPopover
+      v-model="state.popoverVisible2"
+      target=".target2"
+    >
+      Popover v-modal 2
+    </VuiPopover>
   </div>
 </template>
 
 <script setup>
 import VineUI from 'vine-ui';
-import { ref } from 'vue';
+import { reactive } from 'vue';
 const {
     VuiButton,
     VuiCheckbox,
@@ -209,16 +236,39 @@ const {
     VuiSelect
 } = VineUI;
 
-const borderColor = ref('');
-const bgColor = ref('');
+const state = reactive({
+    borderColor: '',
+    bgColor: '',
 
+    popoverVisible1: false,
+    popoverVisible2: false
+});
+
+let popover;
+let popoverTarget;
 const openPopover = function(e) {
-    VuiPopover.createComponent({
+    if (popover) {
+        popover.unmount();
+        popover = null;
+
+        // console.log('popoverTarget', popoverTarget, e.target);
+
+        if (popoverTarget === e.target) {
+            popoverTarget = null;
+            return;
+        }
+    }
+
+    popoverTarget = e.target;
+    popover = VuiPopover.createComponent({
         props: {
-            target: e.target,
+            target: popoverTarget,
             title: 'Popover Title',
-            borderColor: borderColor.value,
-            bgColor: bgColor.value
+            borderColor: state.borderColor,
+            bgColor: state.bgColor,
+            onClose: () => {
+                popover = null;
+            }
         },
         slots: (h) => {
             return {
@@ -236,10 +286,14 @@ const openPopover = function(e) {
     });
 };
 
+const onPopoverVisibleClick = (i) => {
+    state[`popoverVisible${i}`] = !state[`popoverVisible${i}`];
+};
+
 </script>
 <style>
-.vui-popover-example > *:first-child {
-    margin-bottom: 10px;
+.vui-popover-example > *:not(:first-child) {
+    margin-top: 10px;
 }
 
 .vui-popover-example .vui-popover-content {
