@@ -48,7 +48,7 @@
     </VuiTab>
 
     <VuiTab
-      v-model="tabActive"
+      :index="1"
       align="right"
       background="#cdcdcd"
       :left="'Left Header Props ' + tabActive"

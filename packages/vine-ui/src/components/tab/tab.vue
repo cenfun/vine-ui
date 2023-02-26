@@ -14,7 +14,7 @@
           v-for="(item, i) in tabList"
           :key="i"
           :content="item"
-          :selected="modelData===i"
+          :selected="data.index===i"
           @click="clickHandler(i)"
         />
       </div>
@@ -29,19 +29,23 @@
         v-for="(item, i) in paneList"
         :key="i"
         :content="item"
-        :selected="modelData===i"
+        :selected="data.index===i"
       />
     </div>
   </div>
 </template>
 <script setup>
-import { computed } from 'vue';
+import {
+    computed, watch, watchEffect, reactive
+} from 'vue';
 import {
     useBase, BaseRender, getSlot
 } from '../../base/base.js';
 
 import TabItem from './tab-item.vue';
 import TabPane from './tab-pane.vue';
+
+const { cid } = useBase('VuiTab');
 
 const props = defineProps({
     align: {
@@ -75,13 +79,31 @@ const props = defineProps({
         type: String,
         default: ''
     },
-    modelValue: {
+
+    index: {
         type: Number,
         default: 0
+    },
+
+    modelValue: {
+        type: Number,
+        default: null
     }
 });
 
-const { cid } = useBase('VuiTab');
+const emit = defineEmits(['update:modelValue']);
+
+const data = reactive({
+    index: 0
+});
+
+watchEffect(() => {
+    data.index = props.modelValue === null ? props.index : props.modelValue;
+});
+
+watch(() => data.index, () => {
+    emit('update:modelValue', data.index);
+});
 
 const classList = computed(() => {
     return [
@@ -111,20 +133,8 @@ const paneList = computed(() => {
     return props.panes || getSlot('panes') || getSlot() || [];
 });
 
-const emit = defineEmits(['update:modelValue']);
-
-// TODO if no v-model
-const modelData = computed({
-    get() {
-        return props.modelValue;
-    },
-    set(v) {
-        emit('update:modelValue', v);
-    }
-});
-
 const clickHandler = (index) => {
-    modelData.value = index;
+    data.index = index;
 };
 
 </script>
