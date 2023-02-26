@@ -21,68 +21,88 @@
   </div>
 </template>
 <script setup>
-import {
-    computed, reactive, watchEffect
-} from 'vue';
+import { computed, reactive } from 'vue';
 import {
     useBase, BaseRender, getSlot
 } from '../../base/base.js';
 
 const defaultColors = ['#aaaaaa', '#1890ff'];
 
+const { cid } = useBase('VuiSwitch');
+
+const classList = ['vui', 'vui-switch', cid];
+
 const props = defineProps({
+
     label: {
         type: String,
         default: ''
     },
+
     colors: {
         type: String,
         default: '#aaaaaa,#1890ff'
     },
+
     width: {
         type: String,
         default: '35px'
     },
+
     height: {
         type: String,
         default: '20px'
     },
+
     disabled: {
         type: Boolean,
         default: false
     },
+
     checked: {
         type: Boolean,
         default: false
     },
+
     modelValue: {
         type: Boolean,
         default: null
     }
 });
 
-const { cid } = useBase('VuiSwitch');
-
-const classList = ['vui', 'vui-switch', cid];
+const emit = defineEmits(['update:modelValue']);
 
 const data = reactive({
-    checked: false
+    checked: props.checked
+});
+
+const modelChecked = computed({
+    get() {
+        if (props.modelValue === null) {
+            return data.checked;
+        }
+        return props.modelValue;
+    },
+    set(v) {
+        data.checked = v;
+        emit('update:modelValue', v);
+    }
 });
 
 const buttonClassList = computed(() => {
     return {
         'vui-switch-button': true,
-        'vui-switch-checked': data.checked,
+        'vui-switch-checked': modelChecked.value,
         'vui-switch-disabled': props.disabled
     };
 });
 
 const buttonStyleList = computed(() => {
 
-    let bgc = data.checked ? defaultColors[1] : defaultColors[0];
+    let bgc = modelChecked.value ? defaultColors[1] : defaultColors[0];
     if (props.colors) {
         const ls = `${props.colors}`.split(',').map((it) => it.trim());
-        if (data.checked && ls[1]) {
+        if (modelChecked.value && ls[1]) {
             bgc = ls[1];
         } else if (ls[0]) {
             bgc = ls[0];
@@ -100,7 +120,7 @@ const buttonStyleList = computed(() => {
 const iconStyleList = computed(() => {
     return {
         width: `calc(${props.height} - 4px)`,
-        right: data.checked ? '2px' : `calc(${props.width} - ${props.height} + 2px)`
+        right: modelChecked.value ? '2px' : `calc(${props.width} - ${props.height} + 2px)`
     };
 });
 
@@ -108,23 +128,12 @@ const labelContent = computed(() => {
     return props.label || getSlot();
 });
 
-const emit = defineEmits(['update:modelValue']);
-
 const clickHandler = () => {
     if (props.disabled) {
         return;
     }
-    data.checked = !data.checked;
-    emit('update:modelValue', data.checked);
+    modelChecked.value = !modelChecked.value;
 };
-
-watchEffect(() => {
-    if (props.modelValue === null) {
-        data.checked = props.checked;
-    } else {
-        data.checked = props.modelValue;
-    }
-});
 
 </script>
 <style lang="scss">
