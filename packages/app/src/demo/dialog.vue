@@ -5,7 +5,7 @@
     </VuiButton>
 
     <VuiButton @click="state.dialogVisible=!state.dialogVisible">
-      Open Dialog Visible
+      Dialog v-model
     </VuiButton>
 
     <VuiDialog

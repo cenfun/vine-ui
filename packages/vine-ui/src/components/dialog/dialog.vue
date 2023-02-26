@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="state.visible"
+    v-show="data.visible"
     ref="el"
     :class="classList"
   >
@@ -30,6 +30,10 @@ import {
 } from '../../base/base.js';
 
 import { bindEvents, unbindEvents } from '../../util/util.js';
+
+const { cid } = useBase('VuiDialog');
+
+const classList = ['vui', 'vui-dialog', cid];
 
 const props = defineProps({
 
@@ -62,25 +66,30 @@ const props = defineProps({
         type: Boolean,
         default: true
     },
+
     modelValue: {
         type: Boolean,
         default: null
     }
 });
 
-const { cid } = useBase('VuiDialog');
-
-const classList = ['vui', 'vui-dialog', cid];
-
-const el = ref(null);
-
 const emit = defineEmits(['update:modelValue']);
 
-const state = reactive({
-    $el: null,
+const data = reactive({
     visible: true
 });
 
+watchEffect(() => {
+    data.visible = props.modelValue === null ? props.visible : props.modelValue;
+});
+
+watch(() => data.visible, () => {
+    eventsHandler();
+    emit('update:modelValue', data.visible);
+});
+
+const el = ref(null);
+let $el;
 
 const styleMap = computed(() => {
     const st = {};
@@ -95,25 +104,24 @@ const styleMap = computed(() => {
 
 const close = () => {
 
-    const component = getComponent(state.$el);
+    const component = getComponent($el);
     if (component) {
-        destroyComponent(state.$el);
+        destroyComponent($el);
         return;
     }
 
-    if (!state.visible) {
+    if (!data.visible) {
         return;
     }
 
-    state.visible = false;
-    emit('update:modelValue', state.visible);
+    data.visible = false;
 
 };
 
 const documentEvents = {
     click: {
         handler: (e) => {
-            const $main = state.$el.querySelector('.vui-dialog-window');
+            const $main = $el.querySelector('.vui-dialog-window');
             if ($main === e.target || $main.contains(e.target)) {
                 return;
             }
@@ -123,31 +131,21 @@ const documentEvents = {
     }
 };
 
-const eventHandler = () => {
-    if (state.visible && props.closeOnClickOut) {
-        setTimeout(() => {
-            bindEvents(documentEvents, document);
-        }, 100);
+const eventsHandler = () => {
+    if (data.visible) {
+        if (props.closeOnClickOut) {
+            setTimeout(() => {
+                bindEvents(documentEvents, document);
+            }, 100);
+        }
     } else {
         unbindEvents(documentEvents);
     }
 };
 
-watchEffect(() => {
-    if (props.modelValue === null) {
-        state.visible = props.visible;
-    } else {
-        state.visible = props.modelValue;
-    }
-});
-
-watch(() => state.visible, () => {
-    eventHandler();
-});
-
 onMounted(() => {
-    state.$el = el.value;
-    eventHandler();
+    $el = el.value;
+    eventsHandler();
 });
 
 onUnmounted(() => {
