@@ -141,7 +141,7 @@ watch(() => data.checked, (v) => {
         }
 
         &:checked ~ label::after {
-            background-image: url("./images/checkbox.svg");
+            background-image: url("../../images/checkbox.svg");
         }
 
         &:checked:disabled ~ label::before {

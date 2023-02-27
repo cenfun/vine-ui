@@ -60,7 +60,7 @@ import {
     hasOwn, clamp, isList, autoPx
 } from '../../utils/util.js';
 
-import IconX from '../../base/images/icon-x.vue';
+import IconX from '../../images/icon-x.vue';
 
 const { cid } = useBase('VuiSelect');
 
@@ -595,7 +595,7 @@ onMounted(() => {
     padding: 0 20px 0 5px;
     border: 1px solid #aaa;
     border-radius: 5px;
-    background-image: url("./images/select.svg");
+    background-image: url("../../images/select.svg");
     background-repeat: no-repeat;
     background-position: right 7px center;
     background-size: 8px 10px;
@@ -606,7 +606,7 @@ onMounted(() => {
     &:disabled {
         color: gray;
         border: 1px solid #ccc;
-        background-image: url("./images/select-disabled.svg");
+        background-image: url("../../images/select-disabled.svg");
     }
 
     &:not(:disabled):hover {

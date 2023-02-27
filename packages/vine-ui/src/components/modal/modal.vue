@@ -38,7 +38,7 @@ import {
 } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
 
-import IconX from '../../base/images/icon-x.vue';
+import IconX from '../../images/icon-x.vue';
 import { bindEvents, unbindEvents } from '../../utils/util.js';
 
 const { cid } = useBase('VuiModal');

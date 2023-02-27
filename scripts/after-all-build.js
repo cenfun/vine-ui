@@ -3,14 +3,14 @@ const path = require('path');
 
 module.exports = (o, Util) => {
 
-    //console.log(o.jobList);
+    // console.log(o.jobList);
 
     const item = o.jobList.find((it) => it.name === 'vine-ui');
     if (!item) {
         return 0;
     }
 
-    //console.log(item);
+    // console.log(item);
 
     if (!item.production) {
         return 0;
