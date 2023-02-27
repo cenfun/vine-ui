@@ -1,12 +1,9 @@
 import components from './components.js';
-import bindTooltips from './util/bind-tooltips.js';
-import { createComponent, destroyComponent } from './base/base.js';
+import bindTooltips from './utils/bind-tooltips.js';
 
 export {
     components,
-    bindTooltips,
-    createComponent,
-    destroyComponent
+    bindTooltips
 };
 
 export default components;

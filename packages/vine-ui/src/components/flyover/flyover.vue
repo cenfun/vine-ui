@@ -12,15 +12,19 @@
 
 <script setup>
 import {
-    ref, computed, watchEffect, onMounted, onUnmounted, reactive
+    ref, computed, watch, watchEffect, onMounted, onUnmounted, reactive
 } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
 
+const { cid } = useBase('VuiFlyover');
+
 const props = defineProps({
+
     width: {
         type: String,
         default: '50%'
     },
+
     position: {
         type: String,
         default: 'right',
@@ -28,19 +32,51 @@ const props = defineProps({
             return ['right', 'left'].includes(value);
         }
     },
+
     content: {
         validator: (v) => true,
         default: ''
     },
+
     visible: {
         type: Boolean,
         default: true
+    },
+
+    modelValue: {
+        type: Boolean,
+        default: null
     }
 });
 
-const emit = defineEmits(['start', 'end']);
+const emit = defineEmits(['update:modelValue', 'start', 'end']);
 
-const { cid } = useBase('VuiFlyover');
+const data = reactive({
+    visible: props.visible,
+    width: props.width,
+    position: props.position,
+    hasStarted: false
+});
+
+watchEffect(() => {
+    data.visible = props.modelValue === null ? props.visible : props.modelValue;
+});
+
+watch(() => data.visible, (nv, ov) => {
+    console.log('visible change', ov, nv);
+    onStart(ov, nv);
+    emit('update:modelValue', data.visible);
+});
+
+watchEffect(() => {
+    data.width = props.width;
+});
+watchEffect(() => {
+    data.position = props.position;
+});
+
+const el = ref(null);
+let $el;
 
 const classList = computed(() => {
     return [
@@ -51,88 +87,69 @@ const classList = computed(() => {
     ];
 });
 
-const el = ref(null);
-
-const state = reactive({
-    hasStarted: false,
-    locked: false,
-    $el: null,
-    visible: props.visible
-});
-
-const dataWidth = ref(props.width);
 
 const styleList = computed(() => {
     return {
-        width: dataWidth.value
+        width: data.width
     };
 });
 
 const animationHandler = () => {
-    onEnd(state.visible);
+    onEnd(data.visible);
 };
 
 const bindEvents = () => {
-    if (state.$el) {
-        state.$el.addEventListener('animationend', animationHandler);
+    if ($el) {
+        $el.addEventListener('animationend', animationHandler);
     }
 };
 
 const unbindEvents = () => {
-    if (state.$el) {
-        state.$el.removeEventListener('animationend', animationHandler);
+    if ($el) {
+        $el.removeEventListener('animationend', animationHandler);
     }
 };
 
-const onStart = () => {
-
-    const nv = props.visible;
-    const ov = state.visible;
+const onStart = (ov, nv) => {
 
     if (nv === ov) {
         return;
     }
 
-    if (state.hasStarted) {
+    if (data.hasStarted) {
         onEnd(ov);
     }
     unbindEvents();
-    const cl = state.$el.classList;
+    const cl = $el.classList;
     if (nv) {
         cl.add(`vui-slide-in-${props.position}`, 'vui-flyover-show');
-        dataWidth.value = props.width;
+        data.width = props.width;
     } else {
         cl.add(`vui-slide-out-${props.position}`);
     }
-    state.hasStarted = true;
+    data.hasStarted = true;
     bindEvents();
     emit('start', nv);
 };
 
 const onEnd = (v) => {
-    state.hasStarted = false;
+    data.hasStarted = false;
     unbindEvents();
-    const cl = state.$el.classList;
+    const cl = $el.classList;
     if (v) {
         cl.remove(`vui-slide-in-${props.position}`);
     } else {
         cl.remove(`vui-slide-out-${props.position}`, 'vui-flyover-show');
-        dataWidth.value = '0px';
+        data.width = '0px';
     }
     emit('end', v);
 };
 
-watchEffect(() => {
-    dataWidth.value = props.width;
-    if (state.$el) {
-        onStart();
-    }
-    state.visible = props.visible;
-});
-
 onMounted(() => {
-    state.$el = el.value;
-    onStart();
+    $el = el.value;
+    if (data.visible) {
+        onStart(false, true);
+    }
 });
 
 onUnmounted(() => {

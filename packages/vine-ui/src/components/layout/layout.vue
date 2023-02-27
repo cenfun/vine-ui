@@ -18,7 +18,7 @@ import { useBase, BaseRender } from '../../base/base.js';
 
 import {
     clamp, bindEvents, unbindEvents, preventDefault
-} from '../../util/util.js';
+} from '../../utils/util.js';
 
 const props = defineProps({
     width: {

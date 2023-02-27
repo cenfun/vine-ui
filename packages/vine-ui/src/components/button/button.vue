@@ -13,7 +13,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
-import { autoPx } from '../../util/util.js';
+import { autoPx } from '../../utils/util.js';
 
 const props = defineProps({
 

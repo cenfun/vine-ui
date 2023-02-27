@@ -41,7 +41,7 @@ import {
 } from '../../base/base.js';
 
 import IconX from '../../base/images/icon-x.vue';
-import { bindEvents, unbindEvents } from '../../util/util.js';
+import { bindEvents, unbindEvents } from '../../utils/util.js';
 
 const props = defineProps({
     title: {

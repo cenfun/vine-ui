@@ -1,5 +1,5 @@
 
-import { toNum } from '../util/util.js';
+import { toNum } from '../utils/util.js';
 import './base-popup.scss';
 
 const isWindow = (obj) => {

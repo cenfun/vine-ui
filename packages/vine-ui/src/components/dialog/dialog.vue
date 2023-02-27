@@ -29,7 +29,7 @@ import {
     useBase, BaseRender, getComponent, destroyComponent
 } from '../../base/base.js';
 
-import { bindEvents, unbindEvents } from '../../util/util.js';
+import { bindEvents, unbindEvents } from '../../utils/util.js';
 
 const { cid } = useBase('VuiDialog');
 

@@ -1,4 +1,4 @@
-import generateComponents from './util/generate-components.js';
+import generateComponents from './utils/generate-components.js';
 const context = require.context('./components', true, /\.vue$/);
 const components = generateComponents(context);
 // console.log(components);

@@ -1,49 +1,50 @@
 <template>
   <VuiFlex gap="10px">
     <div
-      v-if="flyover.position==='left'"
+      v-if="data.position==='left'"
       class="vui-flex-empty"
     />
-    <VuiSelect v-model="flyover.width">
+    <VuiSelect v-model="data.width">
       <option>30%</option>
       <option>50%</option>
       <option>60%</option>
       <option>100px</option>
     </VuiSelect>
 
-    <VuiSelect v-model="flyover.position">
+    <VuiSelect v-model="data.position">
       <option>right</option>
       <option>left</option>
     </VuiSelect>
 
-    <VuiButton @click="toggleFlyover()">
-      Toggle
+    <VuiButton @click="createFlyover()">
+      createComponent
     </VuiButton>
 
-    <VuiButton @click="showFlyover(true)">
-      Show
+    <VuiButton @click="data.visible=true">
+      show
     </VuiButton>
 
-    <VuiButton @click="showFlyover(false)">
-      Hide
+    <VuiButton @click="data.visible=false">
+      hide
     </VuiButton>
 
-    <VuiButton
-      tooltip="Destroy Flyover"
-      @click="destroyFlyover()"
-    >
-      Destroy
+    <VuiButton @click="destroyFlyover()">
+      destroy
+    </VuiButton>
+
+    <VuiButton @click="data.modelVisible=!data.modelVisible">
+      Flyover v-model
     </VuiButton>
 
     <div
-      v-if="flyover.position==='right'"
+      v-if="data.position==='right'"
       class="vui-flex-empty"
     />
   </VuiFlex>
 </template>
 
 <script setup>
-import { shallowReactive } from 'vue';
+import { reactive } from 'vue';
 
 import VineUI from 'vine-ui';
 const {
@@ -53,22 +54,30 @@ const {
     VuiSelect
 } = VineUI;
 
-const flyover = shallowReactive({
+const data = reactive({
     width: '30%',
     position: 'right',
-    visible: false,
-    onStart: (v) => {
-        console.log(`flyover start: ${v}`);
-    },
-    onEnd: (v) => {
-        console.log(`flyover end: ${v}`);
-    }
+    visible: true,
+
+    modelVisible: false
 });
 
 
+let flyover;
 const createFlyover = () => {
-    return VuiFlyover.createComponent({
-        props: flyover,
+    destroyFlyover();
+    flyover = VuiFlyover.createComponent({
+        props: {
+            width: data.width,
+            position: data.position,
+            visible: data.visible,
+            onStart: (v) => {
+                console.log(`flyover start: ${v}`);
+            },
+            onEnd: (v) => {
+                console.log(`flyover end: ${v}`);
+            }
+        },
         slots: (h) => {
             return {
                 default: () => h('div', {
@@ -76,7 +85,7 @@ const createFlyover = () => {
                 }, h(VuiButton, {
                     label: 'Close',
                     onClick() {
-                        flyover.visible = false;
+                        // data.visible = false;
                     }
                 }))
             };
@@ -84,28 +93,11 @@ const createFlyover = () => {
     });
 };
 
-let instance;
-const showFlyover = (v) => {
-    if (!instance) {
-        instance = createFlyover();
-    }
-    flyover.visible = v;
-};
-
-const toggleFlyover = () => {
-    let v = !flyover.visible;
-    if (!instance) {
-        v = true;
-    }
-    showFlyover(v);
-};
-
 const destroyFlyover = () => {
-    if (instance) {
-        instance.unmount();
-        instance = null;
+    if (flyover) {
+        flyover.unmount();
+        flyover = null;
     }
-    flyover.visible = false;
 };
 
 </script>

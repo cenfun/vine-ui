@@ -58,7 +58,7 @@ import {
 
 import {
     hasOwn, clamp, isList
-} from '../../util/util.js';
+} from '../../utils/util.js';
 import IconX from '../../base/images/icon-x.vue';
 
 const { cid, undef } = useBase('VuiSelect');

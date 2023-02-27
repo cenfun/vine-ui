@@ -2,7 +2,7 @@ import {
     createApp, h, useSlots
 } from 'vue';
 
-import { pascalToKebabCase } from '../util/util.js';
+import { pascalToKebabCase } from '../utils/util.js';
 import './base.scss';
 
 import Portal from './portal.vue';
@@ -76,7 +76,7 @@ export const createComponent = function(options = {}) {
     let container = options.container;
     const beforeMount = options.beforeMount;
 
-    const Component = this;
+    const Component = options.Component || this;
 
     if (typeof slots === 'function') {
         slots = slots.call(this, h);

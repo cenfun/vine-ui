@@ -47,7 +47,7 @@ import {
     getBestPosition, getRect, getElement, toRect
 } from '../../base/base-popup.js';
 
-import { autoPx } from '../../util/util.js';
+import { autoPx } from '../../utils/util.js';
 
 const { cid } = useBase('VuiPopover');
 
