@@ -13,7 +13,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
-import { toCssUnit } from '../../util/util.js';
+import { autoPx } from '../../util/util.js';
 
 const props = defineProps({
 
@@ -60,7 +60,7 @@ const classList = computed(() => {
 const styleMap = computed(() => {
     const st = {};
     if (props.width) {
-        st.width = toCssUnit(props.width);
+        st.width = autoPx(props.width);
     }
     return st;
 });

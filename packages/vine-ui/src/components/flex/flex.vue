@@ -12,12 +12,18 @@
 <script setup>
 import { computed } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
-import { toCssUnit } from '../../util/util.js';
+import { autoPx } from '../../util/util.js';
 
 const { cid } = useBase('VuiFlex');
 
 const props = defineProps({
 
+    gap: {
+        type: [String, Number],
+        default: ''
+    },
+
+    // alias for gap
     spacing: {
         type: [String, Number],
         default: ''
@@ -46,11 +52,6 @@ const props = defineProps({
         default: ''
     },
 
-    center: {
-        type: Boolean,
-        default: false
-    },
-
     margin: {
         type: [String, Number],
         default: ''
@@ -59,6 +60,16 @@ const props = defineProps({
     padding: {
         type: [String, Number],
         default: ''
+    },
+
+    center: {
+        type: Boolean,
+        default: false
+    },
+
+    wrap: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -71,8 +82,8 @@ const classList = computed(() => {
     if (props.center) {
         ls.push('vui-flex-center');
     }
-    if (props.spacing) {
-        ls.push('vui-flex-spacing');
+    if (props.wrap) {
+        ls.push('vui-flex-wrap');
     }
     ls.push(cid);
     return ls;
@@ -81,19 +92,19 @@ const classList = computed(() => {
 const styleList = computed(() => {
     const st = {};
     if (props.width) {
-        st.width = toCssUnit(props.width);
+        st.width = autoPx(props.width);
     }
     if (props.height) {
-        st.height = toCssUnit(props.height);
+        st.height = autoPx(props.height);
     }
-    if (props.spacing) {
-        st['--vui-flex-spacing'] = toCssUnit(props.spacing);
+    if (props.gap || props.spacing) {
+        st['--vui-flex-gap'] = autoPx(props.gap || props.spacing);
     }
-    if (props.spacing) {
-        st['--vui-flex-margin'] = toCssUnit(props.margin);
+    if (props.margin) {
+        st['--vui-flex-margin'] = autoPx(props.margin);
     }
-    if (props.spacing) {
-        st['--vui-flex-padding'] = toCssUnit(props.padding);
+    if (props.padding) {
+        st['--vui-flex-padding'] = autoPx(props.padding);
     }
     return st;
 });
@@ -102,14 +113,18 @@ const styleList = computed(() => {
 
 <style lang="scss">
 .vui-flex {
-    --vui-flex-spacing: 0;
+    --vui-flex-gap: 0;
     --vui-flex-margin: 0;
     --vui-flex-padding: 0;
 
+    gap: var(--vui-flex-gap);
     margin: var(--vui-flex-margin);
     padding: var(--vui-flex-padding);
 }
 
+/*
+display for portable using both vui-flex-row and vui-flex-column
+*/
 .vui-flex-row {
     position: relative;
     display: flex;
@@ -127,6 +142,10 @@ const styleList = computed(() => {
     justify-content: center;
 }
 
+.vui-flex-wrap {
+    flex-wrap: wrap;
+}
+
 .vui-flex-auto {
     flex: 1 1 0%;
     overflow: hidden;
@@ -135,22 +154,8 @@ const styleList = computed(() => {
 .vui-flex-empty {
     flex: 1 1 0%;
     margin: 0;
+    padding: 0;
     overflow: hidden;
-}
-
-.vui-flex-spacing {
-    &.vui-flex-column > *:not(:first-child) {
-        margin-top: var(--vui-flex-spacing);
-    }
-
-    &.vui-flex-row > *:not(:first-child) {
-        margin-left: var(--vui-flex-spacing);
-    }
-
-    &.vui-flex .vui-flex-empty,
-    &.vui-flex .vui-flex-empty + * {
-        margin: 0;
-    }
 }
 
 </style>

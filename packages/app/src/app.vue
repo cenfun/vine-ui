@@ -35,7 +35,7 @@
         <div class="vui-item-name">
           {{ item.name }}
         </div>
-        <div class="vui-item-example">
+        <div class="vui-item-demo">
           <component :is="item.Demo" />
         </div>
       </div>

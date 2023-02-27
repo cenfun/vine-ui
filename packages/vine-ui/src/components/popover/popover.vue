@@ -47,7 +47,7 @@ import {
     getBestPosition, getRect, getElement, toRect
 } from '../../base/base-popup.js';
 
-import { toCssUnit } from '../../util/util.js';
+import { autoPx } from '../../util/util.js';
 
 const { cid } = useBase('VuiPopover');
 
@@ -211,7 +211,7 @@ const styleList = computed(() => {
 
 const styleBody = computed(() => {
     return {
-        width: toCssUnit(props.width)
+        width: autoPx(props.width)
     };
 });
 

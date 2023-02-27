@@ -74,15 +74,16 @@ export const getValue = function(data, dotPathStr, defaultValue) {
     return defaultValue;
 };
 
-export const toCssUnit = function(value) {
-    if (typeof value === 'undefined' || value === null) {
-        return value;
+export const autoPx = function(value) {
+    if (typeof value === 'string' || typeof value === 'number') {
+        // exclude: 10%, 10em, 10px, 10.1(no float)
+        // include 10, "10" (only int for px)
+        const s = `${value}`.trim();
+        if (parseInt(s).toString() === s && s !== '0') {
+            return `${s}px`;
+        }
     }
-    const s = `${value}`.trim();
-    if (parseInt(s).toString() === s && s !== '0') {
-        return `${s}px`;
-    }
-    return s;
+    return value;
 };
 
 export const unbindEvents = function(events) {

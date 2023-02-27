@@ -1,7 +1,7 @@
 <template>
-  <VuiFlex spacing="10px">
+  <VuiFlex gap="10px">
     <VuiFlex
-      spacing="10px"
+      gap="10px"
       direction="column"
     >
       <VuiSelect
@@ -12,19 +12,16 @@
         <option>column</option>
       </VuiSelect>
 
-      <VuiSwitch v-model="flex.center">
-        center
-      </VuiSwitch>
-
       <VuiSelect
-        v-model="flex.spacing"
-        tooltip="spacing"
+        v-model="flex.gap"
+        tooltip="gap"
       >
         <option />
         <option>5px</option>
         <option>10px</option>
         <option>15px</option>
         <option>20px</option>
+        <option>10px 5px</option>
       </VuiSelect>
 
       <VuiSelect
@@ -49,6 +46,7 @@
         v-model="flex.width"
         tooltip="width"
       >
+        <option />
         <option>100px</option>
         <option>200px</option>
         <option>300px</option>
@@ -59,20 +57,33 @@
         v-model="flex.height"
         tooltip="height"
       >
+        <option />
         <option>100px</option>
         <option>200px</option>
         <option>300px</option>
       </VuiSelect>
+
+      <VuiSwitch v-model="flex.center">
+        center
+      </VuiSwitch>
+
+      <VuiSwitch v-model="flex.wrap">
+        wrap
+      </VuiSwitch>
     </VuiFlex>
 
     <VuiFlex
       :direction="flex.direction"
-      :center="flex.center"
-      :spacing="flex.spacing"
+
+      :gap="flex.gap"
       :margin="flex.margin"
       :padding="flex.padding"
       :width="flex.width"
       :height="flex.height"
+
+      :center="flex.center"
+      :wrap="flex.wrap"
+
       class="flex-demo-bg"
     >
       <div class="flex-demo-border">
@@ -89,12 +100,16 @@
 
     <VuiFlex
       :direction="flex.direction"
-      :center="flex.center"
-      :spacing="flex.spacing"
+
+      :gap="flex.gap"
       :margin="flex.margin"
       :padding="flex.padding"
       :width="flex.width"
       :height="flex.height"
+
+      :center="flex.center"
+      :wrap="flex.wrap"
+
       class="flex-demo-bg"
     >
       <div class="flex-demo-border">
@@ -104,13 +119,9 @@
         button
       </VuiButton>
       <div
-        class="flex-demo-border"
-        :class="flex.spaceClass"
+        class="vui-flex-auto flex-demo-border"
       >
-        <VuiSelect v-model="flex.spaceClass">
-          <option>vui-flex-auto</option>
-          <option>vui-flex-empty</option>
-        </VuiSelect>
+        vui-flex-auto
       </div>
       <span class="flex-demo-border">span</span>
       <div class="flex-demo-border">
@@ -132,14 +143,15 @@ const {
 
 const flex = reactive({
     direction: 'column',
-    center: false,
-    spacing: '5px',
-    margin: '5px',
-    padding: '5px',
+
+    gap: '5px',
+    margin: '',
+    padding: '',
     width: '400px',
     height: '300px',
 
-    spaceClass: 'vui-flex-auto'
+    center: false,
+    wrap: false
 });
 
 </script>
