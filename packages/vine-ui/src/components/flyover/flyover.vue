@@ -67,7 +67,7 @@ watchEffect(() => {
 watch(() => data.visible, (nv, ov) => {
     // console.log('visible change', ov, nv);
     onStart(ov, nv);
-    emit('update:modelValue', data.visible);
+    emit('update:modelValue', nv);
 });
 
 watchEffect(() => {

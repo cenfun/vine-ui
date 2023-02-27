@@ -57,8 +57,8 @@ watchEffect(() => {
     data.checked = props.modelValue === null ? props.checked : props.modelValue;
 });
 
-watch(() => data.checked, () => {
-    emit('update:modelValue', data.checked);
+watch(() => data.checked, (v) => {
+    emit('update:modelValue', v);
 });
 
 </script>

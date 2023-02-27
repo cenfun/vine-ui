@@ -81,9 +81,9 @@ watchEffect(() => {
     data.visible = props.modelValue === null ? props.visible : props.modelValue;
 });
 
-watch(() => data.visible, () => {
+watch(() => data.visible, (v) => {
     eventsHandler();
-    emit('update:modelValue', data.visible);
+    emit('update:modelValue', v);
 });
 
 const el = ref(null);

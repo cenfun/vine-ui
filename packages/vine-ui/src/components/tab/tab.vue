@@ -101,8 +101,8 @@ watchEffect(() => {
     data.index = props.modelValue === null ? props.index : props.modelValue;
 });
 
-watch(() => data.index, () => {
-    emit('update:modelValue', data.index);
+watch(() => data.index, (v) => {
+    emit('update:modelValue', v);
 });
 
 const classList = computed(() => {
