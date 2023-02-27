@@ -1,15 +1,14 @@
 <template>
-  <VuiFlex gap="10px">
-    <VuiButton @click="openDialog()">
-      createComponent Dialog
-    </VuiButton>
-
-    <VuiButton @click="state.dialogVisible=!state.dialogVisible">
-      Dialog v-model
+  <VuiFlex
+    gap="10px"
+    class="vui-demo-dialog"
+  >
+    <VuiButton @click="data.visible=true">
+      open Dialog
     </VuiButton>
 
     <VuiDialog
-      v-model="state.dialogVisible"
+      v-model="data.visible"
       :fast-close="false"
       class="vui-dialog-custom-model"
     >
@@ -23,13 +22,13 @@
             <VuiButton
               primary
               width="80px"
-              @click="state.dialogVisible=false"
+              @click="onOkClick"
             >
               Ok
             </VuiButton>
             <VuiButton
               width="80px"
-              @click="state.dialogVisible=false"
+              @click="data.visible=false"
             >
               Cancel
             </VuiButton>
@@ -49,52 +48,22 @@ const {
     VuiDialog
 } = VineUI;
 
-const state = reactive({
-    dialogVisible: false
+const data = reactive({
+    visible: false
 });
 
-const openDialog = () => {
-    const dialog = VuiDialog.createComponent({
-        props: {
-            message: 'Do you want to save?'
-        },
-        slots: (h) => {
-            return {
-                default: () => {
-                    return h(VuiFlex, {
-                        gap: '10px',
-                        padding: '10px 0'
-                    }, {
-                        default: () => {
-                            return [h(VuiButton, {
-                                label: 'Save',
-                                primary: true,
-                                width: 80,
-                                onclick: () => {
-                                    console.log('saved');
-                                    dialog.unmount();
-                                }
-                            }), h(VuiButton, {
-                                label: 'Close',
-                                width: 80,
-                                onclick: () => {
-                                    dialog.unmount();
-                                }
-                            })];
-                        }
-                    });
-                }
-            };
-        }
-    });
+const onOkClick = () => {
+    console.log('ok');
+    data.visible = false;
 };
 
 </script>
-<style lang="scss">
-.vui-dialog-custom-create {
-    .vui-dialog-message {
-        padding: 10px;
-    }
+<style>
+/*
+  test dialog position: fixed;
+*/
+.vui-demo-dialog {
+    position: relative;
+    overflow: hidden;
 }
-
 </style>

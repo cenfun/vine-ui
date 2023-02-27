@@ -23,7 +23,7 @@
 
 <script setup>
 import {
-    computed, onMounted, ref, onUnmounted, reactive, watchEffect, watch
+    computed, onMounted, ref, reactive, watchEffect, watch
 } from 'vue';
 import {
     useBase, BaseRender, getComponent, destroyComponent
@@ -146,10 +146,6 @@ const eventsHandler = () => {
 onMounted(() => {
     $el = el.value;
     eventsHandler();
-});
-
-onUnmounted(() => {
-    unbindEvents(documentEvents);
 });
 
 defineExpose({

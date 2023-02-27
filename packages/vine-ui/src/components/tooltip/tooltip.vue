@@ -1,26 +1,18 @@
 <template>
-  <Teleport :to="props.to">
-    <div
-      v-show="data.visible"
-      ref="el"
-      :class="classList"
-      :style="styleList"
-    >
-      <transition
-        appear
-        mode="out-in"
-        name="vui-fade"
-      >
-        <div class="vui-tooltip-content">
-          <slot />
-        </div>
-      </transition>
+  <div
+    v-show="data.visible"
+    ref="el"
+    :class="classList"
+    :style="styleList"
+  >
+    <div class="vui-tooltip-content">
+      <slot />
     </div>
-  </Teleport>
+  </div>
 </template>
 <script setup>
 import {
-    computed, onMounted, reactive, ref, nextTick, watch, watchEffect
+    computed, onMounted, reactive, ref, watch, watchEffect
 } from 'vue';
 import { useBase } from '../../base/base.js';
 
@@ -76,24 +68,9 @@ const props = defineProps({
         default: ''
     },
 
-    content: {
-        validator: (v) => true,
-        default: ''
-    },
-
     container: {
         validator: (v) => true,
         default: ''
-    },
-
-    disabled: {
-        type: Boolean,
-        default: false
-    },
-
-    to: {
-        validator: (v) => true,
-        default: 'body'
     },
 
     visible: {
@@ -105,6 +82,7 @@ const props = defineProps({
 
 const el = ref(null);
 let $el;
+let positionInfo;
 
 const data = reactive({
     visible: props.visible,
@@ -154,7 +132,8 @@ watch(() => data.visible, () => {
 });
 
 const update = () => {
-    nextTick(() => {
+    contentHandler();
+    setTimeout(() => {
         updateSync();
     });
 };
@@ -163,12 +142,6 @@ const updateSync = () => {
     if (!data.visible) {
         return;
     }
-    if (!$el) {
-        return;
-    }
-
-    contentHandler();
-
     const containerRect = getRect(props.container || window);
     const targetRect = getRect(props.target);
 
@@ -184,11 +157,12 @@ const updateSync = () => {
 
     // console.log(containerRect, targetRect, rect);
 
-    const positionInfo = getBestPosition(
+    positionInfo = getBestPosition(
         containerRect,
         targetRect,
         rect,
-        positions
+        positions,
+        positionInfo
     );
 
     // no change
@@ -208,6 +182,9 @@ const updateSync = () => {
 };
 
 const contentHandler = () => {
+    if (!$el) {
+        return;
+    }
     const $content = $el.querySelector('.vui-tooltip-content');
     if (props.html) {
         $content.innerHTML = props.html;
@@ -227,33 +204,19 @@ onMounted(() => {
 
 <style lang="scss">
 .vui-tooltip {
-    //pointer-events: none;
-    position: absolute;
+    position: fixed;
     z-index: 1000;
     margin: 0;
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.2s linear, visibility 0.2s linear;
+    pointer-events: none;
 
     .vui-tooltip-content {
         display: inline-block;
         padding: 10px;
-        font-size: 14px;
         //IE https://caniuse.com/#feat=wordwrap
         word-wrap: break-word;
         //https://developer.mozilla.org/zh-CN/docs/Web/CSS/word-break
         word-break: break-word;
         overflow-wrap: break-word;
-    }
-
-    .vui-fade-enter-active,
-    .vui-fade-leave-active {
-        transition: opacity 0.3s;
-    }
-
-    .vui-fade-enter,
-    .vui-fade-leave-to {
-        opacity: 0;
     }
 }
 </style>
