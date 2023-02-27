@@ -1,43 +1,37 @@
 <template>
   <div
-    v-show="modelVisible"
+    v-show="data.visible"
     ref="el"
     :class="classList"
     :style="styleList"
   >
-    <transition
-      appear
-      mode="out-in"
-      name="vui-fade"
+    <div
+      class="vui-popover-body"
+      :style="styleBody"
     >
       <div
-        class="vui-popover-body"
-        :style="styleBody"
+        v-if="props.title"
+        class="vui-popover-header"
       >
-        <div
-          v-if="props.title"
-          class="vui-popover-header"
-        >
-          <slot name="header">
-            <div
-              class="vui-popover-title"
-              v-text="props.title"
-            />
-          </slot>
-        </div>
-        <div :class="classContent">
-          <slot>
-            <BaseRender :content="props.content" />
-          </slot>
-        </div>
+        <slot name="header">
+          <div
+            class="vui-popover-title"
+            v-text="props.title"
+          />
+        </slot>
       </div>
-    </transition>
+      <div :class="classContent">
+        <slot>
+          <BaseRender :content="props.content" />
+        </slot>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import {
-    computed, onMounted, onUnmounted, reactive, ref, nextTick, watch
+    computed, onMounted, reactive, ref, watch, watchEffect, nextTick
 } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
 
@@ -48,7 +42,6 @@ import {
 import { autoPx } from '../../utils/util.js';
 
 const { cid } = useBase('VuiPopover');
-
 
 const props = defineProps({
 
@@ -124,7 +117,7 @@ const props = defineProps({
 
     visible: {
         type: Boolean,
-        default: true
+        default: false
     },
 
     modelValue: {
@@ -136,26 +129,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'update', 'beforeClose', 'close']);
 
-const modelVisible = computed({
-    get() {
-        if (props.modelValue === null) {
-            return props.visible;
-        }
-        return props.modelValue;
-    },
-    set(v) {
-        emit('update:modelValue', v);
-    }
-});
-
-const el = ref(null);
-let $el;
-
-let positionInfo;
-let timeout_close;
-
 const data = reactive({
-    visible: modelVisible,
+    visible: false,
     contentOverflow: false,
     // calculation info
     info: {
@@ -167,6 +142,19 @@ const data = reactive({
         height: 'auto'
     }
 });
+
+watchEffect(() => {
+    data.visible = props.modelValue === null ? props.visible : props.modelValue;
+});
+
+watch(() => data.visible, () => {
+    visibleChangeHandler();
+    emit('update:modelValue', data.visible);
+});
+
+const el = ref(null);
+let $el;
+let positionInfo;
 
 // ====================================================================================================
 
@@ -220,24 +208,21 @@ const classContent = computed(() => {
 
 // ====================================================================================================
 
-watch(() => data.visible, () => {
+const visibleChangeHandler = () => {
     if (!$el) {
         return;
     }
 
     if (data.visible) {
-        bindResizeEvent();
-        bindScrollEvent();
-        bindCloseEvent();
+        // start showing
+        bindEvents();
         update();
     } else {
-        unbindResizeEvent();
-        unbindScrollEvent();
-        unbindCloseEvent();
+        // clean when closed
+        unbindEvents();
         positionInfo = null;
-        emit('close');
     }
-});
+};
 
 const bindEvents = () => {
     bindResizeEvent();
@@ -306,7 +291,7 @@ const scrollHandler = (e) => {
 const bindCloseEvent = () => {
     unbindCloseEvent();
     if (props.autoClose && data.visible) {
-        timeout_close = setTimeout(() => {
+        setTimeout(() => {
             window.addEventListener('click', clickHandler, true);
             window.addEventListener('keydown', keydownHandler);
         }, 10);
@@ -370,6 +355,7 @@ const close = () => {
         return;
     }
     data.visible = false;
+    emit('close');
 };
 
 // =============================================================================
@@ -439,6 +425,7 @@ const updateSync = () => {
 };
 
 const update = () => {
+    // do not setTimeout, because we can see popover top left in first time
     nextTick(() => {
         updateSync();
     });
@@ -448,31 +435,22 @@ const update = () => {
 
 onMounted(() => {
     $el = el.value;
-    if (!$el.parentNode) {
-        document.body.appendChild($el);
-    }
-    bindEvents();
-    update();
+    visibleChangeHandler();
 });
 
-onUnmounted(() => {
-    clearTimeout(timeout_close);
-    unbindEvents();
-    positionInfo = null;
-    emit('close');
+defineExpose({
+    cid,
+    update
 });
 
 </script>
 
 <style lang="scss">
 .vui-popover {
-    position: absolute;
+    position: fixed;
     z-index: 1000;
     margin: 0;
     padding: 16px;
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.2s linear, visibility 0.2s linear;
 
     .vui-popover-header {
         margin-bottom: 5px;
@@ -494,16 +472,6 @@ onUnmounted(() => {
 
     .vui-popover-content-overflow {
         overflow-y: auto;
-    }
-
-    .vui-fade-enter-active,
-    .vui-fade-leave-active {
-        transition: opacity 0.3s;
-    }
-
-    .vui-fade-enter,
-    .vui-fade-leave-to {
-        opacity: 0;
     }
 }
 </style>

@@ -1,4 +1,3 @@
-import { createComponent } from '../base/base.js';
 
 export default function(context) {
 
@@ -33,8 +32,6 @@ export default function(context) {
         // esModule default
         const Component = context(path).default;
         // console.log(context(path));
-
-        Component.createComponent = createComponent;
 
         // no private component
         if (Component.private) {

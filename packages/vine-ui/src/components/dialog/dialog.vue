@@ -62,7 +62,7 @@ const props = defineProps({
 
     visible: {
         type: Boolean,
-        default: true
+        default: false
     },
 
     modelValue: {
@@ -74,7 +74,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const data = reactive({
-    visible: true
+    visible: false
 });
 
 watchEffect(() => {

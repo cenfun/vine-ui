@@ -1,11 +1,7 @@
-import {
-    createApp, h, useSlots
-} from 'vue';
+import { h, useSlots } from 'vue';
 
 import { pascalToKebabCase } from '../utils/util.js';
 import './base.scss';
-
-import Portal from './portal.vue';
 
 
 let _uid = 1;
@@ -50,78 +46,6 @@ export const BaseRender = {
 
 };
 
-export const createComponent = function(options = {}) {
-
-    const props = options.props;
-    let slots = options.slots;
-    let container = options.container;
-    const beforeMount = options.beforeMount;
-
-    const Component = options.Component || this;
-
-    if (typeof slots === 'function') {
-        slots = slots.call(this, h);
-    }
-
-    // full signature
-    // function h(
-    //  type: string | Component,
-    //  props?: object | null,
-    //  children?: Children | Slot | Slots
-    // ): VNode
-
-    // container state
-    const hasContainer = Boolean(container);
-
-    let instance;
-    const instanceRender = () => {
-        instance = h(Component, props, slots);
-        return instance;
-    };
-
-    const app = createApp({
-        setup() {
-            // async
-            if (hasContainer) {
-                return instanceRender;
-            }
-            return () => h(Portal, {}, {
-                default: instanceRender
-            });
-        }
-    });
-
-    let portalContainer;
-    if (!hasContainer) {
-        portalContainer = document.createElement('div');
-        container = portalContainer;
-    }
-
-    // for app.use()
-    if (typeof beforeMount === 'function') {
-        beforeMount(app, container);
-    }
-
-    const component = app.mount(container);
-
-    // custom unmount for component
-    component.unmount = () => {
-        app.unmount();
-        if (portalContainer) {
-            portalContainer.remove();
-            portalContainer = null;
-        }
-    };
-
-    // component.$el is componentContainer.firstChild
-    // console.log(component.$el, componentContainer.firstChild);
-
-    // console.log(instance.el);
-
-    return component;
-
-};
-
 export const getSlot = function(name) {
     const slots = useSlots();
     const fun = slots[name || 'default'];
@@ -142,8 +66,6 @@ export const vSelectOnFocus = function(el) {
 export default {
     useBase,
     BaseRender,
-
-    createComponent,
 
     getSlot,
 

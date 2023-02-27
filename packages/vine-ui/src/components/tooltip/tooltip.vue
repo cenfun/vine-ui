@@ -12,7 +12,7 @@
 </template>
 <script setup>
 import {
-    computed, onMounted, reactive, ref, watch, watchEffect
+    computed, onMounted, reactive, ref, watch, watchEffect, nextTick
 } from 'vue';
 import { useBase } from '../../base/base.js';
 
@@ -133,7 +133,8 @@ watch(() => data.visible, () => {
 
 const update = () => {
     contentHandler();
-    setTimeout(() => {
+    // do not setTimeout, because we can see popover top left in first time
+    nextTick(() => {
         updateSync();
     });
 };

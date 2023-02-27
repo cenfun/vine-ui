@@ -42,7 +42,7 @@ const props = defineProps({
 
     visible: {
         type: Boolean,
-        default: true
+        default: false
     },
 
     modelValue: {
