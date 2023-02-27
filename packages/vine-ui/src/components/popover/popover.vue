@@ -39,9 +39,7 @@
 import {
     computed, onMounted, onUnmounted, reactive, ref, nextTick, watch
 } from 'vue';
-import {
-    useBase, BaseRender, destroyComponent
-} from '../../base/base.js';
+import { useBase, BaseRender } from '../../base/base.js';
 
 import {
     getBestPosition, getRect, getElement, toRect
@@ -65,11 +63,6 @@ const props = defineProps({
     },
 
     autoClose: {
-        type: Boolean,
-        default: true
-    },
-
-    autoDestroy: {
         type: Boolean,
         default: true
     },
@@ -377,11 +370,6 @@ const close = () => {
         return;
     }
     data.visible = false;
-
-    // if not create by createComponent API will be not destroy because no $el keep
-    if (props.autoDestroy) {
-        destroyComponent($el);
-    }
 };
 
 // =============================================================================

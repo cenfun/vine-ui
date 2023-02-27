@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="state.visible"
+    v-show="data.visible"
     ref="el"
     :class="classList"
   >
@@ -34,16 +34,19 @@
 
 <script setup>
 import {
-    computed, onMounted, ref, onUnmounted, reactive, watchEffect, watch
+    computed, onMounted, ref, reactive, watchEffect, watch
 } from 'vue';
-import {
-    useBase, BaseRender, getComponent, destroyComponent
-} from '../../base/base.js';
+import { useBase, BaseRender } from '../../base/base.js';
 
 import IconX from '../../base/images/icon-x.vue';
 import { bindEvents, unbindEvents } from '../../utils/util.js';
 
+const { cid } = useBase('VuiModal');
+
+const classList = ['vui', 'vui-modal', cid];
+
 const props = defineProps({
+
     title: {
         type: String,
         default: ''
@@ -54,7 +57,7 @@ const props = defineProps({
         default: ''
     },
 
-    padding: {
+    inset: {
         type: String,
         default: '20%'
     },
@@ -73,46 +76,44 @@ const props = defineProps({
         type: Boolean,
         default: true
     },
+
     modelValue: {
         type: Boolean,
         default: null
     }
 });
 
-const { cid } = useBase('VuiModal');
+const emit = defineEmits(['update:modelValue', 'close']);
 
-const classList = ['vui', 'vui-modal', cid];
-
-const el = ref(null);
-
-const emit = defineEmits(['update:modelValue']);
-
-const state = reactive({
-    $el: null,
+const data = reactive({
     visible: true
 });
 
+watchEffect(() => {
+    data.visible = props.modelValue === null ? props.visible : props.modelValue;
+});
+
+watch(() => data.visible, () => {
+    eventsHandler();
+    emit('update:modelValue', data.visible);
+});
+
+const el = ref(null);
+let $el;
 
 const styleWindow = computed(() => {
     return {
-        inset: props.padding
+        inset: props.inset
     };
 });
 
 const close = () => {
 
-    const component = getComponent(state.$el);
-    if (component) {
-        destroyComponent(state.$el);
+    if (!data.visible) {
         return;
     }
 
-    if (!state.visible) {
-        return;
-    }
-
-    state.visible = false;
-    emit('update:modelValue', state.visible);
+    data.visible = false;
 
 };
 
@@ -123,7 +124,7 @@ const onCloseClick = () => {
 const documentEvents = {
     click: {
         handler: (e) => {
-            const $main = state.$el.querySelector('.vui-modal-main');
+            const $main = $el.querySelector('.vui-modal-main');
             if ($main === e.target || $main.contains(e.target)) {
                 return;
             }
@@ -133,35 +134,21 @@ const documentEvents = {
     }
 };
 
-const eventHandler = () => {
-    if (state.visible && props.closeOnClickOut) {
-        setTimeout(() => {
-            bindEvents(documentEvents, document);
-        }, 100);
+const eventsHandler = () => {
+    if (data.visible) {
+        if (props.closeOnClickOut) {
+            setTimeout(() => {
+                bindEvents(documentEvents, document);
+            }, 100);
+        }
     } else {
         unbindEvents(documentEvents);
     }
 };
 
-watchEffect(() => {
-    if (props.modelValue === null) {
-        state.visible = props.visible;
-    } else {
-        state.visible = props.modelValue;
-    }
-});
-
-watch(() => state.visible, () => {
-    eventHandler();
-});
-
 onMounted(() => {
-    state.$el = el.value;
-    eventHandler();
-});
-
-onUnmounted(() => {
-    unbindEvents(documentEvents);
+    $el = el.value;
+    eventsHandler();
 });
 
 defineExpose({

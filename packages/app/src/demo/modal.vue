@@ -1,29 +1,56 @@
 <template>
   <VuiFlex gap="10px">
-    <VuiButton @click="openModal()">
-      Open Modal
-    </VuiButton>
+    <VuiSelect
+      v-model="data.title"
+      tooltip="title"
+    >
+      <option>Modal Title</option>
+      <option />
+    </VuiSelect>
 
-    <VuiButton @click="openModalScrollbar('Modal With Scrollbar')">
-      With Scrollbar
-    </VuiButton>
+    <VuiSelect
+      v-model="data.inset"
+      tooltip="inset"
+    >
+      <option />
+      <option>20%</option>
+      <option>30%</option>
+      <option>50px</option>
+      <option>100px</option>
+    </VuiSelect>
 
-    <VuiButton @click="openModalScrollbar()">
-      Without Title
-    </VuiButton>
+    <VuiSwitch v-model="data.closeButton">
+      closeButton
+    </VuiSwitch>
 
-    <VuiButton @click="state.modalVisible=!state.modalVisible">
-      Open Modal Visible
+    <VuiSwitch v-model="data.closeOnClickOut">
+      closeOnClickOut
+    </VuiSwitch>
+
+    <VuiSelect
+      v-model="data.contentHeight"
+      tooltip="content height for scrollbar"
+    >
+      <option />
+      <option>100px</option>
+      <option>800px</option>
+    </VuiSelect>
+
+    <VuiButton @click="data.visible = true">
+      open Modal
     </VuiButton>
 
     <VuiModal
-      v-model="state.modalVisible"
-      title="Modal Visible"
-      :close-button="false"
+      v-model="data.visible"
+      :title="data.title"
+      :inset="data.inset"
+      :close-button="data.closeButton"
+      :close-on-click-out="data.closeOnClickOut"
     >
-      <VuiButton @click="state.modalVisible=false">
+      <VuiButton @click="data.visible=false">
         CLose
       </VuiButton>
+      <div :style="'height:'+data.contentHeight" />
     </VuiModal>
   </VuiFlex>
 </template>
@@ -33,59 +60,19 @@ import VineUI from 'vine-ui';
 import { reactive } from 'vue';
 const {
     VuiButton,
-    VuiCheckbox,
     VuiFlex,
+    VuiSwitch,
+    VuiSelect,
     VuiModal
 } = VineUI;
 
-const state = reactive({
-    modalVisible: false
+const data = reactive({
+    visible: false,
+    title: 'Modal Title',
+    inset: '20%',
+    closeButton: true,
+    closeOnClickOut: true,
+    contentHeight: ''
 });
-
-const openModal = () => {
-    const modal = VuiModal.createComponent({
-        props: {
-            title: 'Modal Title'
-        },
-        slots: (h) => {
-
-            const list = [h(VuiCheckbox, {
-                label: 'Modal Checkbox'
-            }), h(VuiButton, {
-                label: 'CLose',
-                onClick: () => {
-                    modal.unmount();
-                }
-            })];
-
-            return {
-                default: () => {
-                    return list;
-                }
-            };
-        }
-    });
-};
-
-const openModalScrollbar = (title) => {
-    VuiModal.createComponent({
-        props: {
-            title,
-            closeOnClickOut: false
-        },
-        slots: (h) => {
-
-            const list = [h('div', {
-                style: 'width:1000px; height: 1000px; background:#f5f5f5'
-            })];
-
-            return {
-                default: () => {
-                    return list;
-                }
-            };
-        }
-    });
-};
 
 </script>

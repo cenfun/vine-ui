@@ -50,25 +50,6 @@ export const BaseRender = {
 
 };
 
-const componentMap = new WeakMap();
-export const getComponent = function($el) {
-    if (!$el) {
-        return;
-    }
-    if (typeof $el === 'string') {
-        $el = document.querySelector($el);
-    }
-    return componentMap.get($el);
-};
-
-export const destroyComponent = function($el) {
-    const component = getComponent($el);
-    if (component) {
-        component.unmount();
-    }
-};
-
-
 export const createComponent = function(options = {}) {
 
     const props = options.props;
@@ -137,8 +118,6 @@ export const createComponent = function(options = {}) {
 
     // console.log(instance.el);
 
-    componentMap.set(instance.el, component);
-
     return component;
 
 };
@@ -164,8 +143,6 @@ export default {
     useBase,
     BaseRender,
 
-    getComponent,
-    destroyComponent,
     createComponent,
 
     getSlot,

@@ -25,9 +25,7 @@
 import {
     computed, onMounted, ref, reactive, watchEffect, watch
 } from 'vue';
-import {
-    useBase, BaseRender, getComponent, destroyComponent
-} from '../../base/base.js';
+import { useBase, BaseRender } from '../../base/base.js';
 
 import { bindEvents, unbindEvents } from '../../utils/util.js';
 
@@ -103,12 +101,6 @@ const styleMap = computed(() => {
 });
 
 const close = () => {
-
-    const component = getComponent($el);
-    if (component) {
-        destroyComponent($el);
-        return;
-    }
 
     if (!data.visible) {
         return;
