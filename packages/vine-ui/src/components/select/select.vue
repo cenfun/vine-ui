@@ -403,6 +403,7 @@ const onClick = (e) => {
 };
 
 const onInput = (e) => {
+    data.searchValue = data.viewValue;
     emit('search', e);
 };
 
