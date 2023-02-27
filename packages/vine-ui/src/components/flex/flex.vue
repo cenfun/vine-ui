@@ -123,6 +123,7 @@ const styleList = computed(() => {
     text-overflow: ellipsis;
     overflow: hidden;
 
+    // layout component do not break sub component size
     > * {
         flex-shrink: 0;
     }
