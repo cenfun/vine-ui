@@ -120,6 +120,12 @@ const styleList = computed(() => {
     gap: var(--vui-flex-gap);
     margin: var(--vui-flex-margin);
     padding: var(--vui-flex-padding);
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    > * {
+        flex-shrink: 0;
+    }
 }
 
 /*

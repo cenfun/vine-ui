@@ -84,16 +84,19 @@
       :center="flex.center"
       :wrap="flex.wrap"
 
-      class="flex-demo-bg"
+      class="vui-demo-flex"
     >
-      <div class="flex-demo-border">
+      <div>
         div
       </div>
-      <VuiButton class="flex-demo-border">
+      <VuiButton>
         button
       </VuiButton>
-      <span class="flex-demo-border">span</span>
-      <div class="flex-demo-border">
+      <div>
+        long text long text long text long text for row wrap
+      </div>
+      <span>span</span>
+      <div>
         div
       </div>
     </VuiFlex>
@@ -110,21 +113,22 @@
       :center="flex.center"
       :wrap="flex.wrap"
 
-      class="flex-demo-bg"
+      class="vui-demo-flex"
     >
-      <div class="flex-demo-border">
+      <div>
         div
       </div>
-      <VuiButton class="flex-demo-border">
+      <VuiButton>
         button
       </VuiButton>
-      <div
-        class="vui-flex-auto flex-demo-border"
-      >
+      <div class="vui-flex-auto">
         vui-flex-auto
       </div>
-      <span class="flex-demo-border">span</span>
-      <div class="flex-demo-border">
+      <div>
+        long text long text long text long text for row wrap
+      </div>
+      <span>span</span>
+      <div>
         div
       </div>
     </VuiFlex>
@@ -155,14 +159,19 @@ const flex = reactive({
 });
 
 </script>
-<style>
-.flex-demo-border {
-    box-sizing: border-box;
-    border: thin solid #ccc;
-}
-
-.flex-demo-bg {
+<style lang="scss">
+.vui-demo-flex {
     background-color: #eee;
+
+    > * {
+        box-sizing: border-box;
+        border: thin solid #ccc;
+    }
+
+    .vui-flex-auto {
+        border: none;
+        background-color: #f8f8f8;
+    }
 }
 
 </style>
