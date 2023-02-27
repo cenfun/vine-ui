@@ -110,21 +110,6 @@ const styleList = computed(() => {
     padding: var(--vui-flex-padding);
 }
 
-.vui-flex-auto {
-    flex: 1 1 0%;
-    overflow: hidden;
-}
-
-.vui-flex-empty {
-    flex: 1 1 0%;
-    margin: 0;
-    overflow: hidden;
-}
-
-.vui-flex-center {
-    justify-content: center;
-}
-
 .vui-flex-row {
     position: relative;
     display: flex;
@@ -138,27 +123,33 @@ const styleList = computed(() => {
     flex-direction: column;
 }
 
-.vui-flex-spacing > .vui-flex-empty,
-.vui-flex-spacing > .vui-flex-empty + * {
-    margin-top: 0;
-    margin-left: 0;
+.vui-flex-center {
+    justify-content: center;
+}
+
+.vui-flex-auto {
+    flex: 1 1 0%;
+    overflow: hidden;
+}
+
+.vui-flex-empty {
+    flex: 1 1 0%;
+    margin: 0;
+    overflow: hidden;
 }
 
 .vui-flex-spacing {
-    &.vui-flex-column > * {
+    &.vui-flex-column > *:not(:first-child) {
         margin-top: var(--vui-flex-spacing);
     }
 
-    &.vui-flex-row > * {
+    &.vui-flex-row > *:not(:first-child) {
         margin-left: var(--vui-flex-spacing);
     }
 
-    &.vui-flex-column > *:first-child {
-        margin-top: 0;
-    }
-
-    &.vui-flex-row > *:first-child {
-        margin-left: 0;
+    &.vui-flex .vui-flex-empty,
+    &.vui-flex .vui-flex-empty + * {
+        margin: 0;
     }
 }
 

@@ -4,7 +4,10 @@
       spacing="10px"
       direction="column"
     >
-      <VuiSelect v-model="flex.direction">
+      <VuiSelect
+        v-model="flex.direction"
+        tooltip="direction"
+      >
         <option>row</option>
         <option>column</option>
       </VuiSelect>
@@ -13,20 +16,49 @@
         center
       </VuiSwitch>
 
-      <VuiSelect v-model="flex.spacing">
+      <VuiSelect
+        v-model="flex.spacing"
+        tooltip="spacing"
+      >
         <option />
         <option>5px</option>
         <option>10px</option>
         <option>15px</option>
         <option>20px</option>
       </VuiSelect>
-      <VuiSelect v-model="flex.width">
+
+      <VuiSelect
+        v-model="flex.margin"
+        tooltip="margin"
+      >
+        <option />
+        <option>5px</option>
+        <option>10px</option>
+      </VuiSelect>
+
+      <VuiSelect
+        v-model="flex.padding"
+        tooltip="padding"
+      >
+        <option />
+        <option>5px</option>
+        <option>10px</option>
+      </VuiSelect>
+
+      <VuiSelect
+        v-model="flex.width"
+        tooltip="width"
+      >
         <option>100px</option>
         <option>200px</option>
         <option>300px</option>
-        <option>30%</option>
+        <option>400px</option>
+        <option>50%</option>
       </VuiSelect>
-      <VuiSelect v-model="flex.height">
+      <VuiSelect
+        v-model="flex.height"
+        tooltip="height"
+      >
         <option>100px</option>
         <option>200px</option>
         <option>300px</option>
@@ -37,53 +69,53 @@
       :direction="flex.direction"
       :center="flex.center"
       :spacing="flex.spacing"
+      :margin="flex.margin"
+      :padding="flex.padding"
       :width="flex.width"
       :height="flex.height"
-      style="background: #ccc;"
+      class="flex-demo-bg"
     >
-      <VuiButton>Button</VuiButton>
-      <span>span</span>
-      <button>Button</button>
-      <div>div</div>
+      <div class="flex-demo-border">
+        div
+      </div>
+      <VuiButton class="flex-demo-border">
+        button
+      </VuiButton>
+      <span class="flex-demo-border">span</span>
+      <div class="flex-demo-border">
+        div
+      </div>
     </VuiFlex>
 
     <VuiFlex
       :direction="flex.direction"
       :center="flex.center"
       :spacing="flex.spacing"
+      :margin="flex.margin"
+      :padding="flex.padding"
       :width="flex.width"
       :height="flex.height"
-      style="background: #ccc;"
+      class="flex-demo-bg"
     >
-      <VuiButton>Button</VuiButton>
-      <div
-        class="vui-flex-auto"
-        style="background: #eee;"
-      >
-        <span>auto</span>
-        <button>Button</button>
+      <div class="flex-demo-border">
+        div
       </div>
-      <div>div</div>
-    </VuiFlex>
-
-    <VuiFlex
-      :direction="flex.direction"
-      :center="flex.center"
-      :spacing="flex.spacing"
-      :width="flex.width"
-      :height="flex.height"
-      style="background: #ccc;"
-    >
-      <VuiButton>Button</VuiButton>
-      <span>span</span>
+      <VuiButton class="flex-demo-border">
+        button
+      </VuiButton>
       <div
-        class="vui-flex-empty"
-        style="background: #eee;"
+        class="flex-demo-border"
+        :class="flex.spaceClass"
       >
-        empty
+        <VuiSelect v-model="flex.spaceClass">
+          <option>vui-flex-auto</option>
+          <option>vui-flex-empty</option>
+        </VuiSelect>
       </div>
-      <button>Button</button>
-      <div>div</div>
+      <span class="flex-demo-border">span</span>
+      <div class="flex-demo-border">
+        div
+      </div>
     </VuiFlex>
   </VuiFlex>
 </template>
@@ -102,8 +134,23 @@ const flex = reactive({
     direction: 'column',
     center: false,
     spacing: '5px',
-    width: '300px',
-    height: '200px'
+    margin: '5px',
+    padding: '5px',
+    width: '400px',
+    height: '300px',
+
+    spaceClass: 'vui-flex-auto'
 });
 
 </script>
+<style>
+.flex-demo-border {
+    box-sizing: border-box;
+    border: thin solid #ccc;
+}
+
+.flex-demo-bg {
+    background-color: #eee;
+}
+
+</style>

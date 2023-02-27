@@ -85,7 +85,7 @@ const props = defineProps({
     },
 
     width: {
-        type: [Number, String],
+        type: [String, Number],
         default: 200
     },
 
