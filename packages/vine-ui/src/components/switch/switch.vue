@@ -72,7 +72,7 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 const data = reactive({
     checked: false
@@ -131,6 +131,7 @@ const clickHandler = () => {
         return;
     }
     data.checked = !data.checked;
+    emit('change', data.checked);
 };
 
 </script>

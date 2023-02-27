@@ -91,7 +91,7 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 const data = reactive({
     index: 0
@@ -135,6 +135,7 @@ const paneList = computed(() => {
 
 const clickHandler = (index) => {
     data.index = index;
+    emit('change', index);
 };
 
 </script>
