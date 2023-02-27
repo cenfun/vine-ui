@@ -8,7 +8,7 @@
     </label>
 
     <input
-      v-model="viewValue"
+      v-model="data.viewValue"
       v-select-on-focus
       type="text"
       :class="viewClass"
@@ -27,7 +27,7 @@
         :style="listStyle"
       >
         <div
-          v-for="(item, index) in list"
+          v-for="(item, index) in data.list"
           :key="index"
           :class="getItemClass(item)"
           @mousedown="onItemClick(item)"
@@ -50,15 +50,16 @@
 
 <script setup>
 import {
-    computed, nextTick, onMounted, ref, shallowReactive, watch
+    computed, nextTick, onMounted, ref, shallowReactive, watch, watchEffect
 } from 'vue';
 import {
     useBase, BaseRender, vSelectOnFocus, getSlot
 } from '../../base/base.js';
 
 import {
-    hasOwn, clamp, isList
+    hasOwn, clamp, isList, autoPx
 } from '../../utils/util.js';
+
 import IconX from '../../base/images/icon-x.vue';
 
 const { cid } = useBase('VuiSelect');
@@ -103,12 +104,20 @@ const props = defineProps({
     }
 });
 
-const state = shallowReactive({
+const emit = defineEmits(['update:modelValue', 'search', 'remove']);
+
+const data = shallowReactive({
+
+    // from v-model
+    value: '',
+    // from list selected item
+    viewValue: '',
+
+    list: [],
 
     isOpen: false,
     shouldOpen: false,
 
-    timeout_display: null,
     lastDirection: 'down',
 
     // for view width
@@ -122,26 +131,28 @@ const state = shallowReactive({
 
 });
 
-const emit = defineEmits(['update:modelValue', 'search', 'remove']);
-
-const viewValue = computed({
-    get() {
-        if (props.searchable && state.searchValue !== null) {
-            return state.searchValue;
-        }
-        return state.selectedLabel;
-    },
-    set(v) {
-        state.searchValue = v;
-    }
+watchEffect(() => {
+    data.value = props.modelValue === null ? props.value : props.modelValue;
 });
 
+watch(() => data.value, (v) => {
+    initSelectedItem();
+    emit('update:modelValue', v);
+});
+
+watchEffect(() => {
+    data.viewValue = props.searchable && data.searchValue !== null ? data.searchValue : data.selectedLabel;
+});
+
+watch(() => props.options, () => {
+    initList();
+});
 
 const el = ref(null);
 let $el;
 let $view;
 let $list;
-
+let timeout_display;
 
 const viewClass = computed(() => {
     const ls = ['vui-select-view'];
@@ -151,119 +162,22 @@ const viewClass = computed(() => {
     return ls;
 });
 
-
 const viewStyle = computed(() => {
-    if (state.width) {
+    if (data.width) {
         return {
-            'width': `${state.width}`
+            'width': autoPx(data.width)
         };
     }
     return {};
 });
 
 const listStyle = computed(() => {
-    if (state.width) {
+    if (data.width) {
         return {
-            'min-width': `${state.width}`
+            'min-width': autoPx(data.width)
         };
     }
     return {};
-});
-
-
-// =========================================================================================================
-
-const initSelectedItem = (ls) => {
-    const dv = props.modelValue === null ? props.value : props.modelValue;
-
-    // console.log(props.label, 'dv', dv);
-
-    const item = ls.find((it) => it.value === dv);
-    if (item) {
-        state.selectedLabel = item.label;
-        state.selectedValue = item.value;
-    } else {
-        state.selectedLabel = '';
-        state.selectedValue = null;
-    }
-
-    // console.log(props.label, 'initSelectedItem', dv, state.selectedLabel);
-
-};
-
-const getListByPropOptions = (ls) => {
-    ls = ls.map((item) => {
-        if (item && typeof item === 'object') {
-            const newItem = {
-                ... item
-            };
-            if (!hasOwn(newItem, 'value') && hasOwn(newItem, 'label')) {
-                newItem.value = newItem.label;
-            }
-            if (!hasOwn(newItem, 'label') && hasOwn(newItem, 'value')) {
-                newItem.label = newItem.value;
-            }
-            return newItem;
-        }
-        return {
-            label: `${item}`,
-            value: `${item}`
-        };
-    });
-
-    initSelectedItem(ls);
-
-    return ls;
-
-};
-
-const getListBySlotOptions = (ls) => {
-    if (!isList(ls)) {
-        return [];
-    }
-
-    const getChildrenLabel = (children) => {
-        if (typeof children === 'string') {
-            return children;
-        }
-        if (isList(children)) {
-            return children.map((c) => {
-                return getChildrenLabel(c.children);
-            }).join('');
-        }
-        return children || '';
-    };
-
-    ls = ls.map((vn) => {
-        const item = vn.props || {};
-        if (!hasOwn(item, 'label')) {
-            item.label = getChildrenLabel(vn.children);
-        }
-        if (!hasOwn(item, 'value')) {
-            item.value = item.label;
-        }
-        if (hasOwn(item, 'selected')) {
-            item.selected = true;
-        }
-        if (hasOwn(item, 'removable')) {
-            item.removable = true;
-        }
-        return item;
-    });
-
-    initSelectedItem(ls);
-
-    return ls;
-};
-
-// TODO vue bug here, only can put it here not in computed
-const slotDefault = getSlot();
-
-const list = computed(() => {
-    if (props.options) {
-        return getListByPropOptions(props.options);
-    }
-    return getListBySlotOptions(slotDefault);
 });
 
 // =========================================================================================================
@@ -326,11 +240,11 @@ const bindEvents = () => {
 
 const showList = () => {
     document.body.appendChild($list);
-    state.isOpen = true;
+    data.isOpen = true;
 };
 
 const hideList = () => {
-    state.isOpen = false;
+    data.isOpen = false;
     $list.remove();
 };
 
@@ -339,19 +253,19 @@ const hideList = () => {
 const close = () => {
 
     // align with open
-    state.shouldOpen = false;
+    data.shouldOpen = false;
 
-    if (!state.isOpen) {
+    if (!data.isOpen) {
         return;
     }
-    state.lastDirection = 'down';
+    data.lastDirection = 'down';
     hideList();
     unbindEvents();
 };
 
 const closeAsync = () => {
-    clearTimeout(state.timeout_display);
-    state.timeout_display = setTimeout(() => {
+    clearTimeout(timeout_display);
+    timeout_display = setTimeout(() => {
         close();
     }, 100);
 };
@@ -373,16 +287,16 @@ const getListTop = (viewRect, listRect, bodyRect) => {
 
     // console.log(top, ok);
 
-    if (ok[state.lastDirection]) {
-        return top[state.lastDirection];
+    if (ok[data.lastDirection]) {
+        return top[data.lastDirection];
     }
 
     if (ok.down) {
-        state.lastDirection = 'down';
+        data.lastDirection = 'down';
         return top.down;
     }
 
-    state.lastDirection = 'up';
+    data.lastDirection = 'up';
     return top.up;
 };
 
@@ -436,14 +350,14 @@ const layoutAsync = () => {
         return;
     }
 
-    if (state.shouldOpen && !state.isOpen) {
+    if (data.shouldOpen && !data.isOpen) {
         nextTick(() => {
             open();
         });
         return;
     }
 
-    if (!state.isOpen) {
+    if (!data.isOpen) {
         return;
     }
 
@@ -458,13 +372,13 @@ const open = () => {
         return;
     }
 
-    state.shouldOpen = true;
+    data.shouldOpen = true;
 
-    if (state.isOpen) {
+    if (data.isOpen) {
         return;
     }
 
-    if (!list.value.length) {
+    if (!isList(data.list)) {
         return;
     }
 
@@ -476,8 +390,8 @@ const open = () => {
 // when opened list and click out side browser will blur
 // then click body will trigger focus and blur, that not make sense
 const openAsync = () => {
-    clearTimeout(state.timeout_display);
-    state.timeout_display = setTimeout(() => {
+    clearTimeout(timeout_display);
+    timeout_display = setTimeout(() => {
         open();
     }, 100);
 };
@@ -499,7 +413,7 @@ const onFocus = (e) => {
 
 const onBlur = (e) => {
     // console.log('onBlur', cid);
-    state.searchValue = null;
+    data.searchValue = null;
     closeAsync();
 };
 
@@ -509,7 +423,7 @@ const onBlur = (e) => {
 
 const getItemClass = (item) => {
     const ls = ['vui-select-item'];
-    if (item.value === state.selectedValue) {
+    if (item.value === data.selectedValue) {
         ls.push('selected');
     }
     return ls;
@@ -517,13 +431,13 @@ const getItemClass = (item) => {
 
 const onItemClick = (item) => {
 
-    state.searchValue = null;
-    state.selectedLabel = item.label;
-    state.selectedValue = item.value;
+    data.searchValue = null;
+    data.selectedLabel = item.label;
+    data.selectedValue = item.value;
+    data.value = item.value;
 
-    // console.log(props.label, 'onItemClick', item, state.selectedLabel);
+    // console.log(props.label, 'onItemClick', item, data.selectedLabel);
 
-    emit('update:modelValue', item.value);
     close();
 };
 
@@ -531,12 +445,73 @@ const onItemRemove = (item) => {
     emit('remove', item);
 };
 
+// =========================================================================================================
+
+const getListFromProps = (ls) => {
+    return ls.map((item) => {
+        if (item && typeof item === 'object') {
+            const newItem = {
+                ... item
+            };
+            if (!hasOwn(newItem, 'value') && hasOwn(newItem, 'label')) {
+                newItem.value = newItem.label;
+            }
+            if (!hasOwn(newItem, 'label') && hasOwn(newItem, 'value')) {
+                newItem.label = newItem.value;
+            }
+            return newItem;
+        }
+        return {
+            label: `${item}`,
+            value: `${item}`
+        };
+    });
+};
+
+const getListFromSlot = (ls) => {
+
+    if (!isList(ls)) {
+        return [];
+    }
+
+    const getChildrenLabel = (children) => {
+        if (typeof children === 'string') {
+            return children.trim();
+        }
+        if (isList(children)) {
+            return children.map((c) => {
+                return getChildrenLabel(c.children);
+            }).join('');
+        }
+        return children || '';
+    };
+
+    ls = ls.map((vn) => {
+        const item = vn.props || {};
+        if (!hasOwn(item, 'label')) {
+            item.label = getChildrenLabel(vn.children);
+        }
+        if (!hasOwn(item, 'value')) {
+            item.value = item.label;
+        }
+        if (hasOwn(item, 'selected')) {
+            item.selected = true;
+        }
+        if (hasOwn(item, 'removable')) {
+            item.removable = true;
+        }
+        return item;
+    });
+
+    return ls;
+};
+
 
 // =========================================================================================================
 
 const initWidth = () => {
 
-    if (state.width) {
+    if (data.width) {
         return;
     }
 
@@ -552,26 +527,49 @@ const initWidth = () => {
     const viewMaxWidth = 350;
     // no padding because list have same padding
     const w = clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
-    state.width = `${w}px`;
+    data.width = `${w}px`;
 
 };
 
-watch(list, () => {
-    layoutAsync();
-});
+const initSelectedItem = () => {
 
+    const item = data.list.find((it) => it.value === data.value);
+
+    if (item) {
+        data.selectedLabel = item.label;
+        data.selectedValue = item.value;
+    } else {
+        data.selectedLabel = '';
+        data.selectedValue = null;
+    }
+
+    // console.log(props.label, 'initSelectedItem', dv, data.selectedLabel);
+
+};
+
+const initList = () => {
+
+    data.list = props.options ? getListFromProps(props.options) : getListFromSlot(getSlot());
+
+    initSelectedItem();
+
+    nextTick(() => {
+        initWidth();
+
+        layoutAsync();
+    });
+
+};
 
 onMounted(() => {
     $el = el.value;
-
     $view = $el.querySelector('.vui-select-view');
     $list = $el.querySelector('.vui-select-list');
 
-    initWidth();
+    initList();
 });
 
 </script>
-
 <style lang="scss">
 .vui-select {
     position: relative;
