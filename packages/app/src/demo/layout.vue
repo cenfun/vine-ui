@@ -4,6 +4,7 @@
       <div class="vui-layout-iframe">
         <iframe />
       </div>
+
       <VuiLayout
         v-model="layoutModel"
         width="50%"
@@ -22,6 +23,7 @@
           row right auto (layout: {{ layoutModel }})
         </div>
       </VuiLayout>
+
       <VuiLayout
         width="50%"
         height="300px"
@@ -60,6 +62,7 @@
         </div>
       </VuiLayout>
     </VuiFlex>
+
     <VuiLayout
       v-model="layoutNested"
       width="100%"

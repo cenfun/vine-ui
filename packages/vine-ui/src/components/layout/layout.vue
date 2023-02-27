@@ -12,7 +12,7 @@
 
 <script setup>
 import {
-    computed, onMounted, onUnmounted, ref, shallowReactive, watch
+    computed, onMounted, ref, shallowReactive, watch, watchEffect
 } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
 
@@ -20,15 +20,20 @@ import {
     clamp, bindEvents, unbindEvents, preventDefault
 } from '../../utils/util.js';
 
+const { cid } = useBase('VuiLayout');
+
 const props = defineProps({
+
     width: {
         type: String,
         default: ''
     },
+
     height: {
         type: String,
         default: ''
     },
+
     direction: {
         type: String,
         default: 'row',
@@ -41,6 +46,7 @@ const props = defineProps({
         type: String,
         default: '2px'
     },
+
     gutterSize: {
         type: String,
         default: '4px'
@@ -50,6 +56,12 @@ const props = defineProps({
         validator: (v) => true,
         default: ''
     },
+
+    layout: {
+        type: String,
+        default: ''
+    },
+
     modelValue: {
         type: String,
         default: ''
@@ -58,8 +70,44 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const { cid } = useBase('VuiLayout');
+const data = shallowReactive({
+
+    layout: '',
+    layoutList: [],
+    layoutReset: false,
+
+    children: null,
+    indexMap: new WeakMap(),
+    autoNum: 0,
+
+    // offset include border, but client not
+    sizeKey: props.direction === 'row' ? 'offsetWidth' : 'offsetHeight',
+    clientKey: props.direction === 'row' ? 'clientWidth' : 'clientHeight',
+    offsetKey: props.direction === 'row' ? 'offsetX' : 'offsetY',
+
+    moveGutter: null,
+    moveInfo: null,
+    totalSize: 0,
+    prevInfo: null,
+    nextInfo: null
+
+});
+
+watchEffect(() => {
+    data.layout = props.modelValue === null ? props.layout : props.modelValue;
+});
+
+watch(() => data.layout, (v) => {
+    layoutChangeHandler();
+    emit('update:modelValue', v);
+});
+
+watch(() => data.layoutList, (v) => {
+    layoutListChangeHandler();
+});
+
 const el = ref(null);
+let $el;
 
 const classList = computed(() => {
     const ls = [
@@ -88,40 +136,10 @@ const styleList = computed(() => {
     return st;
 });
 
-const state = shallowReactive({
-    $el: null,
-
-    children: null,
-    indexMap: new WeakMap(),
-    layout: [],
-    autoNum: 0,
-
-    // offset include border, but client not
-    sizeKey: props.direction === 'row' ? 'offsetWidth' : 'offsetHeight',
-    clientKey: props.direction === 'row' ? 'clientWidth' : 'clientHeight',
-    offsetKey: props.direction === 'row' ? 'offsetX' : 'offsetY',
-
-    moveGutter: null,
-    moveInfo: null,
-    totalSize: 0,
-    prevInfo: null,
-    nextInfo: null
-
-});
-
-const layout = computed({
-    get() {
-        return state.layout.join(',');
-    },
-    set(v) {
-        emit('update:modelValue', v.join(','));
-    }
-});
-
 const mousedownEvents = {
     mousedown: {
         handler: (e) => {
-            startHandler(e);
+            mouseDownHandler(e);
         }
     }
 };
@@ -159,7 +177,7 @@ const getSize = function() {
     let size = 0;
     Array.from(arguments).forEach(($elem) => {
         if ($elem) {
-            size += $elem[state.sizeKey];
+            size += $elem[data.sizeKey];
         }
     });
     return size;
@@ -167,7 +185,7 @@ const getSize = function() {
 
 const getBorderSize = function($elem) {
     const size = getSize($elem);
-    const clientSize = $elem[state.clientKey];
+    const clientSize = $elem[data.clientKey];
     return size - clientSize;
 };
 
@@ -180,8 +198,8 @@ const getMax = ($elem, key) => {
     if (!$elemItem) {
         return 0;
     }
-    const index = state.indexMap.get($elemItem);
-    const size = state.layout[index];
+    const index = data.indexMap.get($elemItem);
+    const size = data.layoutList[index];
     if (isAutoSize(size)) {
         return getSize($elemItem) - getBorderSize($elemItem) + getMax($elemItem, key);
     }
@@ -189,10 +207,10 @@ const getMax = ($elem, key) => {
 };
 
 const getPercentSize = (size) => {
-    if (!state.totalSize) {
+    if (!data.totalSize) {
         return '0%';
     }
-    const percent = (size / state.totalSize * 100).toFixed(2);
+    const percent = (size / data.totalSize * 100).toFixed(2);
     return `${percent}%`;
 };
 
@@ -202,12 +220,12 @@ const getAutoSize = ($elem) => {
 };
 
 const updateTotalSize = () => {
-    state.totalSize = getSize(state.$el);
+    data.totalSize = getSize($el);
 };
 
 // =======================================================================================
 
-const startHandler = (e) => {
+const mouseDownHandler = (e) => {
 
     const $elem = e.target;
     if (!$elem.classList.contains('vui-layout-gutter')) {
@@ -217,9 +235,9 @@ const startHandler = (e) => {
     // stop nested layout event
     e.stopImmediatePropagation();
 
-    state.moveGutter = null;
-    state.prevInfo = null;
-    state.nextInfo = null;
+    data.moveGutter = null;
+    data.prevInfo = null;
+    data.nextInfo = null;
 
     const moveGutter = $elem;
     const prevNode = moveGutter.previousElementSibling;
@@ -229,9 +247,9 @@ const startHandler = (e) => {
         return;
     }
 
-    state.moveGutter = moveGutter;
+    data.moveGutter = moveGutter;
     moveGutter.classList.add('vui-layout-active');
-    state.$el.classList.add('vui-layout-moving');
+    $el.classList.add('vui-layout-moving');
 
     initMoveInfo(e, prevNode, nextNode);
 
@@ -239,7 +257,7 @@ const startHandler = (e) => {
 
 const initMoveInfo = (e, prevNode, nextNode) => {
 
-    state.moveInfo = {
+    data.moveInfo = {
         startX: e.pageX,
         startY: e.pageY,
         offsetX: 0,
@@ -251,7 +269,7 @@ const initMoveInfo = (e, prevNode, nextNode) => {
 
     // for percent
     updateTotalSize();
-    // console.log(state.totalSize);
+    // console.log(data.totalSize);
 
     const prevInfo = {
         node: prevNode
@@ -286,20 +304,20 @@ const initMoveInfo = (e, prevNode, nextNode) => {
 
 const removeAuto = ($elem, index) => {
     // at least one auto could be left
-    if (state.autoNum < 2) {
+    if (data.autoNum < 2) {
         return;
     }
     const percent = getAutoSize($elem);
-    state.layout[index] = percent;
+    data.layoutList[index] = percent;
     $elem.style.flexBasis = percent;
     $elem.classList.remove('vui-layout-auto');
 };
 
 const initNodeInfo = (prevNode, nextNode, prevInfo, nextInfo) => {
-    const prevIndex = state.indexMap.get(prevNode);
-    const nextIndex = state.indexMap.get(nextNode);
-    const prevSize = state.layout[prevIndex];
-    const nextSize = state.layout[nextIndex];
+    const prevIndex = data.indexMap.get(prevNode);
+    const nextIndex = data.indexMap.get(nextNode);
+    const prevSize = data.layoutList[prevIndex];
+    const nextSize = data.layoutList[nextIndex];
 
     const prevAuto = isAutoSize(prevSize);
     const nextAuto = isAutoSize(nextSize);
@@ -320,10 +338,12 @@ const initNodeInfo = (prevNode, nextNode, prevInfo, nextInfo) => {
         nextInfo.percent = true;
     }
 
-    state.prevInfo = prevInfo;
-    state.nextInfo = nextInfo;
+    data.prevInfo = prevInfo;
+    data.nextInfo = nextInfo;
 
 };
+
+// =======================================================================================
 
 const mouseMoveHandler = function(e) {
     preventDefault(e);
@@ -334,26 +354,18 @@ const mouseMoveHandler = function(e) {
         return;
     }
 
-    state.moveInfo.offsetX = e.pageX - state.moveInfo.startX;
-    state.moveInfo.offsetY = e.pageY - state.moveInfo.startY;
+    data.moveInfo.offsetX = e.pageX - data.moveInfo.startX;
+    data.moveInfo.offsetY = e.pageY - data.moveInfo.startY;
     updateHandler(e);
-};
-
-const mouseUpHandler = function(e) {
-    preventDefault(e);
-
-    updateLayout();
-
-    clean();
 };
 
 const updateHandler = (e) => {
 
-    const offset = state.moveInfo[state.offsetKey];
+    const offset = data.moveInfo[data.offsetKey];
     // console.log(offset);
 
-    updateNodeInfo(state.prevInfo, offset);
-    updateNodeInfo(state.nextInfo, -offset);
+    updateNodeInfo(data.prevInfo, offset);
+    updateNodeInfo(data.nextInfo, -offset);
 
 };
 
@@ -369,11 +381,32 @@ const updateNodeInfo = (info, offset) => {
     info.node.style.flexBasis = basis;
 };
 
-const updateLayout = () => {
+// =======================================================================================
+
+const mouseUpHandler = function(e) {
+    preventDefault(e);
+
+    unbindEvents(windowEvents);
+
+    if (data.moveGutter) {
+        data.moveGutter.classList.remove('vui-layout-active');
+        data.moveGutter = null;
+    }
+
+    $el.classList.remove('vui-layout-moving');
+    data.prevInfo = null;
+    data.nextInfo = null;
+
+    updateLayoutList();
+
+};
+
+const updateLayoutList = () => {
+    const oldLayout = data.layoutList;
     const newLayout = [];
-    const children = state.children;
+    const children = data.children;
     children.forEach((child, i) => {
-        const size = state.layout[i];
+        const size = oldLayout[i];
         if (isAutoSize(size)) {
             newLayout.push('auto');
         } else {
@@ -382,25 +415,47 @@ const updateLayout = () => {
         }
     });
 
-    state.layout = newLayout;
-    layout.value = newLayout;
-
+    data.layoutList = newLayout;
+    // console.log(cid, oldLayout, newLayout);
 };
 
-const clean = () => {
-    unbindEvents(windowEvents);
-    if (state.moveGutter) {
-        state.moveGutter.classList.remove('vui-layout-active');
-        state.moveGutter = null;
+// =======================================================================================
+
+const setChildrenLayout = () => {
+    // console.log(cid, 'setChildrenLayout', data.children);
+
+    // console.log(cid, 'setChildrenLayout', data.layoutList);
+
+    const children = data.children;
+    if (!children) {
+        return;
     }
-    state.$el.classList.remove('vui-layout-moving');
-    state.prevInfo = null;
-    state.nextInfo = null;
+
+    if (data.layoutReset) {
+        children.forEach((child, i) => {
+            child.classList.remove('vui-layout-auto');
+        });
+    } else {
+        data.layoutReset = true;
+    }
+
+    children.forEach((child, i) => {
+        const size = data.layoutList[i];
+        if (isAutoSize(size)) {
+            child.classList.add('vui-layout-auto');
+            child.style.removeProperty('flexBasis');
+        } else {
+            child.style.flexBasis = size;
+        }
+    });
+
 };
 
-const initChildren = () => {
+// =======================================================================================
 
-    const children = Array.from(state.$el.children).filter((child) => {
+const initChildrenAndEvents = () => {
+
+    const children = Array.from($el.children).filter((child) => {
         if (child.classList.contains('vui-layout-gutter')) {
             child.remove();
             return false;
@@ -414,11 +469,11 @@ const initChildren = () => {
         return;
     }
 
-    state.children = children;
+    data.children = children;
 
     children.forEach((child, i) => {
         child.classList.add('vui-layout-item');
-        state.indexMap.set(child, i);
+        data.indexMap.set(child, i);
 
         if (i < total - 1) {
             const gutter = document.createElement('div');
@@ -428,14 +483,14 @@ const initChildren = () => {
 
     });
 
-    bindEvents(mousedownEvents, state.$el);
+    bindEvents(mousedownEvents, $el);
 
 };
 
 const getLayoutFromChildren = () => {
     const ls = [];
 
-    const children = state.children;
+    const children = data.children;
     if (!children) {
         return ls;
     }
@@ -452,98 +507,52 @@ const getLayoutFromChildren = () => {
     return ls;
 };
 
-const setChildrenLayout = (resetLayout) => {
+const layoutChangeHandler = () => {
 
-    const children = state.children;
-    if (!children) {
-        return;
-    }
+    // need same size
+    const list = getLayoutFromChildren();
 
-    if (resetLayout) {
-        children.forEach((child, i) => {
-            child.classList.remove('vui-layout-auto');
+    // merge with layout string
+    if (data.layout) {
+        `${data.layout}`.split(',').forEach((item, i) => {
+            item = `${item}`.trim();
+            if (isAutoSize(item)) {
+                item = 'auto';
+            }
+            list[i] = item;
         });
-    }
-
-    children.forEach((child, i) => {
-        const size = state.layout[i];
-        if (isAutoSize(size)) {
-            child.classList.add('vui-layout-auto');
-            child.style.removeProperty('flexBasis');
-        } else {
-            child.style.flexBasis = size;
-        }
-    });
-
-};
-
-const initLayout = (ls) => {
-    if (!ls) {
-        state.autoNum = 0;
-        return [];
-    }
-
-    // console.log(cid, ls);
-
-    if (!Array.isArray(ls)) {
-        ls = `${ls}`.split(',');
     }
 
     // console.log(cid, ls);
 
     let autoNum = 0;
-
-    ls = ls.map((item) => {
-        item = `${item}`.trim();
+    list.forEach((item) => {
         if (isAutoSize(item)) {
             autoNum += 1;
-            return 'auto';
         }
-        return item;
     });
 
     // console.log(cid, ls);
 
-    state.autoNum = autoNum;
-
-    return ls;
-
+    data.autoNum = autoNum;
+    data.layoutList = list;
 };
 
-watch(() => props.modelValue, () => {
-
-    state.layout = initLayout(props.modelValue);
-
-    // console.log(cid, 'watch props.modelValue', state.layout);
-
-    updateTotalSize();
-    setChildrenLayout(true);
-
-});
-
-onMounted(() => {
-    state.$el = el.value;
-
-    initChildren();
-
-    if (props.modelValue) {
-        state.layout = initLayout(props.modelValue);
-    } else {
-        state.layout = initLayout(getLayoutFromChildren());
-    }
+const layoutListChangeHandler = () => {
+    // update layout back
+    data.layout = data.layoutList.join(',');
 
     updateTotalSize();
     setChildrenLayout();
+};
 
+onMounted(() => {
+    $el = el.value;
+    initChildrenAndEvents();
+
+    // console.log(cid, 'onMounted');
+    layoutChangeHandler();
 });
-
-onUnmounted(() => {
-    clean();
-    unbindEvents(mousedownEvents);
-    state.children = null;
-    state.indexMap = null;
-});
-
 </script>
 
 <style lang="scss">
@@ -567,7 +576,7 @@ onUnmounted(() => {
 
 .vui-layout-item {
     position: relative;
-    flex: 0 0 auto;
+    flex-grow: 0;
     flex-shrink: 0;
     margin: 0;
     padding: 0;
