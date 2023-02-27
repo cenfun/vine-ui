@@ -79,7 +79,7 @@ export const toCssUnit = function(value) {
         return value;
     }
     const s = `${value}`.trim();
-    if (parseInt(s).toString() === s) {
+    if (parseInt(s).toString() === s && s !== '0') {
         return `${s}px`;
     }
     return s;

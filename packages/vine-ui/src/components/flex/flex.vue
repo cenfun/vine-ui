@@ -12,18 +12,17 @@
 <script setup>
 import { computed } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
+import { toCssUnit } from '../../util/util.js';
 
 const { cid } = useBase('VuiFlex');
 
 const props = defineProps({
-    width: {
-        type: String,
+
+    spacing: {
+        type: [String, Number],
         default: ''
     },
-    height: {
-        type: String,
-        default: ''
-    },
+
     direction: {
         type: String,
         default: 'row',
@@ -31,16 +30,34 @@ const props = defineProps({
             return ['row', 'column'].includes(value);
         }
     },
-    center: {
-        type: Boolean,
-        default: false
-    },
+
     content: {
         validator: (v) => true,
         default: ''
     },
-    spacing: {
-        type: String,
+
+    width: {
+        type: [String, Number],
+        default: ''
+    },
+
+    height: {
+        type: [String, Number],
+        default: ''
+    },
+
+    center: {
+        type: Boolean,
+        default: false
+    },
+
+    margin: {
+        type: [String, Number],
+        default: ''
+    },
+
+    padding: {
+        type: [String, Number],
         default: ''
     }
 });
@@ -64,13 +81,19 @@ const classList = computed(() => {
 const styleList = computed(() => {
     const st = {};
     if (props.width) {
-        st.width = props.width;
+        st.width = toCssUnit(props.width);
     }
     if (props.height) {
-        st.height = props.height;
+        st.height = toCssUnit(props.height);
     }
     if (props.spacing) {
-        st['--vui-flex-spacing'] = props.spacing;
+        st['--vui-flex-spacing'] = toCssUnit(props.spacing);
+    }
+    if (props.spacing) {
+        st['--vui-flex-margin'] = toCssUnit(props.margin);
+    }
+    if (props.spacing) {
+        st['--vui-flex-padding'] = toCssUnit(props.padding);
     }
     return st;
 });
@@ -80,6 +103,11 @@ const styleList = computed(() => {
 <style lang="scss">
 .vui-flex {
     --vui-flex-spacing: 0;
+    --vui-flex-margin: 0;
+    --vui-flex-padding: 0;
+
+    margin: var(--vui-flex-margin);
+    padding: var(--vui-flex-padding);
 }
 
 .vui-flex-auto {

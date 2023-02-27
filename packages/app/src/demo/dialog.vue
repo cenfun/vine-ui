@@ -1,7 +1,7 @@
 <template>
   <VuiFlex spacing="10px">
     <VuiButton @click="openDialog()">
-      Open Dialog
+      createComponent Dialog
     </VuiButton>
 
     <VuiButton @click="state.dialogVisible=!state.dialogVisible">
@@ -11,12 +11,13 @@
     <VuiDialog
       v-model="state.dialogVisible"
       :fast-close="false"
+      class="vui-dialog-custom-model"
     >
       <VuiFlex
         direction="column"
         spacing="0"
       >
-        <h3>Do you want to remove all?</h3>
+        <p>Do you want to remove all?</p>
         <div>
           <VuiFlex spacing="10px">
             <VuiButton
@@ -58,23 +59,30 @@ const openDialog = () => {
             message: 'Do you want to save?'
         },
         slots: (h) => {
-
-            const list = [h(VuiButton, {
-                label: 'Save',
-                onclick: () => {
-                    console.log('saved');
-                    dialog.unmount();
-                }
-            }), h(VuiButton, {
-                label: 'Cancel',
-                onclick: () => {
-                    dialog.unmount();
-                }
-            })];
-
             return {
                 default: () => {
-                    return list;
+                    return h(VuiFlex, {
+                        spacing: '10px',
+                        padding: '10px 0'
+                    }, {
+                        default: () => {
+                            return [h(VuiButton, {
+                                label: 'Save',
+                                primary: true,
+                                width: 80,
+                                onclick: () => {
+                                    console.log('saved');
+                                    dialog.unmount();
+                                }
+                            }), h(VuiButton, {
+                                label: 'Close',
+                                width: 80,
+                                onclick: () => {
+                                    dialog.unmount();
+                                }
+                            })];
+                        }
+                    });
                 }
             };
         }
@@ -82,3 +90,11 @@ const openDialog = () => {
 };
 
 </script>
+<style lang="scss">
+.vui-dialog-custom-create {
+    .vui-dialog-message {
+        padding: 10px;
+    }
+}
+
+</style>

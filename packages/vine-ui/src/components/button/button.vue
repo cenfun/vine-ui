@@ -13,24 +13,30 @@
 <script setup>
 import { computed } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
+import { toCssUnit } from '../../util/util.js';
 
 const props = defineProps({
+
     label: {
         type: String,
         default: ''
     },
+
     primary: {
         type: Boolean,
         default: false
     },
+
     type: {
         type: String,
         default: 'button'
     },
+
     width: {
-        type: String,
+        type: [String, Number],
         default: ''
     },
+
     disabled: {
         type: Boolean,
         default: false
@@ -54,7 +60,7 @@ const classList = computed(() => {
 const styleMap = computed(() => {
     const st = {};
     if (props.width) {
-        st.width = props.width;
+        st.width = toCssUnit(props.width);
     }
     return st;
 });
