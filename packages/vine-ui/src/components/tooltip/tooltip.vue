@@ -1,34 +1,34 @@
 <template>
-  <div
-    v-show="modelVisible"
-    ref="el"
-    :class="classList"
-    :style="styleList"
-  >
-    <transition
-      appear
-      mode="out-in"
-      name="vui-fade"
+  <Teleport :to="props.to">
+    <div
+      v-show="data.visible"
+      ref="el"
+      :class="classList"
+      :style="styleList"
     >
-      <div class="vui-tooltip-content">
-        <slot>
-          <BaseRender :content="text" />
-        </slot>
-      </div>
-    </transition>
-  </div>
+      <transition
+        appear
+        mode="out-in"
+        name="vui-fade"
+      >
+        <div class="vui-tooltip-content">
+          <slot />
+        </div>
+      </transition>
+    </div>
+  </Teleport>
 </template>
-
 <script setup>
-
 import {
-    computed, onMounted, onUnmounted, reactive, ref, nextTick, watch
+    computed, onMounted, reactive, ref, nextTick, watch, watchEffect
 } from 'vue';
-import { useBase, BaseRender } from '../../base/base.js';
+import { useBase } from '../../base/base.js';
 
 import {
     getDefaultPositions, getBestPosition, getRect
 } from '../../base/base-popup.js';
+
+import { autoPx } from '../../utils/util.js';
 
 const { cid } = useBase('VuiTooltip');
 
@@ -45,7 +45,7 @@ const props = defineProps({
     },
 
     maxWidth: {
-        type: Number,
+        type: [String, Number],
         default: 320
     },
 
@@ -91,41 +91,31 @@ const props = defineProps({
         default: false
     },
 
+    to: {
+        validator: (v) => true,
+        default: 'body'
+    },
+
     visible: {
         type: Boolean,
         default: true
-    },
-
-    modelValue: {
-        type: Boolean,
-        default: null
     }
 
-});
-
-const emit = defineEmits(['update:modelValue', 'update', 'close']);
-
-const modelVisible = computed({
-    get() {
-        if (props.modelValue === null) {
-            return props.visible;
-        }
-        return props.modelValue;
-    },
-    set(v) {
-        emit('update:modelValue', v);
-    }
 });
 
 const el = ref(null);
 let $el;
 
 const data = reactive({
-    visible: modelVisible,
+    visible: props.visible,
     position: 'top',
     align: 'center',
     top: 0,
     left: 0
+});
+
+watchEffect(() => {
+    data.visible = props.visible;
 });
 
 const classList = computed(() => {
@@ -143,7 +133,7 @@ const styleList = computed(() => {
     const st = {
         top: `${data.top}px`,
         left: `${data.left}px`,
-        'max-width': `${props.maxWidth}px`
+        'max-width': autoPx(props.maxWidth)
     };
     if (props.borderColor) {
         st['--vui-popup-border-color'] = props.borderColor;
@@ -154,29 +144,31 @@ const styleList = computed(() => {
     if (props.color) {
         st['--vui-popup-color'] = props.color;
     }
-
     return st;
 });
 
 // ====================================================================================================
 
 watch(() => data.visible, () => {
-    if (!$el) {
-        return;
-    }
-
-    if (data.visible) {
-        update();
-    } else {
-        emit('close');
-    }
+    update();
 });
 
+const update = () => {
+    nextTick(() => {
+        updateSync();
+    });
+};
 
 const updateSync = () => {
     if (!data.visible) {
         return;
     }
+    if (!$el) {
+        return;
+    }
+
+    contentHandler();
+
     const containerRect = getRect(props.container || window);
     const targetRect = getRect(props.target);
 
@@ -213,36 +205,22 @@ const updateSync = () => {
     data.align = positionInfo.align;
     data.top = positionInfo.top;
     data.left = positionInfo.left;
-
-    emit('update');
 };
 
-const update = () => {
-    nextTick(() => {
-        updateSync();
-    });
+const contentHandler = () => {
+    const $content = $el.querySelector('.vui-tooltip-content');
+    if (props.html) {
+        $content.innerHTML = props.html;
+        return;
+    }
+    $content.innerText = props.text;
 };
 
 // ====================================================================================================
 
 onMounted(() => {
     $el = el.value;
-    if (!$el.parentNode) {
-        document.body.appendChild($el);
-    }
-
-    // console.log(html);
-    if (props.html) {
-        const $content = $el.querySelector('.vui-tooltip-content');
-        $content.innerHTML = props.html;
-    }
-
     update();
-
-});
-
-onUnmounted(() => {
-    emit('close');
 });
 
 </script>

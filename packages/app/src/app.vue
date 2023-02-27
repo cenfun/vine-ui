@@ -43,13 +43,13 @@
   </VuiFlex>
 </template>
 <script setup>
-import VineUI from 'vine-ui';
-import FPSDetector from 'fps-detector';
 import { onMounted } from 'vue';
+import { components } from 'vine-ui';
+import FPSDetector from 'fps-detector';
 
-console.log('components', VineUI);
+console.log('components', components);
 
-const { VuiFlex } = VineUI;
+const { VuiFlex } = components;
 
 const context = require.context('./demo', true, /\.vue$/);
 const demos = {};

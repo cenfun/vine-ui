@@ -1,9 +1,9 @@
 import components from './components.js';
-import bindTooltips from './utils/bind-tooltips.js';
+import generateTooltips from './utils/generate-tooltips.js';
 
 export {
     components,
-    bindTooltips
+    generateTooltips
 };
 
 export default components;

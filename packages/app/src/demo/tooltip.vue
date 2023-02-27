@@ -5,35 +5,45 @@
         Hover Tooltip
       </VuiButton>
 
-      <VuiSelect v-model="state.borderColor">
-        <option value="">
-          borderColor
-        </option>
+      <VuiSelect
+        v-model="data.borderColor"
+        tooltip="borderColor"
+      >
+        <option />
         <option>gray</option>
         <option>green</option>
         <option>red</option>
         <option>#000</option>
       </VuiSelect>
 
-      <VuiSelect v-model="state.bgColor">
-        <option value="">
-          bgColor
-        </option>
+      <VuiSelect
+        v-model="data.bgColor"
+        tooltip="bgColor"
+      >
+        <option />
         <option>gray</option>
         <option>green</option>
         <option>red</option>
       </VuiSelect>
 
-      <VuiSelect v-model="state.color">
-        <option value="">
-          color
-        </option>
+      <VuiSelect
+        v-model="data.color"
+        tooltip="color"
+      >
+        <option />
         <option>#ffffff</option>
         <option>gray</option>
         <option>green</option>
         <option>red</option>
       </VuiSelect>
 
+
+      <VuiButton
+        @mouseenter="onHtml"
+        @mouseleave="onHtml"
+      >
+        html
+      </VuiButton>
 
       <div class="vui-flex-auto" />
 
@@ -45,27 +55,21 @@
       </VuiButton>
     </VuiFlex>
 
-    <div class="vui-tooltip-no-margin">
-      <VuiButton
-        class="tooltip-target1"
-        @mouseenter="state.tooltipVisible=true"
-        @mouseleave="state.tooltipVisible=false"
-      >
-        Tooltip v-modal
-      </VuiButton>
-      <VuiTooltip
-        v-model="state.tooltipVisible"
-        target=".tooltip-target1"
-      >
-        <b>slots in tooltip</b>
-      </VuiTooltip>
-    </div>
+    <VuiTooltip
+      :visible="data.visible"
+      :target="data.target"
+      :text="data.text"
+      :html="data.html"
+      :border-color="data.borderColor"
+      :bg-color="data.bgColor"
+      :color="data.color"
+    />
   </div>
 </template>
 
 <script setup>
-import { onMounted, reactive } from 'vue';
-import { components, bindTooltips } from 'vine-ui';
+import { reactive, onMounted } from 'vue';
+import { components, generateTooltips } from 'vine-ui';
 
 const {
     VuiButton,
@@ -74,30 +78,38 @@ const {
     VuiTooltip
 } = components;
 
-const state = reactive({
+const data = reactive({
+    visible: false,
+    target: '',
+    text: '',
+    html: '',
     borderColor: '',
     bgColor: '',
-    color: '',
+    color: ''
 
-    tooltipVisible: false
 });
 
+const onHtml = (e) => {
+    if (e.type === 'mouseenter') {
+        data.visible = true;
+        data.target = e.target;
+        data.html = '<b>this is bold text</b>';
+    } else {
+        data.visible = false;
+        // must be removed to let text works next
+        data.html = '';
+    }
+};
 
 onMounted(() => {
-    bindTooltips((target, text) => {
-        return {
-            borderColor: state.borderColor,
-            bgColor: state.bgColor,
-            color: state.color
-        };
+    generateTooltips((target, text) => {
+        data.visible = true;
+        data.target = target;
+        data.text = text;
+    }, (target) => {
+        data.visible = false;
+        data.text = '';
     });
 });
 
-
 </script>
-<style lang="scss">
-.vui-tooltip-no-margin {
-    margin: 10px 50%;
-}
-
-</style>
