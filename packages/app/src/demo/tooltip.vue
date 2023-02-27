@@ -1,6 +1,9 @@
 <template>
   <div>
-    <VuiFlex gap="20px">
+    <VuiFlex
+      gap="20px"
+      padding="5px"
+    >
       <VuiButton tooltip="This is tooltip left This is tooltip left This is tooltip left">
         Hover Tooltip
       </VuiButton>

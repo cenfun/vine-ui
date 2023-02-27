@@ -2,6 +2,7 @@
   <VuiFlex gap="10px">
     <VuiFlex
       gap="10px"
+      padding="5px"
       direction="column"
     >
       <VuiSelect

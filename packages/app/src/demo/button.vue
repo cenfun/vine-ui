@@ -1,5 +1,8 @@
 <template>
-  <VuiFlex gap="10px">
+  <VuiFlex
+    gap="10px"
+    padding="5px"
+  >
     <VuiButton
       :label="'Label + ' + count"
       @click="onClick(1)"

@@ -1,9 +1,9 @@
 <template>
-  <VuiFlex
-    gap="10px"
-    direction="column"
-  >
-    <VuiFlex gap="10px">
+  <div>
+    <VuiFlex
+      gap="10px"
+      padding="5px"
+    >
       <VuiSelect
         v-model="selectValue"
         label="prop options:"
@@ -54,7 +54,10 @@
       </VuiSelect>
     </VuiFlex>
 
-    <VuiFlex gap="10px">
+    <VuiFlex
+      gap="10px"
+      padding="5px"
+    >
       <VuiSelect
         v-model="selectValue"
         label="select:"
@@ -98,7 +101,10 @@
       </VuiSelect>
     </VuiFlex>
 
-    <VuiFlex gap="10px">
+    <VuiFlex
+      gap="10px"
+      padding="5px"
+    >
       <VuiSelect
         v-model="selectValue"
         label="max width:"
@@ -124,7 +130,10 @@
       </VuiSelect>
     </VuiFlex>
 
-    <VuiFlex gap="10px">
+    <VuiFlex
+      gap="10px"
+      padding="5px"
+    >
       <VuiSelect
         v-model="selectValue"
         label="input:"
@@ -142,9 +151,8 @@
         @remove="onSelectRemove"
       />
     </VuiFlex>
-  </VuiFlex>
+  </div>
 </template>
-
 <script setup>
 import VineUI from 'vine-ui';
 import { reactive, ref } from 'vue';
@@ -152,7 +160,6 @@ const {
     VuiSelect,
     VuiFlex
 } = VineUI;
-
 
 const selectValue = ref('STG');
 

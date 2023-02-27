@@ -61,11 +61,12 @@ import {
 } from '../../utils/util.js';
 import IconX from '../../base/images/icon-x.vue';
 
-const { cid, undef } = useBase('VuiSelect');
+const { cid } = useBase('VuiSelect');
 
 const classList = ['vui', 'vui-select', cid];
 
 const props = defineProps({
+
     label: {
         type: String,
         default: ''
@@ -98,19 +99,11 @@ const props = defineProps({
 
     modelValue: {
         type: String,
-        default: () => {
-            let ud;
-            return ud;
-        }
+        default: null
     }
 });
 
-const el = ref(null);
-
 const state = shallowReactive({
-    $el: null,
-    $view: null,
-    $list: null,
 
     isOpen: false,
     shouldOpen: false,
@@ -123,11 +116,31 @@ const state = shallowReactive({
     // label for view display
     selectedLabel: '',
     // value for selected item class
-    selectedValue: undef,
+    selectedValue: null,
     // for search input
-    searchValue: undef
+    searchValue: null
 
 });
+
+const emit = defineEmits(['update:modelValue', 'search', 'remove']);
+
+const viewValue = computed({
+    get() {
+        if (props.searchable && state.searchValue !== null) {
+            return state.searchValue;
+        }
+        return state.selectedLabel;
+    },
+    set(v) {
+        state.searchValue = v;
+    }
+});
+
+
+const el = ref(null);
+let $el;
+let $view;
+let $list;
 
 
 const viewClass = computed(() => {
@@ -138,7 +151,6 @@ const viewClass = computed(() => {
     return ls;
 });
 
-const emit = defineEmits(['search', 'remove', 'update:modelValue']);
 
 const viewStyle = computed(() => {
     if (state.width) {
@@ -147,18 +159,6 @@ const viewStyle = computed(() => {
         };
     }
     return {};
-});
-
-const viewValue = computed({
-    get() {
-        if (props.searchable && state.searchValue !== undef) {
-            return state.searchValue;
-        }
-        return state.selectedLabel;
-    },
-    set(v) {
-        state.searchValue = v;
-    }
 });
 
 const listStyle = computed(() => {
@@ -174,7 +174,7 @@ const listStyle = computed(() => {
 // =========================================================================================================
 
 const initSelectedItem = (ls) => {
-    const dv = props.modelValue === undef ? props.value : props.modelValue;
+    const dv = props.modelValue === null ? props.value : props.modelValue;
 
     // console.log(props.label, 'dv', dv);
 
@@ -184,13 +184,12 @@ const initSelectedItem = (ls) => {
         state.selectedValue = item.value;
     } else {
         state.selectedLabel = '';
-        state.selectedValue = undef;
+        state.selectedValue = null;
     }
 
     // console.log(props.label, 'initSelectedItem', dv, state.selectedLabel);
 
 };
-
 
 const getListByPropOptions = (ls) => {
     ls = ls.map((item) => {
@@ -275,12 +274,12 @@ const resizeHandler = (e) => {
 };
 
 const isSelectInner = (elem) => {
-    if (state.$list === elem) {
+    if ($list === elem) {
         return true;
     }
     let inner = false;
     try {
-        inner = state.$list.contains(elem);
+        inner = $list.contains(elem);
     } catch (e) {
         // empty
     }
@@ -288,7 +287,7 @@ const isSelectInner = (elem) => {
 };
 
 const isViewParent = (elem) => {
-    const targetElement = state.$view;
+    const targetElement = $view;
     let parent = targetElement.parentNode;
     while (parent) {
         if (parent === elem) {
@@ -326,13 +325,13 @@ const bindEvents = () => {
 // =========================================================================================================
 
 const showList = () => {
-    document.body.appendChild(state.$list);
+    document.body.appendChild($list);
     state.isOpen = true;
 };
 
 const hideList = () => {
     state.isOpen = false;
-    state.$list.remove();
+    $list.remove();
 };
 
 // =========================================================================================================
@@ -401,8 +400,8 @@ const getRect = (elem) => {
 
 const layout = () => {
 
-    const viewRect = getRect(state.$view);
-    const listRect = getRect(state.$list);
+    const viewRect = getRect($view);
+    const listRect = getRect($list);
     const bodyRect = getRect(document.body);
 
     const top = getListTop(viewRect, listRect, bodyRect);
@@ -414,12 +413,12 @@ const layout = () => {
 
     // console.log('left', left, 'top', top);
 
-    const st = state.$list.style;
+    const st = $list.style;
     st.left = `${left}px`;
     st.top = `${top}px`;
 
     // selected element.scrollIntoView();
-    const $selected = state.$list.querySelector('.vui-select-item.selected');
+    const $selected = $list.querySelector('.vui-select-item.selected');
     if ($selected) {
         // scrollIntoView cased whole page scroll if body scrollable
         // $selected.scrollIntoView();
@@ -433,7 +432,7 @@ const layoutAsync = () => {
         return;
     }
 
-    if (!state.$el) {
+    if (!$el) {
         return;
     }
 
@@ -500,7 +499,7 @@ const onFocus = (e) => {
 
 const onBlur = (e) => {
     // console.log('onBlur', cid);
-    state.searchValue = undef;
+    state.searchValue = null;
     closeAsync();
 };
 
@@ -518,7 +517,7 @@ const getItemClass = (item) => {
 
 const onItemClick = (item) => {
 
-    state.searchValue = undef;
+    state.searchValue = null;
     state.selectedLabel = item.label;
     state.selectedValue = item.value;
 
@@ -541,7 +540,7 @@ const initWidth = () => {
         return;
     }
 
-    const listRect = state.$list.getBoundingClientRect();
+    const listRect = $list.getBoundingClientRect();
     // border is 2 if empty
     if (listRect.width <= 2) {
         return;
@@ -563,10 +562,10 @@ watch(list, () => {
 
 
 onMounted(() => {
-    state.$el = el.value;
+    $el = el.value;
 
-    state.$view = state.$el.querySelector('.vui-select-view');
-    state.$list = state.$el.querySelector('.vui-select-list');
+    $view = $el.querySelector('.vui-select-view');
+    $list = $el.querySelector('.vui-select-list');
 
     initWidth();
 });

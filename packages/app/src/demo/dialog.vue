@@ -1,6 +1,7 @@
 <template>
   <VuiFlex
     gap="10px"
+    padding="5px"
     class="vui-demo-dialog"
   >
     <VuiButton @click="data.visible=true">
@@ -38,7 +39,6 @@
     </VuiDialog>
   </VuiFlex>
 </template>
-
 <script setup>
 import VineUI from 'vine-ui';
 import { reactive } from 'vue';

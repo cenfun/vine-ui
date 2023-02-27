@@ -6,58 +6,62 @@
       </slot>
     </label>
     <input
-      v-model="value"
+      v-model="data.value"
       v-select-on-focus
       :disabled="props.disabled"
       :placeholder="props.placeholder"
       :type="props.type"
       :style="styleMap"
-      :title="props.title"
     >
   </div>
 </template>
 <script setup>
-import { computed } from 'vue';
+import {
+    computed, reactive, watch, watchEffect
+} from 'vue';
+
 import {
     useBase, BaseRender, vSelectOnFocus, getSlot
 } from '../../base/base.js';
 
+import { autoPx } from '../../utils/util.js';
+
 const { cid } = useBase('VuiInput');
 
 const classMap = ['vui', 'vui-input', cid];
-const styleMap = computed(() => {
-    return {
-        width: props.width
-    };
-});
 
 const props = defineProps({
+
     label: {
         type: String,
         default: ''
-    },
-    disabled: {
-        type: Boolean,
-        default: false
     },
 
     type: {
         type: String,
         default: 'text'
     },
+
     placeholder: {
         type: String,
         default: ''
     },
+
     width: {
-        type: String,
+        type: [String, Number],
         default: '80px'
+    },
+
+    disabled: {
+        type: Boolean,
+        default: false
     },
 
     value: {
         type: String,
         default: ''
     },
+
     modelValue: {
         type: String,
         default: null
@@ -66,22 +70,27 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const value = computed({
-    get() {
-        if (props.modelValue === null) {
-            return props.value;
-        }
-        return props.modelValue;
-    },
-    set(v) {
-        emit('update:modelValue', v);
-    }
+const data = reactive({
+    value: ''
+});
+
+watchEffect(() => {
+    data.value = props.modelValue === null ? props.value : props.modelValue;
+});
+
+watch(() => data.value, (v) => {
+    emit('update:modelValue', v);
+});
+
+const styleMap = computed(() => {
+    return {
+        width: autoPx(props.width)
+    };
 });
 
 const labelContent = computed(() => {
     return props.label || getSlot();
 });
-
 
 </script>
 <style lang="scss">

@@ -1,5 +1,8 @@
 <template>
-  <VuiFlex gap="10px">
+  <VuiFlex
+    gap="10px"
+    padding="5px"
+  >
     <div
       v-if="data.position==='left'"
       class="vui-flex-empty"

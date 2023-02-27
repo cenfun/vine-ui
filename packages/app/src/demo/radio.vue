@@ -1,6 +1,9 @@
 <template>
   <div>
-    <VuiFlex gap="10px">
+    <VuiFlex
+      gap="10px"
+      padding="5px"
+    >
       <div>radioName1</div>
 
       <VuiSelect v-model="radioValue1">
@@ -34,7 +37,7 @@
 
     <VuiFlex
       gap="10px"
-      margin="10px 0 0 0"
+      padding="5px"
     >
       <div>radioName2</div>
 

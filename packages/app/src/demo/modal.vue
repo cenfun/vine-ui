@@ -1,5 +1,8 @@
 <template>
-  <VuiFlex gap="10px">
+  <VuiFlex
+    gap="10px"
+    padding="5px"
+  >
     <VuiSelect
       v-model="data.title"
       tooltip="title"
@@ -54,7 +57,6 @@
     </VuiModal>
   </VuiFlex>
 </template>
-
 <script setup>
 import VineUI from 'vine-ui';
 import { reactive } from 'vue';
