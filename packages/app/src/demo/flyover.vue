@@ -4,21 +4,27 @@
       v-if="data.position==='left'"
       class="vui-flex-empty"
     />
-    <VuiSelect v-model="data.width">
+    <VuiSelect
+      v-model="data.width"
+      tooltip="width"
+    >
       <option>30%</option>
       <option>50%</option>
       <option>60%</option>
       <option>100px</option>
     </VuiSelect>
 
-    <VuiSelect v-model="data.position">
+    <VuiSelect
+      v-model="data.position"
+      tooltip="position"
+    >
       <option>right</option>
       <option>left</option>
     </VuiSelect>
 
-    <VuiButton @click="createFlyover()">
-      createComponent
-    </VuiButton>
+    <VuiSwitch v-model="data.visible">
+      visible on start
+    </VuiSwitch>
 
     <VuiButton @click="data.visible=true">
       show
@@ -28,13 +34,28 @@
       hide
     </VuiButton>
 
-    <VuiButton @click="destroyFlyover()">
-      destroy
+    <VuiButton @click="data.visible=!data.visible">
+      toggle Flyover
     </VuiButton>
 
-    <VuiButton @click="data.modelVisible=!data.modelVisible">
-      Flyover v-model
-    </VuiButton>
+    <VuiFlyover
+      v-model="data.visible"
+      :width="data.width"
+      :position="data.position"
+      @start="onStart"
+      @end="onEnd"
+    >
+      <VuiFlex
+        margin="20px"
+        gap="20px"
+      >
+        <div>This is Flyover</div>
+        <div class="vui-flex-auto" />
+        <VuiButton @click="data.visible=false">
+          Close
+        </VuiButton>
+      </VuiFlex>
+    </VuiFlyover>
 
     <div
       v-if="data.position==='right'"
@@ -44,60 +65,36 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, watch } from 'vue';
 
 import VineUI from 'vine-ui';
 const {
     VuiButton,
     VuiFlex,
     VuiFlyover,
-    VuiSelect
+    VuiSelect,
+    VuiSwitch
 } = VineUI;
+
+const visible = sessionStorage.getItem('vui-flyover-visible') === 'true';
 
 const data = reactive({
     width: '30%',
     position: 'right',
-    visible: true,
-
-    modelVisible: false
+    visible: visible
 });
 
+watch(() => data.visible, (v) => {
+    sessionStorage.setItem('vui-flyover-visible', v);
+});
 
-let flyover;
-const createFlyover = () => {
-    destroyFlyover();
-    flyover = VuiFlyover.createComponent({
-        props: {
-            width: data.width,
-            position: data.position,
-            visible: data.visible,
-            onStart: (v) => {
-                console.log(`flyover start: ${v}`);
-            },
-            onEnd: (v) => {
-                console.log(`flyover end: ${v}`);
-            }
-        },
-        slots: (h) => {
-            return {
-                default: () => h('div', {
-                    style: 'padding:10px;'
-                }, h(VuiButton, {
-                    label: 'Close',
-                    onClick() {
-                        // data.visible = false;
-                    }
-                }))
-            };
-        }
-    });
+const onStart = () => {
+    console.log('start');
 };
 
-const destroyFlyover = () => {
-    if (flyover) {
-        flyover.unmount();
-        flyover = null;
-    }
+const onEnd = () => {
+    console.log('end');
 };
+
 
 </script>

@@ -16,12 +16,14 @@ import {
 } from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
 
+import { autoPx } from '../../utils/util.js';
+
 const { cid } = useBase('VuiFlyover');
 
 const props = defineProps({
 
     width: {
-        type: String,
+        type: [String, Number],
         default: '50%'
     },
 
@@ -63,7 +65,7 @@ watchEffect(() => {
 });
 
 watch(() => data.visible, (nv, ov) => {
-    console.log('visible change', ov, nv);
+    // console.log('visible change', ov, nv);
     onStart(ov, nv);
     emit('update:modelValue', data.visible);
 });
@@ -90,7 +92,7 @@ const classList = computed(() => {
 
 const styleList = computed(() => {
     return {
-        width: data.width
+        width: autoPx(data.width)
     };
 });
 
