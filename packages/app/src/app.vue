@@ -16,7 +16,7 @@
           target="_blank"
         >Vue 3.x</a>
       </div>
-      <VuiFlex spacing="10px">
+      <VuiFlex gap="10px">
         <div class="fps-detector" />
         <a
           href="https://github.com/cenfun/vine-ui"

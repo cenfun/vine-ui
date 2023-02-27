@@ -23,12 +23,6 @@ const props = defineProps({
         default: ''
     },
 
-    // alias for gap
-    spacing: {
-        type: [String, Number],
-        default: ''
-    },
-
     direction: {
         type: String,
         default: 'row',
@@ -97,8 +91,8 @@ const styleList = computed(() => {
     if (props.height) {
         st.height = autoPx(props.height);
     }
-    if (props.gap || props.spacing) {
-        st['--vui-flex-gap'] = autoPx(props.gap || props.spacing);
+    if (props.gap) {
+        st['--vui-flex-gap'] = autoPx(props.gap);
     }
     if (props.margin) {
         st['--vui-flex-margin'] = autoPx(props.margin);

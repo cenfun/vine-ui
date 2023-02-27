@@ -1,6 +1,6 @@
 <template>
   <div class="vui-popover-example">
-    <VuiFlex spacing="20px">
+    <VuiFlex gap="20px">
       <VuiButton @click="openPopover">
         Open Popover
       </VuiButton>
@@ -16,7 +16,7 @@
       </VuiButton>
     </VuiFlex>
 
-    <VuiFlex spacing="10px">
+    <VuiFlex gap="10px">
       <div>12 positions:</div>
       <div class="vui-popover-positions">
         <VuiPopover
@@ -188,7 +188,7 @@
 
       <VuiFlex
         direction="column"
-        spacing="10px"
+        gap="10px"
       >
         <VuiSelect v-model="state.borderColor">
           <option value="">
@@ -222,7 +222,7 @@
     </VuiFlex>
 
 
-    <VuiFlex spacing="20px">
+    <VuiFlex gap="20px">
       <VuiButton
         class="target1"
         @click="onPopoverVisibleClick1"

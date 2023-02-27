@@ -1,5 +1,5 @@
 <template>
-  <VuiFlex spacing="10px">
+  <VuiFlex gap="10px">
     <div
       v-if="flyover.position==='left'"
       class="vui-flex-empty"

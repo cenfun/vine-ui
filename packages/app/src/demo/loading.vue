@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VuiFlex spacing="10px">
+    <VuiFlex gap="10px">
       <VuiSelect
         v-model="loading.color"
         label="Color"

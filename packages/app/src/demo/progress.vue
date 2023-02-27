@@ -1,5 +1,5 @@
 <template>
-  <VuiFlex spacing="10px">
+  <VuiFlex gap="10px">
     <VuiProgress />
     <VuiProgress percentage="100%" />
     <VuiProgress

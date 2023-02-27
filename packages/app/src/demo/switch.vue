@@ -1,5 +1,5 @@
 <template>
-  <VuiFlex spacing="10px">
+  <VuiFlex gap="10px">
     <VuiSwitch v-model="switchValue">
       switch:
     </VuiSwitch>

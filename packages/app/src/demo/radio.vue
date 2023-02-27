@@ -1,5 +1,5 @@
 <template>
-  <VuiFlex spacing="10px">
+  <VuiFlex gap="10px">
     <VuiRadio
       v-model="radioValue"
       name="radioName1"

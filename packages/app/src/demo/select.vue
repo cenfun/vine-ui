@@ -1,9 +1,9 @@
 <template>
   <VuiFlex
-    spacing="10px"
+    gap="10px"
     direction="column"
   >
-    <VuiFlex spacing="10px">
+    <VuiFlex gap="10px">
       <VuiSelect
         v-model="selectValue"
         label="prop options:"
@@ -54,7 +54,7 @@
       </VuiSelect>
     </VuiFlex>
 
-    <VuiFlex spacing="10px">
+    <VuiFlex gap="10px">
       <VuiSelect
         v-model="selectValue"
         label="select:"
@@ -98,7 +98,7 @@
       </VuiSelect>
     </VuiFlex>
 
-    <VuiFlex spacing="10px">
+    <VuiFlex gap="10px">
       <VuiSelect
         v-model="selectValue"
         label="max width:"
@@ -124,7 +124,7 @@
       </VuiSelect>
     </VuiFlex>
 
-    <VuiFlex spacing="10px">
+    <VuiFlex gap="10px">
       <VuiSelect
         v-model="selectValue"
         label="input:"

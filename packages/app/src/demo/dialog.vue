@@ -1,5 +1,5 @@
 <template>
-  <VuiFlex spacing="10px">
+  <VuiFlex gap="10px">
     <VuiButton @click="openDialog()">
       createComponent Dialog
     </VuiButton>
@@ -15,11 +15,11 @@
     >
       <VuiFlex
         direction="column"
-        spacing="0"
+        gap="0"
       >
         <p>Do you want to remove all?</p>
         <div>
-          <VuiFlex spacing="10px">
+          <VuiFlex gap="10px">
             <VuiButton
               primary
               width="80px"
@@ -62,7 +62,7 @@ const openDialog = () => {
             return {
                 default: () => {
                     return h(VuiFlex, {
-                        spacing: '10px',
+                        gap: '10px',
                         padding: '10px 0'
                     }, {
                         default: () => {

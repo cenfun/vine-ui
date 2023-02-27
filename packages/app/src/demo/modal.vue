@@ -1,5 +1,5 @@
 <template>
-  <VuiFlex spacing="10px">
+  <VuiFlex gap="10px">
     <VuiButton @click="openModal()">
       Open Modal
     </VuiButton>

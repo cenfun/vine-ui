@@ -360,11 +360,11 @@ const closeAsync = () => {
 // =========================================================================================================
 
 const getListTop = (viewRect, listRect, bodyRect) => {
-    const spacing = 2;
+    const space = 2;
 
     const top = {
-        down: viewRect.top + viewRect.height + spacing,
-        up: viewRect.top - listRect.height - spacing
+        down: viewRect.top + viewRect.height + space,
+        up: viewRect.top - listRect.height - space
     };
 
     const ok = {

@@ -1,7 +1,7 @@
 <template>
   <VuiFlex
     direction="column"
-    spacing="10px"
+    gap="10px"
   >
     <VuiTab
       v-model="tabActive"
