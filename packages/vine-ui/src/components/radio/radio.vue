@@ -2,7 +2,7 @@
   <div :class="classList">
     <input
       :id="cid"
-      v-model="modelData"
+      v-model="data.checked"
       :disabled="props.disabled"
       :name="props.name"
       :value="props.value"
@@ -16,7 +16,9 @@
   </div>
 </template>
 <script setup>
-import { computed } from 'vue';
+import {
+    reactive, watch, watchEffect
+} from 'vue';
 import { useBase, BaseRender } from '../../base/base.js';
 
 const { cid } = useBase('VuiRadio');
@@ -24,26 +26,32 @@ const { cid } = useBase('VuiRadio');
 const classList = ['vui', 'vui-radio', cid];
 
 const props = defineProps({
+
     label: {
         type: String,
         default: ''
     },
+
     name: {
         type: String,
         default: ''
     },
+
     disabled: {
         type: Boolean,
         default: false
     },
+
     checked: {
         type: Boolean,
         default: false
     },
+
     value: {
         type: String,
         default: ''
     },
+
     modelValue: {
         type: String,
         default: null
@@ -52,16 +60,16 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const modelData = computed({
-    get() {
-        if (props.checked) {
-            return props.value;
-        }
-        return props.modelValue;
-    },
-    set(v) {
-        emit('update:modelValue', v);
-    }
+const data = reactive({
+    checked: false
+});
+
+watchEffect(() => {
+    data.checked = props.modelValue === null ? props.checked : props.modelValue;
+});
+
+watch(() => data.checked, () => {
+    emit('update:modelValue', data.checked);
 });
 
 </script>
