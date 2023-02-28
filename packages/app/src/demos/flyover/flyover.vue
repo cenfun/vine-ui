@@ -1,45 +1,60 @@
 <template>
-  <VuiFlex
-    gap="10px"
-    padding="5px"
-  >
-    <div
-      v-if="data.position==='left'"
-      class="vui-flex-empty"
-    />
-    <VuiSelect
-      v-model="data.width"
-      tooltip="width"
+  <div>
+    <VuiFlex
+      gap="10px"
+      padding="5px"
     >
-      <option>30%</option>
-      <option>50%</option>
-      <option>60%</option>
-      <option>100px</option>
-    </VuiSelect>
+      <VuiButton @click="data.visible=true">
+        show Flyover
+      </VuiButton>
 
-    <VuiSelect
-      v-model="data.position"
-      tooltip="position"
+      <VuiButton @click="data.visible=false">
+        hide Flyover
+      </VuiButton>
+
+      <VuiButton @click="data.visible=!data.visible">
+        toggle Flyover
+      </VuiButton>
+    </VuiFlex>
+
+    <VuiFlex
+      gap="10px"
+      padding="5px"
+      margin="10px 0 0 0"
     >
-      <option>right</option>
-      <option>left</option>
-    </VuiSelect>
+      <div
+        v-if="data.position==='left'"
+        class="vui-flex-empty"
+      />
+      <div>Props:</div>
+      <VuiSelect
+        v-model="data.width"
+        tooltip="width"
+      >
+        <option>30%</option>
+        <option>50%</option>
+        <option>60%</option>
+        <option>100px</option>
+      </VuiSelect>
 
-    <VuiSwitch v-model="data.visible">
-      visible on start
-    </VuiSwitch>
+      <VuiSelect
+        v-model="data.position"
+        tooltip="position"
+      >
+        <option>right</option>
+        <option>left</option>
+      </VuiSelect>
 
-    <VuiButton @click="data.visible=true">
-      show
-    </VuiButton>
+      <VuiSwitch v-model="data.visible">
+        visible on start
+      </VuiSwitch>
 
-    <VuiButton @click="data.visible=false">
-      hide
-    </VuiButton>
+      <div
+        v-if="data.position==='right'"
+        class="vui-flex-empty"
+      />
+    </VuiFlex>
 
-    <VuiButton @click="data.visible=!data.visible">
-      toggle Flyover
-    </VuiButton>
 
     <VuiFlyover
       v-model="data.visible"
@@ -59,12 +74,7 @@
         </VuiButton>
       </VuiFlex>
     </VuiFlyover>
-
-    <div
-      v-if="data.position==='right'"
-      class="vui-flex-empty"
-    />
-  </VuiFlex>
+  </div>
 </template>
 
 <script setup>

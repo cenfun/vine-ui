@@ -4,3 +4,4 @@
 /dist/
 /public/dist/
 /packages/*/dist/
+/packages/app/src/metadata.json

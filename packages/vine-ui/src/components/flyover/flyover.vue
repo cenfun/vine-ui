@@ -130,7 +130,9 @@ const onStart = (ov, nv) => {
         cl.add(`vui-slide-out-${props.position}`);
     }
     data.hasStarted = true;
+
     bindEvents();
+
     emit('start', nv);
 };
 
@@ -144,6 +146,7 @@ const onEnd = (v) => {
         cl.remove(`vui-slide-out-${props.position}`, 'vui-flyover-show');
         data.width = '0px';
     }
+
     emit('end', v);
 };
 
@@ -156,10 +159,6 @@ onMounted(() => {
 
 onUnmounted(() => {
     unbindEvents();
-});
-
-defineExpose({
-    cid
 });
 
 </script>

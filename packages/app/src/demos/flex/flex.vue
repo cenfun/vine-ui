@@ -1,10 +1,74 @@
 <template>
-  <VuiFlex gap="10px">
+  <div>
+    <VuiFlex gap="10px">
+      <VuiFlex
+        :direction="flex.direction"
+
+        :gap="flex.gap"
+        :margin="flex.margin"
+        :padding="flex.padding"
+        :width="flex.width"
+        :height="flex.height"
+
+        :center="flex.center"
+        :wrap="flex.wrap"
+
+        class="vui-demo-flex"
+      >
+        <div>
+          div
+        </div>
+        <VuiButton>
+          button
+        </VuiButton>
+        <div>
+          long text long text long text long text for row wrap
+        </div>
+        <span>span</span>
+        <div>
+          div
+        </div>
+      </VuiFlex>
+
+      <VuiFlex
+        :direction="flex.direction"
+
+        :gap="flex.gap"
+        :margin="flex.margin"
+        :padding="flex.padding"
+        :width="flex.width"
+        :height="flex.height"
+
+        :center="flex.center"
+        :wrap="flex.wrap"
+
+        class="vui-demo-flex"
+      >
+        <div>
+          div
+        </div>
+        <VuiButton>
+          button
+        </VuiButton>
+        <div class="vui-flex-auto">
+          vui-flex-auto
+        </div>
+        <div>
+          long text long text long text long text for row wrap
+        </div>
+        <span>span</span>
+        <div>
+          div
+        </div>
+      </VuiFlex>
+    </VuiFlex>
+
     <VuiFlex
       gap="10px"
       padding="5px"
-      direction="column"
+      margin="10px 0 0 0"
     >
+      <div>Props:</div>
       <VuiSelect
         v-model="flex.direction"
         tooltip="direction"
@@ -72,68 +136,7 @@
         wrap
       </VuiSwitch>
     </VuiFlex>
-
-    <VuiFlex
-      :direction="flex.direction"
-
-      :gap="flex.gap"
-      :margin="flex.margin"
-      :padding="flex.padding"
-      :width="flex.width"
-      :height="flex.height"
-
-      :center="flex.center"
-      :wrap="flex.wrap"
-
-      class="vui-demo-flex"
-    >
-      <div>
-        div
-      </div>
-      <VuiButton>
-        button
-      </VuiButton>
-      <div>
-        long text long text long text long text for row wrap
-      </div>
-      <span>span</span>
-      <div>
-        div
-      </div>
-    </VuiFlex>
-
-    <VuiFlex
-      :direction="flex.direction"
-
-      :gap="flex.gap"
-      :margin="flex.margin"
-      :padding="flex.padding"
-      :width="flex.width"
-      :height="flex.height"
-
-      :center="flex.center"
-      :wrap="flex.wrap"
-
-      class="vui-demo-flex"
-    >
-      <div>
-        div
-      </div>
-      <VuiButton>
-        button
-      </VuiButton>
-      <div class="vui-flex-auto">
-        vui-flex-auto
-      </div>
-      <div>
-        long text long text long text long text for row wrap
-      </div>
-      <span>span</span>
-      <div>
-        div
-      </div>
-    </VuiFlex>
-  </VuiFlex>
+  </div>
 </template>
 
 <script setup>

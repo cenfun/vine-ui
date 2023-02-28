@@ -49,7 +49,12 @@ const props = defineProps({
     positions: {
         type: [String, Array],
         default: () => {
-            return getDefaultPositions(['center', 'top', 'bottom', 'right']);
+            return getDefaultPositions([
+                'center',
+                'top',
+                'bottom',
+                'right'
+            ]);
         }
     },
 

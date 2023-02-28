@@ -151,10 +151,6 @@ onMounted(() => {
     eventsHandler();
 });
 
-defineExpose({
-    cid
-});
-
 </script>
 <style lang="scss">
 .vui-modal {

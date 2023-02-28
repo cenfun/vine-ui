@@ -15,6 +15,7 @@ module.exports = {
         },
         cssExtract: false,
 
+        before: require('./before-build.js'),
         afterAll: require('./after-all-build.js')
     }
 

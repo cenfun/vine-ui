@@ -26,28 +26,26 @@
         />
       </VuiFlex>
     </div>
-    <div class="vui-body vui-flex-auto">
-      <VuiFlex>
-        <div class="vui-nav">
-          <router-link
-            class="vui-nav-home"
-            to="/"
-          >
-            Preview All
-          </router-link>
-          <router-link
-            v-for="(item,i) in demos"
-            :key="i"
-            :to="item.path"
-            :class="'vui-nav-'+item.key"
-          >
-            {{ item.componentName }}
-          </router-link>
-        </div>
-        <div class="vui-demo vui-flex-auto">
-          <router-view />
-        </div>
-      </VuiFlex>
+    <div class="vui-body vui-flex-auto vui-flex-row">
+      <div class="vui-demo-nav">
+        <router-link
+          class="vui-nav-home"
+          to="/"
+        >
+          Preview All
+        </router-link>
+        <router-link
+          v-for="(item,i) in demos"
+          :key="i"
+          :to="item.path"
+          :class="'vui-nav-'+item.key"
+        >
+          {{ item.componentName }}
+        </router-link>
+      </div>
+      <div class="vui-demo-body vui-flex-auto">
+        <router-view />
+      </div>
     </div>
   </VuiFlex>
 </template>
@@ -127,15 +125,14 @@ body {
 }
 
 .vui-body {
-    overflow-y: auto;
-
-    > .vui-flex {
-        align-items: start;
-    }
+    align-items: start;
+    overflow: hidden;
 }
 
-.vui-nav {
+.vui-demo-nav {
     width: 168px;
+    height: 100%;
+    overflow-y: auto;
 
     a {
         position: relative;
@@ -183,9 +180,11 @@ body {
     }
 }
 
-.vui-demo {
+.vui-demo-body {
+    height: 100%;
     margin-left: 10px;
     padding: 10px;
+    overflow-y: auto;
 }
 
 </style>

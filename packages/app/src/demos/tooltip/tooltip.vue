@@ -8,6 +8,29 @@
         Hover Tooltip
       </VuiButton>
 
+      <VuiButton
+        @mouseenter="onHtml"
+        @mouseleave="onHtml"
+      >
+        html
+      </VuiButton>
+
+      <div class="vui-flex-auto" />
+
+      <VuiButton tooltip="This is tooltip right center">
+        Hover Tooltip
+      </VuiButton>
+      <VuiButton tooltip="This is tooltip right long text">
+        Hover Tooltip
+      </VuiButton>
+    </VuiFlex>
+
+    <VuiFlex
+      gap="10px"
+      padding="5px"
+      margin="10px 0 0 0"
+    >
+      <div>Props:</div>
       <VuiSelect
         v-model="data.borderColor"
         tooltip="borderColor"
@@ -39,23 +62,6 @@
         <option>green</option>
         <option>red</option>
       </VuiSelect>
-
-
-      <VuiButton
-        @mouseenter="onHtml"
-        @mouseleave="onHtml"
-      >
-        html
-      </VuiButton>
-
-      <div class="vui-flex-auto" />
-
-      <VuiButton tooltip="This is tooltip right center">
-        Hover Tooltip
-      </VuiButton>
-      <VuiButton tooltip="This is tooltip right long text">
-        Hover Tooltip
-      </VuiButton>
     </VuiFlex>
 
     <VuiTooltip

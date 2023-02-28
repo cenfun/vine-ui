@@ -439,7 +439,6 @@ onMounted(() => {
 });
 
 defineExpose({
-    cid,
     update
 });
 

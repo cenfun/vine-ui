@@ -1,33 +1,79 @@
 <template>
-  <div v-if="data.demo">
+  <div
+    v-if="data.demo"
+    class="vui-demo-list"
+  >
     <div
       v-if="data.props"
       class="vui-demo-item vui-demo-props"
     >
       <div class="vui-demo-title">
-        {{ data.demo.componentName }} Props
+        {{ data.demo.componentName }}
       </div>
       <table class="vui-demo-table">
         <tr>
-          <th>name</th>
-          <th>type</th>
-          <th>default</th>
+          <th>Props</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
         </tr>
         <tr
           v-for="(item, key) in data.props"
           :key="key"
         >
-          <td>{{ getPropKey(item,key) }}</td>
-          <td>{{ getPropType(item, key) }}</td>
-          <td>{{ getPropDefault(item, key) }}</td>
+          <td>{{ getPropKey(item) }}</td>
+          <td>{{ item.type && item.type.name }}</td>
+          <td>{{ item.defaultValue.value }}</td>
+          <td>{{ item.description }}</td>
         </tr>
-        <template v-if="data.emits">
+        <template v-if="data.events">
+          <tr>
+            <th colspan="4">
+              Events
+            </th>
+          </tr>
           <tr
-            v-for="(item, key) in data.emits"
+            v-for="(item, key) in data.events"
             :key="key"
           >
-            <td>@{{ item }}</td>
-            <td>[event]</td>
+            <td>
+              @{{ item.name }}
+            </td>
+            <td colspan="2" />
+            <td />
+          </tr>
+        </template>
+        <template v-if="data.slots">
+          <tr>
+            <th colspan="4">
+              Slots
+            </th>
+          </tr>
+          <tr
+            v-for="(item, key) in data.slots"
+            :key="key"
+          >
+            <td>
+              {{ item.name }}
+            </td>
+            <td colspan="2" />
+            <td />
+          </tr>
+        </template>
+        <template v-if="data.expose">
+          <tr>
+            <th colspan="4">
+              Expose
+            </th>
+          </tr>
+          <tr
+            v-for="(item, key) in data.expose"
+            :key="key"
+          >
+            <td>
+              {{ item.name }}
+            </td>
+            <td colspan="2" />
             <td />
           </tr>
         </template>
@@ -39,7 +85,7 @@
       class="vui-demo-item"
     >
       <div class="vui-demo-title">
-        {{ data.demo.componentName }} Demo <span>{{ item.path }}</span>
+        Demo <span>{{ item.path }}</span>
       </div>
       <component :is="item.component" />
       <div class="vui-demo-source">
@@ -49,15 +95,15 @@
   </div>
 </template>
 <script setup>
+import { isList } from 'vine-ui/src/utils/util';
 import {
     onMounted, watch, shallowReactive
 } from 'vue';
 import { useRoute } from 'vue-router';
 
-import components from 'vine-ui';
-
 import demos from './demos.js';
-import { isList } from 'vine-ui/src/utils/util';
+
+import metadata from './metadata.json';
 
 const route = useRoute();
 watch(() => route.path, (v) => {
@@ -65,80 +111,40 @@ watch(() => route.path, (v) => {
 });
 
 const data = shallowReactive({
-    demo: null,
-    props: null,
-    emits: null
+    demo: null
 });
 
-let previousKey;
-const getPropKey = (item, key) => {
-    if (key === 'modelValue') {
-        return `v-model (${previousKey})`;
+let previousName;
+const getPropKey = (item) => {
+    const name = item.name;
+    if (name === 'modelValue') {
+        return `v-model (${previousName})`;
     }
-    previousKey = key;
-    return key;
+    previousName = name;
+    return name;
 };
-
-const getPropType = (item, key) => {
-
-    let types = item.type;
-    if (!(types instanceof Array)) {
-        types = [types];
-    }
-
-    const list = types.map((t) => {
-        if (typeof t === 'undefined') {
-            return '[undefined]';
-        }
-        return t.name;
-    });
-
-    return list.join(', ');
-};
-
-const getPropDefault = (item, key) => {
-    if (typeof item.default === 'undefined') {
-        return '[undefined]';
-    }
-    if (typeof item.default === 'function') {
-        return '[function]';
-    }
-
-    if (item.default === null) {
-        return 'null';
-    }
-    if (typeof item.default === 'string') {
-        return `'${item.default}'`;
-    }
-    return item.default;
-};
-
 
 const update = () => {
     const item = demos.find((it) => it.path === route.path);
     // console.log(item);
-
-    const component = components[item.componentName];
-    // console.log(component);
-
-    const emits = [];
-    if (component.emits) {
-        component.emits.forEach((t) => {
-            if (t !== 'update:modelValue') {
-                emits.push(t);
-            }
-        });
-    }
-
-    if (isList(emits)) {
-        data.emits = emits;
-    } else {
-        data.emits = null;
-    }
-
-    data.props = component.props;
-
     data.demo = item;
+
+    const info = metadata[item.key];
+
+    console.log(info);
+
+    data.props = info.props;
+
+    let events = info.events;
+    if (events) {
+        events = events.filter((it) => it.name !== 'update:modelValue');
+    }
+    data.events = isList(events) ? events : null;
+
+    data.slots = info.slots;
+
+    data.expose = info.expose;
+
 };
 
 onMounted(() => {
@@ -150,7 +156,10 @@ onMounted(() => {
 .vui-demo-item {
     margin-top: 15px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #ccc;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid #ccc;
+    }
 }
 
 .vui-demo-props {
@@ -164,14 +173,14 @@ onMounted(() => {
     font-size: 20px;
 
     span {
-        color: gray;
+        color: #666;
         font-weight: normal;
         font-size: 14px;
     }
 }
 
 .vui-demo-table {
-    min-width: 500px;
+    min-width: 600px;
     border-collapse: collapse;
 
     th {

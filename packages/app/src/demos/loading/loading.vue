@@ -1,9 +1,21 @@
 <template>
   <div>
+    <div style=" position: relative;height: 80px; margin-top: 5px; border: 1px solid #eee;">
+      <VuiLoading
+        :size="loading.size"
+        :color="loading.color"
+        :fast="loading.fast"
+        :center="loading.center"
+        :visible="loading.visible"
+      />
+    </div>
+
     <VuiFlex
       gap="10px"
       padding="5px"
+      margin="10px 0 0 0"
     >
+      <div>Props:</div>
       <VuiSelect
         v-model="loading.color"
         label="Color"
@@ -32,15 +44,6 @@
         Visible
       </VuiCheckbox>
     </VuiFlex>
-    <div style=" position: relative;height: 80px; margin-top: 5px; border: 1px solid #eee;">
-      <VuiLoading
-        :size="loading.size"
-        :color="loading.color"
-        :fast="loading.fast"
-        :center="loading.center"
-        :visible="loading.visible"
-      />
-    </div>
   </div>
 </template>
 
