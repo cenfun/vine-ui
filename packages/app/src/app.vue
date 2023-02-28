@@ -8,7 +8,7 @@
         class="vui-title"
         tooltip="Lightweight UI components"
       >
-        Vine UI
+        Vine UI Components
       </div>
       <div class="vui-sub">
         Based on <a
@@ -27,18 +27,27 @@
       </VuiFlex>
     </div>
     <div class="vui-body vui-flex-auto">
-      <div
-        v-for="(item, i) in list"
-        :key="i"
-        class="vui-item"
-      >
-        <div class="vui-item-name">
-          {{ item.name }}
+      <VuiFlex>
+        <div class="vui-nav">
+          <router-link
+            class="vui-nav-home"
+            to="/"
+          >
+            Preview All
+          </router-link>
+          <router-link
+            v-for="(item,i) in demos"
+            :key="i"
+            :to="item.path"
+            :class="'vui-nav-'+item.key"
+          >
+            {{ item.componentName }}
+          </router-link>
         </div>
-        <div class="vui-item-demo">
-          <component :is="item.Demo" />
+        <div class="vui-demo vui-flex-auto">
+          <router-view />
         </div>
-      </div>
+      </VuiFlex>
     </div>
   </VuiFlex>
 </template>
@@ -47,31 +56,17 @@ import { onMounted } from 'vue';
 import { components } from 'vine-ui';
 import FPSDetector from 'fps-detector';
 
-console.log('components', components);
+import demos from './demos.js';
 
 const { VuiFlex } = components;
 
-const context = require.context('./demo', true, /\.vue$/);
-const demos = {};
-const list = [];
-const paths = context.keys();
-paths.forEach((path) => {
-    // console.log(path);
-    const fileName = path.split('/').pop();
-    const demoName = fileName.split('.').shift();
-    const N = demoName.slice(0, 1).toUpperCase() + demoName.slice(1).toLowerCase();
-    const Demo = context(path).default;
-    demos[`Demo${N}`] = Demo;
-    list.push({
-        name: `Vui${N}`,
-        Demo
-    });
-});
-
-console.log('demos', demos);
-
 onMounted(() => {
+
+    console.log('components', components);
+    console.log('demos', demos);
+
     new FPSDetector('.fps-detector');
+
 });
 
 </script>
@@ -133,18 +128,64 @@ body {
 
 .vui-body {
     overflow-y: auto;
+
+    > .vui-flex {
+        align-items: start;
+    }
 }
 
-.vui-item {
+.vui-nav {
+    width: 168px;
+
+    a {
+        position: relative;
+        display: block;
+        padding: 10px;
+        padding-left: 25px;
+        color: #000;
+        text-decoration: none;
+        border-bottom: 1px solid #ddd;
+
+        &::before {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            content: "";
+            display: block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #000;
+            transform: translate(0, -50%);
+        }
+    }
+
+    a:visited {
+        color: #000;
+    }
+
+    a.router-link-active {
+        font-weight: bold;
+        background-color: #eee;
+    }
+
+    a:hover {
+        background-color: #f8f8f8;
+    }
+
+    .vui-nav-home {
+        &::before {
+            left: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 0;
+        }
+    }
+}
+
+.vui-demo {
+    margin-left: 10px;
     padding: 10px;
-    border-bottom: 1px solid #999;
-}
-
-.vui-item-name {
-    padding: 10px 0;
-    color: #000;
-    font-weight: bold;
-    font-size: 20px;
 }
 
 </style>

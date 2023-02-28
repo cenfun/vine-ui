@@ -7,7 +7,8 @@
     ],
     "dependencies": {
         "fps-detector": "^1.0.3",
-        "vine-ui": "~3.0.16"
+        "vine-ui": "~3.0.16",
+        "vue-router": "^4.1.6"
     },
     "devDependencies": {},
     "private": true

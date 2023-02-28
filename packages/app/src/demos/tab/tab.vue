@@ -125,11 +125,11 @@ const tabPanes = ref(['Pane 1', 'Pane 2', function(h) {
 }
 
 .vui-tab-icon-tools {
-    background-image: url("../images/tools.svg");
+    background-image: url("../../images/tools.svg");
 }
 
 .vui-tab-icon-plus {
-    background-image: url("../images/plus.svg");
+    background-image: url("../../images/plus.svg");
 }
 
 .vui-fixed-height {
