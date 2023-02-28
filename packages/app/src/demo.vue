@@ -85,7 +85,7 @@
       class="vui-demo-item"
     >
       <div class="vui-demo-title">
-        Demo <span>{{ item.path }}</span>
+        {{ getDemoTitle(item) }} <span>{{ item.path }}</span>
       </div>
       <component :is="item.component" />
       <div
@@ -135,6 +135,12 @@ const getPropDescription = (item) => {
     return item.description;
 };
 
+const getDemoTitle = (item) => {
+    const list = item.path.split('/');
+    const title = list.pop().slice(0, -4).split('-').join(' ');
+    return `Demo ${title}`;
+};
+
 const update = () => {
     const item = demos.find((it) => it.path === route.path);
     // console.log(item);
@@ -163,19 +169,6 @@ const update = () => {
     });
 
 };
-
-// const setEditorContent = (content) => {
-//     const text = editor.state.doc.toString();
-//     const transaction = editor.state.update({
-//         changes: {
-//             from: 0,
-//             to: text.length,
-//             insert: content
-//         }
-//     });
-
-//     editor.dispatch(transaction);
-// };
 
 const sourceHandler = (list) => {
 

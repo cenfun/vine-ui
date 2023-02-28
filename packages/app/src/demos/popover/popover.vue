@@ -208,52 +208,6 @@
           right-bottom
         </VuiPopover>
       </div>
-
-      <VuiFlex
-        direction="column"
-        gap="10px"
-      >
-        <VuiSelect
-          v-model="data.title"
-          tooltip="title"
-        >
-          <option>Popover Title</option>
-          <option />
-        </VuiSelect>
-
-
-        <VuiSelect
-          v-model="data.borderColor"
-          tooltip="borderColor"
-        >
-          <option />
-          <option>gray</option>
-          <option>green</option>
-          <option>red</option>
-          <option>#000</option>
-        </VuiSelect>
-
-        <VuiSelect
-          v-model="data.bgColor"
-          tooltip="bgColor"
-        >
-          <option />
-          <option>gray</option>
-          <option>green</option>
-          <option>red</option>
-        </VuiSelect>
-
-        <VuiSelect
-          v-model="data.color"
-          tooltip="color"
-        >
-          <option />
-          <option>#ffffff</option>
-          <option>gray</option>
-          <option>green</option>
-          <option>red</option>
-        </VuiSelect>
-      </VuiFlex>
     </VuiFlex>
 
 
@@ -279,6 +233,53 @@
       <VuiButton @click="openPopover">
         Popover bottom right
       </VuiButton>
+    </VuiFlex>
+
+    <VuiFlex
+      gap="10px"
+      margin="10px 0 0 0"
+    >
+      <div>Props:</div>
+      <VuiSelect
+        v-model="data.title"
+        tooltip="title"
+      >
+        <option>Popover Title</option>
+        <option />
+      </VuiSelect>
+
+
+      <VuiSelect
+        v-model="data.borderColor"
+        tooltip="borderColor"
+      >
+        <option />
+        <option>gray</option>
+        <option>green</option>
+        <option>red</option>
+        <option>#000</option>
+      </VuiSelect>
+
+      <VuiSelect
+        v-model="data.bgColor"
+        tooltip="bgColor"
+      >
+        <option />
+        <option>gray</option>
+        <option>green</option>
+        <option>red</option>
+      </VuiSelect>
+
+      <VuiSelect
+        v-model="data.color"
+        tooltip="color"
+      >
+        <option />
+        <option>#ffffff</option>
+        <option>gray</option>
+        <option>green</option>
+        <option>red</option>
+      </VuiSelect>
     </VuiFlex>
 
     <VuiPopover
