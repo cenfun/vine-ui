@@ -24,7 +24,7 @@
           <td>{{ getPropKey(item) }}</td>
           <td>{{ item.type && item.type.name }}</td>
           <td>{{ item.defaultValue.value }}</td>
-          <td>{{ item.description }}</td>
+          <td>{{ getPropDescription(item) }}</td>
         </tr>
         <template v-if="data.events">
           <tr>
@@ -88,9 +88,10 @@
         Demo <span>{{ item.path }}</span>
       </div>
       <component :is="item.component" />
-      <div class="vui-demo-source">
-        source
-      </div>
+      <div
+        class="vui-demo-source"
+        :path="item.path"
+      />
     </div>
   </div>
 </template>
@@ -100,6 +101,8 @@ import {
     onMounted, watch, shallowReactive
 } from 'vue';
 import { useRoute } from 'vue-router';
+
+import Editor from './utils/editor.js';
 
 import demos from './demos.js';
 
@@ -124,6 +127,14 @@ const getPropKey = (item) => {
     return name;
 };
 
+const getPropDescription = (item) => {
+    const vs = item.values;
+    if (vs) {
+        return vs;
+    }
+    return item.description;
+};
+
 const update = () => {
     const item = demos.find((it) => it.path === route.path);
     // console.log(item);
@@ -131,7 +142,7 @@ const update = () => {
 
     const info = metadata[item.key];
 
-    console.log(info);
+    // console.log(info);
 
     data.props = info.props;
 
@@ -145,6 +156,44 @@ const update = () => {
 
     data.expose = info.expose;
 
+    data.source = info.source;
+
+    setTimeout(() => {
+        sourceHandler(item.list);
+    });
+
+};
+
+// const setEditorContent = (content) => {
+//     const text = editor.state.doc.toString();
+//     const transaction = editor.state.update({
+//         changes: {
+//             from: 0,
+//             to: text.length,
+//             insert: content
+//         }
+//     });
+
+//     editor.dispatch(transaction);
+// };
+
+const sourceHandler = (list) => {
+
+    list.forEach((item) => {
+
+        const container = document.querySelector(`.vui-demo-source[path="${item.path}"]`);
+        // console.log(container);
+
+        container.innerHTML = '';
+
+        const content = data.source[item.path];
+
+        Editor({
+            container,
+            content
+        });
+
+    });
 };
 
 onMounted(() => {
@@ -202,6 +251,16 @@ onMounted(() => {
 
 .vui-demo-source {
     margin-top: 10px;
+
+    .cm-editor {
+        min-width: 600px;
+        max-width: 1200px;
+        max-height: 350px;
+    }
+
+    .cm-scroller {
+        overflow: auto;
+    }
 }
 
 </style>

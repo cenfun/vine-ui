@@ -32,7 +32,7 @@ paths.forEach((path) => {
 
     // demo list
     item.list.push({
-        path: `/demos/${list.slice(1).join('/')}`,
+        path: `demos/${list.slice(1).join('/')}`,
         component: Demo
     });
 });
