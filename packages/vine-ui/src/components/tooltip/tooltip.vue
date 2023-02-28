@@ -16,9 +16,7 @@ import {
 } from 'vue';
 import { useBase } from '../../base/base.js';
 
-import {
-    getDefaultPositions, getBestPosition, getRect
-} from '../../base/base-popup.js';
+import { getBestPosition, getRect } from '../../base/base-popup.js';
 
 import { autoPx } from '../../utils/util.js';
 
@@ -49,12 +47,7 @@ const props = defineProps({
     positions: {
         type: [String, Array],
         default: () => {
-            return getDefaultPositions([
-                'center',
-                'top',
-                'bottom',
-                'right'
-            ]);
+            return ['top', 'bottom', 'right', 'center'];
         }
     },
 
@@ -87,7 +80,6 @@ const props = defineProps({
 
 const el = ref(null);
 let $el;
-let positionInfo;
 
 const data = reactive({
     visible: props.visible,
@@ -163,12 +155,11 @@ const updateSync = () => {
 
     // console.log(containerRect, targetRect, rect);
 
-    positionInfo = getBestPosition(
+    const positionInfo = getBestPosition(
         containerRect,
         targetRect,
         rect,
-        positions,
-        positionInfo
+        positions
     );
 
     // no change

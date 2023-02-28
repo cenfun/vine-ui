@@ -1,8 +1,5 @@
 <template>
-  <VuiFlex
-    direction="column"
-    class="vui-app"
-  >
+  <div class="vui-app vui-flex-column">
     <div class="vui-header vui-flex-row">
       <div
         class="vui-title"
@@ -47,16 +44,39 @@
         <router-view />
       </div>
     </div>
-  </VuiFlex>
+    <VuiTooltip
+      :visible="tooltip.visible"
+      :target="tooltip.target"
+      :text="tooltip.text"
+      :html="tooltip.html"
+      :border-color="tooltip.borderColor"
+      :bg-color="tooltip.bgColor"
+      :color="tooltip.color"
+    />
+  </div>
 </template>
 <script setup>
-import { onMounted } from 'vue';
-import { components } from 'vine-ui';
+import {
+    onMounted, reactive, provide
+} from 'vue';
+import { components, generateTooltips } from 'vine-ui';
 import FPSDetector from 'fps-detector';
 
 import demos from './demos.js';
 
-const { VuiFlex } = components;
+const { VuiFlex, VuiTooltip } = components;
+
+const tooltip = reactive({
+    visible: false,
+    target: '',
+    text: '',
+    html: '',
+    borderColor: '',
+    bgColor: '',
+    color: ''
+});
+
+provide('tooltip', tooltip);
 
 onMounted(() => {
 
@@ -64,6 +84,15 @@ onMounted(() => {
     console.log('demos', demos);
 
     new FPSDetector('.fps-detector');
+
+    generateTooltips((target, text) => {
+        tooltip.visible = true;
+        tooltip.target = target;
+        tooltip.text = text;
+    }, (target) => {
+        tooltip.visible = false;
+        tooltip.text = '';
+    });
 
 });
 

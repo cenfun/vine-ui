@@ -32,7 +32,7 @@
     >
       <div>Props:</div>
       <VuiSelect
-        v-model="data.borderColor"
+        v-model="tooltip.borderColor"
         tooltip="borderColor"
       >
         <option />
@@ -43,7 +43,7 @@
       </VuiSelect>
 
       <VuiSelect
-        v-model="data.bgColor"
+        v-model="tooltip.bgColor"
         tooltip="bgColor"
       >
         <option />
@@ -53,7 +53,7 @@
       </VuiSelect>
 
       <VuiSelect
-        v-model="data.color"
+        v-model="tooltip.color"
         tooltip="color"
       >
         <option />
@@ -63,62 +63,32 @@
         <option>red</option>
       </VuiSelect>
     </VuiFlex>
-
-    <VuiTooltip
-      :visible="data.visible"
-      :target="data.target"
-      :text="data.text"
-      :html="data.html"
-      :border-color="data.borderColor"
-      :bg-color="data.bgColor"
-      :color="data.color"
-    />
   </div>
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue';
-import { components, generateTooltips } from 'vine-ui';
+import { inject } from 'vue';
+import { components } from 'vine-ui';
 
 const {
     VuiButton,
     VuiFlex,
-    VuiSelect,
-    VuiTooltip
+    VuiSelect
 } = components;
 
-const data = reactive({
-    visible: false,
-    target: '',
-    text: '',
-    html: '',
-    borderColor: '',
-    bgColor: '',
-    color: ''
-
-});
+// global tooltip
+const tooltip = inject('tooltip');
 
 const onHtml = (e) => {
     if (e.type === 'mouseenter') {
-        data.visible = true;
-        data.target = e.target;
-        data.html = '<b>this is bold text</b>';
+        tooltip.visible = true;
+        tooltip.target = e.target;
+        tooltip.html = '<b>this is bold text</b>';
     } else {
-        data.visible = false;
+        tooltip.visible = false;
         // must be removed to let text works next
-        data.html = '';
+        tooltip.html = '';
     }
 };
-
-onMounted(() => {
-    generateTooltips((target, text) => {
-        data.visible = true;
-        data.target = target;
-        data.text = text;
-    }, (target) => {
-        data.visible = false;
-        data.text = '';
-    });
-});
 
 </script>

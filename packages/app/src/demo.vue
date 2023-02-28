@@ -183,6 +183,10 @@ onMounted(() => {
     min-width: 600px;
     border-collapse: collapse;
 
+    tr:hover {
+        background-color: #f8f8f8;
+    }
+
     th {
         white-space: nowrap;
         text-align: left;
