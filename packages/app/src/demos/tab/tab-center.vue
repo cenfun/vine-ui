@@ -6,8 +6,8 @@
     <div class="vui-fixed-height">
       <VuiTab
         v-model="tabActive"
+        :theme="gstate.tabTheme"
         align="center"
-        height="40px"
       >
         <template #left>
           <b>Header Title</b>
@@ -40,18 +40,33 @@
         </template>
       </VuiTab>
     </div>
+    <VuiFlex
+      gap="10px"
+      padding="5px"
+    >
+      <div>Props:</div>
+      <VuiSelect
+        v-model="gstate.tabTheme"
+        tooltip="theme"
+      >
+        <option>chrome</option>
+        <option>simple</option>
+      </VuiSelect>
+    </VuiFlex>
   </VuiFlex>
 </template>
 
 <script setup>
+import { inject, ref } from 'vue';
 import VineUI from 'vine-ui';
-import { ref } from 'vue';
 const {
     VuiFlex,
+    VuiSelect,
     VuiTab
 } = VineUI;
 
 const tabActive = ref(0);
+const gstate = inject('gstate');
 
 </script>
 <style lang="scss">

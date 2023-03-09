@@ -6,8 +6,7 @@
     <VuiTab
       :index="1"
       align="right"
-      background="#cdcdcd"
-      left="Left Header Props"
+      :theme="gstate.tabTheme"
     >
       <template #left>
         <b>Right Tab</b>
@@ -29,11 +28,14 @@
 </template>
 
 <script setup>
+import { inject } from 'vue';
 import VineUI from 'vine-ui';
 const {
     VuiButton,
     VuiFlex,
     VuiTab
 } = VineUI;
+
+const gstate = inject('gstate');
 
 </script>

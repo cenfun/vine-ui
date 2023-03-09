@@ -5,6 +5,7 @@
   >
     <VuiTab
       v-model="tabActive"
+      :theme="gstate.tabTheme"
       align="left"
     >
       <template #right>
@@ -51,8 +52,8 @@
 </template>
 
 <script setup>
+import { inject, ref } from 'vue';
 import VineUI from 'vine-ui';
-import { ref } from 'vue';
 const {
     VuiButton,
     VuiFlex,
@@ -60,6 +61,7 @@ const {
 } = VineUI;
 
 const tabActive = ref(0);
+const gstate = inject('gstate');
 
 </script>
 <style>
@@ -71,6 +73,5 @@ const tabActive = ref(0);
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 18px 18px;
-    pointer-events: none;
 }
 </style>

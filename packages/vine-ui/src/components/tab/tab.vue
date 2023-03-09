@@ -2,7 +2,6 @@
   <div
     ref="el"
     :class="classList"
-    :style="styleList"
   >
     <div class="vui-tab-header vui-flex-row">
       <div class="vui-tab-header-left vui-flex-row">
@@ -39,16 +38,6 @@ const props = defineProps({
         validator(value) {
             return ['left', 'center', 'right'].includes(value);
         }
-    },
-
-    background: {
-        type: String,
-        default: ''
-    },
-
-    height: {
-        type: String,
-        default: ''
     },
 
     theme: {
@@ -92,19 +81,9 @@ const classList = computed(() => {
         'vui',
         'vui-tab',
         `vui-tab-${props.align}`,
+        `vui-tab-${props.theme}`,
         cid
     ];
-});
-
-const styleList = computed(() => {
-    const st = {};
-    if (props.background) {
-        st['--vui-tab-background'] = props.background;
-    }
-    if (props.height) {
-        st['--vui-tab-height'] = props.height;
-    }
-    return st;
 });
 
 const onTabClick = (e) => {
@@ -168,9 +147,6 @@ onMounted(() => {
 </script>
 <style lang="scss">
 .vui-tab {
-    --vui-tab-background: #dee1e6;
-    --vui-tab-height: 36px;
-
     position: relative;
     display: flex;
     flex-direction: column;
@@ -184,8 +160,6 @@ onMounted(() => {
     flex-shrink: 0;
     width: 100%;
     white-space: nowrap;
-    background: var(--vui-tab-background);
-    overflow: hidden;
 }
 
 .vui-tab-header-left,
@@ -247,65 +221,20 @@ onMounted(() => {
     position: relative;
     align-items: flex-end;
     align-self: flex-end;
-    height: 100%;
     margin: 0 10px;
-    padding-top: 5px;
 }
 
 .vui-tab-item {
     position: relative;
-    height: var(--vui-tab-height);
     padding: 0 15px;
     color: #002b36;
-    line-height: var(--vui-tab-height);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
     cursor: pointer;
     user-select: none;
-}
-
-.vui-tab-item::after {
-    position: absolute;
-    left: 100%;
-    bottom: 8px;
-    content: "";
-    z-index: 0;
-    display: block;
-    width: 1px;
-    height: 20px;
-    background-color: #a4a7ab;
-}
-
-.vui-tab-item:last-child::after {
-    display: none;
 }
 
 .vui-tab-item:hover {
     z-index: 2;
     background-color: #ebecef;
-}
-
-.vui-tab-item:hover::before,
-.vui-tab-item:hover::after {
-    position: absolute;
-    left: -10px;
-    bottom: 0;
-    content: "";
-    display: block;
-    width: 10px;
-    height: 10px;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    pointer-events: none;
-}
-
-.vui-tab-item:hover::before {
-    background-image: url("../../images/hover-before.svg");
-}
-
-.vui-tab-item:hover::after {
-    left: 100%;
-    background-image: url("../../images/hover-after.svg");
 }
 
 .vui-tab-item.vui-tab-selected {
@@ -314,32 +243,108 @@ onMounted(() => {
     background-color: #fff;
 }
 
-.vui-tab-item.vui-tab-selected::before,
-.vui-tab-item.vui-tab-selected::after {
-    position: absolute;
-    left: -10px;
-    bottom: 0;
-    content: "";
-    display: block;
-    width: 10px;
-    height: 10px;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    pointer-events: none;
-}
-
-.vui-tab-item.vui-tab-selected::before {
-    background-image: url("../../images/selected-before.svg");
-}
-
-.vui-tab-item.vui-tab-selected::after {
-    left: 100%;
-    background-image: url("../../images/selected-after.svg");
-}
-
 .vui-tab-item > * {
     text-overflow: ellipsis;
     overflow: hidden;
+}
+
+.vui-tab-simple {
+    .vui-tab-header {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .vui-tab-item {
+        height: 36px;
+        line-height: 36px;
+        border: 1px solid transparent;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .vui-tab-item.vui-tab-selected {
+        margin-bottom: -1px;
+        border: 1px solid #ccc;
+        border-bottom: transparent;
+    }
+}
+
+.vui-tab-chrome {
+    .vui-tab-header {
+        background: #dee1e6;
+    }
+
+    .vui-tab-tabs {
+        padding-top: 8px;
+    }
+
+    .vui-tab-item {
+        height: 36px;
+        line-height: 36px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .vui-tab-item::after {
+        position: absolute;
+        left: 100%;
+        bottom: 8px;
+        content: "";
+        z-index: 0;
+        display: block;
+        width: 1px;
+        height: 20px;
+        background-color: #a4a7ab;
+    }
+
+    .vui-tab-item:last-child::after {
+        display: none;
+    }
+
+    .vui-tab-item:hover::before,
+    .vui-tab-item:hover::after {
+        position: absolute;
+        left: -10px;
+        bottom: 0;
+        content: "";
+        display: block;
+        width: 10px;
+        height: 10px;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        pointer-events: none;
+    }
+
+    .vui-tab-item:hover::before {
+        background-image: url("../../images/hover-before.svg");
+    }
+
+    .vui-tab-item:hover::after {
+        left: 100%;
+        background-image: url("../../images/hover-after.svg");
+    }
+
+    .vui-tab-item.vui-tab-selected::before,
+    .vui-tab-item.vui-tab-selected::after {
+        position: absolute;
+        left: -10px;
+        bottom: 0;
+        content: "";
+        display: block;
+        width: 10px;
+        height: 10px;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        pointer-events: none;
+    }
+
+    .vui-tab-item.vui-tab-selected::before {
+        background-image: url("../../images/selected-before.svg");
+    }
+
+    .vui-tab-item.vui-tab-selected::after {
+        left: 100%;
+        background-image: url("../../images/selected-after.svg");
+    }
 }
 
 </style>
