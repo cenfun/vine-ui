@@ -253,18 +253,40 @@ onMounted(() => {
         border-bottom: 1px solid #ccc;
     }
 
+    .vui-tab-tabs {
+        margin-bottom: -1px;
+    }
+
     .vui-tab-item {
         height: 36px;
         line-height: 36px;
         border: 1px solid transparent;
+        border-bottom: none;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
+
+        &.vui-tab-selected {
+            border-color: #ccc;
+        }
     }
 
-    .vui-tab-item.vui-tab-selected {
-        margin-bottom: -1px;
-        border: 1px solid #ccc;
-        border-bottom: transparent;
+    .vui-tab-item:not(:first-child)::before {
+        position: absolute;
+        left: 0;
+        bottom: 8px;
+        content: "";
+        z-index: 0;
+        display: block;
+        width: 1px;
+        height: 20px;
+        background-color: #ccc;
+    }
+
+    .vui-tab-item:hover::before,
+    .vui-tab-item:hover + .vui-tab-item::before,
+    .vui-tab-item.vui-tab-selected::before,
+    .vui-tab-item.vui-tab-selected + .vui-tab-item::before {
+        display: none;
     }
 }
 
@@ -284,7 +306,7 @@ onMounted(() => {
         border-top-right-radius: 10px;
     }
 
-    .vui-tab-item::after {
+    .vui-tab-item:not(:last-child)::after {
         position: absolute;
         left: 100%;
         bottom: 8px;
@@ -294,10 +316,6 @@ onMounted(() => {
         width: 1px;
         height: 20px;
         background-color: #a4a7ab;
-    }
-
-    .vui-tab-item:last-child::after {
-        display: none;
     }
 
     .vui-tab-item:hover::before,
