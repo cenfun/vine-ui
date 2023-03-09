@@ -8,17 +8,17 @@
 </head>
 <body>
    <!--inject:start-->
-   <script src="dist/fps-detector.js?v=3.1.0"></script>
-   <script src="dist/vue.runtime.global.prod.js?v=3.1.0"></script>
-   <script src="dist/vine-ui.js?v=3.1.0"></script>
-   <script src="dist/vue-router.global.prod.js?v=3.1.0"></script>
-   <script src="dist/vine-ui-app.js?v=3.1.0"></script>
+   <script src="dist/fps-detector.js?v=3.1.1"></script>
+   <script src="dist/vue.runtime.global.prod.js?v=3.1.1"></script>
+   <script src="dist/vine-ui.js?v=3.1.1"></script>
+   <script src="dist/vue-router.global.prod.js?v=3.1.1"></script>
+   <script src="dist/vine-ui-app.js?v=3.1.1"></script>
    <!--inject:end-->
 
    <script>
        // keep scroll position when reload
        const storeKey = 'vui-scroll-position';
-       const scrollTarget = document.querySelector('.vui-body');
+       const scrollTarget = document.querySelector('.vui-demo-body');
        if (scrollTarget) {
            const positionHandler = function(event) {
                const position = sessionStorage.getItem(storeKey);
