@@ -8,27 +8,32 @@
       align="right"
       background="#cdcdcd"
       left="Left Header Props"
-      :tabs="tabs"
-      :panes="tabPanes"
-    />
+    >
+      <template #left>
+        <b>Right Tab</b>
+      </template>
+      <template #tabs>
+        <div>Right Tab 1</div>
+        <div>Right Tab 2</div>
+        <div>Right Tab 3</div>
+      </template>
+      <template #panes>
+        <div>Right Pane 1</div>
+        <div>Right Pane 2</div>
+        <div>
+          <VuiButton>Right Pane 3</VuiButton>
+        </div>
+      </template>
+    </VuiTab>
   </VuiFlex>
 </template>
 
 <script setup>
 import VineUI from 'vine-ui';
-import { ref } from 'vue';
 const {
     VuiButton,
     VuiFlex,
     VuiTab
 } = VineUI;
-
-const tabs = ['Right Tab 1', 'Right Tab 2', 'Right Tab 3'];
-
-const tabPanes = ref(['Pane 1', 'Pane 2', function(h) {
-    return h(VuiButton, {
-        label: 'Label'
-    });
-}]);
 
 </script>

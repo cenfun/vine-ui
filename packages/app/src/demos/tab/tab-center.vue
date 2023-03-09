@@ -10,16 +10,15 @@
         height="40px"
       >
         <template #left>
-          <div class="vui-tab-header-title">
-            Header Title
-          </div>
+          <b>Header Title</b>
         </template>
         <template #right>
           <div class="vui-flex-auto" />
           <div
-            class="vui-tab-icon vui-tab-icon-plus"
+            class="vui-flex-row"
             tooltip="This is toolbar tooltip"
           >
+            <div class="vui-tab-icon-plus" />
             Right Header Slot {{ tabActive }}
           </div>
         </template>
@@ -29,13 +28,13 @@
           <div>Center Tab 3</div>
         </template>
         <template #panes>
-          <div class="vui-fixed-pane">
-            Pane 1
+          <div>
+            Pane 1 (fixed height: 200px)
           </div>
-          <div class="vui-fixed-pane">
+          <div>
             Pane 2
           </div>
-          <div class="vui-fixed-pane">
+          <div>
             Pane 3
           </div>
         </template>
@@ -59,42 +58,30 @@ const tabActive = ref(0);
 /*
   style shared for all tab demos
 */
-.vui-tab-icon {
-    padding-right: 8px;
-    padding-left: 25px;
-    background-repeat: no-repeat;
-    background-position: 2px center;
-    background-size: 18px 18px;
-}
-
-.vui-tab-icon-tools {
-    background-image: url("../../images/tools.svg");
-}
 
 .vui-tab-icon-plus {
+    width: 18px;
+    height: 18px;
+    margin-right: 3px;
     background-image: url("../../images/plus.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 18px 18px;
 }
 
 .vui-fixed-height {
     height: 200px;
-}
 
-.vui-fixed-pane {
-    height: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-top: none;
-}
-
-.vui-tab-header-title {
-    padding: 10px;
-    font-weight: bold;
-    font-size: 18px;
+    .vui-tab-pane {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
 }
 
 .vui-tab-header-left,
 .vui-tab-header-right {
-    padding: 5px;
+    padding: 0 10px;
 }
 
 .vui-tab-right .vui-tab-header-right,

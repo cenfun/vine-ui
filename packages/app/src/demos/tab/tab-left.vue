@@ -10,9 +10,10 @@
       <template #right>
         <div class="vui-flex-auto" />
         <div
-          class="vui-tab-icon vui-tab-icon-plus"
+          class="vui-flex-row"
           tooltip="This is toolbar tooltip"
         >
+          <div class="vui-tab-icon-plus" />
           Right Header Slot {{ tabActive }}
         </div>
       </template>
@@ -21,10 +22,8 @@
           Tab 1 {{ tabActive }}
         </div>
         <div>Tab 2</div>
-        <div
-          class="vui-tab-icon vui-tab-icon-tools"
-          tooltip="This is tab tooltip"
-        >
+        <div tooltip="This is tab tooltip">
+          <div class="vui-tab-icon-tools" />
           Tab 3
         </div>
         <div>
@@ -39,9 +38,11 @@
           Pane 2 100px height {{ tabActive }}
         </div>
         <div>Pane 3</div>
-        <VuiButton>
-          Button Pane 4
-        </VuiButton>
+        <div>
+          <VuiButton>
+            Button Pane 4
+          </VuiButton>
+        </div>
         <span />
         <div>Pane 6</div>
       </template>
@@ -61,3 +62,15 @@ const {
 const tabActive = ref(0);
 
 </script>
+<style>
+.vui-tab-icon-tools {
+    width: 18px;
+    height: 18px;
+    margin-right: 3px;
+    background-image: url("../../images/tools.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 18px 18px;
+    pointer-events: none;
+}
+</style>
