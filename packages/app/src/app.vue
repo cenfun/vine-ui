@@ -66,11 +66,6 @@ import demos from './demos.js';
 
 const { VuiFlex, VuiTooltip } = components;
 
-const gstate = reactive({
-    tabTheme: 'chrome'
-});
-provide('gstate', gstate);
-
 const tooltip = reactive({
     visible: false,
     target: '',

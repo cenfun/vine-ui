@@ -4,7 +4,10 @@
     :class="classList"
   >
     <div class="vui-tab-header vui-flex-row">
-      <div class="vui-tab-header-left vui-flex-row">
+      <div
+        v-if="props.align!=='left'"
+        class="vui-tab-header-left vui-flex-row"
+      >
         <slot name="left" />
       </div>
       <div
@@ -13,7 +16,10 @@
       >
         <slot name="tabs" />
       </div>
-      <div class="vui-tab-header-right vui-flex-row">
+      <div
+        v-if="props.align!=='right'"
+        class="vui-tab-header-right vui-flex-row"
+      >
         <slot name="right" />
       </div>
     </div>
