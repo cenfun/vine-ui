@@ -1,6 +1,8 @@
-import { h, useSlots } from 'vue';
+import {
+    h, useSlots, useAttrs
+} from 'vue';
 
-import { pascalToKebabCase } from '../utils/util.js';
+import { isList, pascalToKebabCase } from '../utils/util.js';
 import './base.scss';
 
 
@@ -41,6 +43,18 @@ export const BaseRender = {
 
     }
 
+};
+
+export const bindAttrs = function(excludes) {
+    const attrs = useAttrs();
+    if (isList(excludes)) {
+        const filtered = {};
+        Object.keys(attrs).filter((k) => !excludes.includes(k)).forEach((k) => {
+            filtered[k] = attrs[k];
+        });
+        return filtered;
+    }
+    return attrs;
 };
 
 export const getSlot = function(name) {

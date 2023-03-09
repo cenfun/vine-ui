@@ -8,10 +8,11 @@
     <input
       v-model="data.value"
       v-select-on-focus
-      :disabled="props.disabled"
       :placeholder="props.placeholder"
+      :disabled="props.disabled"
       :type="props.type"
       :style="styleMap"
+      v-bind="bindAttrs(['class'])"
     >
   </div>
 </template>
@@ -21,7 +22,7 @@ import {
 } from 'vue';
 
 import {
-    useBase, BaseRender, vSelectOnFocus, getSlot
+    useBase, bindAttrs, BaseRender, vSelectOnFocus, getSlot
 } from '../../base/base.js';
 
 import { autoPx } from '../../utils/util.js';
@@ -42,14 +43,14 @@ const props = defineProps({
         default: 'text'
     },
 
-    placeholder: {
-        type: String,
-        default: ''
-    },
-
     width: {
         type: [String, Number],
         default: '80px'
+    },
+
+    placeholder: {
+        type: String,
+        default: ''
     },
 
     disabled: {
@@ -58,12 +59,12 @@ const props = defineProps({
     },
 
     value: {
-        type: String,
+        type: [String, Number],
         default: ''
     },
 
     modelValue: {
-        type: String,
+        type: [String, Number],
         default: null
     }
 });

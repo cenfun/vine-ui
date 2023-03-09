@@ -19,6 +19,8 @@
     </VuiInput>
 
     <VuiInput
+      v-model="inputNumber"
+      class="vui-input-number"
       type="number"
       step="10"
     >
@@ -41,5 +43,6 @@ const {
 } = VineUI;
 
 const inputText = ref('Text');
+const inputNumber = ref(0);
 
 </script>
