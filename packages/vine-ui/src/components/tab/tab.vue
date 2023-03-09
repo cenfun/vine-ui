@@ -232,9 +232,25 @@ onMounted(() => {
     user-select: none;
 }
 
+.vui-tab-item:not(:first-child)::before {
+    position: absolute;
+    left: 0;
+    bottom: 8px;
+    content: "";
+    z-index: 0;
+    display: block;
+    width: 1px;
+    height: 20px;
+    background-color: #a4a7ab;
+}
+
+.vui-tab-item:hover + .vui-tab-item::before,
+.vui-tab-item.vui-tab-selected + .vui-tab-item::before {
+    display: none;
+}
+
 .vui-tab-item:hover {
     z-index: 2;
-    background-color: #ebecef;
 }
 
 .vui-tab-item.vui-tab-selected {
@@ -248,46 +264,20 @@ onMounted(() => {
     overflow: hidden;
 }
 
-.vui-tab-simple {
-    .vui-tab-header {
-        border-bottom: 1px solid #ccc;
-    }
+.vui-tab-chrome .vui-tab-item {
+    height: 36px;
+    line-height: 36px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
 
-    .vui-tab-tabs {
-        margin-bottom: -1px;
-    }
-
-    .vui-tab-item {
-        height: 36px;
-        line-height: 36px;
-        border: 1px solid transparent;
-        border-bottom: none;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-
-        &.vui-tab-selected {
-            border-color: #ccc;
-        }
-    }
-
-    .vui-tab-item:not(:first-child)::before {
-        position: absolute;
-        left: 0;
-        bottom: 8px;
-        content: "";
-        z-index: 0;
-        display: block;
-        width: 1px;
-        height: 20px;
-        background-color: #ccc;
-    }
-
-    .vui-tab-item:hover::before,
-    .vui-tab-item:hover + .vui-tab-item::before,
-    .vui-tab-item.vui-tab-selected::before,
-    .vui-tab-item.vui-tab-selected + .vui-tab-item::before {
-        display: none;
-    }
+.vui-tab-simple .vui-tab-item {
+    height: 36px;
+    line-height: 36px;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .vui-tab-chrome {
@@ -299,23 +289,8 @@ onMounted(() => {
         padding-top: 8px;
     }
 
-    .vui-tab-item {
-        height: 36px;
-        line-height: 36px;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-
-    .vui-tab-item:not(:last-child)::after {
-        position: absolute;
-        left: 100%;
-        bottom: 8px;
-        content: "";
-        z-index: 0;
-        display: block;
-        width: 1px;
-        height: 20px;
-        background-color: #a4a7ab;
+    .vui-tab-item:not(.vui-tab-selected):hover {
+        background-color: #ebecef;
     }
 
     .vui-tab-item:hover::before,
@@ -362,6 +337,29 @@ onMounted(() => {
     .vui-tab-item.vui-tab-selected::after {
         left: 100%;
         background-image: url("../../images/selected-after.svg");
+    }
+}
+
+.vui-tab-simple {
+    .vui-tab-header {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .vui-tab-tabs {
+        margin-bottom: -1px;
+    }
+
+    .vui-tab-item.vui-tab-selected {
+        border-color: #ccc;
+    }
+
+    .vui-tab-item:not(.vui-tab-selected):hover {
+        border-color: #ccc;
+    }
+
+    .vui-tab-item:hover::before,
+    .vui-tab-item.vui-tab-selected::before {
+        display: none;
     }
 }
 
