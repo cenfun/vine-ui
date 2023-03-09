@@ -1,8 +1,6 @@
 <template>
   <VuiFlex gap="10px">
-    <VuiCheckbox>
-      Checkbox
-    </VuiCheckbox>
+    <VuiCheckbox label="Checkbox" />
 
     <VuiCheckbox
       :checked="checkboxChecked"
@@ -12,7 +10,7 @@
     </VuiCheckbox>
 
     <VuiCheckbox v-model="checkboxChecked">
-      v-model
+      <b>v-model</b>
     </VuiCheckbox>
 
     <VuiCheckbox

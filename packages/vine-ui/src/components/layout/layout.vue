@@ -4,9 +4,7 @@
     :class="classList"
     :style="styleList"
   >
-    <slot>
-      <BaseRender :content="props.content" />
-    </slot>
+    <slot />
   </div>
 </template>
 
@@ -14,7 +12,7 @@
 import {
     computed, onMounted, ref, shallowReactive, watch, watchEffect
 } from 'vue';
-import { useBase, BaseRender } from '../../base/base.js';
+import { useBase } from '../../base/base.js';
 
 import {
     clamp, bindEvents, unbindEvents, preventDefault
@@ -50,11 +48,6 @@ const props = defineProps({
     gutterSize: {
         type: String,
         default: '4px'
-    },
-
-    content: {
-        validator: (v) => true,
-        default: ''
     },
 
     layout: {

@@ -4,7 +4,7 @@
     :class="classList"
   >
     <label v-if="props.label">
-      <BaseRender :content="props.label" />
+      {{ props.label }}
     </label>
 
     <input
@@ -53,7 +53,7 @@ import {
     computed, nextTick, onMounted, ref, shallowReactive, watch, watchEffect
 } from 'vue';
 import {
-    useBase, BaseRender, vSelectOnFocus, getSlot
+    useBase, vSelectOnFocus, getSlot
 } from '../../base/base.js';
 
 import {

@@ -4,9 +4,7 @@
     :class="classList"
     :style="styleList"
   >
-    <slot>
-      <BaseRender :content="props.content" />
-    </slot>
+    <slot />
   </div>
 </template>
 
@@ -14,7 +12,7 @@
 import {
     ref, computed, watch, watchEffect, onMounted, onUnmounted, reactive
 } from 'vue';
-import { useBase, BaseRender } from '../../base/base.js';
+import { useBase } from '../../base/base.js';
 
 import { autoPx } from '../../utils/util.js';
 
@@ -33,11 +31,6 @@ const props = defineProps({
         validator(value) {
             return ['right', 'left'].includes(value);
         }
-    },
-
-    content: {
-        validator: (v) => true,
-        default: ''
     },
 
     visible: {

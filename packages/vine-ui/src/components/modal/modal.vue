@@ -20,12 +20,10 @@
           v-if="props.title"
           class="vui-modal-header"
         >
-          <BaseRender :content="props.title" />
+          {{ props.title }}
         </div>
         <div class="vui-modal-content vui-flex-auto">
-          <slot>
-            <BaseRender :content="props.content" />
-          </slot>
+          <slot />
         </div>
       </div>
     </div>
@@ -36,7 +34,7 @@
 import {
     computed, onMounted, ref, reactive, watchEffect, watch
 } from 'vue';
-import { useBase, BaseRender } from '../../base/base.js';
+import { useBase } from '../../base/base.js';
 
 import IconX from '../../images/icon-x.vue';
 import { bindEvents, unbindEvents } from '../../utils/util.js';
@@ -49,11 +47,6 @@ const props = defineProps({
 
     title: {
         type: String,
-        default: ''
-    },
-
-    content: {
-        validator: (v) => true,
         default: ''
     },
 

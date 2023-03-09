@@ -1,8 +1,9 @@
 <template>
   <VuiFlex gap="10px">
-    <VuiSwitch v-model="switchValue">
-      switch:
-    </VuiSwitch>
+    <VuiSwitch
+      v-model="switchValue"
+      label="switch:"
+    />
 
     <VuiSwitch
       v-model="switchValue"
@@ -14,7 +15,7 @@
     <VuiSwitch
       colors="darkred, green"
     >
-      colors:
+      <b>colors:</b>
     </VuiSwitch>
 
     <VuiSwitch

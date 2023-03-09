@@ -2,7 +2,7 @@
   <div :class="classMap">
     <label v-if="labelContent">
       <slot>
-        <BaseRender :content="props.label" />
+        {{ props.label }}
       </slot>
     </label>
     <input
@@ -22,7 +22,7 @@ import {
 } from 'vue';
 
 import {
-    useBase, bindAttrs, BaseRender, vSelectOnFocus, getSlot
+    useBase, bindAttrs, vSelectOnFocus, getSlot
 } from '../../base/base.js';
 
 import { autoPx } from '../../utils/util.js';

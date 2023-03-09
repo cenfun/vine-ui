@@ -14,9 +14,7 @@
       >
         {{ props.message }}
       </div>
-      <slot>
-        <BaseRender :content="props.content" />
-      </slot>
+      <slot />
     </div>
   </div>
 </template>
@@ -25,7 +23,7 @@
 import {
     computed, onMounted, ref, reactive, watchEffect, watch
 } from 'vue';
-import { useBase, BaseRender } from '../../base/base.js';
+import { useBase } from '../../base/base.js';
 
 import { bindEvents, unbindEvents } from '../../utils/util.js';
 
@@ -37,11 +35,6 @@ const props = defineProps({
 
     message: {
         type: String,
-        default: ''
-    },
-
-    content: {
-        validator: (v) => true,
         default: ''
     },
 

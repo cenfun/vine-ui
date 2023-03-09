@@ -6,7 +6,7 @@
     <div class="vui-tab-header vui-flex-row">
       <div class="vui-tab-header-left vui-flex-row">
         <slot name="left">
-          <BaseRender :content="props.left" />
+          {{ props.left }}
         </slot>
       </div>
       <div class="vui-tab-tabs vui-flex-row">
@@ -20,7 +20,7 @@
       </div>
       <div class="vui-tab-header-right vui-flex-row">
         <slot name="right">
-          <BaseRender :content="props.right" />
+          {{ props.right }}
         </slot>
       </div>
     </div>
@@ -38,9 +38,7 @@
 import {
     computed, watch, watchEffect, reactive
 } from 'vue';
-import {
-    useBase, BaseRender, getSlot
-} from '../../base/base.js';
+import { useBase, getSlot } from '../../base/base.js';
 
 import TabItem from './tab-item.vue';
 import TabPane from './tab-pane.vue';
@@ -56,11 +54,11 @@ const props = defineProps({
         }
     },
     left: {
-        validator: (v) => true,
+        type: String,
         default: ''
     },
     right: {
-        validator: (v) => true,
+        type: String,
         default: ''
     },
     tabs: {

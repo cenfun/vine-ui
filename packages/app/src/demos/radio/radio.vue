@@ -16,9 +16,8 @@
         v-model="radioValue1"
         name="radioName1"
         value="1"
-      >
-        Radio
-      </VuiRadio>
+        label="Radio"
+      />
 
       <VuiRadio
         name="radioName1"
@@ -53,7 +52,7 @@
         name="radioName2"
         value="1"
       >
-        Disabled {{ radioValue2 }}
+        <b>Disabled</b> {{ radioValue2 }}
       </VuiRadio>
 
       <VuiRadio

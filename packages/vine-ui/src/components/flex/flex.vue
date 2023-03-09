@@ -3,15 +3,13 @@
     :class="classList"
     :style="styleList"
   >
-    <slot>
-      <BaseRender :content="props.content" />
-    </slot>
+    <slot />
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
-import { useBase, BaseRender } from '../../base/base.js';
+import { useBase } from '../../base/base.js';
 import { autoPx } from '../../utils/util.js';
 
 const { cid } = useBase('VuiFlex');
@@ -29,11 +27,6 @@ const props = defineProps({
         validator(value) {
             return ['row', 'column'].includes(value);
         }
-    },
-
-    content: {
-        validator: (v) => true,
-        default: ''
     },
 
     width: {

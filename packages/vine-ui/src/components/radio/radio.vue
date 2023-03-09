@@ -10,7 +10,7 @@
     >
     <label :for="cid">
       <slot>
-        <BaseRender :content="props.label" />
+        {{ props.label }}
       </slot>
     </label>
   </div>
@@ -19,7 +19,7 @@
 import {
     reactive, watch, watchEffect
 } from 'vue';
-import { useBase, BaseRender } from '../../base/base.js';
+import { useBase } from '../../base/base.js';
 
 const { cid } = useBase('VuiRadio');
 

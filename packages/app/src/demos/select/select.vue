@@ -60,7 +60,6 @@
     >
       <VuiSelect
         v-model="selectValue"
-        label="select:"
         :options="selectList"
       />
       <VuiSelect

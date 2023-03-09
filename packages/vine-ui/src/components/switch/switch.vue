@@ -5,7 +5,7 @@
       class="vui-switch-label"
     >
       <slot>
-        <BaseRender :content="props.label" />
+        {{ props.label }}
       </slot>
     </div>
     <div
@@ -24,9 +24,7 @@
 import {
     computed, reactive, watch, watchEffect
 } from 'vue';
-import {
-    useBase, BaseRender, getSlot
-} from '../../base/base.js';
+import { useBase, getSlot } from '../../base/base.js';
 
 const defaultColors = ['#aaaaaa', '#1890ff'];
 

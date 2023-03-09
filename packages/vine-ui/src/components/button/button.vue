@@ -6,13 +6,13 @@
     :disabled="props.disabled"
   >
     <slot>
-      <BaseRender :content="props.label" />
+      {{ props.label }}
     </slot>
   </button>
 </template>
 <script setup>
 import { computed } from 'vue';
-import { useBase, BaseRender } from '../../base/base.js';
+import { useBase } from '../../base/base.js';
 import { autoPx } from '../../utils/util.js';
 
 const props = defineProps({

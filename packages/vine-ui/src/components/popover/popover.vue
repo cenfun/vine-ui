@@ -21,9 +21,7 @@
         </slot>
       </div>
       <div :class="classContent">
-        <slot>
-          <BaseRender :content="props.content" />
-        </slot>
+        <slot />
       </div>
     </div>
   </div>
@@ -33,7 +31,7 @@
 import {
     computed, onMounted, reactive, ref, watch, watchEffect, nextTick
 } from 'vue';
-import { useBase, BaseRender } from '../../base/base.js';
+import { useBase } from '../../base/base.js';
 
 import {
     getBestPosition, getRect, getElement, toRect
@@ -102,11 +100,6 @@ const props = defineProps({
 
     color: {
         type: String,
-        default: ''
-    },
-
-    content: {
-        validator: (v) => true,
         default: ''
     },
 

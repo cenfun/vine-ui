@@ -24,7 +24,7 @@
       type="number"
       step="10"
     >
-      Number:
+      <b>Number:</b>
     </VuiInput>
 
     <VuiInput

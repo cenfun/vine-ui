@@ -63,6 +63,19 @@
         <option>red</option>
       </VuiSelect>
     </VuiFlex>
+
+    <!--
+      check app.vue for global tooltip
+      <VuiTooltip
+      :visible="tooltip.visible"
+      :target="tooltip.target"
+      :text="tooltip.text"
+      :html="tooltip.html"
+      :border-color="tooltip.borderColor"
+      :bg-color="tooltip.bgColor"
+      :color="tooltip.color"
+    />
+    -->
   </div>
 </template>
 
