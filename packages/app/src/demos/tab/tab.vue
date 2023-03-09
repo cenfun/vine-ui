@@ -62,6 +62,15 @@
       <div>Props:</div>
 
       <VuiSelect
+        v-model="state.index"
+        tooltip="index"
+      >
+        <option>0</option>
+        <option>1</option>
+        <option>2</option>
+      </VuiSelect>
+
+      <VuiSelect
         v-model="state.align"
         tooltip="align"
       >
@@ -125,6 +134,10 @@ const state = reactive({
     background-size: 18px 18px;
 }
 
+.vui-tab-pane {
+    padding: 10px;
+}
+
 .vui-fixed-height {
     height: 200px;
 
@@ -140,8 +153,4 @@ const state = reactive({
     padding: 0 10px;
 }
 
-.vui-tab-right .vui-tab-pane,
-.vui-tab-left .vui-tab-pane {
-    padding: 10px;
-}
 </style>

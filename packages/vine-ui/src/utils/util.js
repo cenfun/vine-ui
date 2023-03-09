@@ -15,6 +15,10 @@ export const clamp = function(value, min, max) {
     return Math.max(min, Math.min(max, value));
 };
 
+export const toStr = function(input) {
+    return `${input}`;
+};
+
 export const isList = function(data) {
     if (data && data instanceof Array && data.length > 0) {
         return true;

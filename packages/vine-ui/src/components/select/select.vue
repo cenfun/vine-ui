@@ -57,7 +57,7 @@ import {
 } from '../../base/base.js';
 
 import {
-    hasOwn, clamp, isList, autoPx
+    hasOwn, clamp, isList, autoPx, toStr
 } from '../../utils/util.js';
 
 import IconX from '../../images/icon-x.vue';
@@ -94,12 +94,12 @@ const props = defineProps({
     },
 
     value: {
-        type: String,
+        type: [String, Number],
         default: ''
     },
 
     modelValue: {
-        type: String,
+        type: [String, Number],
         default: null
     }
 });
@@ -132,7 +132,7 @@ const data = shallowReactive({
 });
 
 watchEffect(() => {
-    data.value = props.modelValue === null ? props.value : props.modelValue;
+    data.value = toStr(props.modelValue === null ? props.value : props.modelValue);
 });
 
 watch(() => data.value, (v) => {

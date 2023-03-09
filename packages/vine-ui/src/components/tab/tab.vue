@@ -55,12 +55,12 @@ const props = defineProps({
     },
 
     index: {
-        type: Number,
+        type: [Number, String],
         default: 0
     },
 
     modelValue: {
-        type: Number,
+        type: [Number, String],
         default: null
     }
 });
@@ -72,7 +72,7 @@ const data = reactive({
 });
 
 watchEffect(() => {
-    data.index = props.modelValue === null ? props.index : props.modelValue;
+    data.index = toNum(props.modelValue === null ? props.index : props.modelValue);
 });
 
 watch(() => data.index, (v) => {
@@ -96,7 +96,7 @@ const onTabClick = (e) => {
     let tabItem;
     let target = e.target;
     while (target) {
-        if (target.classList.contains('vui-tab-item')) {
+        if (target.classList && target.classList.contains('vui-tab-item')) {
             tabItem = target;
             break;
         }
