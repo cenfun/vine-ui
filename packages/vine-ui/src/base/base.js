@@ -1,7 +1,4 @@
-import {
-    h, useSlots, useAttrs
-} from 'vue';
-
+import { useSlots, useAttrs } from 'vue';
 import { isList, pascalToKebabCase } from '../utils/util.js';
 import './base.scss';
 
@@ -18,31 +15,6 @@ export const useBase = (name) => {
         uid,
         cid
     };
-};
-
-export const BaseRender = {
-
-    props: {
-        content: {
-            validator: (v) => true,
-            default: ''
-        }
-    },
-
-    setup(props, ctx) {
-
-        // render function
-        if (typeof props.content === 'function') {
-            return () => {
-                return props.content.call(ctx, h, ctx);
-            };
-        }
-
-        // text node
-        return () => props.content;
-
-    }
-
 };
 
 export const bindAttrs = function(excludes) {
@@ -76,7 +48,6 @@ export const vSelectOnFocus = function(el) {
 
 export default {
     useBase,
-    BaseRender,
 
     getSlot,
 

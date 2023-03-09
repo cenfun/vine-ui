@@ -11,6 +11,9 @@ export default (onEnter, onLeave) => {
     }, true);
     document.body.addEventListener('mouseleave', (e) => {
         const target = e.target;
-        onLeave(target);
+        const text = target.getAttribute('tooltip');
+        if (text) {
+            onLeave(target);
+        }
     }, true);
 };
