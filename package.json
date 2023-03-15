@@ -1,6 +1,6 @@
 {
     "name": "vine-ui-components",
-    "version": "3.1.1",
+    "version": "3.1.2",
     "description": "vine ui components",
     "main": "",
     "scripts": {
@@ -24,7 +24,7 @@
         "@lezer/javascript": "^1.4.1",
         "@uiw/codemirror-theme-vscode": "^4.19.9",
         "codemirror": "^6.0.1",
-        "eslint": "^8.35.0",
+        "eslint": "^8.36.0",
         "eslint-config-plus": "^1.0.6",
         "eslint-plugin-html": "^7.1.0",
         "eslint-plugin-vue": "^9.9.0",

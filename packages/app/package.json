@@ -1,13 +1,13 @@
 {
     "name": "vine-ui-app",
-    "version": "3.1.1",
+    "version": "3.1.2",
     "main": "dist/vine-ui-app.js",
     "files": [
         "dist"
     ],
     "dependencies": {
         "fps-detector": "^1.0.3",
-        "vine-ui": "~3.1.1",
+        "vine-ui": "",
         "vue-router": "^4.1.6"
     },
     "devDependencies": {},
