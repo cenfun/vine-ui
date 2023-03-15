@@ -8,7 +8,7 @@
     </label>
 
     <input
-      v-model="data.viewValue"
+      v-model="data.viewLabel"
       v-select-on-focus
       type="text"
       :class="viewClass"
@@ -27,8 +27,8 @@
         :style="listStyle"
       >
         <div
-          v-for="(item, index) in data.list"
-          :key="index"
+          v-for="item in data.list"
+          :key="item.index"
           :class="getItemClass(item)"
           @mousedown="onItemClick(item)"
         >
@@ -38,7 +38,7 @@
           <div
             v-if="item.removable"
             class="vui-select-item-remove"
-            @mousedown.stop="onItemRemove(item)"
+            @mousedown.stop.prevent="onItemRemove(item)"
           >
             <IconX />
           </div>
@@ -57,7 +57,7 @@ import {
 } from '../../base/base.js';
 
 import {
-    hasOwn, clamp, isList, autoPx, toStr
+    hasOwn, clamp, isList, autoPx, toStr, bindEvents, unbindEvents
 } from '../../utils/util.js';
 
 import IconX from '../../images/icon-x.vue';
@@ -111,7 +111,7 @@ const data = shallowReactive({
     // from v-model
     value: '',
     // from list selected item
-    viewValue: '',
+    viewLabel: '',
 
     list: [],
 
@@ -122,10 +122,13 @@ const data = shallowReactive({
 
     // for view width
     width: props.width,
+
+    selectedIndex: -1,
     // label for view display
     selectedLabel: '',
     // value for selected item class
     selectedValue: null,
+
     // for search input
     searchValue: null
 
@@ -141,7 +144,7 @@ watch(() => data.value, (v) => {
 });
 
 watchEffect(() => {
-    data.viewValue = props.searchable && data.searchValue !== null ? data.searchValue : data.selectedLabel;
+    data.viewLabel = props.searchable && data.searchValue !== null ? data.searchValue : data.selectedLabel;
 });
 
 watch(() => props.options, () => {
@@ -223,18 +226,121 @@ const scrollHandler = (e) => {
     close();
 };
 
-
-const unbindEvents = () => {
-    // console.log('unbindEvents');
-    window.removeEventListener('resize', resizeHandler);
-    window.removeEventListener('scroll', scrollHandler, true);
+const openEvents = {
+    resize: {
+        target: window,
+        handler: resizeHandler
+    },
+    scroll: {
+        target: window,
+        handler: scrollHandler,
+        options: true
+    }
 };
 
-const bindEvents = () => {
-    unbindEvents();
-    window.addEventListener('resize', resizeHandler);
-    window.addEventListener('scroll', scrollHandler, true);
+const unbindOpenEvents = () => {
+    unbindEvents(openEvents);
 };
+
+const bindOpenEvents = () => {
+    unbindOpenEvents();
+    bindEvents(openEvents, window);
+};
+
+// =========================================================================================================
+
+const keydownHandler = (e) => {
+    // console.log(e.key);
+    const handlers = {
+        ArrowDown: keyArrowDownHandler,
+        ArrowUp: keyArrowUpHandler,
+        Enter: keyEnterHandler,
+        Escape: keyEscapeHandler
+    };
+    const handler = handlers[e.key];
+    if (handler) {
+        e.preventDefault();
+        handler(e);
+    }
+};
+
+const keyArrowDownHandler = (e) => {
+    keyArrowHandler(e, 1);
+};
+
+const keyArrowUpHandler = (e) => {
+    keyArrowHandler(e, -1);
+};
+
+const keyArrowHandler = (e, offset) => {
+    if (!data.isOpen) {
+        open();
+        return;
+    }
+    const len = data.list.length;
+    let index = data.selectedIndex + offset;
+    if (index >= len) {
+        index = 0;
+    } else if (index < 0) {
+        index = len - 1;
+    }
+    const item = data.list[index];
+
+    data.selectedIndex = index;
+    data.selectedValue = item.value;
+
+    nextTick(() => {
+        const target = $list.querySelector('.vui-select-item.selected');
+        if (target) {
+            const tt = target.offsetTop;
+            const th = target.clientHeight;
+            const lt = $list.scrollTop;
+            const lh = $list.clientHeight;
+            if (tt < lt || tt + th > lt + lh) {
+                const block = offset > 0 ? 'end' : 'start';
+                target.scrollIntoView({
+                    block
+                });
+            }
+        }
+    });
+};
+
+const keyEnterHandler = (e) => {
+    if (!data.isOpen) {
+        open();
+        return;
+    }
+
+    const item = data.list[data.selectedIndex];
+    if (item) {
+        data.searchValue = null;
+        data.selectedLabel = item.label;
+        data.value = item.value;
+    }
+    close();
+};
+
+const keyEscapeHandler = (e) => {
+    close();
+};
+
+
+const keyEvents = {
+    keydown: {
+        handler: keydownHandler
+    }
+};
+
+const unbindKeyEvents = () => {
+    unbindEvents(keyEvents);
+};
+
+const bindKeyEvents = () => {
+    unbindKeyEvents();
+    bindEvents(keyEvents, $el);
+};
+
 
 // =========================================================================================================
 
@@ -260,7 +366,7 @@ const close = () => {
     }
     data.lastDirection = 'down';
     hideList();
-    unbindEvents();
+    unbindOpenEvents();
 };
 
 const closeAsync = () => {
@@ -384,7 +490,7 @@ const open = () => {
 
     showList();
     layout();
-    bindEvents();
+    bindOpenEvents();
 };
 
 // when opened list and click out side browser will blur
@@ -403,19 +509,24 @@ const onClick = (e) => {
 };
 
 const onInput = (e) => {
-    data.searchValue = data.viewValue;
+    data.searchValue = data.viewLabel;
+    if (!data.isOpen) {
+        open();
+    }
     emit('search', e);
 };
 
 const onFocus = (e) => {
-    // console.log('onFocus', cid);
+    // console.log(cid, 'focus');
     openAsync();
+    bindKeyEvents();
 };
 
 const onBlur = (e) => {
-    // console.log('onBlur', cid);
+    // console.log(cid, 'blur');
     data.searchValue = null;
     closeAsync();
+    unbindKeyEvents();
 };
 
 
@@ -432,7 +543,10 @@ const getItemClass = (item) => {
 
 const onItemClick = (item) => {
 
+    // console.log(cid, 'item click');
+
     data.searchValue = null;
+    data.selectedIndex = item.index;
     data.selectedLabel = item.label;
     data.selectedValue = item.value;
     data.value = item.value;
@@ -443,6 +557,8 @@ const onItemClick = (item) => {
 };
 
 const onItemRemove = (item) => {
+    // console.log(cid, 'item remove');
+
     emit('remove', item);
 };
 
@@ -537,20 +653,30 @@ const initSelectedItem = () => {
     const item = data.list.find((it) => it.value === data.value);
 
     if (item) {
+        data.selectedIndex = item.index;
         data.selectedLabel = item.label;
         data.selectedValue = item.value;
     } else {
+        data.selectedIndex = -1;
         data.selectedLabel = '';
         data.selectedValue = null;
     }
 
-    // console.log(props.label, 'initSelectedItem', dv, data.selectedLabel);
+    // console.log(cid, 'initSelectedItem', item, data.selectedIndex);
 
 };
 
 const initList = () => {
 
-    data.list = props.options ? getListFromProps(props.options) : getListFromSlot(getSlot());
+    const list = props.options ? getListFromProps(props.options) : getListFromSlot(getSlot());
+
+    // for selectedIndex
+    list.forEach((item, i) => {
+        item.index = i;
+        item.value = toStr(item.value);
+    });
+
+    data.list = list;
 
     initSelectedItem();
 
