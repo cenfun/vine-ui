@@ -53,6 +53,29 @@
         resizable
       </VuiSwitch>
 
+      <VuiSelect
+        v-model="data.minWidth"
+        tooltip="minWidth"
+      >
+        <option />
+        <option>10%</option>
+        <option>20%</option>
+        <option>100</option>
+        <option>200</option>
+      </VuiSelect>
+
+      <VuiSelect
+        v-model="data.maxWidth"
+        tooltip="maxWidth"
+      >
+        <option />
+        <option>90%</option>
+        <option>80%</option>
+        <option>100%</option>
+        <option>600</option>
+        <option>800</option>
+      </VuiSelect>
+
       <VuiSwitch v-model="data.visible">
         visible on start
       </VuiSwitch>
@@ -62,6 +85,8 @@
       v-model="data.visible"
       :resizable="data.resizable"
       :width="data.width"
+      :min-width="data.minWidth"
+      :max-width="data.maxWidth"
       :position="data.position"
       @start="onStart"
       @end="onEnd"
@@ -112,6 +137,8 @@ const visible = sessionStorage.getItem('vui-flyover-visible') === 'true';
 
 const data = reactive({
     width: '30%',
+    minWidth: '10%',
+    maxWidth: '100%',
     position: 'right',
     resizable: true,
     visible: visible,

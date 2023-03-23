@@ -41,7 +41,12 @@ const props = defineProps({
 
     minWidth: {
         type: [String, Number],
-        default: 200
+        default: '10%'
+    },
+
+    maxWidth: {
+        type: [String, Number],
+        default: '100%'
     },
 
     resizable: {
@@ -182,13 +187,15 @@ const unbindAnimationEvents = () => {
 
 // ==============================================================================================
 
-const getWidthInfo = (w) => {
-    const ws = autoPx(w);
+const getWidthInfo = (w, maxWidth, defaultWidth) => {
+    let ws = autoPx(w);
+    if (typeof ws !== 'string' || !ws) {
+        ws = defaultWidth;
+    }
     let width = parseFloat(ws);
     let unit = 'px';
-    if (typeof ws === 'string' && ws.endsWith('%')) {
+    if (ws.endsWith('%')) {
         unit = '%';
-        const maxWidth = window.innerWidth;
         width = width / 100 * maxWidth;
     }
     return {
@@ -201,16 +208,22 @@ const mouseDownHandler = (e) => {
     // prevent select text
     preventDefault(e);
 
-    const startWidth = getWidthInfo(data.width);
-    const startMinWidth = getWidthInfo(props.minWidth);
-    if (startMinWidth.width > startWidth.width) {
-        startMinWidth.width = startWidth.width;
-    }
+    const maxWidth = window.innerWidth;
+
+    const startWidth = getWidthInfo(data.width, maxWidth, '50%');
+
+    const startMinWidth = getWidthInfo(props.minWidth, maxWidth, '10%');
+    startMinWidth.width = clamp(startMinWidth.width, 0, startWidth.width);
+
+    const startMaxWidth = getWidthInfo(props.maxWidth, maxWidth, '100%');
+    startMaxWidth.width = clamp(startMaxWidth.width, startWidth.width, maxWidth);
 
     data.resizeInfo = {
+        maxWidth,
         startX: e.pageX,
         startWidth,
-        startMinWidth
+        startMinWidth,
+        startMaxWidth
     };
     bindEvents(windowEvents, window);
 };
@@ -232,7 +245,7 @@ const mouseMoveHandler = function(e) {
 const updateSize = (e) => {
     // update width
     const {
-        startWidth, startMinWidth, startX
+        startWidth, startMinWidth, startMaxWidth, startX
     } = data.resizeInfo;
 
     const offsetFactor = data.position === 'right' ? -1 : 1;
@@ -241,7 +254,7 @@ const updateSize = (e) => {
     // console.log(offsetX, startWidth);
 
     const maxWidth = window.innerWidth;
-    const newWidth = clamp(startWidth.width + offsetX, startMinWidth.width, maxWidth);
+    const newWidth = clamp(startWidth.width + offsetX, startMinWidth.width, startMaxWidth.width);
 
     if (startWidth.unit === '%') {
         const newPercent = (newWidth / maxWidth * 100).toFixed(2);
