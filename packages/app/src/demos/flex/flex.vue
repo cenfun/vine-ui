@@ -5,13 +5,15 @@
         :direction="flex.direction"
 
         :gap="flex.gap"
-        :margin="flex.margin"
-        :padding="flex.padding"
+        :wrap="flex.wrap"
+
+        :align="flex.align"
+        :center="flex.center"
+
         :width="flex.width"
         :height="flex.height"
-
-        :center="flex.center"
-        :wrap="flex.wrap"
+        :margin="flex.margin"
+        :padding="flex.padding"
 
         class="vui-demo-flex"
       >
@@ -34,13 +36,15 @@
         :direction="flex.direction"
 
         :gap="flex.gap"
-        :margin="flex.margin"
-        :padding="flex.padding"
+        :wrap="flex.wrap"
+
+        :align="flex.align"
+        :center="flex.center"
+
         :width="flex.width"
         :height="flex.height"
-
-        :center="flex.center"
-        :wrap="flex.wrap"
+        :margin="flex.margin"
+        :padding="flex.padding"
 
         class="vui-demo-flex"
       >
@@ -89,23 +93,41 @@
         <option>10px 5px</option>
       </VuiSelect>
 
-      <VuiSelect
-        v-model="flex.margin"
-        tooltip="margin"
-      >
-        <option />
-        <option>5px</option>
-        <option>10px</option>
-      </VuiSelect>
+      <VuiSwitch v-model="flex.wrap">
+        wrap
+      </VuiSwitch>
 
       <VuiSelect
-        v-model="flex.padding"
-        tooltip="padding"
+        v-model="flex.align"
+        tooltip="align"
       >
         <option />
-        <option>5px</option>
-        <option>10px</option>
+        <option>center</option>
+        <option>start</option>
+        <option>end</option>
+
+        <option>flex-start</option>
+        <option>flex-end</option>
+
+        <option>left</option>
+        <option>right</option>
+
+        <option>baseline</option>
+        <option>first baseline</option>
+        <option>last baseline</option>
+
+        <option>space-between</option>
+        <option>space-around</option>
+        <option>space-evenly</option>
+        <option>stretch</option>
+
+        <option>safe center</option>
+        <option>unsafe center</option>
       </VuiSelect>
+
+      <VuiSwitch v-model="flex.center">
+        center
+      </VuiSwitch>
 
       <VuiSelect
         v-model="flex.width"
@@ -128,13 +150,23 @@
         <option>300px</option>
       </VuiSelect>
 
-      <VuiSwitch v-model="flex.center">
-        center
-      </VuiSwitch>
+      <VuiSelect
+        v-model="flex.margin"
+        tooltip="margin"
+      >
+        <option />
+        <option>5px</option>
+        <option>10px</option>
+      </VuiSelect>
 
-      <VuiSwitch v-model="flex.wrap">
-        wrap
-      </VuiSwitch>
+      <VuiSelect
+        v-model="flex.padding"
+        tooltip="padding"
+      >
+        <option />
+        <option>5px</option>
+        <option>10px</option>
+      </VuiSelect>
     </VuiFlex>
   </div>
 </template>
@@ -158,6 +190,7 @@ const flex = reactive({
     width: '400px',
     height: '300px',
 
+    align: '',
     center: false,
     wrap: false
 });

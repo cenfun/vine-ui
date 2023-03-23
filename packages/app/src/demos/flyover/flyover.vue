@@ -3,6 +3,7 @@
     <VuiFlex
       gap="10px"
       padding="5px"
+      :align="data.position==='left'?'right':'left'"
     >
       <VuiButton
         primary
@@ -24,11 +25,8 @@
       gap="10px"
       padding="5px"
       margin="10px 0 0 0"
+      :align="data.position==='left'?'right':'left'"
     >
-      <div
-        v-if="data.position==='left'"
-        class="vui-flex-empty"
-      />
       <div>Props:</div>
 
       <VuiSelect
@@ -58,11 +56,6 @@
       <VuiSwitch v-model="data.visible">
         visible on start
       </VuiSwitch>
-
-      <div
-        v-if="data.position==='right'"
-        class="vui-flex-empty"
-      />
     </VuiFlex>
 
     <VuiFlyover

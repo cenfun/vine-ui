@@ -16,17 +16,34 @@ const { cid } = useBase('VuiFlex');
 
 const props = defineProps({
 
-    gap: {
-        type: [String, Number],
-        default: ''
-    },
-
     direction: {
         type: String,
         default: 'row',
         validator(value) {
             return ['row', 'column'].includes(value);
         }
+    },
+
+    gap: {
+        type: [String, Number],
+        default: ''
+    },
+
+    wrap: {
+        type: Boolean,
+        default: false
+    },
+
+    // justify-content
+    align: {
+        type: String,
+        default: ''
+    },
+
+    // quick align center
+    center: {
+        type: Boolean,
+        default: false
     },
 
     width: {
@@ -47,16 +64,6 @@ const props = defineProps({
     padding: {
         type: [String, Number],
         default: ''
-    },
-
-    center: {
-        type: Boolean,
-        default: false
-    },
-
-    wrap: {
-        type: Boolean,
-        default: false
     }
 });
 
@@ -66,9 +73,6 @@ const classList = computed(() => {
         'vui-flex',
         `vui-flex-${props.direction}`
     ];
-    if (props.center) {
-        ls.push('vui-flex-center');
-    }
     if (props.wrap) {
         ls.push('vui-flex-wrap');
     }
@@ -83,6 +87,11 @@ const styleList = computed(() => {
     }
     if (props.height) {
         st.height = autoPx(props.height);
+    }
+    if (props.align) {
+        st['--vui-flex-align'] = props.align;
+    } else if (props.center) {
+        st['--vui-flex-align'] = 'center';
     }
     if (props.gap) {
         st['--vui-flex-gap'] = autoPx(props.gap);
@@ -103,8 +112,10 @@ const styleList = computed(() => {
     --vui-flex-gap: 0;
     --vui-flex-margin: 0;
     --vui-flex-padding: 0;
+    --vui-flex-align: "";
 
     gap: var(--vui-flex-gap);
+    justify-content: var(--vui-flex-align);
     margin: var(--vui-flex-margin);
     padding: var(--vui-flex-padding);
     text-overflow: ellipsis;
@@ -130,10 +141,6 @@ display for portable using both vui-flex-row and vui-flex-column
     position: relative;
     display: flex;
     flex-direction: column;
-}
-
-.vui-flex-center {
-    justify-content: center;
 }
 
 .vui-flex-wrap {
