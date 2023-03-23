@@ -19,7 +19,7 @@ import {
 import { useBase } from '../../base/base.js';
 
 import {
-    autoPx, bindEvents, unbindEvents, preventDefault
+    autoPx, bindEvents, unbindEvents, preventDefault, clamp
 } from '../../utils/util.js';
 
 const { cid } = useBase('VuiFlyover');
@@ -37,6 +37,11 @@ const props = defineProps({
     width: {
         type: [String, Number],
         default: '50%'
+    },
+
+    minWidth: {
+        type: [String, Number],
+        default: 200
     },
 
     resizable: {
@@ -153,7 +158,7 @@ const onEnd = (v) => {
         cl.remove(`vui-slide-in-${props.position}`);
     } else {
         cl.remove(`vui-slide-out-${props.position}`, 'vui-flyover-show');
-        data.width = '0px';
+        data.width = '0';
     }
 
     emit('end', v);
@@ -177,12 +182,35 @@ const unbindAnimationEvents = () => {
 
 // ==============================================================================================
 
+const getWidthInfo = (w) => {
+    const ws = autoPx(w);
+    let width = parseFloat(ws);
+    let unit = 'px';
+    if (typeof ws === 'string' && ws.endsWith('%')) {
+        unit = '%';
+        const maxWidth = window.innerWidth;
+        width = width / 100 * maxWidth;
+    }
+    return {
+        width,
+        unit
+    };
+};
+
 const mouseDownHandler = (e) => {
     // prevent select text
     preventDefault(e);
+
+    const startWidth = getWidthInfo(data.width);
+    const startMinWidth = getWidthInfo(props.minWidth);
+    if (startMinWidth.width > startWidth.width) {
+        startMinWidth.width = startWidth.width;
+    }
+
     data.resizeInfo = {
         startX: e.pageX,
-        startWidth: autoPx(data.width)
+        startWidth,
+        startMinWidth
     };
     bindEvents(windowEvents, window);
 };
@@ -196,23 +224,33 @@ const mouseMoveHandler = function(e) {
         return;
     }
 
+    updateSize(e);
+
+};
+
+
+const updateSize = (e) => {
     // update width
-    const { startWidth, startX } = data.resizeInfo;
-    const offsetX = e.pageX - startX;
-    // console.log(offsetX, startWidth);
+    const {
+        startWidth, startMinWidth, startX
+    } = data.resizeInfo;
 
     const offsetFactor = data.position === 'right' ? -1 : 1;
+    const offsetX = (e.pageX - startX) * offsetFactor;
 
-    const width = parseFloat(startWidth);
-    if (startWidth.endsWith('%')) {
-        const offsetPercent = offsetX / window.innerWidth * 100 * offsetFactor;
-        data.width = `${(width + offsetPercent).toFixed(2)}%`;
+    // console.log(offsetX, startWidth);
+
+    const maxWidth = window.innerWidth;
+    const newWidth = clamp(startWidth.width + offsetX, startMinWidth.width, maxWidth);
+
+    if (startWidth.unit === '%') {
+        const newPercent = (newWidth / maxWidth * 100).toFixed(2);
+        data.width = `${newPercent}%`;
     } else {
-        data.width = `${Math.round(width + offsetX * offsetFactor)}px`;
+        data.width = `${Math.round(newWidth)}px`;
     }
 
     emit('resize', data.width);
-
 };
 
 const mouseUpHandler = function(e) {
