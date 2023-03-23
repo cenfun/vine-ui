@@ -27,6 +27,15 @@
         class="vui-flex-empty"
       />
       <div>Props:</div>
+
+      <VuiSelect
+        v-model="data.position"
+        tooltip="position"
+      >
+        <option>right</option>
+        <option>left</option>
+      </VuiSelect>
+
       <VuiSelect
         v-model="data.width"
         tooltip="width"
@@ -37,13 +46,11 @@
         <option>100px</option>
       </VuiSelect>
 
-      <VuiSelect
-        v-model="data.position"
-        tooltip="position"
-      >
-        <option>right</option>
-        <option>left</option>
-      </VuiSelect>
+      <div>{{ data.width }}</div>
+
+      <VuiSwitch v-model="data.resizable">
+        resizable
+      </VuiSwitch>
 
       <VuiSwitch v-model="data.visible">
         visible on start
@@ -55,23 +62,39 @@
       />
     </VuiFlex>
 
-
     <VuiFlyover
       v-model="data.visible"
+      :resizable="data.resizable"
       :width="data.width"
       :position="data.position"
       @start="onStart"
       @end="onEnd"
+      @resize="onResize"
     >
       <VuiFlex
-        margin="20px"
-        gap="20px"
+        direction="column"
+        class="demo-flyover"
       >
-        <div>This is Flyover</div>
-        <div class="vui-flex-auto" />
-        <VuiButton @click="data.visible=false">
-          Close
-        </VuiButton>
+        <VuiFlex
+          class="demo-flyover-head"
+          gap="10px"
+          padding="10px"
+        >
+          <div>This is Flyover</div>
+          <div class="vui-flex-auto" />
+          <VuiButton @click="data.visible=false">
+            Close
+          </VuiButton>
+        </VuiFlex>
+        <div class="demo-flyover-content vui-flex-auto">
+          <VuiSelect v-model="data.contentHeight">
+            <option />
+            <option>500px</option>
+            <option>1000px</option>
+            <option>2000px</option>
+          </VuiSelect>
+          <div :style="'background:#f5f5f5;height:'+data.contentHeight" />
+        </div>
       </VuiFlex>
     </VuiFlyover>
   </div>
@@ -94,20 +117,44 @@ const visible = sessionStorage.getItem('vui-flyover-visible') === 'true';
 const data = reactive({
     width: '30%',
     position: 'right',
-    visible: visible
+    resizable: true,
+    visible: visible,
+
+    contentHeight: ''
 });
 
 watch(() => data.visible, (v) => {
     sessionStorage.setItem('vui-flyover-visible', v);
 });
 
-const onStart = () => {
-    console.log('start');
+const onStart = (v) => {
+    console.log('start', v);
 };
 
-const onEnd = () => {
-    console.log('end');
+const onEnd = (v) => {
+    console.log('end', v);
 };
 
+const onResize = (width) => {
+    // console.log(width);
+    data.width = width;
+};
 
 </script>
+<style>
+.demo-flyover {
+    height: 100%;
+}
+
+.demo-flyover-head {
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    background-color: #eee;
+}
+
+.demo-flyover-content {
+    padding: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+</style>

@@ -51,12 +51,26 @@ export const unbindEvents = function(events) {
     }
     Object.keys(events).forEach((type) => {
         const item = events[type];
-        if (item.target) {
-            item.target.removeEventListener(type, item.handler, item.options);
+        if (item.currentTarget) {
+            item.currentTarget.removeEventListener(type, item.handler, item.options);
+            // remove current target reference for rebind, not target
+            item.currentTarget = null;
         }
     });
 };
 
+/**
+ *
+ * @param events = {
+    event_type: {
+        handler: (e) => { }
+        options: {}
+        target: null
+    }
+}
+ * @param target common target
+ * @returns
+ */
 export const bindEvents = function(events, target) {
     if (!events) {
         return;
@@ -64,8 +78,9 @@ export const bindEvents = function(events, target) {
     unbindEvents(events);
     Object.keys(events).forEach((type) => {
         const item = events[type];
-        item.target = item.target || target;
-        item.target.addEventListener(type, item.handler, item.options);
+        const currentTarget = item.target || target;
+        currentTarget.addEventListener(type, item.handler, item.options);
+        item.currentTarget = currentTarget;
     });
 };
 

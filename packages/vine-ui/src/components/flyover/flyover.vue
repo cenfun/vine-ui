@@ -4,26 +4,27 @@
     :class="classList"
     :style="styleList"
   >
+    <div
+      v-if="data.resizable"
+      class="vui-flyover-resizer"
+    />
     <slot />
   </div>
 </template>
 
 <script setup>
 import {
-    ref, computed, watch, watchEffect, onMounted, onUnmounted, reactive
+    ref, computed, watch, watchEffect, onMounted, onUnmounted, reactive, nextTick
 } from 'vue';
 import { useBase } from '../../base/base.js';
 
-import { autoPx } from '../../utils/util.js';
+import {
+    autoPx, bindEvents, unbindEvents, preventDefault
+} from '../../utils/util.js';
 
 const { cid } = useBase('VuiFlyover');
 
 const props = defineProps({
-
-    width: {
-        type: [String, Number],
-        default: '50%'
-    },
 
     position: {
         type: String,
@@ -31,6 +32,16 @@ const props = defineProps({
         validator(value) {
             return ['right', 'left'].includes(value);
         }
+    },
+
+    width: {
+        type: [String, Number],
+        default: '50%'
+    },
+
+    resizable: {
+        type: Boolean,
+        default: true
     },
 
     visible: {
@@ -44,13 +55,16 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['update:modelValue', 'start', 'end']);
+const emit = defineEmits(['update:modelValue', 'start', 'end', 'resize']);
 
 const data = reactive({
     visible: props.visible,
-    width: props.width,
     position: props.position,
-    hasStarted: false
+    width: props.width,
+    resizable: props.resizable,
+
+    hasStarted: false,
+    resizeInfo: null
 });
 
 watchEffect(() => {
@@ -64,24 +78,39 @@ watch(() => data.visible, (nv, ov) => {
 });
 
 watchEffect(() => {
+    data.position = props.position;
+});
+watchEffect(() => {
     data.width = props.width;
 });
 watchEffect(() => {
-    data.position = props.position;
+    data.resizable = props.resizable;
+});
+
+watch(() => data.resizable, () => {
+    bindResizeEvents();
 });
 
 const el = ref(null);
 let $el;
 
 const classList = computed(() => {
-    return [
+    const cls = [
         'vui',
         'vui-flyover',
-        `vui-flyover-${props.position}`,
-        cid
+        cid,
+        `vui-flyover-${props.position}`
     ];
-});
 
+    // keep visible state onEnd
+    if ($el) {
+        if ($el.classList.contains('vui-flyover-show')) {
+            cls.push('vui-flyover-show');
+        }
+    }
+
+    return cls;
+});
 
 const styleList = computed(() => {
     return {
@@ -89,21 +118,8 @@ const styleList = computed(() => {
     };
 });
 
-const animationHandler = () => {
-    onEnd(data.visible);
-};
 
-const bindEvents = () => {
-    if ($el) {
-        $el.addEventListener('animationend', animationHandler);
-    }
-};
-
-const unbindEvents = () => {
-    if ($el) {
-        $el.removeEventListener('animationend', animationHandler);
-    }
-};
+// ==============================================================================================
 
 const onStart = (ov, nv) => {
 
@@ -114,7 +130,7 @@ const onStart = (ov, nv) => {
     if (data.hasStarted) {
         onEnd(ov);
     }
-    unbindEvents();
+    unbindAnimationEvents();
     const cl = $el.classList;
     if (nv) {
         cl.add(`vui-slide-in-${props.position}`, 'vui-flyover-show');
@@ -124,14 +140,14 @@ const onStart = (ov, nv) => {
     }
     data.hasStarted = true;
 
-    bindEvents();
+    bindAnimationEvents();
 
     emit('start', nv);
 };
 
 const onEnd = (v) => {
     data.hasStarted = false;
-    unbindEvents();
+    unbindAnimationEvents();
     const cl = $el.classList;
     if (v) {
         cl.remove(`vui-slide-in-${props.position}`);
@@ -143,15 +159,115 @@ const onEnd = (v) => {
     emit('end', v);
 };
 
+const animationEvents = {
+    animationend: {
+        handler: (e) => {
+            onEnd(data.visible);
+        }
+    }
+};
+
+const bindAnimationEvents = () => {
+    bindEvents(animationEvents, $el);
+};
+
+const unbindAnimationEvents = () => {
+    unbindEvents(animationEvents);
+};
+
+// ==============================================================================================
+
+const mouseDownHandler = (e) => {
+    // prevent select text
+    preventDefault(e);
+    data.resizeInfo = {
+        startX: e.pageX,
+        startWidth: autoPx(data.width)
+    };
+    bindEvents(windowEvents, window);
+};
+
+const mouseMoveHandler = function(e) {
+    preventDefault(e);
+
+    const buttonPressed = e.buttons;
+    if (!buttonPressed) {
+        mouseUpHandler(e);
+        return;
+    }
+
+    // update width
+    const { startWidth, startX } = data.resizeInfo;
+    const offsetX = e.pageX - startX;
+    // console.log(offsetX, startWidth);
+
+    const offsetFactor = data.position === 'right' ? -1 : 1;
+
+    const width = parseFloat(startWidth);
+    if (startWidth.endsWith('%')) {
+        const offsetPercent = offsetX / window.innerWidth * 100 * offsetFactor;
+        data.width = `${(width + offsetPercent).toFixed(2)}%`;
+    } else {
+        data.width = `${Math.round(width + offsetX * offsetFactor)}px`;
+    }
+
+    emit('resize', data.width);
+
+};
+
+const mouseUpHandler = function(e) {
+    preventDefault(e);
+    unbindEvents(windowEvents);
+};
+
+const windowEvents = {
+    mousemove: {
+        handler: (ee) => {
+            mouseMoveHandler(ee);
+        },
+        options: true
+    },
+    mouseup: {
+        handler: (ee) => {
+            mouseUpHandler(ee);
+        },
+        options: {
+            once: true
+        }
+    }
+};
+
+const mousedownEvents = {
+    mousedown: {
+        handler: (e) => {
+            mouseDownHandler(e);
+        }
+    }
+};
+
+const bindResizeEvents = () => {
+    unbindEvents(mousedownEvents);
+    if (data.resizable) {
+        nextTick(() => {
+            const $resizer = $el.querySelector('.vui-flyover-resizer');
+            bindEvents(mousedownEvents, $resizer);
+        });
+    }
+};
+
+// ==============================================================================================
+
 onMounted(() => {
     $el = el.value;
     if (data.visible) {
         onStart(false, true);
     }
+    bindResizeEvents();
 });
 
 onUnmounted(() => {
-    unbindEvents();
+    unbindAnimationEvents();
+    unbindEvents(mousedownEvents);
 });
 
 </script>
@@ -169,12 +285,29 @@ onUnmounted(() => {
     animation-fill-mode: both;
 }
 
+.vui-flyover-resizer {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    width: 6px;
+    height: 100%;
+    cursor: ew-resize;
+}
+
 .vui-flyover-right {
     right: 0;
+
+    .vui-flyover-resizer {
+        left: -3px;
+    }
 }
 
 .vui-flyover-left {
     left: 0;
+
+    .vui-flyover-resizer {
+        right: -3px;
+    }
 }
 
 .vui-flyover-show {
