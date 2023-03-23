@@ -4,8 +4,11 @@
     padding="5px"
     class="vui-demo-dialog"
   >
-    <VuiButton @click="data.visible=true">
-      open Dialog
+    <VuiButton
+      primary
+      @click="data.visible=true"
+    >
+      Open Dialog
     </VuiButton>
 
     <VuiDialog

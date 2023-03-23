@@ -1,8 +1,11 @@
 <template>
   <div>
     <div>
-      <VuiButton @click="data.visible = true">
-        open Modal
+      <VuiButton
+        primary
+        @click="data.visible = true"
+      >
+        Open Modal
       </VuiButton>
     </div>
     <VuiFlex
