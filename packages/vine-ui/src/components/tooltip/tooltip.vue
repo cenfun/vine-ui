@@ -30,8 +30,8 @@ const props = defineProps({
     },
 
     html: {
-        type: String,
-        default: ''
+        type: Boolean,
+        default: false
     },
 
     maxWidth: {
@@ -184,7 +184,7 @@ const contentHandler = () => {
     }
     const $content = $el.querySelector('.vui-tooltip-content');
     if (props.html) {
-        $content.innerHTML = props.html;
+        $content.innerHTML = props.text;
         return;
     }
     $content.innerText = props.text;

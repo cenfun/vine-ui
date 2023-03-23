@@ -4,16 +4,16 @@
       gap="10px"
       padding="5px"
     >
+      <VuiButton @click="data.visible=!data.visible">
+        toggle Flyover
+      </VuiButton>
+
       <VuiButton @click="data.visible=true">
-        show Flyover
+        show
       </VuiButton>
 
       <VuiButton @click="data.visible=false">
-        hide Flyover
-      </VuiButton>
-
-      <VuiButton @click="data.visible=!data.visible">
-        toggle Flyover
+        hide
       </VuiButton>
     </VuiFlex>
 

@@ -70,7 +70,7 @@ const tooltip = reactive({
     visible: false,
     target: '',
     text: '',
-    html: '',
+    html: false,
     borderColor: '',
     bgColor: '',
     color: ''

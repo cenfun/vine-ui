@@ -195,6 +195,10 @@ onMounted(() => {
 
 </script>
 <style lang="scss">
+.vui-demo-list {
+    padding-bottom: 10px;
+}
+
 .vui-demo-item {
     margin-top: 15px;
     padding-bottom: 10px;

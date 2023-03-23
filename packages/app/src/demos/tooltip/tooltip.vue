@@ -62,6 +62,10 @@
         <option>green</option>
         <option>red</option>
       </VuiSelect>
+
+      <VuiSwitch v-model="tooltip.html">
+        html
+      </VuiSwitch>
     </VuiFlex>
 
     <!--
@@ -86,7 +90,8 @@ import { components } from 'vine-ui';
 const {
     VuiButton,
     VuiFlex,
-    VuiSelect
+    VuiSelect,
+    VuiSwitch
 } = components;
 
 // global tooltip
@@ -96,11 +101,13 @@ const onHtml = (e) => {
     if (e.type === 'mouseenter') {
         tooltip.visible = true;
         tooltip.target = e.target;
-        tooltip.html = '<b>this is bold text</b>';
+        tooltip.text = '<b>this is bold text</b>';
+        tooltip.html = true;
     } else {
         tooltip.visible = false;
         // must be removed to let text works next
-        tooltip.html = '';
+        tooltip.text = '';
+        tooltip.html = false;
     }
 };
 
