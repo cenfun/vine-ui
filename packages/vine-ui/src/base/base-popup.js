@@ -17,8 +17,8 @@ const isElement = (obj) => {
 export const toRect = (obj) => {
     if (obj) {
         return {
-            left: toNum(obj.left),
-            top: toNum(obj.top),
+            left: toNum(obj.left || obj.x),
+            top: toNum(obj.top || obj.y),
             width: toNum(obj.width),
             height: toNum(obj.height)
         };

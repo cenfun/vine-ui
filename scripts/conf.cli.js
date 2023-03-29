@@ -15,6 +15,8 @@ module.exports = {
         },
         cssExtract: false,
 
+        vendors: ['vine-ui', 'app'],
+
         before: require('./before-build.js'),
         afterAll: require('./after-all-build.js')
     }

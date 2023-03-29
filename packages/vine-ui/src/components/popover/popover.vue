@@ -5,10 +5,7 @@
     :class="classList"
     :style="styleList"
   >
-    <div
-      class="vui-popover-body"
-      :style="styleBody"
-    >
+    <div class="vui-popover-body">
       <div
         v-if="props.title"
         class="vui-popover-header"
@@ -29,13 +26,13 @@
 
 <script setup>
 import {
-    computed, onMounted, reactive, ref, watch, watchEffect, nextTick
+    computed, onMounted, reactive, ref, watch, watchEffect, nextTick, onUnmounted
 } from 'vue';
-import { useBase } from '../../base/base.js';
-
 import {
-    getBestPosition, getRect, getElement, toRect
-} from '../../base/base-popup.js';
+    getBestPosition, getPositionStyle, getRect, getElement
+} from 'popover-helper';
+
+import { useBase } from '../../base/base.js';
 
 import { autoPx } from '../../utils/util.js';
 
@@ -74,12 +71,12 @@ const props = defineProps({
     },
 
     minHeight: {
-        type: Number,
-        default: 0
+        type: [String, Number],
+        default: 20
     },
 
     maxHeight: {
-        type: Number,
+        type: [String, Number],
         default: 800
     },
 
@@ -125,15 +122,12 @@ const emit = defineEmits(['update:modelValue', 'update', 'beforeClose', 'close']
 const data = reactive({
     visible: false,
     contentOverflow: false,
-    // calculation info
-    info: {
-        position: 'bottom',
-        align: 'center',
-        top: 0,
-        left: 0,
-        width: 'auto',
-        height: 'auto'
-    }
+
+    left: 0,
+    top: 0,
+    background: '',
+    padding: ''
+
 });
 
 watchEffect(() => {
@@ -145,18 +139,18 @@ watch(() => data.visible, (v) => {
     emit('update:modelValue', v);
 });
 
+watch([() => props.bgColor, () => props.borderColor], () => {
+    update();
+});
+
 const el = ref(null);
 let $el;
-let positionInfo;
 
 // ====================================================================================================
 
 const classList = computed(() => {
     return [
         'vui',
-        'vui-popup',
-        `vui-popup-${data.info.position}`,
-        `vui-popup-${data.info.position}-${data.info.align}`,
         'vui-popover',
         cid
     ];
@@ -164,29 +158,27 @@ const classList = computed(() => {
 
 const styleList = computed(() => {
     const st = {
-        top: `${data.info.top}px`,
-        left: `${data.info.left}px`,
-        width: `${data.info.width}px`,
-        height: `${data.info.height}px`
+        top: `${data.top}px`,
+        left: `${data.left}px`,
+        background: data.background,
+        padding: data.padding
     };
 
-    if (props.borderColor) {
-        st['--vui-popup-border-color'] = props.borderColor;
-    }
-    if (props.bgColor) {
-        st['--vui-popup-bg-color'] = props.bgColor;
-    }
+
     if (props.color) {
-        st['--vui-popup-color'] = props.color;
+        st['--vui-popover-color'] = props.color;
+    }
+    if (props.width) {
+        st['--vui-popover-width'] = autoPx(props.width);
+    }
+    if (props.minHeight) {
+        st['--vui-popover-min-height'] = autoPx(props.minHeight);
+    }
+    if (props.maxHeight) {
+        st['--vui-popover-max-height'] = autoPx(props.maxHeight);
     }
 
     return st;
-});
-
-const styleBody = computed(() => {
-    return {
-        width: autoPx(props.width)
-    };
 });
 
 const classContent = computed(() => {
@@ -218,15 +210,34 @@ const visibleChangeHandler = () => {
 };
 
 const bindEvents = () => {
+    bindContainerEvent();
     bindResizeEvent();
     bindScrollEvent();
     bindCloseEvent();
 };
 
 const unbindEvents = () => {
+    unbindContainerEvent();
     unbindResizeEvent();
     unbindScrollEvent();
     unbindCloseEvent();
+};
+
+// ====================================================================================================
+
+let resizeObserver;
+const bindContainerEvent = () => {
+    resizeObserver = new ResizeObserver((entries) => {
+        update();
+    });
+    resizeObserver.observe($el);
+};
+
+const unbindContainerEvent = () => {
+    if (resizeObserver) {
+        resizeObserver.disconnect();
+        resizeObserver = null;
+    }
 };
 
 // =============================================================================
@@ -352,68 +363,42 @@ const close = () => {
 };
 
 // =============================================================================
-const updateContentHeight = () => {
-    $el.style.height = 'auto';
-    const elem = $el.querySelector('.vui-popover-content');
-    elem.style.height = 'auto';
 
-    const br = elem.getBoundingClientRect();
-    const rect = toRect(br);
-    const ch = rect.height;
-
-    data.contentOverflow = false;
-    // fix for min/max height
-    if (ch > props.maxHeight) {
-        elem.style.height = `${props.maxHeight}px`;
-        data.contentOverflow = true;
-    } else if (ch < props.minHeight) {
-        elem.style.height = `${props.minHeight}px`;
-    }
-
-};
-
+let positionInfo;
 const updateSync = () => {
     if (!data.visible) {
         return;
     }
     const containerRect = getRect(props.container || window);
-    const arrowSize = 10;
-    const targetRect = getRect(props.target, arrowSize);
-
-    updateContentHeight();
-
-    const rect = getRect(`.${cid}`);
+    const targetRect = getRect(props.target);
+    const popoverRect = getRect(`.${cid}`);
     const positions = props.positions;
 
     // console.log('containerRect', containerRect);
     // console.log('targetRect', targetRect);
-    // console.log('rect', rect);
+    // console.log('popoverRect', popoverRect);
 
     positionInfo = getBestPosition(
         containerRect,
         targetRect,
-        rect,
+        popoverRect,
         positions,
         // previous position info for keeping position if has animation (dynamic size)
         positionInfo
     );
 
-    // console.log('positionInfo', positionInfo);
+    // console.table('positionInfo', positionInfo);
 
-    let noChange = true;
-    for (const k in data.info) {
-        if (data.info[k] !== positionInfo[k]) {
-            noChange = false;
-            break;
-        }
-    }
-    if (noChange) {
-        return;
-    }
+    const style = getPositionStyle(positionInfo, {
+        bgColor: props.bgColor,
+        borderColor: props.borderColor
+    });
 
-    for (const k in data.info) {
-        data.info[k] = positionInfo[k];
-    }
+    data.left = positionInfo.left;
+    data.top = positionInfo.top;
+    data.background = style.background;
+    data.padding = style.padding;
+
     emit('update');
 };
 
@@ -431,6 +416,10 @@ onMounted(() => {
     visibleChangeHandler();
 });
 
+onUnmounted(() => {
+    unbindEvents();
+});
+
 defineExpose({
     update
 });
@@ -439,10 +428,28 @@ defineExpose({
 
 <style lang="scss">
 .vui-popover {
+    --vui-popover-color: inherit;
+    --vui-popover-width: 200px;
+    --vui-popover-min-height: 20px;
+    --vui-popover-max-height: 800px;
+
     position: fixed;
     z-index: 1000;
     margin: 0;
-    padding: 16px;
+    padding: 10px;
+    box-sizing: border-box;
+    color: var(--vui-popover-color);
+    border: none;
+    filter: drop-shadow(1px 2px 2px rgb(0 0 0 / 20%));
+    overflow: hidden;
+
+    .vui-popover-body {
+        position: relative;
+        width: var(--vui-popover-width);
+        min-height: var(--vui-popover-min-height);
+        max-height: var(--vui-popover-max-height);
+        padding: 5px;
+    }
 
     .vui-popover-header {
         margin-bottom: 5px;

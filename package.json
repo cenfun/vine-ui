@@ -28,6 +28,7 @@
         "eslint-config-plus": "^1.0.6",
         "eslint-plugin-html": "^7.1.0",
         "eslint-plugin-vue": "^9.9.0",
+        "popover-helper": "^2.0.0",
         "stylelint": "^15.3.0",
         "stylelint-config-plus": "^1.0.2",
         "vue-docgen-api": "^4.64.1"

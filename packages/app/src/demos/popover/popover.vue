@@ -31,12 +31,12 @@
       <div>12 positions:</div>
       <div class="vui-popover-positions">
         <VuiPopover
+          positions="bottom"
           :visible="true"
           :auto-close="false"
           :bind-resize="false"
           :bind-scroll="false"
-          positions="bottom-right"
-          :target="{left:10,top:10}"
+          :target="{left:0,top:0}"
           :width="100"
           :border-color="data.borderColor"
           :bg-color="data.bgColor"
@@ -45,12 +45,12 @@
           bottom-right
         </VuiPopover>
         <VuiPopover
+          positions="bottom"
           :visible="true"
           :auto-close="false"
           :bind-resize="false"
           :bind-scroll="false"
-          positions="bottom-center"
-          :target="{left:260,top:10}"
+          :target="{left:260,top:0}"
           :width="100"
           :border-color="data.borderColor"
           :bg-color="data.bgColor"
@@ -59,12 +59,12 @@
           bottom-center
         </VuiPopover>
         <VuiPopover
+          positions="bottom"
           :visible="true"
           :auto-close="false"
           :bind-resize="false"
           :bind-scroll="false"
-          positions="bottom-left"
-          :target="{left:510,top:10}"
+          :target="{left:510,top:0}"
           :width="100"
           :border-color="data.borderColor"
           :bg-color="data.bgColor"
@@ -283,7 +283,6 @@
     </VuiFlex>
 
     <VuiPopover
-      ref="popover"
       v-model="data.visible"
       :target="data.target"
       :title="data.title"
@@ -304,7 +303,7 @@
 
 <script setup>
 import VineUI from 'vine-ui';
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 const {
     VuiButton,
     VuiCheckbox,
@@ -323,8 +322,6 @@ const data = reactive({
 
     dynamicSize: ''
 });
-
-const popover = ref(null);
 
 let previousTarget;
 const openPopover = function(e) {
@@ -351,7 +348,6 @@ const onChangeSize = () => {
     } else {
         data.dynamicSize = 'width:350px;height:200px;';
     }
-    popover.value.update();
 };
 
 </script>
