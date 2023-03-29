@@ -17,7 +17,7 @@
           />
         </slot>
       </div>
-      <div :class="classContent">
+      <div class="vui-popover-content">
         <slot />
       </div>
     </div>
@@ -26,7 +26,7 @@
 
 <script setup>
 import {
-    computed, onMounted, reactive, ref, watch, watchEffect, nextTick, onUnmounted
+    computed, onMounted, reactive, ref, watch, watchEffect, onUnmounted
 } from 'vue';
 import {
     getBestPosition, getPositionStyle, getRect, getElement
@@ -34,7 +34,7 @@ import {
 
 import { useBase } from '../../base/base.js';
 
-import { autoPx } from '../../utils/util.js';
+import { autoPx, microtask } from '../../utils/util.js';
 
 const { cid } = useBase('VuiPopover');
 
@@ -105,6 +105,11 @@ const props = defineProps({
         default: ''
     },
 
+    nonreactive: {
+        type: Boolean,
+        default: false
+    },
+
     visible: {
         type: Boolean,
         default: false
@@ -121,13 +126,10 @@ const emit = defineEmits(['update:modelValue', 'update', 'beforeClose', 'close']
 
 const data = reactive({
     visible: false,
-    contentOverflow: false,
 
     left: 0,
     top: 0,
-    background: '',
-    padding: ''
-
+    background: ''
 });
 
 watchEffect(() => {
@@ -139,7 +141,11 @@ watch(() => data.visible, (v) => {
     emit('update:modelValue', v);
 });
 
-watch([() => props.bgColor, () => props.borderColor], () => {
+watch([
+    () => props.target,
+    () => props.bgColor,
+    () => props.borderColor
+], () => {
     update();
 });
 
@@ -149,21 +155,24 @@ let $el;
 // ====================================================================================================
 
 const classList = computed(() => {
-    return [
+    const ls = [
         'vui',
         'vui-popover',
         cid
     ];
+
+    if (props.nonreactive) {
+        ls.push('vui-popover-nonreactive');
+    }
+    return ls;
 });
 
 const styleList = computed(() => {
     const st = {
         top: `${data.top}px`,
         left: `${data.left}px`,
-        background: data.background,
-        padding: data.padding
+        background: data.background
     };
-
 
     if (props.color) {
         st['--vui-popover-color'] = props.color;
@@ -181,16 +190,6 @@ const styleList = computed(() => {
     return st;
 });
 
-const classContent = computed(() => {
-    const list = [
-        'vui-popover-content'
-    ];
-    if (data.contentOverflow) {
-        list.push('vui-popover-content-overflow');
-    }
-    return list;
-});
-
 // ====================================================================================================
 
 const visibleChangeHandler = () => {
@@ -205,7 +204,6 @@ const visibleChangeHandler = () => {
     } else {
         // clean when closed
         unbindEvents();
-        positionInfo = null;
     }
 };
 
@@ -397,17 +395,12 @@ const updateSync = () => {
     data.left = positionInfo.left;
     data.top = positionInfo.top;
     data.background = style.background;
-    data.padding = style.padding;
 
     emit('update');
 };
 
-const update = () => {
-    // do not setTimeout, because we can see popover top left in first time
-    nextTick(() => {
-        updateSync();
-    });
-};
+// do not setTimeout, because we can see popover top left in first time
+const update = microtask(updateSync);
 
 // ====================================================================================================
 
@@ -418,6 +411,8 @@ onMounted(() => {
 
 onUnmounted(() => {
     unbindEvents();
+    $el = null;
+    positionInfo = null;
 });
 
 defineExpose({
@@ -436,12 +431,15 @@ defineExpose({
     position: fixed;
     z-index: 1000;
     margin: 0;
-    padding: 10px;
+    padding: 20px;
     box-sizing: border-box;
     color: var(--vui-popover-color);
     border: none;
     filter: drop-shadow(1px 2px 2px rgb(0 0 0 / 20%));
-    overflow: hidden;
+
+    &.vui-popover-nonreactive {
+        pointer-events: none;
+    }
 
     .vui-popover-body {
         position: relative;
@@ -449,6 +447,7 @@ defineExpose({
         min-height: var(--vui-popover-min-height);
         max-height: var(--vui-popover-max-height);
         padding: 5px;
+        overflow: hidden;
     }
 
     .vui-popover-header {
@@ -463,14 +462,9 @@ defineExpose({
     }
 
     .vui-popover-content {
+        position: relative;
         margin: 0;
         padding: 0;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-
-    .vui-popover-content-overflow {
-        overflow-y: auto;
     }
 }
 </style>

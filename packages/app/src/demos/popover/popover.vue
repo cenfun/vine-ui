@@ -24,192 +24,13 @@
       </VuiButton>
     </VuiFlex>
 
-    <VuiFlex
-      gap="10px"
-      margin="10px 0"
-    >
-      <div>12 positions:</div>
-      <div class="vui-popover-positions">
-        <VuiPopover
-          positions="bottom"
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          :target="{left:0,top:0}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          bottom-right
-        </VuiPopover>
-        <VuiPopover
-          positions="bottom"
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          :target="{left:260,top:0}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          bottom-center
-        </VuiPopover>
-        <VuiPopover
-          positions="bottom"
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          :target="{left:510,top:0}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          bottom-left
-        </VuiPopover>
-
-        <VuiPopover
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          positions="left-bottom"
-          :target="{left:510,top:90}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          left-bottom
-        </VuiPopover>
-
-        <VuiPopover
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          positions="left-center"
-          :target="{left:510,top:180}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          left-center
-        </VuiPopover>
-
-        <VuiPopover
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          positions="left-top"
-          :target="{left:510,top:270}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          left-top
-        </VuiPopover>
-
-        <VuiPopover
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          positions="top-left"
-          :target="{left:510,top:350}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          top-left
-        </VuiPopover>
-
-        <VuiPopover
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          positions="top-center"
-          :target="{left:260,top:350}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          top-center
-        </VuiPopover>
-
-        <VuiPopover
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          positions="top-right"
-          :target="{left:10,top:350}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          top-right
-        </VuiPopover>
-
-        <VuiPopover
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          positions="right-top"
-          :target="{left:10,top:270}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          right-top
-        </VuiPopover>
-
-        <VuiPopover
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          positions="right-center"
-          :target="{left:10,top:180}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          right-center
-        </VuiPopover>
-
-        <VuiPopover
-          :visible="true"
-          :auto-close="false"
-          :bind-resize="false"
-          :bind-scroll="false"
-          positions="right-bottom"
-          :target="{left:10,top:90}"
-          :width="100"
-          :border-color="data.borderColor"
-          :bg-color="data.bgColor"
-          :color="data.color"
-        >
-          right-bottom
-        </VuiPopover>
-      </div>
-    </VuiFlex>
-
+    <div class="vui-popover-positions">
+      <VuiFlex center>
+        <VuiSwitch v-model="data.movable">
+          mouse move in container
+        </VuiSwitch>
+      </VuiFlex>
+    </div>
 
     <VuiFlex
       gap="20px"
@@ -285,6 +106,8 @@
     <VuiPopover
       v-model="data.visible"
       :target="data.target"
+      :container="data.container"
+      :nonreactive="data.nonreactive"
       :title="data.title"
       :border-color="data.borderColor"
       :bg-color="data.bgColor"
@@ -303,22 +126,28 @@
 
 <script setup>
 import VineUI from 'vine-ui';
-import { reactive } from 'vue';
+import { reactive, watch } from 'vue';
 const {
     VuiButton,
     VuiCheckbox,
     VuiFlex,
     VuiPopover,
-    VuiSelect
+    VuiSelect,
+    VuiSwitch
 } = VineUI;
 
 const data = reactive({
     visible: false,
     target: null,
+
     title: 'Popover Title',
     borderColor: '',
     bgColor: '',
     color: '',
+
+    movable: false,
+    container: null,
+    nonreactive: false,
 
     dynamicSize: ''
 });
@@ -346,17 +175,46 @@ const onChangeSize = () => {
     if (data.dynamicSize) {
         data.dynamicSize = '';
     } else {
-        data.dynamicSize = 'width:350px;height:200px;';
+        data.dynamicSize = 'width:350px;height:900px;';
     }
 };
+
+const mouseMoveHandler = (e) => {
+    if (!data.movable) {
+        return;
+    }
+    data.target = {
+        x: e.pageX,
+        y: e.pageY,
+        width: 0,
+        height: 0
+    };
+    data.container = '.vui-popover-positions';
+    data.nonreactive = true;
+    data.visible = true;
+};
+
+
+watch(() => data.movable, (v) => {
+    if (v) {
+        window.addEventListener('mousemove', mouseMoveHandler);
+    } else {
+        window.removeEventListener('mousemove', mouseMoveHandler);
+        data.visible = false;
+        data.container = null;
+        data.nonreactive = false;
+    }
+});
+
 
 </script>
 <style lang="scss">
 .vui-popover-positions {
-    position: relative;
-    z-index: 0;
     width: 520px;
     height: 360px;
+    margin: 10px auto;
+    line-height: 360px;
+    text-align: center;
     border: 1px solid #999;
 
     .vui-popover {
