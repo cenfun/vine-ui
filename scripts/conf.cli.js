@@ -15,7 +15,7 @@ module.exports = {
         },
         cssExtract: false,
 
-        vendors: ['vine-ui', 'app'],
+        safeModules: ['popover-helper', 'async-tick'],
 
         before: require('./before-build.js'),
         afterAll: require('./after-all-build.js')
