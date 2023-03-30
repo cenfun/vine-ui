@@ -1,5 +1,3 @@
-import Microtask from './microtask.js';
-
 export const toNum = function(num, toInt) {
     if (typeof (num) !== 'number') {
         num = parseFloat(num);
@@ -99,17 +97,4 @@ export const pascalToKebabCase = function(text) {
         .replace(/^-+|-+$/g, '')
         .replace(/-{2,}/g, '-')
         .toLowerCase();
-};
-
-export const microtask = function(callback) {
-    const mt = new Microtask();
-    const handler = function() {
-        mt.start(() => {
-            callback.apply(this, arguments);
-        });
-    };
-    handler.cancel = () => {
-        mt.cancel();
-    };
-    return handler;
 };

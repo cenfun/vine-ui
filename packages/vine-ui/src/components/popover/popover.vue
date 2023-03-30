@@ -31,10 +31,11 @@ import {
 import {
     getBestPosition, getPositionStyle, getRect, getElement
 } from 'popover-helper';
+import { microtask } from 'async-tick';
 
 import { useBase } from '../../base/base.js';
 
-import { autoPx, microtask } from '../../utils/util.js';
+import { autoPx } from '../../utils/util.js';
 
 const { cid } = useBase('VuiPopover');
 
@@ -137,7 +138,7 @@ watchEffect(() => {
 });
 
 watch(() => data.visible, (v) => {
-    visibleChangeHandler();
+    render();
     emit('update:modelValue', v);
 });
 
@@ -190,52 +191,81 @@ const styleList = computed(() => {
     return st;
 });
 
+// =============================================================================
+
+let positionInfo;
+const updateSync = () => {
+    if (!data.visible) {
+        return;
+    }
+    const containerRect = getRect(props.container || window);
+    const targetRect = getRect(props.target);
+    const popoverRect = getRect(`.${cid}`);
+    const positions = props.positions;
+
+    // console.log('containerRect', containerRect);
+    // console.log('targetRect', targetRect);
+    // console.log('popoverRect', popoverRect);
+
+    positionInfo = getBestPosition(
+        containerRect,
+        targetRect,
+        popoverRect,
+        positions,
+        // previous position info for keeping position if has animation (dynamic size)
+        positionInfo
+    );
+
+    // console.table('positionInfo', positionInfo);
+    if (positionInfo.changed) {
+        data.left = positionInfo.left;
+        data.top = positionInfo.top;
+    }
+
+    const style = getPositionStyle(positionInfo, {
+        bgColor: props.bgColor,
+        borderColor: props.borderColor
+    });
+    if (style.changed) {
+        data.background = style.background;
+    }
+
+    emit('update');
+};
+
+// do not setTimeout, because we can see popover top left in first time
+const update = microtask(updateSync);
+
 // ====================================================================================================
 
-const visibleChangeHandler = () => {
+const render = () => {
+
+    if (!data.visible) {
+        // clean when closed
+        unbindEvents();
+        return;
+    }
+
     if (!$el) {
         return;
     }
 
-    if (data.visible) {
-        // start showing
-        bindEvents();
-        update();
-    } else {
-        // clean when closed
-        unbindEvents();
-    }
+    // start showing
+    bindEvents();
+    update();
+
 };
 
 const bindEvents = () => {
-    bindContainerEvent();
     bindResizeEvent();
     bindScrollEvent();
     bindCloseEvent();
 };
 
 const unbindEvents = () => {
-    unbindContainerEvent();
     unbindResizeEvent();
     unbindScrollEvent();
     unbindCloseEvent();
-};
-
-// ====================================================================================================
-
-let resizeObserver;
-const bindContainerEvent = () => {
-    resizeObserver = new ResizeObserver((entries) => {
-        update();
-    });
-    resizeObserver.observe($el);
-};
-
-const unbindContainerEvent = () => {
-    if (resizeObserver) {
-        resizeObserver.disconnect();
-        resizeObserver = null;
-    }
 };
 
 // =============================================================================
@@ -360,63 +390,42 @@ const close = () => {
     emit('close');
 };
 
-// =============================================================================
 
-let positionInfo;
-const updateSync = () => {
-    if (!data.visible) {
-        return;
-    }
-    const containerRect = getRect(props.container || window);
-    const targetRect = getRect(props.target);
-    const popoverRect = getRect(`.${cid}`);
-    const positions = props.positions;
+// ====================================================================================================
 
-    // console.log('containerRect', containerRect);
-    // console.log('targetRect', targetRect);
-    // console.log('popoverRect', popoverRect);
-
-    positionInfo = getBestPosition(
-        containerRect,
-        targetRect,
-        popoverRect,
-        positions,
-        // previous position info for keeping position if has animation (dynamic size)
-        positionInfo
-    );
-
-    // console.table('positionInfo', positionInfo);
-
-    const style = getPositionStyle(positionInfo, {
-        bgColor: props.bgColor,
-        borderColor: props.borderColor
+let resizeObserver;
+const bindContainerEvent = () => {
+    resizeObserver = new ResizeObserver((entries) => {
+        update();
     });
-
-    data.left = positionInfo.left;
-    data.top = positionInfo.top;
-    data.background = style.background;
-
-    emit('update');
+    resizeObserver.observe($el);
 };
 
-// do not setTimeout, because we can see popover top left in first time
-const update = microtask(updateSync);
+const unbindContainerEvent = () => {
+    if (resizeObserver) {
+        resizeObserver.disconnect();
+        resizeObserver = null;
+    }
+};
 
 // ====================================================================================================
 
 onMounted(() => {
     $el = el.value;
-    visibleChangeHandler();
+    bindContainerEvent();
+    render();
 });
 
 onUnmounted(() => {
+    unbindContainerEvent();
     unbindEvents();
     $el = null;
     positionInfo = null;
 });
 
 defineExpose({
-    update
+    update,
+    cid
 });
 
 </script>

@@ -14,14 +14,13 @@
 import {
     computed, onMounted, onUnmounted, reactive, ref, watch, watchEffect
 } from 'vue';
-
 import { useBase } from '../../base/base.js';
-
 import {
     getBestPosition, getPositionStyle, getRect
 } from 'popover-helper';
+import { microtask } from 'async-tick';
 
-import { autoPx, microtask } from '../../utils/util.js';
+import { autoPx } from '../../utils/util.js';
 
 const { cid } = useBase('VuiTooltip');
 
@@ -148,27 +147,29 @@ const updateSync = () => {
         positions
     );
 
+    if (positionInfo.changed) {
+        data.top = positionInfo.top;
+        data.left = positionInfo.left;
+    }
+
     const style = getPositionStyle(positionInfo, {
         bgColor: props.bgColor,
         borderColor: props.borderColor
     });
-
-    data.top = positionInfo.top;
-    data.left = positionInfo.left;
-    data.background = style.background;
+    if (style.changed) {
+        data.background = style.background;
+    }
 };
 
 const update = microtask(updateSync);
 
 const render = () => {
     if (!data.visible) {
-        unbindContainerEvent();
         return;
     }
     if (!$el) {
         return;
     }
-    bindContainerEvent();
     const $content = $el.querySelector('.vui-tooltip-content');
     if (props.html) {
         $content.innerHTML = props.text;
@@ -178,6 +179,7 @@ const render = () => {
     update();
 };
 
+// ====================================================================================================
 
 let resizeObserver;
 const bindContainerEvent = () => {
@@ -202,11 +204,18 @@ watch(() => data.visible, (v) => {
 
 onMounted(() => {
     $el = el.value;
+    bindContainerEvent();
     render();
 });
 
 onUnmounted(() => {
     unbindContainerEvent();
+    $el = null;
+});
+
+defineExpose({
+    update,
+    cid
 });
 
 </script>

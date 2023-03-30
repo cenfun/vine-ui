@@ -5,6 +5,7 @@
     "files": [
         "dist"
     ],
+    "license": "MIT",
     "dependencies": {
         "fps-detector": "^1.0.3",
         "vine-ui": "~3.1.4",

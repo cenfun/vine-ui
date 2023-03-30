@@ -184,10 +184,10 @@ const mouseMoveHandler = (e) => {
         return;
     }
     data.target = {
-        x: e.pageX,
-        y: e.pageY,
-        width: 0,
-        height: 0
+        x: e.pageX - 10,
+        y: e.pageY - 10,
+        width: 20,
+        height: 20
     };
     data.container = '.vui-popover-positions';
     data.nonreactive = true;
