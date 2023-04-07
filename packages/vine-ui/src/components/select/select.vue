@@ -22,10 +22,7 @@
     >
 
     <div class="vui-select-holder">
-      <div
-        class="vui vui-select-list"
-        :style="listStyle"
-      >
+      <div class="vui vui-select-list">
         <div
           v-for="item in data.list"
           :key="item.index"
@@ -166,21 +163,13 @@ const viewClass = computed(() => {
 });
 
 const viewStyle = computed(() => {
+    const st = {};
     if (data.width) {
-        return {
-            'width': autoPx(data.width)
-        };
+        if (data.width !== 'auto') {
+            st.width = autoPx(data.width);
+        }
     }
-    return {};
-});
-
-const listStyle = computed(() => {
-    if (data.width) {
-        return {
-            'min-width': autoPx(data.width)
-        };
-    }
-    return {};
+    return st;
 });
 
 // =========================================================================================================
@@ -432,6 +421,7 @@ const layout = () => {
     const st = $list.style;
     st.left = `${left}px`;
     st.top = `${top}px`;
+    st.minWidth = `${viewRect.width}px`;
 
     // selected element.scrollIntoView();
     const $selected = $list.querySelector('.vui-select-item.selected');
