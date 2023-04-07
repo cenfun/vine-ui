@@ -34,6 +34,11 @@ const props = defineProps({
         default: false
     },
 
+    shrink: {
+        type: Boolean,
+        default: false
+    },
+
     // justify-content
     align: {
         type: String,
@@ -75,6 +80,9 @@ const classList = computed(() => {
     ];
     if (props.wrap) {
         ls.push('vui-flex-wrap');
+    }
+    if (props.shrink) {
+        ls.push('vui-flex-shrink');
     }
     ls.push(cid);
     return ls;
@@ -145,6 +153,12 @@ display for portable using both vui-flex-row and vui-flex-column
 
 .vui-flex-wrap {
     flex-wrap: wrap;
+}
+
+.vui-flex-shrink {
+    > * {
+        flex-shrink: 1;
+    }
 }
 
 .vui-flex-auto {

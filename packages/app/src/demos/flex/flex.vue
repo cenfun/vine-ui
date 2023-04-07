@@ -6,6 +6,7 @@
 
         :gap="flex.gap"
         :wrap="flex.wrap"
+        :shrink="flex.shrink"
 
         :align="flex.align"
         :center="flex.center"
@@ -37,6 +38,7 @@
 
         :gap="flex.gap"
         :wrap="flex.wrap"
+        :shrink="flex.shrink"
 
         :align="flex.align"
         :center="flex.center"
@@ -95,6 +97,10 @@
 
       <VuiSwitch v-model="flex.wrap">
         wrap
+      </VuiSwitch>
+
+      <VuiSwitch v-model="flex.shrink">
+        shrink
       </VuiSwitch>
 
       <VuiSelect
@@ -192,7 +198,8 @@ const flex = reactive({
 
     align: '',
     center: false,
-    wrap: false
+    wrap: false,
+    shrink: false
 });
 
 </script>

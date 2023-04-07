@@ -2,6 +2,7 @@
     "name": "vine-ui-components",
     "version": "3.1.5",
     "description": "vine ui components",
+    "private": true,
     "main": "",
     "scripts": {
         "dev": "sf dev",
@@ -31,9 +32,8 @@
         "eslint-plugin-html": "^7.1.0",
         "eslint-plugin-vue": "^9.10.0",
         "popover-helper": "^2.0.3",
-        "stylelint": "^15.3.0",
+        "stylelint": "^15.4.0",
         "stylelint-config-plus": "^1.0.2",
         "vue-docgen-api": "^4.64.1"
-    },
-    "private": true
+    }
 }
