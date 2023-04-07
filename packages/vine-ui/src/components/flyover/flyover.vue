@@ -14,8 +14,9 @@
 
 <script setup>
 import {
-    ref, computed, watch, watchEffect, onMounted, onUnmounted, reactive, nextTick
+    ref, computed, watch, watchEffect, onMounted, onUnmounted, reactive
 } from 'vue';
+import { microtask } from 'async-tick';
 import { useBase } from '../../base/base.js';
 
 import {
@@ -299,12 +300,14 @@ const mousedownEvents = {
 const bindResizeEvents = () => {
     unbindEvents(mousedownEvents);
     if (data.resizable) {
-        nextTick(() => {
-            const $resizer = $el.querySelector('.vui-flyover-resizer');
-            bindEvents(mousedownEvents, $resizer);
-        });
+        bindResizeAsync();
     }
 };
+
+const bindResizeAsync = microtask(() => {
+    const $resizer = $el.querySelector('.vui-flyover-resizer');
+    bindEvents(mousedownEvents, $resizer);
+});
 
 // ==============================================================================================
 

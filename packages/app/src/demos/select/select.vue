@@ -3,6 +3,7 @@
     <VuiFlex
       gap="10px"
       padding="5px"
+      wrap
     >
       <VuiSelect
         v-model="selectValue"
@@ -52,22 +53,7 @@
       >
         <option />
       </VuiSelect>
-    </VuiFlex>
 
-    <VuiFlex
-      gap="10px"
-      padding="5px"
-    >
-      <VuiSelect
-        v-model="selectValue"
-        :options="selectList"
-      />
-      <VuiSelect
-        v-model="selectValue"
-        label="200 width:"
-        width="200px"
-        :options="selectList"
-      />
       <VuiSelect
         v-model="selectValue"
         label="disabled:"
@@ -84,6 +70,29 @@
         </option>
         <option>WC</option>
       </VuiSelect>
+    </VuiFlex>
+
+    <VuiFlex
+      gap="10px"
+      padding="5px"
+      wrap
+    >
+      <VuiSelect
+        v-model="selectValue"
+        :options="selectList"
+      />
+      <VuiSelect
+        v-model="selectValue"
+        label="200 width:"
+        width="200px"
+        :options="selectList"
+      />
+      <VuiSelect
+        v-model="selectValue"
+        label="auto width:"
+        width="auto"
+        :options="selectList"
+      />
 
       <div class="vui-flex-empty" />
 
@@ -103,6 +112,7 @@
     <VuiFlex
       gap="10px"
       padding="5px"
+      wrap
     >
       <VuiSelect
         v-model="selectValue"
@@ -132,6 +142,7 @@
     <VuiFlex
       gap="10px"
       padding="5px"
+      wrap
     >
       <VuiSelect
         v-model="selectValue"

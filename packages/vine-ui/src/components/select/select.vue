@@ -50,8 +50,9 @@
 
 <script setup>
 import {
-    computed, nextTick, onMounted, ref, shallowReactive, watch, watchEffect
+    computed, onMounted, ref, shallowReactive, watch, watchEffect
 } from 'vue';
+import { microtask } from 'async-tick';
 import {
     useBase, vSelectOnFocus, getSlot
 } from '../../base/base.js';
@@ -155,7 +156,6 @@ const el = ref(null);
 let $el;
 let $view;
 let $list;
-let timeout_display;
 
 const viewClass = computed(() => {
     const ls = ['vui-select-view'];
@@ -278,33 +278,34 @@ const keyArrowHandler = (e, offset) => {
         return;
     }
     const len = data.list.length;
-    let index = data.selectedIndex + offset;
-    if (index >= len) {
-        index = 0;
-    } else if (index < 0) {
-        index = len - 1;
+    const index = data.selectedIndex + offset;
+    if (index >= len || index < 0) {
+        return;
     }
     const item = data.list[index];
 
     data.selectedIndex = index;
     data.selectedValue = item.value;
 
-    nextTick(() => {
-        const target = $list.querySelector('.vui-select-item.selected');
-        if (target) {
-            const tt = target.offsetTop;
-            const th = target.clientHeight;
-            const lt = $list.scrollTop;
-            const lh = $list.clientHeight;
-            if (tt < lt || tt + th > lt + lh) {
-                const block = offset > 0 ? 'end' : 'start';
-                target.scrollIntoView({
-                    block
-                });
-            }
-        }
-    });
+    scrollIntoViewAsync(offset);
 };
+
+const scrollIntoViewAsync = microtask((offset) => {
+    const target = $list.querySelector('.vui-select-item.selected');
+    if (!target) {
+        return;
+    }
+    const tt = target.offsetTop;
+    const th = target.clientHeight;
+    const lt = $list.scrollTop;
+    const lh = $list.clientHeight;
+    if (tt < lt || tt + th > lt + lh) {
+        const block = offset > 0 ? 'end' : 'start';
+        target.scrollIntoView({
+            block
+        });
+    }
+});
 
 const keyEnterHandler = (e) => {
     if (!data.isOpen) {
@@ -369,12 +370,7 @@ const close = () => {
     unbindOpenEvents();
 };
 
-const closeAsync = () => {
-    clearTimeout(timeout_display);
-    timeout_display = setTimeout(() => {
-        close();
-    }, 100);
-};
+const closeAsync = microtask(close);
 
 // =========================================================================================================
 
@@ -447,7 +443,7 @@ const layout = () => {
 
 };
 
-const layoutAsync = () => {
+const layoutAsync = microtask(() => {
     if (props.disabled) {
         return;
     }
@@ -457,9 +453,7 @@ const layoutAsync = () => {
     }
 
     if (data.shouldOpen && !data.isOpen) {
-        nextTick(() => {
-            open();
-        });
+        openAsync();
         return;
     }
 
@@ -467,11 +461,9 @@ const layoutAsync = () => {
         return;
     }
 
-    nextTick(() => {
-        layout();
-    });
+    layout();
 
-};
+});
 
 const open = () => {
     if (props.disabled) {
@@ -495,12 +487,7 @@ const open = () => {
 
 // when opened list and click out side browser will blur
 // then click body will trigger focus and blur, that not make sense
-const openAsync = () => {
-    clearTimeout(timeout_display);
-    timeout_display = setTimeout(() => {
-        open();
-    }, 100);
-};
+const openAsync = microtask(open);
 
 // =========================================================================================================
 
@@ -626,7 +613,7 @@ const getListFromSlot = (ls) => {
 
 // =========================================================================================================
 
-const initWidth = () => {
+const renderWidth = () => {
 
     if (data.width) {
         return;
@@ -647,6 +634,13 @@ const initWidth = () => {
     data.width = `${w}px`;
 
 };
+
+const renderListAsync = microtask(() => {
+    renderWidth();
+    layoutAsync();
+});
+
+// =========================================================================================================
 
 const initSelectedItem = () => {
 
@@ -680,11 +674,7 @@ const initList = () => {
 
     initSelectedItem();
 
-    nextTick(() => {
-        initWidth();
-
-        layoutAsync();
-    });
+    renderListAsync();
 
 };
 

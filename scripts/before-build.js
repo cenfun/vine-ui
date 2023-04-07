@@ -37,7 +37,7 @@ module.exports = async (item, Util) => {
     for (const p of componentPathList) {
         const res = await DG.parse(p);
         info[res.displayName] = res;
-        console.log(`metadata generated ${res.displayName}: ${p}`);
+        // console.log(`metadata generated ${res.displayName}: ${p}`);
     }
 
     // demo source
@@ -51,13 +51,16 @@ module.exports = async (item, Util) => {
             info[displayName].source = {};
         }
         info[displayName].source[sourcePath] = source;
-        console.log(`source generated ${displayName}: ${sourcePath}`);
+        //  console.log(`source generated ${displayName}: ${sourcePath}`);
     }
 
     // save metadata
     const infoStr = JSON.stringify(info, null, 4);
 
-    fs.writeFileSync(path.resolve(item.componentPath, 'src/metadata.json'), infoStr);
+    const metadataPath = path.resolve(Util.getTempRoot(), 'metadata.json');
+    fs.writeFileSync(metadataPath, infoStr);
+
+    Util.logCyan(`metadata generated: ${metadataPath}`);
 
     return 0;
 };

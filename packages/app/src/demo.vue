@@ -106,7 +106,7 @@ import Editor from './utils/editor.js';
 
 import demos from './demos.js';
 
-import metadata from './metadata.json';
+import metadata from '../../../.temp/metadata.json';
 
 const route = useRoute();
 watch(() => route.path, (v) => {
