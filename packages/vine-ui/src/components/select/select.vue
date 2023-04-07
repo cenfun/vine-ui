@@ -712,9 +712,8 @@ onMounted(() => {
 
 .vui-select-view {
     position: relative;
-    height: 30px;
     min-width: 50px;
-    padding: 0 20px 0 5px;
+    padding: 5px 20px 5px 5px;
     border: 1px solid #aaa;
     border-radius: 5px;
     background-image: url("../../images/select.svg");
@@ -794,7 +793,7 @@ onMounted(() => {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 8px 5px;
+    padding: 6px 5px;
     color: #555;
     border-bottom: 1px solid #eee;
     cursor: pointer;
