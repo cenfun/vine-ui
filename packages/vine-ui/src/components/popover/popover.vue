@@ -193,6 +193,25 @@ const styleList = computed(() => {
 
 // =============================================================================
 
+const close = () => {
+    if (!data.visible) {
+        return;
+    }
+    data.visible = false;
+    emit('close');
+};
+
+const beforeClose = () => {
+    emit('beforeClose');
+
+    // async to make sure get previous visible outside
+    setTimeout(() => {
+        close();
+    });
+};
+
+// =============================================================================
+
 let positionInfo;
 const updateSync = () => {
     if (!data.visible) {
@@ -284,7 +303,7 @@ const unbindResizeEvent = () => {
 
 const resizeHandler = () => {
     if (props.bindResize === 'close') {
-        close();
+        beforeClose();
         return;
     }
     update();
@@ -312,7 +331,7 @@ const scrollHandler = (e) => {
         return;
     }
     if (props.bindScroll === 'close') {
-        close();
+        beforeClose();
         return;
     }
     update();
@@ -339,20 +358,14 @@ const clickHandler = (e) => {
     if (isInnerElement(e.target)) {
         return;
     }
-    emit('beforeClose');
-
-    // async to make sure get previous visible outside
-    setTimeout(() => {
-        close();
-    });
+    beforeClose();
 };
 
 const keydownHandler = (e) => {
-    // ESC
-    if (e.keyCode !== 27) {
+    if (e.code !== 'Escape') {
         return;
     }
-    close();
+    beforeClose();
 };
 
 // =============================================================================
@@ -365,8 +378,8 @@ const isInnerElement = (elem) => {
 };
 
 const isParentElement = (elem) => {
-
-    const targetElement = getElement(props.target);
+    // props.target could be a rect
+    const targetElement = getElement(props.target) || $el;
     if (!targetElement) {
         return false;
     }
@@ -379,17 +392,6 @@ const isParentElement = (elem) => {
     }
     return false;
 };
-
-// =============================================================================
-
-const close = () => {
-    if (!data.visible) {
-        return;
-    }
-    data.visible = false;
-    emit('close');
-};
-
 
 // ====================================================================================================
 
