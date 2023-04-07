@@ -160,6 +160,7 @@ const clickHandler = () => {
     height: calc(100% - 4px);
     border-radius: 50%;
     background-color: #fff;
+    user-select: none;
     transition: right 0.1s ease-in-out;
 }
 

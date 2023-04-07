@@ -13,6 +13,7 @@
       type="text"
       :class="viewClass"
       :style="viewStyle"
+      :size="viewSize"
       :disabled="props.disabled"
       :readonly="!props.searchable"
       @click.stop="onClick"
@@ -21,7 +22,7 @@
       @blur="onBlur"
     >
 
-    <div class="vui-select-holder">
+    <div class="vui-select-hide">
       <div class="vui vui-select-list">
         <div
           v-for="item in data.list"
@@ -152,6 +153,7 @@ watch(() => props.options, () => {
 const el = ref(null);
 let $el;
 let $view;
+let $hide;
 let $list;
 
 const viewClass = computed(() => {
@@ -170,6 +172,15 @@ const viewStyle = computed(() => {
         }
     }
     return st;
+});
+
+// when width is auto using size as width
+const viewSize = computed(() => {
+    if (data.width === 'auto' && typeof data.viewLabel === 'string') {
+        // arrow takes 1 size
+        return data.viewLabel.length + 1;
+    }
+    return '';
 });
 
 // =========================================================================================================
@@ -433,28 +444,6 @@ const layout = () => {
 
 };
 
-const layoutAsync = microtask(() => {
-    if (props.disabled) {
-        return;
-    }
-
-    if (!$el) {
-        return;
-    }
-
-    if (data.shouldOpen && !data.isOpen) {
-        openAsync();
-        return;
-    }
-
-    if (!data.isOpen) {
-        return;
-    }
-
-    layout();
-
-});
-
 const open = () => {
     if (props.disabled) {
         return;
@@ -603,31 +592,54 @@ const getListFromSlot = (ls) => {
 
 // =========================================================================================================
 
-const renderWidth = () => {
+// wait for list render
+const initWidthIfNeeded = microtask(() => {
 
+    // fixed width or already calculated
     if (data.width) {
         return;
     }
 
+    // auto width
+    document.body.appendChild($hide);
     const listRect = $list.getBoundingClientRect();
-    // border is 2 if empty
-    if (listRect.width <= 2) {
-        return;
-    }
+    $el.appendChild($hide);
 
-    // Symbol, last latter is l will be cut, so + 1
-    const iconWidth = 15 + 1;
+    const listWidth = Math.ceil(listRect.width);
+    // console.log(cid, listWidth);
+
+    // list item padding 5px = view padding 5px
+    // only icon width
+    const viewIconWidth = 15;
+
     const viewMinWidth = 50;
     const viewMaxWidth = 350;
     // no padding because list have same padding
-    const w = clamp(Math.ceil(listRect.width) + iconWidth, viewMinWidth, viewMaxWidth);
+    const w = clamp(listWidth + viewIconWidth, viewMinWidth, viewMaxWidth);
     data.width = `${w}px`;
 
-};
+});
 
-const renderListAsync = microtask(() => {
-    renderWidth();
-    layoutAsync();
+const layoutIfNeeded = microtask(() => {
+    if (props.disabled) {
+        return;
+    }
+
+    if (!$el) {
+        return;
+    }
+
+    if (data.shouldOpen && !data.isOpen) {
+        openAsync();
+        return;
+    }
+
+    if (!data.isOpen) {
+        return;
+    }
+
+    layout();
+
 });
 
 // =========================================================================================================
@@ -664,13 +676,18 @@ const initList = () => {
 
     initSelectedItem();
 
-    renderListAsync();
+    // async calculate width first time
+    initWidthIfNeeded();
+
+    // async layout if list is show and change list dynamic
+    layoutIfNeeded();
 
 };
 
 onMounted(() => {
     $el = el.value;
     $view = $el.querySelector('.vui-select-view');
+    $hide = $el.querySelector('.vui-select-hide');
     $list = $el.querySelector('.vui-select-list');
 
     initList();
@@ -682,12 +699,12 @@ onMounted(() => {
     position: relative;
     display: flex;
     flex-direction: row;
+    gap: 5px;
     align-items: center;
 
     label {
         position: relative;
         display: inline-block;
-        padding-right: 5px;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
@@ -695,7 +712,6 @@ onMounted(() => {
 
 .vui-select-view {
     position: relative;
-    width: 50px;
     height: 30px;
     min-width: 50px;
     padding: 0 20px 0 5px;
@@ -730,8 +746,8 @@ onMounted(() => {
     cursor: text;
 }
 
-/* holder for width computed */
-.vui-select-holder {
+/* hide for width computed */
+.vui-select-hide {
     position: absolute;
     width: 500px;
     visibility: hidden;
