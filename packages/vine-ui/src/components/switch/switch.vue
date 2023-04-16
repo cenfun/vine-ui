@@ -1,22 +1,32 @@
 <template>
   <div :class="classList">
     <div
-      v-if="labelContent"
+      v-if="labelContent && props.labelPosition==='left'"
       class="vui-switch-label"
+      @click="onLabelClick"
     >
       <slot>
         {{ props.label }}
       </slot>
     </div>
     <div
-      :class="buttonClassList"
+      class="vui-switch-button"
       :style="buttonStyleList"
-      @click="clickHandler"
+      @click="onButtonClick"
     >
       <div
         class="vui-switch-icon"
         :style="iconStyleList"
       />
+    </div>
+    <div
+      v-if="labelContent && props.labelPosition==='right'"
+      class="vui-switch-label"
+      @click="onLabelClick"
+    >
+      <slot>
+        {{ props.label }}
+      </slot>
     </div>
   </div>
 </template>
@@ -30,13 +40,24 @@ const defaultColors = ['#aaaaaa', '#1890ff'];
 
 const { cid } = useBase('VuiSwitch');
 
-const classList = ['vui', 'vui-switch', cid];
-
 const props = defineProps({
 
     label: {
         type: String,
         default: ''
+    },
+
+    labelPosition: {
+        type: String,
+        default: 'left',
+        validator(value) {
+            return ['left', 'right'].includes(value);
+        }
+    },
+
+    labelClickable: {
+        type: Boolean,
+        default: false
     },
 
     colors: {
@@ -85,12 +106,19 @@ watch(() => data.checked, (v) => {
 });
 
 
-const buttonClassList = computed(() => {
-    return {
-        'vui-switch-button': true,
-        'vui-switch-checked': data.checked,
-        'vui-switch-disabled': props.disabled
-    };
+const classList = computed(() => {
+    const ls = ['vui', 'vui-switch', cid];
+    if (data.checked) {
+        ls.push('vui-switch-checked');
+    }
+    if (props.labelClickable) {
+        ls.push('vui-switch-label-clickable');
+    }
+    if (props.disabled) {
+        ls.push('vui-switch-disabled');
+    }
+    return ls;
+
 });
 
 const buttonStyleList = computed(() => {
@@ -124,7 +152,7 @@ const labelContent = computed(() => {
     return props.label || getSlot();
 });
 
-const clickHandler = () => {
+const onButtonClick = () => {
     if (props.disabled) {
         return;
     }
@@ -132,20 +160,22 @@ const clickHandler = () => {
     emit('change', data.checked);
 };
 
+const onLabelClick = () => {
+    if (props.labelClickable) {
+        onButtonClick();
+    }
+};
+
 </script>
 <style lang="scss">
 .vui-switch {
     display: flex;
+    gap: 5px;
     align-items: center;
-
-    .vui-switch-disabled {
-        cursor: default;
-        opacity: 0.5;
-    }
 }
 
 .vui-switch-label {
-    margin-right: 5px;
+    cursor: default;
 }
 
 .vui-switch-button {
@@ -164,9 +194,27 @@ const clickHandler = () => {
     transition: right 0.1s ease-in-out;
 }
 
+.vui-switch-label-clickable {
+    .vui-switch-label {
+        cursor: pointer;
+        user-select: none;
+    }
+}
+
 .vui-switch-checked {
     .vui-switch-icon {
         right: 2px;
+    }
+}
+
+.vui-switch-disabled {
+    .vui-switch-label {
+        cursor: default;
+    }
+
+    .vui-switch-button {
+        cursor: default;
+        opacity: 0.6;
     }
 }
 
