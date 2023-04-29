@@ -10,6 +10,7 @@
 
         :align="flex.align"
         :center="flex.center"
+        :align-items="flex.alignItems"
 
         :width="flex.width"
         :height="flex.height"
@@ -42,6 +43,7 @@
 
         :align="flex.align"
         :center="flex.center"
+        :align-items="flex.alignItems"
 
         :width="flex.width"
         :height="flex.height"
@@ -136,6 +138,32 @@
       </VuiSwitch>
 
       <VuiSelect
+        v-model="flex.alignItems"
+        tooltip="alignItems"
+      >
+        <option />
+        <option>normal</option>
+
+        <option>flex-start</option>
+        <option>flex-end</option>
+
+        <option>center</option>
+        <option>start</option>
+        <option>end</option>
+
+        <option>self-start</option>
+        <option>self-end</option>
+
+        <option>baseline</option>
+        <option>first baseline</option>
+        <option>last baseline</option>
+
+        <option>stretch</option>
+        <option>safe</option>
+        <option>unsafe</option>
+      </VuiSelect>
+
+      <VuiSelect
         v-model="flex.width"
         tooltip="width"
       >
@@ -198,6 +226,7 @@ const flex = reactive({
 
     align: '',
     center: false,
+    alignItems: '',
     wrap: false,
     shrink: false
 });

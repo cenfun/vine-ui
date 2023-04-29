@@ -51,6 +51,11 @@ const props = defineProps({
         default: false
     },
 
+    alignItems: {
+        type: String,
+        default: ''
+    },
+
     width: {
         type: [String, Number],
         default: ''
@@ -88,28 +93,30 @@ const classList = computed(() => {
     return ls;
 });
 
+const autoFxStyle = (st, k, v) => {
+    if (v) {
+        st[k] = autoPx(v);
+    }
+};
+
 const styleList = computed(() => {
     const st = {};
-    if (props.width) {
-        st.width = autoPx(props.width);
-    }
-    if (props.height) {
-        st.height = autoPx(props.height);
-    }
+    autoFxStyle(st, 'width', props.width);
+    autoFxStyle(st, 'height', props.height);
+    autoFxStyle(st, '--vui-flex-gap', props.gap);
+    autoFxStyle(st, '--vui-flex-margin', props.margin);
+    autoFxStyle(st, '--vui-flex-padding', props.padding);
+
     if (props.align) {
         st['--vui-flex-align'] = props.align;
     } else if (props.center) {
         st['--vui-flex-align'] = 'center';
     }
-    if (props.gap) {
-        st['--vui-flex-gap'] = autoPx(props.gap);
+
+    if (props.alignItems) {
+        st['--vui-flex-align-items'] = props.alignItems;
     }
-    if (props.margin) {
-        st['--vui-flex-margin'] = autoPx(props.margin);
-    }
-    if (props.padding) {
-        st['--vui-flex-padding'] = autoPx(props.padding);
-    }
+
     return st;
 });
 
@@ -139,16 +146,21 @@ const styleList = computed(() => {
 display for portable using both vui-flex-row and vui-flex-column
 */
 .vui-flex-row {
+    --vui-flex-align-items: center;
+
     position: relative;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: var(--vui-flex-align-items);
 }
 
 .vui-flex-column {
+    --vui-flex-align-items: normal;
+
     position: relative;
     display: flex;
     flex-direction: column;
+    align-items: var(--vui-flex-align-items);
 }
 
 .vui-flex-wrap {
