@@ -11,17 +11,13 @@
       >
         <template #left>
           <b>Tab Title</b>
-          <div class="vui-flex-auto" />
         </template>
         <template #right>
-          <div class="vui-flex-auto" />
-          <div
-            class="vui-flex-row"
-            tooltip="This is toolbar tooltip"
-          >
+          <div>Right</div>
+          <VuiFlex tooltip="This is toolbar tooltip">
             <div class="vui-tab-icon-plus" />
-            Right Header Slot {{ state.index }}
-          </div>
+            Slot {{ state.index }}
+          </VuiFlex>
         </template>
         <template #tabs>
           <div>

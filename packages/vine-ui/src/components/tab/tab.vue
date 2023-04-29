@@ -3,26 +3,33 @@
     ref="el"
     :class="classList"
   >
-    <div class="vui-tab-header vui-flex-row">
-      <div
-        v-if="props.align!=='left'"
-        class="vui-tab-header-left vui-flex-row"
+    <VuiFlex class="vui-tab-header">
+      <VuiFlex
+        v-if="leftContent"
+        wrap
+        gap="10px"
+        class="vui-tab-header-left"
       >
         <slot name="left" />
-      </div>
-      <div
-        class="vui-tab-tabs vui-flex-row"
+      </VuiFlex>
+
+      <VuiFlex
+        :align="props.align"
+        class="vui-tab-tabs vui-flex-auto"
         @click="onTabClick"
       >
         <slot name="tabs" />
-      </div>
-      <div
-        v-if="props.align!=='right'"
-        class="vui-tab-header-right vui-flex-row"
+      </VuiFlex>
+
+      <VuiFlex
+        v-if="rightContent"
+        wrap
+        gap="10px"
+        class="vui-tab-header-right"
       >
         <slot name="right" />
-      </div>
-    </div>
+      </VuiFlex>
+    </VuiFlex>
     <div class="vui-tab-panes">
       <slot name="panes" />
     </div>
@@ -32,8 +39,9 @@
 import {
     computed, watch, watchEffect, reactive, onMounted, ref
 } from 'vue';
-import { useBase } from '../../base/base.js';
+import { useBase, getSlot } from '../../base/base.js';
 import { toNum } from '../../utils/util.js';
+import VuiFlex from '../flex/flex.vue';
 
 const { cid } = useBase('VuiTab');
 
@@ -82,11 +90,18 @@ watch(() => data.index, (v) => {
 const el = ref(null);
 let $el;
 
+const leftContent = computed(() => {
+    return getSlot('left');
+});
+
+const rightContent = computed(() => {
+    return getSlot('right');
+});
+
 const classList = computed(() => {
     return [
         'vui',
         'vui-tab',
-        `vui-tab-${props.align}`,
         `vui-tab-${props.theme}`,
         cid
     ];
@@ -166,6 +181,7 @@ onMounted(() => {
     flex-shrink: 0;
     width: 100%;
     white-space: nowrap;
+    overflow: visible;
 }
 
 .vui-tab-header-left,
@@ -176,28 +192,6 @@ onMounted(() => {
     > * {
         text-overflow: ellipsis;
         overflow: hidden;
-    }
-}
-
-.vui-tab-left {
-    .vui-tab-header-right {
-        flex: auto;
-    }
-}
-
-.vui-tab-center {
-    .vui-tab-header-left {
-        flex: 1 1 50%;
-    }
-
-    .vui-tab-header-right {
-        flex: 1 1 50%;
-    }
-}
-
-.vui-tab-right {
-    .vui-tab-header-left {
-        flex: auto;
     }
 }
 
@@ -228,6 +222,7 @@ onMounted(() => {
     align-items: flex-end;
     align-self: flex-end;
     margin: 0 10px;
+    overflow: visible;
 }
 
 .vui-tab-item {
