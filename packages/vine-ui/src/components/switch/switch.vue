@@ -1,9 +1,11 @@
 <template>
-  <div :class="classList">
+  <div
+    :class="classList"
+    @click="onClick"
+  >
     <div
       v-if="labelContent && props.labelPosition==='left'"
       class="vui-switch-label"
-      @click="onLabelClick"
     >
       <slot>
         {{ props.label }}
@@ -12,7 +14,6 @@
     <div
       class="vui-switch-button"
       :style="buttonStyleList"
-      @click="onButtonClick"
     >
       <div
         class="vui-switch-icon"
@@ -22,7 +23,6 @@
     <div
       v-if="labelContent && props.labelPosition==='right'"
       class="vui-switch-label"
-      @click="onLabelClick"
     >
       <slot>
         {{ props.label }}
@@ -152,17 +152,13 @@ const labelContent = computed(() => {
     return props.label || getSlot();
 });
 
-const onButtonClick = () => {
+const onClick = (e) => {
     if (props.disabled) {
         return;
     }
-    data.checked = !data.checked;
-    emit('change', data.checked);
-};
-
-const onLabelClick = () => {
-    if (props.labelClickable) {
-        onButtonClick();
+    if (props.labelClickable || e.target.classList.contains('vui-switch-button')) {
+        data.checked = !data.checked;
+        emit('change', data.checked);
     }
 };
 
@@ -181,6 +177,7 @@ const onLabelClick = () => {
 .vui-switch-button {
     position: relative;
     cursor: pointer;
+    user-select: none;
     transition: background-color 0.1s;
 }
 
@@ -191,10 +188,13 @@ const onLabelClick = () => {
     border-radius: 50%;
     background-color: #fff;
     user-select: none;
+    pointer-events: none;
     transition: right 0.1s ease-in-out;
 }
 
 .vui-switch-label-clickable {
+    cursor: pointer;
+
     .vui-switch-label {
         cursor: pointer;
         user-select: none;
@@ -208,6 +208,8 @@ const onLabelClick = () => {
 }
 
 .vui-switch-disabled {
+    cursor: default;
+
     .vui-switch-label {
         cursor: default;
     }
