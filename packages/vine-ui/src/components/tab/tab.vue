@@ -85,6 +85,7 @@ watchEffect(() => {
 
 watch(() => data.index, (v) => {
     emit('update:modelValue', v);
+    emit('change', v);
 });
 
 const el = ref(null);
@@ -126,7 +127,6 @@ const onTabClick = (e) => {
         return;
     }
     data.index = index;
-    emit('change', index);
 };
 
 watch(() => data.index, (v) => {

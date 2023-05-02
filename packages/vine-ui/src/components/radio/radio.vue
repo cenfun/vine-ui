@@ -58,7 +58,7 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 const data = reactive({
     checked: false
@@ -70,6 +70,7 @@ watchEffect(() => {
 
 watch(() => data.checked, (v) => {
     emit('update:modelValue', v);
+    emit('change', v);
 });
 
 </script>

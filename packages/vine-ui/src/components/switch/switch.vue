@@ -103,6 +103,7 @@ watchEffect(() => {
 
 watch(() => data.checked, (v) => {
     emit('update:modelValue', v);
+    emit('change', v);
 });
 
 
@@ -158,7 +159,6 @@ const onClick = (e) => {
     }
     if (props.labelClickable || e.target.classList.contains('vui-switch-button')) {
         data.checked = !data.checked;
-        emit('change', data.checked);
     }
 };
 

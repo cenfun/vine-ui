@@ -103,7 +103,7 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['update:modelValue', 'search', 'remove']);
+const emit = defineEmits(['update:modelValue', 'change', 'search', 'remove']);
 
 const data = shallowReactive({
 
@@ -140,6 +140,7 @@ watchEffect(() => {
 watch(() => data.value, (v) => {
     initSelectedItem();
     emit('update:modelValue', v);
+    emit('change', v);
 });
 
 watchEffect(() => {

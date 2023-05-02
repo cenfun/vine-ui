@@ -69,7 +69,7 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 const data = reactive({
     value: ''
@@ -81,6 +81,7 @@ watchEffect(() => {
 
 watch(() => data.value, (v) => {
     emit('update:modelValue', v);
+    emit('change', v);
 });
 
 const styleMap = computed(() => {
