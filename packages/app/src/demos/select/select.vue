@@ -163,10 +163,12 @@
         />
         <VuiSelect
           v-model="data.value"
-          label="width 100(no @search):"
+          label="width 100:"
           width="100px"
           :options="data.results"
           :searchable="true"
+          :select-on-focus="false"
+          tooltip="select-on-focus=false and no @search event"
           @remove="onSelectRemove"
         />
       </VuiFlex>

@@ -9,7 +9,7 @@
 
     <input
       v-model="data.viewLabel"
-      v-select-on-focus
+      v-select-on-focus="props.selectOnFocus"
       type="text"
       :class="viewClass"
       :style="viewStyle"
@@ -90,6 +90,11 @@ const props = defineProps({
     searchable: {
         type: Boolean,
         default: false
+    },
+
+    selectOnFocus: {
+        type: Boolean,
+        default: true
     },
 
     value: {

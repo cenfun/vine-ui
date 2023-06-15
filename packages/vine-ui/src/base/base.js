@@ -37,7 +37,10 @@ export const getSlot = function(name) {
     }
 };
 
-export const vSelectOnFocus = function(el) {
+export const vSelectOnFocus = function(el, binding) {
+    if (!binding.value) {
+        return;
+    }
     el.addEventListener('focus', (e) => {
         if (el.getAttribute('readonly') !== null || !el.value) {
             return;

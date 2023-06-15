@@ -11,7 +11,7 @@
     <VuiInput
       v-model="inputText"
       placeholder="no label"
-      width="150px"
+      width="80px"
     />
 
     <VuiInput disabled>
@@ -30,6 +30,12 @@
     <VuiInput
       :label="inputText"
       placeholder="label"
+    />
+
+    <VuiInput
+      value="selectOnFocus=false"
+      :select-on-focus="false"
+      width="150px"
     />
   </VuiFlex>
 </template>

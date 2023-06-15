@@ -7,7 +7,7 @@
     </label>
     <input
       v-model="data.value"
-      v-select-on-focus
+      v-select-on-focus="props.selectOnFocus"
       :placeholder="props.placeholder"
       :disabled="props.disabled"
       :type="props.type"
@@ -51,6 +51,11 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: ''
+    },
+
+    selectOnFocus: {
+        type: Boolean,
+        default: true
     },
 
     disabled: {

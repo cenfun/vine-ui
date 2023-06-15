@@ -39,8 +39,8 @@ const {
 } = VineUI;
 
 const checkboxChecked = ref(true);
-const onChange = (e) => {
-    checkboxChecked.value = e.target.checked;
+const onChange = (checked) => {
+    checkboxChecked.value = checked;
 };
 
 </script>
