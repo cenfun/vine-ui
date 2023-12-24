@@ -112,6 +112,10 @@
       :border-color="data.borderColor"
       :bg-color="data.bgColor"
       :color="data.color"
+      @open="onOpen"
+      @update="onUpdate"
+      @close="onClose"
+      @beforeClose="onBeforeClose"
     >
       <VuiCheckbox>Popover Checkbox 1</VuiCheckbox>
       <VuiCheckbox>Popover Checkbox 2</VuiCheckbox>
@@ -151,6 +155,22 @@ const data = reactive({
 
     dynamicSize: ''
 });
+
+const onOpen = ($el) => {
+    console.log('onOpen', $el);
+};
+
+const onUpdate = (info) => {
+    // console.log('onUpdate', info);
+};
+
+const onBeforeClose = (e) => {
+    console.log('onBeforeClose');
+};
+
+const onClose = (e) => {
+    console.log('onClose');
+};
 
 let previousTarget;
 const openPopover = function(e) {

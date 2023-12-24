@@ -770,8 +770,7 @@ onMounted(() => {
     border-radius: 5px;
     background-color: #fff;
     box-shadow: 0 2px 3px 0 rgb(0 0 0 / 20%);
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
 }
 
 .vui-select-item-label {

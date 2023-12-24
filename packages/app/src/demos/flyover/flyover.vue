@@ -177,7 +177,6 @@ const onResize = (width) => {
 
 .demo-flyover-content {
     padding: 10px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
 }
 </style>

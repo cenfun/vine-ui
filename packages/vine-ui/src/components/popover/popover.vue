@@ -123,7 +123,10 @@ const props = defineProps({
 
 });
 
-const emit = defineEmits(['update:modelValue', 'update', 'beforeClose', 'close']);
+const el = ref(null);
+let $el;
+
+const emit = defineEmits(['update:modelValue', 'open', 'update', 'beforeClose', 'close']);
 
 const data = reactive({
     visible: false,
@@ -149,9 +152,6 @@ watch([
 ], () => {
     update();
 });
-
-const el = ref(null);
-let $el;
 
 // ====================================================================================================
 
@@ -249,7 +249,7 @@ const updateSync = () => {
         data.background = style.background;
     }
 
-    emit('update');
+    emit('update', positionInfo);
 };
 
 // do not setTimeout, because we can see popover top left in first time
@@ -268,6 +268,8 @@ const render = () => {
     if (!$el) {
         return;
     }
+
+    emit('open', $el);
 
     // start showing
     bindEvents();
