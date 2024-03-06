@@ -48,6 +48,7 @@ test('e2e test', async ({ page }) => {
 
         reports: ['v8', 'console-details']
     });
+    coverageReport.cleanCache();
     await coverageReport.add(coverageData);
     await coverageReport.generate();
 
