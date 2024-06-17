@@ -280,14 +280,14 @@ onMounted(() => {
     overflow: hidden;
 }
 
-.vui-tab-chrome .vui-tab-item {
+.vui-tab-chrome > .vui-tab-header .vui-tab-item {
     height: 36px;
     line-height: 36px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
 
-.vui-tab-simple .vui-tab-item {
+.vui-tab-simple > .vui-tab-header .vui-tab-item {
     height: 36px;
     line-height: 36px;
     border: 1px solid transparent;
@@ -296,10 +296,8 @@ onMounted(() => {
     border-top-right-radius: 5px;
 }
 
-.vui-tab-chrome {
-    .vui-tab-header {
-        background: #dee1e6;
-    }
+.vui-tab-chrome > .vui-tab-header {
+    background: #dee1e6;
 
     .vui-tab-tabs {
         padding-top: 8px;
@@ -356,10 +354,8 @@ onMounted(() => {
     }
 }
 
-.vui-tab-simple {
-    .vui-tab-header {
-        border-bottom: 1px solid #ccc;
-    }
+.vui-tab-simple > .vui-tab-header {
+    border-bottom: 1px solid #ccc;
 
     .vui-tab-tabs {
         margin-bottom: -1px;
