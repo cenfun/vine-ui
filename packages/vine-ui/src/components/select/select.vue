@@ -48,7 +48,7 @@
 
 <script setup>
 import {
-    computed, onMounted, ref, shallowReactive, watch, watchEffect
+    computed, onMounted, ref, shallowReactive, watch, watchEffect, useSlots
 } from 'vue';
 import { microtask } from 'async-tick';
 import {
@@ -668,9 +668,11 @@ const initSelectedItem = () => {
 
 };
 
+const slots = useSlots();
+
 const initList = () => {
 
-    const list = props.options ? getListFromProps(props.options) : getListFromSlot(getSlot());
+    const list = props.options ? getListFromProps(props.options) : getListFromSlot(getSlot(slots));
 
     // for selectedIndex
     list.forEach((item, i) => {

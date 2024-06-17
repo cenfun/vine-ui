@@ -12,13 +12,13 @@
       :disabled="props.disabled"
       :type="props.type"
       :style="styleMap"
-      v-bind="bindAttrs(['class'])"
+      v-bind="bindAttrs(attrs, ['class'])"
     >
   </div>
 </template>
 <script setup>
 import {
-    computed, reactive, watch, watchEffect
+    computed, reactive, watch, watchEffect, useSlots, useAttrs
 } from 'vue';
 
 import {
@@ -30,6 +30,8 @@ import { autoPx } from '../../utils/util.js';
 const { cid } = useBase('VuiInput');
 
 const classMap = ['vui', 'vui-input', cid];
+
+const attrs = useAttrs();
 
 const props = defineProps({
 
@@ -95,8 +97,10 @@ const styleMap = computed(() => {
     };
 });
 
+const slots = useSlots();
+
 const labelContent = computed(() => {
-    return props.label || getSlot();
+    return props.label || getSlot(slots);
 });
 
 </script>

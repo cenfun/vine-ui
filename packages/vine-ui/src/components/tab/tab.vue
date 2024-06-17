@@ -37,7 +37,7 @@
 </template>
 <script setup>
 import {
-    computed, watch, watchEffect, reactive, onMounted, ref
+    computed, watch, watchEffect, reactive, onMounted, ref, useSlots
 } from 'vue';
 import { useBase, getSlot } from '../../base/base.js';
 import { toNum } from '../../utils/util.js';
@@ -91,12 +91,14 @@ watch(() => data.index, (v) => {
 const el = ref(null);
 let $el;
 
+const slots = useSlots();
+
 const leftContent = computed(() => {
-    return getSlot('left');
+    return getSlot(slots, 'left');
 });
 
 const rightContent = computed(() => {
-    return getSlot('right');
+    return getSlot(slots, 'right');
 });
 
 const classList = computed(() => {

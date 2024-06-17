@@ -1,4 +1,3 @@
-import { useSlots, useAttrs } from 'vue';
 import { isList, pascalToKebabCase } from '../utils/util.js';
 import './base.scss';
 
@@ -17,8 +16,7 @@ export const useBase = (name) => {
     };
 };
 
-export const bindAttrs = function(excludes) {
-    const attrs = useAttrs();
+export const bindAttrs = function(attrs, excludes) {
     if (isList(excludes)) {
         const filtered = {};
         Object.keys(attrs).filter((k) => !excludes.includes(k)).forEach((k) => {
@@ -29,8 +27,7 @@ export const bindAttrs = function(excludes) {
     return attrs;
 };
 
-export const getSlot = function(name) {
-    const slots = useSlots();
+export const getSlot = function(slots, name) {
     const fun = slots[name || 'default'];
     if (typeof fun === 'function') {
         return fun();

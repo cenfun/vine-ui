@@ -32,7 +32,7 @@
 </template>
 <script setup>
 import {
-    computed, reactive, watch, watchEffect
+    computed, reactive, watch, watchEffect, useSlots
 } from 'vue';
 import { useBase, getSlot } from '../../base/base.js';
 
@@ -149,8 +149,10 @@ const iconStyleList = computed(() => {
     };
 });
 
+const slots = useSlots();
+
 const labelContent = computed(() => {
-    return props.label || getSlot();
+    return props.label || getSlot(slots);
 });
 
 const onClick = (e) => {
