@@ -1,8 +1,5 @@
 <template>
-  <div
-    ref="el"
-    :class="classList"
-  >
+  <div :class="classList">
     <VuiFlex class="vui-tab-header">
       <VuiFlex
         v-if="leftContent"
@@ -13,13 +10,14 @@
         <slot name="left" />
       </VuiFlex>
 
-      <VuiFlex
-        :align="props.align"
-        class="vui-tab-tabs vui-flex-auto"
+      <div
+        ref="tabs"
+        class="vui-tab-tabs vui-flex vui-flex-row vui-flex-auto"
+        :style="alignStyle"
         @click="onTabClick"
       >
         <slot name="tabs" />
-      </VuiFlex>
+      </div>
 
       <VuiFlex
         v-if="rightContent"
@@ -30,7 +28,10 @@
         <slot name="right" />
       </VuiFlex>
     </VuiFlex>
-    <div class="vui-tab-panes">
+    <div
+      ref="panes"
+      class="vui-tab-panes"
+    >
       <slot name="panes" />
     </div>
   </div>
@@ -88,8 +89,8 @@ watch(() => data.index, (v) => {
     emit('change', v);
 });
 
-const el = ref(null);
-let $el;
+const tabs = ref(null);
+const panes = ref(null);
 
 const slots = useSlots();
 
@@ -99,6 +100,10 @@ const leftContent = computed(() => {
 
 const rightContent = computed(() => {
     return getSlot(slots, 'right');
+});
+
+const alignStyle = computed(() => {
+    return `--vui-flex-align: ${props.align};`;
 });
 
 const classList = computed(() => {
@@ -132,22 +137,32 @@ const onTabClick = (e) => {
 };
 
 watch(() => data.index, (v) => {
-    const $selected = $el.querySelectorAll('.vui-tab-selected');
-    Array.from($selected).forEach((elem) => {
-        elem.classList.remove('vui-tab-selected');
-    });
-    [`.vui-tab-item[index="${v}"]`, `.vui-tab-pane[index="${v}"]`].forEach((selector) => {
-        const elem = $el.querySelector(selector);
-        if (elem) {
+
+    const $panes = panes.value.children;
+    const $tabs = tabs.value.children;
+
+    Array.from($panes).forEach((elem, i) => {
+        if (v === i) {
             elem.classList.add('vui-tab-selected');
+        } else {
+            elem.classList.remove('vui-tab-selected');
         }
     });
+    Array.from($tabs).forEach((elem, i) => {
+        if (v === i) {
+            elem.classList.add('vui-tab-selected');
+        } else {
+            elem.classList.remove('vui-tab-selected');
+        }
+    });
+
 });
 
 onMounted(() => {
-    $el = el.value;
 
-    const $panes = $el.querySelectorAll('.vui-tab-panes > *');
+    const $panes = panes.value.children;
+    const $tabs = tabs.value.children;
+
     Array.from($panes).forEach((elem, i) => {
         elem.setAttribute('index', i);
         elem.classList.add('vui-tab-pane');
@@ -155,8 +170,6 @@ onMounted(() => {
             elem.classList.add('vui-tab-selected');
         }
     });
-
-    const $tabs = $el.querySelectorAll('.vui-tab-tabs > *');
     Array.from($tabs).forEach((elem, i) => {
         elem.setAttribute('index', i);
         elem.classList.add('vui-tab-item', 'vui-flex-row');

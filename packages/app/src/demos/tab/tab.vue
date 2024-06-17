@@ -21,7 +21,7 @@
         </template>
         <template #tabs>
           <div>
-            Tab 1 {{ state.index }}
+            Tab in Tab {{ state.index }}
           </div>
           <div>Tab 2</div>
           <div tooltip="This is tab tooltip">
@@ -35,7 +35,18 @@
           <div>Tab 6</div>
         </template>
         <template #panes>
-          <div>Pane 1 </div>
+          <div>
+            <VuiTab v-model="state.subIndex">
+              <template #tabs>
+                <div>Sub Tab 1</div>
+                <div>Sub Tab 2</div>
+              </template>
+              <template #panes>
+                <div>Sub Pane 1</div>
+                <div>Sub Pane 2</div>
+              </template>
+            </VuiTab>
+          </div>
           <div style="height: 100px;">
             Pane 2 100px height {{ state.index }}
           </div>
@@ -46,7 +57,9 @@
             </VuiButton>
           </div>
           <span />
-          <div>Pane 6</div>
+          <div>
+            Pane 6
+          </div>
         </template>
       </VuiTab>
     </div>
@@ -105,7 +118,8 @@ const {
 const state = reactive({
     index: 0,
     align: 'left',
-    theme: 'chrome'
+    theme: 'chrome',
+    subIndex: 0
 });
 
 </script>
