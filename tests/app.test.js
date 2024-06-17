@@ -1,24 +1,30 @@
 const { test } = require('@playwright/test');
 const MCR = require('monocart-coverage-reports');
+const CDPClient = MCR.CDPClient;
 
 test('e2e test', async ({ page }) => {
 
-    await Promise.all([
-        page.coverage.startJSCoverage({
-            resetOnNavigation: false
-        }),
-        page.coverage.startCSSCoverage({
-            resetOnNavigation: false
-        })
-    ]);
+    const session = await page.context().newCDPSession(page);
+    const client = await CDPClient({
+        session
+    });
+
+    await client.startCoverage();
 
     await page.goto('/');
 
-    const [jsCoverage, cssCoverage] = await Promise.all([
-        page.coverage.stopJSCoverage(),
-        page.coverage.stopCSSCoverage()
-    ]);
-    const coverageData = [... jsCoverage, ... cssCoverage];
+    const coverageData = await client.stopCoverage();
+
+    // add url for anonymous
+    let anonymous = 1;
+    coverageData.forEach((it) => {
+        if (!it.url) {
+            it.url = `anonymous-${anonymous++}`;
+        }
+    });
+
+
+    await client.close();
 
     const coverageReport = MCR({
 
@@ -28,6 +34,7 @@ test('e2e test', async ({ page }) => {
         outputDir: '.temp/coverage-reports',
 
         entryFilter: {
+            '**/anonymous-*': true,
             '**/vine-ui/**': true,
             '**/vine-ui-app.js': true
         },
@@ -46,7 +53,12 @@ test('e2e test', async ({ page }) => {
             'vine-ui-app/packages/': ''
         },
 
-        reports: ['v8', 'console-details']
+        reports: [
+            ['console-details', {
+                metrics: ['bytes', 'functions']
+            }],
+            'v8'
+        ]
     });
     coverageReport.cleanCache();
     await coverageReport.add(coverageData);

@@ -115,7 +115,7 @@
       @open="onOpen"
       @update="onUpdate"
       @close="onClose"
-      @beforeClose="onBeforeClose"
+      @before-close="onBeforeClose"
     >
       <VuiCheckbox>Popover Checkbox 1</VuiCheckbox>
       <VuiCheckbox>Popover Checkbox 2</VuiCheckbox>
