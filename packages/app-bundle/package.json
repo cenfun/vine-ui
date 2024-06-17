@@ -1,6 +1,6 @@
 {
     "name": "vine-ui-app-bundle",
-    "version": "3.1.13",
+    "version": "3.1.14",
     "private": true,
     "main": "dist/vine-ui-app-bundle.js",
     "files": [
