@@ -10,7 +10,7 @@
     "dependencies": {
         "fps-detector": "^1.0.3",
         "vine-ui": "~3.1.15",
-        "vue-router": "^4.3.3"
+        "vue-router": "^4.4.0"
     },
     "devDependencies": {}
 }

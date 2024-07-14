@@ -7,7 +7,7 @@ module.exports = defineConfig({
         baseURL
     },
 
-    outputDir: ".temp/e2e",
+    outputDir: '.temp/e2e',
 
     webServer: {
         command: 'sf dev app --silent',
