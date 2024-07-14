@@ -1,6 +1,6 @@
 {
     "name": "vine-ui",
-    "version": "3.1.15",
+    "version": "3.1.16",
     "main": "dist/vine-ui.js",
     "module": "dist/vine-ui.esm.js",
     "files": [
