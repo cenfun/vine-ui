@@ -85,6 +85,16 @@ onMounted(() => {
 
     new FPSDetector('.fps-detector');
 
+    const getTooltip = (target) => {
+        const text = target.getAttribute('tooltip');
+        if (text) {
+            return text;
+        }
+        if (target.classList.contains('tooltip')) {
+            return target.innerText;
+        }
+    };
+
     generateTooltips((target, text) => {
         tooltip.visible = true;
         tooltip.target = target;
@@ -92,7 +102,7 @@ onMounted(() => {
     }, (target) => {
         tooltip.visible = false;
         tooltip.text = '';
-    });
+    }, getTooltip);
 
 });
 

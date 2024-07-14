@@ -8,6 +8,10 @@
         Hover Tooltip
       </VuiButton>
 
+      <VuiButton class="tooltip">
+        This is long text for test class="tooltip"
+      </VuiButton>
+
       <VuiButton
         @mouseenter="onHtml"
         @mouseleave="onHtml"
