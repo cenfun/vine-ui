@@ -28,7 +28,7 @@ test('e2e test', async ({ page }) => {
 
     const coverageReport = MCR({
 
-        logging: 'debug',
+        // logging: 'debug',
 
         name: 'My Coverage Report',
         outputDir: '.temp/coverage-reports',
@@ -44,6 +44,7 @@ test('e2e test', async ({ page }) => {
             '**/*.vue/**': false,
             '**/*.scss': false,
             '**/*.scss/**': false,
+            'vue?': false,
             '**/src/**': true
         },
 

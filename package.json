@@ -6,7 +6,7 @@
     "main": "",
     "scripts": {
         "dev": "sf dev",
-        "build": "sf lint && sf b vine-ui -e -p && sf b app,app-bundle",
+        "build": "sf lint && sf b vine-ui -e -p && sf b app",
         "test": "npx playwright test",
         "patch": "npm run build && sf publish patch",
         "pack": "sf pack -o docs -q v={version}"

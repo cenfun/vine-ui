@@ -33,7 +33,7 @@
           <option value="3">
             option 3
           </option>
-          <option><b>bold</b> text</option>
+          <option>text</option>
           <option
             label="attr removable"
             value="attr"

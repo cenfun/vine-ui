@@ -11,72 +11,76 @@
         {{ data.demo.componentName }}
       </div>
       <table class="vui-demo-table">
-        <tr>
-          <th>Props</th>
-          <th>Type</th>
-          <th>Default</th>
-          <th>Description</th>
-        </tr>
-        <tr
-          v-for="(item, key) in data.props"
-          :key="key"
-        >
-          <td>{{ getPropKey(item) }}</td>
-          <td>{{ item.type && item.type.name }}</td>
-          <td>{{ item.defaultValue.value }}</td>
-          <td>{{ getPropDescription(item) }}</td>
-        </tr>
-        <template v-if="data.events">
+        <thead>
           <tr>
-            <th colspan="4">
-              Events
-            </th>
+            <th>Props</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
           </tr>
+        </thead>
+        <tbody>
           <tr
-            v-for="(item, key) in data.events"
+            v-for="(item, key) in data.props"
             :key="key"
           >
-            <td>
-              @{{ item.name }}
-            </td>
-            <td colspan="2" />
-            <td />
+            <td>{{ getPropKey(item) }}</td>
+            <td>{{ item.type && item.type.name }}</td>
+            <td>{{ item.defaultValue.value }}</td>
+            <td>{{ getPropDescription(item) }}</td>
           </tr>
-        </template>
-        <template v-if="data.slots">
-          <tr>
-            <th colspan="4">
-              Slots
-            </th>
-          </tr>
-          <tr
-            v-for="(item, key) in data.slots"
-            :key="key"
-          >
-            <td>
-              {{ item.name }}
-            </td>
-            <td colspan="2" />
-            <td />
-          </tr>
-        </template>
-        <template v-if="data.expose">
-          <tr>
-            <th colspan="4">
-              Expose
-            </th>
-          </tr>
-          <tr
-            v-for="(item, key) in data.expose"
-            :key="key"
-          >
-            <td>
-              {{ item.name }}
-            </td>
-            <td colspan="2" />
-            <td />
-          </tr>
-        </template>
+          <template v-if="data.events">
+            <tr>
+              <th colspan="4">
+                Events
+              </th>
+            </tr>
+            <tr
+              v-for="(item, key) in data.events"
+              :key="key"
+            >
+              <td>
+                @{{ item.name }}
+              </td>
+              <td colspan="2" />
+              <td />
+            </tr>
+          </template>
+          <template v-if="data.slots">
+            <tr>
+              <th colspan="4">
+                Slots
+              </th>
+            </tr>
+            <tr
+              v-for="(item, key) in data.slots"
+              :key="key"
+            >
+              <td>
+                {{ item.name }}
+              </td>
+              <td colspan="2" />
+              <td />
+            </tr>
+          </template>
+          <template v-if="data.expose">
+            <tr>
+              <th colspan="4">
+                Expose
+              </th>
+            </tr>
+            <tr
+              v-for="(item, key) in data.expose"
+              :key="key"
+            >
+              <td>
+                {{ item.name }}
+              </td>
+              <td colspan="2" />
+              <td />
+            </tr>
+          </template>
+        </tbody>
       </table>
     </div>
     <div
