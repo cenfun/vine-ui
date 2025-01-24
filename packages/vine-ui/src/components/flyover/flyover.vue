@@ -17,13 +17,11 @@ import {
     ref, computed, watch, watchEffect, onMounted, onUnmounted, reactive
 } from 'vue';
 import { microtask } from 'async-tick';
-import { useBase } from '../../base/base.js';
-
 import {
-    autoPx, bindEvents, unbindEvents, preventDefault, clamp
+    autoPx, bindEvents, unbindEvents, preventDefault, clamp, getCID
 } from '../../utils/util.js';
 
-const { cid } = useBase('VuiFlyover');
+const cid = getCID('VuiFlyover');
 
 const props = defineProps({
 

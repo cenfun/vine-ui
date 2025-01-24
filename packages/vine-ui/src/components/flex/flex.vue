@@ -9,10 +9,9 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useBase } from '../../base/base.js';
-import { autoPx } from '../../utils/util.js';
+import { autoPx, getCID } from '../../utils/util.js';
 
-const { cid } = useBase('VuiFlex');
+const cid = getCID('VuiFlex');
 
 const props = defineProps({
 
@@ -63,6 +62,11 @@ const props = defineProps({
 
     height: {
         type: [String, Number],
+        default: ''
+    },
+
+    overflow: {
+        type: String,
         default: ''
     },
 
@@ -117,6 +121,10 @@ const styleList = computed(() => {
         st['--vui-flex-align-items'] = props.alignItems;
     }
 
+    if (props.overflow) {
+        st['--vui-flex-overflow'] = props.overflow;
+    }
+
     return st;
 });
 
@@ -127,14 +135,16 @@ const styleList = computed(() => {
     --vui-flex-gap: 0;
     --vui-flex-margin: 0;
     --vui-flex-padding: 0;
-    --vui-flex-align: "";
+    --vui-flex-align: unset;
+    --vui-flex-overflow: unset;
 
     gap: var(--vui-flex-gap);
     justify-content: var(--vui-flex-align);
     margin: var(--vui-flex-margin);
     padding: var(--vui-flex-padding);
+    box-sizing: border-box;
     text-overflow: ellipsis;
-    overflow: hidden;
+    overflow: var(--vui-flex-overflow);
 
     // layout component do not break sub component size
     > * {
@@ -175,14 +185,14 @@ display for portable using both vui-flex-row and vui-flex-column
 
 .vui-flex-auto {
     flex: 1 1 0%;
-    overflow: hidden;
+    overflow: var(--vui-flex-overflow);
 }
 
 .vui-flex-empty {
     flex: 1 1 0%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: var(--vui-flex-overflow);
 }
 
 </style>

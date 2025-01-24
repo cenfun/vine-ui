@@ -34,11 +34,11 @@
 import {
     computed, reactive, watch, watchEffect, useSlots
 } from 'vue';
-import { useBase, getSlot } from '../../base/base.js';
+import { getCID, getSlot } from '../../utils/util.js';
 
 const defaultColors = ['#aaaaaa', '#1890ff'];
 
-const { cid } = useBase('VuiSwitch');
+const cid = getCID('VuiSwitch');
 
 const props = defineProps({
 

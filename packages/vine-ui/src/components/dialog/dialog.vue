@@ -23,11 +23,12 @@
 import {
     computed, onMounted, ref, reactive, watchEffect, watch
 } from 'vue';
-import { useBase } from '../../base/base.js';
 
-import { bindEvents, unbindEvents } from '../../utils/util.js';
+import {
+    bindEvents, unbindEvents, getCID
+} from '../../utils/util.js';
 
-const { cid } = useBase('VuiDialog');
+const cid = getCID('VuiDialog');
 
 const classList = ['vui', 'vui-dialog', cid];
 

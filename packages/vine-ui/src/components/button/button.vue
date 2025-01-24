@@ -12,8 +12,9 @@
 </template>
 <script setup>
 import { computed } from 'vue';
-import { useBase } from '../../base/base.js';
-import { autoPx } from '../../utils/util.js';
+import { autoPx, getCID } from '../../utils/util.js';
+
+const cid = getCID('VuiButton');
 
 const props = defineProps({
 
@@ -42,8 +43,6 @@ const props = defineProps({
         default: false
     }
 });
-
-const { cid } = useBase('VuiButton');
 
 const classList = computed(() => {
     const ls = [

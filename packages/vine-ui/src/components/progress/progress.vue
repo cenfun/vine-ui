@@ -6,9 +6,9 @@
 </template>
 <script setup>
 import { computed } from 'vue';
-import { useBase } from '../../base/base.js';
+import { getCID } from '../../utils/util.js';
 
-const { cid } = useBase('VuiProgress');
+const cid = getCID('VuiProgress');
 
 const props = defineProps({
     percentage: {

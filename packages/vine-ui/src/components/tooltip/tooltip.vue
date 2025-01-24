@@ -14,15 +14,15 @@
 import {
     computed, onMounted, onUnmounted, reactive, ref, watch, watchEffect
 } from 'vue';
-import { useBase } from '../../base/base.js';
+
 import {
     getBestPosition, getPositionStyle, getRect
 } from 'popover-helper';
 import { microtask } from 'async-tick';
 
-import { autoPx } from '../../utils/util.js';
+import { autoPx, getCID } from '../../utils/util.js';
 
-const { cid } = useBase('VuiTooltip');
+const cid = getCID('VuiTooltip');
 
 const props = defineProps({
 

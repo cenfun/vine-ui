@@ -16,9 +16,9 @@
 </template>
 <script setup>
 import { computed } from 'vue';
-import { useBase } from '../../base/base.js';
+import { getCID } from '../../utils/util.js';
 
-const { cid } = useBase('VuiLoading');
+const cid = getCID('VuiLoading');
 
 const props = defineProps({
     center: {

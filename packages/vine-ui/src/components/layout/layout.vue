@@ -12,13 +12,12 @@
 import {
     computed, onMounted, ref, shallowReactive, watch, watchEffect
 } from 'vue';
-import { useBase } from '../../base/base.js';
 
 import {
-    clamp, bindEvents, unbindEvents, preventDefault
+    clamp, bindEvents, unbindEvents, preventDefault, getCID
 } from '../../utils/util.js';
 
-const { cid } = useBase('VuiLayout');
+const cid = getCID('VuiLayout');
 
 const props = defineProps({
 

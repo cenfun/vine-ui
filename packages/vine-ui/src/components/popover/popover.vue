@@ -33,11 +33,9 @@ import {
 } from 'popover-helper';
 import { microtask } from 'async-tick';
 
-import { useBase } from '../../base/base.js';
+import { autoPx, getCID } from '../../utils/util.js';
 
-import { autoPx } from '../../utils/util.js';
-
-const { cid } = useBase('VuiPopover');
+const cid = getCID('VuiPopover');
 
 const props = defineProps({
 

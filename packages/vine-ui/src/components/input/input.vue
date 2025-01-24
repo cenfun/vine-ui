@@ -22,12 +22,10 @@ import {
 } from 'vue';
 
 import {
-    useBase, bindAttrs, vSelectOnFocus, getSlot
-} from '../../base/base.js';
+    autoPx, getCID, bindAttrs, vSelectOnFocus, getSlot
+} from '../../utils/util.js';
 
-import { autoPx } from '../../utils/util.js';
-
-const { cid } = useBase('VuiInput');
+const cid = getCID('VuiInput');
 
 const classMap = ['vui', 'vui-input', cid];
 

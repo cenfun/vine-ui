@@ -23,14 +23,14 @@
       </VuiSelect>
 
       <VuiSelect
-        v-model="data.inset"
-        tooltip="inset"
+        v-model="data.width"
+        tooltip="width"
       >
         <option />
-        <option>20%</option>
-        <option>30%</option>
-        <option>50px</option>
-        <option>100px</option>
+        <option>50%</option>
+        <option>80%</option>
+        <option>300px</option>
+        <option>500px</option>
       </VuiSelect>
 
       <VuiSwitch v-model="data.closeButton">
@@ -55,14 +55,31 @@
     <VuiModal
       v-model="data.visible"
       :title="data.title"
-      :inset="data.inset"
+      :width="data.width"
       :close-button="data.closeButton"
       :close-on-click-out="data.closeOnClickOut"
     >
       <VuiButton @click="data.visible=false">
         CLose
       </VuiButton>
-      <div :style="'height:'+data.contentHeight" />
+      <div :style="'width:500px;height:'+data.contentHeight">
+        <VuiFlex
+          direction="column"
+          padding="30px 0px"
+        >
+          <VuiButton @click="data.subVisible=true">
+            Open Modal in Modal
+          </VuiButton>
+        </VuiFlex>
+      </div>
+    </VuiModal>
+
+    <VuiModal
+      v-model="data.subVisible"
+      width="300px"
+      append-to-body
+    >
+      sub modal
     </VuiModal>
   </div>
 </template>
@@ -80,7 +97,7 @@ const {
 const data = reactive({
     visible: false,
     title: 'Modal Title',
-    inset: '20%',
+    width: '50%',
     closeButton: true,
     closeOnClickOut: true,
     contentHeight: ''

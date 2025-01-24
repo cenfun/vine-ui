@@ -51,17 +51,14 @@ import {
     computed, onMounted, ref, shallowReactive, watch, watchEffect, useSlots
 } from 'vue';
 import { microtask } from 'async-tick';
-import {
-    useBase, vSelectOnFocus, getSlot
-} from '../../base/base.js';
 
 import {
-    hasOwn, clamp, isList, autoPx, toStr, bindEvents, unbindEvents
+    hasOwn, clamp, isList, autoPx, toStr, bindEvents, unbindEvents, getCID, vSelectOnFocus, getSlot
 } from '../../utils/util.js';
 
 import IconX from '../../images/icon-x.vue';
 
-const { cid } = useBase('VuiSelect');
+const cid = getCID('VuiSelect');
 
 const classList = ['vui', 'vui-select', cid];
 

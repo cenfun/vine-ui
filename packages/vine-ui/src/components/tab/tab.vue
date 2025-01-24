@@ -40,11 +40,13 @@
 import {
     computed, watch, watchEffect, reactive, onMounted, ref, useSlots
 } from 'vue';
-import { useBase, getSlot } from '../../base/base.js';
-import { toNum } from '../../utils/util.js';
+
+import {
+    toNum, getCID, getSlot
+} from '../../utils/util.js';
 import VuiFlex from '../flex/flex.vue';
 
-const { cid } = useBase('VuiTab');
+const cid = getCID('VuiTab');
 
 const props = defineProps({
     align: {
