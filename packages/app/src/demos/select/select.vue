@@ -23,13 +23,14 @@
         <VuiSelect
           v-model="data.value"
           label="slot options:"
+          width="auto"
           @remove="onSelectRemove"
         >
           <option value="">
             empty value
           </option>
           <option>option 1</option>
-          <option>option 2</option>
+          <option>option 2222222222222222222222222222222 22222222222222222222 2222222222222222222222222222222222 2222222222222222222222222222222222222222</option>
           <option value="3">
             option 3
           </option>
@@ -73,6 +74,7 @@
         <VuiSelect
           v-model="data.value"
           label="last l:"
+          width="auto"
         >
           <option value="">
             Symbol

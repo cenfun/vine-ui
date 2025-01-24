@@ -7,20 +7,24 @@
       {{ props.label }}
     </label>
 
-    <input
-      v-model="data.viewLabel"
-      v-select-on-focus="props.selectOnFocus"
-      type="text"
-      :class="viewClass"
+    <div
+      class="vui-select-view"
       :style="viewStyle"
-      :size="viewSize"
-      :disabled="props.disabled"
-      :readonly="!props.searchable"
-      @click.stop="onClick"
-      @input.stop="onInput"
-      @focus="onFocus"
-      @blur="onBlur"
     >
+      <span>{{ data.viewLabel || " " }}</span>
+      <input
+        v-model="data.viewLabel"
+        v-select-on-focus="props.selectOnFocus"
+        type="text"
+        :class="props.searchable?'vui-select-search':''"
+        :disabled="props.disabled"
+        :readonly="!props.searchable"
+        @click.stop="onClick"
+        @input.stop="onInput"
+        @focus="onFocus"
+        @blur="onBlur"
+      >
+    </div>
 
     <div class="vui-select-hide">
       <div class="vui vui-select-list">
@@ -159,14 +163,6 @@ let $view;
 let $hide;
 let $list;
 
-const viewClass = computed(() => {
-    const ls = ['vui-select-view'];
-    if (props.searchable) {
-        ls.push('vui-select-search');
-    }
-    return ls;
-});
-
 const viewStyle = computed(() => {
     const st = {};
     if (data.width) {
@@ -175,15 +171,6 @@ const viewStyle = computed(() => {
         }
     }
     return st;
-});
-
-// when width is auto using size as width
-const viewSize = computed(() => {
-    if (data.width === 'auto' && typeof data.viewLabel === 'string') {
-        // arrow takes 1 size
-        return data.viewLabel.length + 1;
-    }
-    return '';
 });
 
 // =========================================================================================================
@@ -719,41 +706,70 @@ onMounted(() => {
 .vui-select-view {
     position: relative;
     min-width: 50px;
-    padding: 5px 20px 5px 5px;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    background-image: url("../../images/select.svg");
-    background-repeat: no-repeat;
-    background-position: right 7px center;
-    background-size: 8px 10px;
-    cursor: default;
-    user-select: none;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    max-width: 100%;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
 
-    &:disabled {
-        color: gray;
-        border: 1px solid #ccc;
-        background-image: url("../../images/select-disabled.svg");
+    span {
+        position: relative;
+        display: inline-block;
+        min-width: 2px;
+        padding: 5px 20px 5px 5px;
+        box-sizing: border-box;
+        font-size: inherit;
+        font-family: inherit;
+        line-height: inherit;
+        white-space: pre;
+        opacity: 0;
+        user-select: none;
+        pointer-events: none;
     }
 
-    &:not(:disabled):hover {
-        border: 1px solid #888;
+    input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 5px 20px 5px 5px;
+        box-sizing: border-box;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        background-image: url("../../images/select.svg");
+        background-repeat: no-repeat;
+        background-position: right 7px center;
+        background-size: 8px 10px;
+        cursor: default;
+        user-select: none;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+        &:disabled {
+            color: gray;
+            border: 1px solid #ccc;
+            background-image: url("../../images/select-disabled.svg");
+        }
+
+        &:not(:disabled):hover {
+            border: 1px solid #888;
+        }
+
+        &:not(:disabled):focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+        }
     }
 
-    &:not(:disabled):focus {
-        border-color: #80bdff;
-        outline: 0;
-        box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+    input.vui-select-search {
+        cursor: text;
     }
-}
-
-.vui-select-search {
-    cursor: text;
 }
 
 /* hide for width computed */
 .vui-select-hide {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 500px;
     visibility: hidden;
 }
