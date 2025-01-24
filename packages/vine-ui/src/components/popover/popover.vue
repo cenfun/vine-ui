@@ -49,6 +49,21 @@ const props = defineProps({
         default: ''
     },
 
+    arrow: {
+        type: Boolean,
+        default: true
+    },
+
+    padding: {
+        type: String,
+        default: ''
+    },
+
+    fixed: {
+        type: Boolean,
+        default: false
+    },
+
     autoClose: {
         type: Boolean,
         default: true
@@ -141,6 +156,9 @@ watchEffect(() => {
 watch(() => data.visible, (v) => {
     render();
     emit('update:modelValue', v);
+    if (!v) {
+        emit('close');
+    }
 });
 
 watch([
@@ -155,7 +173,6 @@ watch([
 
 const classList = computed(() => {
     const ls = [
-        'vui',
         'vui-popover',
         cid
     ];
@@ -186,6 +203,10 @@ const styleList = computed(() => {
         st['--vui-popover-max-height'] = autoPx(props.maxHeight);
     }
 
+    if (props.padding) {
+        st['--vui-popover-padding'] = props.padding;
+    }
+
     return st;
 });
 
@@ -196,7 +217,6 @@ const close = () => {
         return;
     }
     data.visible = false;
-    emit('close');
 };
 
 const beforeClose = () => {
@@ -215,8 +235,16 @@ const updateSync = () => {
     if (!data.visible) {
         return;
     }
-    const containerRect = getRect(props.container || window);
-    const targetRect = getRect(props.target);
+
+    const container = props.container || window;
+    const containerRect = getRect(container);
+
+    // fix scroll bar width in right
+    if (container === window) {
+        containerRect.width = document.body.clientWidth;
+    }
+
+    const targetRect = getRect(props.target, props.fixed);
     const popoverRect = getRect(`.${cid}`);
     const positions = props.positions;
 
@@ -241,11 +269,11 @@ const updateSync = () => {
 
     const style = getPositionStyle(positionInfo, {
         bgColor: props.bgColor,
-        borderColor: props.borderColor
+        borderColor: props.borderColor,
+        arrowSize: props.arrow ? 10 : 0
     });
-    if (style.changed) {
-        data.background = style.background;
-    }
+
+    data.background = style.background;
 
     emit('update', positionInfo);
 };
@@ -438,11 +466,12 @@ defineExpose({
     --vui-popover-width: 200px;
     --vui-popover-min-height: 20px;
     --vui-popover-max-height: 800px;
+    --vui-popover-padding: 20px;
 
     position: fixed;
     z-index: 1000;
     margin: 0;
-    padding: 20px;
+    padding: var(--vui-popover-padding);
     box-sizing: border-box;
     color: var(--vui-popover-color);
     border: none;

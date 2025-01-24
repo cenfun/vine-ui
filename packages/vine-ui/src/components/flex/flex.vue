@@ -83,7 +83,6 @@ const props = defineProps({
 
 const classList = computed(() => {
     const ls = [
-        'vui',
         'vui-flex',
         `vui-flex-${props.direction}`
     ];

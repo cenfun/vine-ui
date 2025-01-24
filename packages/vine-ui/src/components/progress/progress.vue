@@ -39,7 +39,6 @@ const props = defineProps({
 
 const classList = computed(() => {
     const ls = [
-        'vui',
         'vui-progress'
     ];
     ls.push(cid);

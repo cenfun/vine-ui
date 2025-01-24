@@ -108,7 +108,7 @@ watch(() => data.checked, (v) => {
 
 
 const classList = computed(() => {
-    const ls = ['vui', 'vui-switch', cid];
+    const ls = ['vui-switch', cid];
     if (data.checked) {
         ls.push('vui-switch-checked');
     }

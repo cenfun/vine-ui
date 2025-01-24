@@ -60,7 +60,7 @@ import IconX from '../../images/icon-x.vue';
 
 const cid = getCID('VuiSelect');
 
-const classList = ['vui', 'vui-select', cid];
+const classList = ['vui-select', cid];
 
 const props = defineProps({
 
@@ -706,6 +706,7 @@ onMounted(() => {
     flex-direction: row;
     gap: 5px;
     align-items: center;
+    font-family: inherit;
 
     label {
         position: relative;

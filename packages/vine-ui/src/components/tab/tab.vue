@@ -110,7 +110,6 @@ const alignStyle = computed(() => {
 
 const classList = computed(() => {
     return [
-        'vui',
         'vui-tab',
         `vui-tab-${props.theme}`,
         cid

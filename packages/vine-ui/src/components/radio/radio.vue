@@ -23,7 +23,7 @@ import { getCID } from '../../utils/util.js';
 
 const cid = getCID('VuiRadio');
 
-const classList = ['vui', 'vui-radio', cid];
+const classList = ['vui-radio', cid];
 
 const props = defineProps({
 

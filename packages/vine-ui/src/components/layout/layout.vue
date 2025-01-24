@@ -103,7 +103,6 @@ let $el;
 
 const classList = computed(() => {
     const ls = [
-        'vui',
         'vui-layout',
         `vui-layout-${props.direction}`
     ];

@@ -46,7 +46,6 @@ const props = defineProps({
 
 const classList = computed(() => {
     const ls = [
-        'vui',
         'vui-button'
     ];
     if (props.primary) {
@@ -73,6 +72,7 @@ const styleMap = computed(() => {
     padding: 5px 8px;
     color: #6c757d;
     font-weight: 400;
+    font-family: inherit;
     white-space: nowrap;
     text-align: center;
     text-overflow: ellipsis;

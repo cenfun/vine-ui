@@ -27,7 +27,7 @@ import {
 
 const cid = getCID('VuiInput');
 
-const classMap = ['vui', 'vui-input', cid];
+const classMap = ['vui-input', cid];
 
 const attrs = useAttrs();
 
@@ -107,6 +107,7 @@ const labelContent = computed(() => {
     display: flex;
     flex-direction: row;
     align-items: center;
+    font-family: inherit;
 
     label {
         display: inline-block;

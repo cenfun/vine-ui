@@ -41,7 +41,7 @@ import {
 
 const cid = getCID('VuiModal');
 
-const classList = ['vui', 'vui-modal', cid];
+const classList = ['vui-modal', cid];
 
 const props = defineProps({
 

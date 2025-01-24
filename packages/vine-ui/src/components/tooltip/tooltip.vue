@@ -102,7 +102,6 @@ watchEffect(() => {
 
 const classList = computed(() => {
     const ls = [
-        'vui',
         'vui-tooltip',
         cid
     ];

@@ -30,7 +30,7 @@ import {
 
 const cid = getCID('VuiDialog');
 
-const classList = ['vui', 'vui-dialog', cid];
+const classList = ['vui-dialog', cid];
 
 const props = defineProps({
 

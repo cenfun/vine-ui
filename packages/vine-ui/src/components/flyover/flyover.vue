@@ -105,7 +105,6 @@ let $el;
 
 const classList = computed(() => {
     const cls = [
-        'vui',
         'vui-flyover',
         cid,
         `vui-flyover-${props.position}`

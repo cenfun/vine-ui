@@ -22,7 +22,7 @@ import { getCID } from '../../utils/util.js';
 
 const cid = getCID('VuiCheckbox');
 
-const classList = ['vui', 'vui-checkbox', cid];
+const classList = ['vui-checkbox', cid];
 
 const props = defineProps({
 
