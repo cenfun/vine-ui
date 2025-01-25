@@ -88,6 +88,11 @@ const props = defineProps({
         default: ''
     },
 
+    minWidth: {
+        type: String,
+        default: ''
+    },
+
     maxWidth: {
         type: String,
         default: ''
@@ -174,6 +179,9 @@ const viewStyle = computed(() => {
         if (data.width !== 'auto') {
             st.width = autoPx(data.width);
         }
+    }
+    if (props.minWidth) {
+        st['min-width'] = props.minWidth;
     }
     if (props.maxWidth) {
         st['max-width'] = props.maxWidth;

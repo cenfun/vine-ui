@@ -77,8 +77,9 @@
 
       <VuiSelect
         v-model="data.value"
-        label="width auto:"
+        label="width auto min 100:"
         width="auto"
+        min-width="100px"
         :options="data.list"
       />
 
