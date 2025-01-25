@@ -1,17 +1,19 @@
 <template>
-  <div>
+  <VuiFlex
+    direction="column"
+    gap="10px"
+  >
+    <VuiSwitch v-model="data.visible">
+      v-show
+    </VuiSwitch>
+
     <VuiFlex
+      v-show="data.visible"
+      direction="column"
       gap="10px"
-      padding="5px"
     >
-      <VuiSwitch v-model="data.visible">
-        v-show
-      </VuiSwitch>
-    </VuiFlex>
-    <div v-show="data.visible">
       <VuiFlex
         gap="10px"
-        padding="5px"
         wrap
       >
         <VuiSelect
@@ -30,7 +32,7 @@
             empty value
           </option>
           <option>option 1</option>
-          <option>option 2222222222222222222222222222222 22222222222222222222 2222222222222222222222222222222222 2222222222222222222222222222222222222222</option>
+          <option>option </option>
           <option value="3">
             option 3
           </option>
@@ -70,6 +72,34 @@
           :options="data.list"
           disabled
         />
+      </VuiFlex>
+
+
+      <VuiSelect
+        v-model="data.value"
+        label="width auto:"
+        width="auto"
+        :options="data.list"
+      />
+
+      <VuiSelect
+        v-model="data.value"
+        label="width 100%:"
+        width="100%"
+        :options="data.list"
+      />
+
+      <VuiFlex
+        gap="10px"
+        align="space-between"
+        wrap
+      >
+        <VuiSelect
+          v-model="data.value"
+          label="width 200:"
+          width="200px"
+          :options="data.list"
+        />
 
         <VuiSelect
           v-model="data.value"
@@ -81,31 +111,7 @@
           </option>
           <option>WC</option>
         </VuiSelect>
-      </VuiFlex>
 
-      <VuiFlex
-        gap="10px"
-        padding="5px"
-        wrap
-      >
-        <VuiSelect
-          v-model="data.value"
-          :options="data.list"
-        />
-        <VuiSelect
-          v-model="data.value"
-          label="width 200:"
-          width="200px"
-          :options="data.list"
-        />
-        <VuiSelect
-          v-model="data.value"
-          label="width auto:"
-          width="auto"
-          :options="data.list"
-        />
-
-        <div class="vui-flex-empty" />
 
         <VuiSelect
           v-model="data.value"
@@ -122,42 +128,32 @@
 
       <VuiFlex
         gap="10px"
-        padding="5px"
         wrap
+        align="space-between"
       >
         <VuiSelect
           v-model="data.value"
-          label="max width:"
-        >
-          <option />
-          <option>dddddddddd ddddddddddddddddd ddddddddddddd5</option>
-          <option>10ddddd ddddddddddd</option>
-          <option>15ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</option>
-          <option>20ddddddd ddddddddddd long test long test long test long test long test long test long test</option>
-        </VuiSelect>
-
-        <div class="vui-flex-empty" />
+          label="width default:"
+          :options="data.list"
+        />
 
         <VuiSelect
           v-model="data.value"
-          label="right:"
-        >
-          <option />
-          <option>5</option>
-          <option>10</option>
-          <option>long test long test long test long</option>
-          <option>long test long test long test long test long test</option>
-        </VuiSelect>
+          width="auto"
+          max-width="200px"
+          label="width auto max 200:"
+          :options="data.list"
+        />
       </VuiFlex>
 
       <VuiFlex
         gap="10px"
-        padding="5px"
         wrap
+        align="space-between"
       >
         <VuiSelect
           v-model="data.value"
-          label="input:"
+          label="search:"
           :options="data.results"
           :searchable="true"
           @search="onSelectSearch"
@@ -165,8 +161,9 @@
         />
         <VuiSelect
           v-model="data.value"
-          label="width 100:"
-          width="100px"
+          label="search width auto:"
+          width="auto"
+          max-width="200px"
           :options="data.results"
           :searchable="true"
           :select-on-focus="false"
@@ -174,8 +171,8 @@
           @remove="onSelectRemove"
         />
       </VuiFlex>
-    </div>
-  </div>
+    </VuiFlex>
+  </VuiFlex>
 </template>
 <script setup>
 import VineUI from 'vine-ui';
@@ -200,14 +197,16 @@ const data = reactive({
     }, {
         label: 'null',
         value: null
-    }, 'Label', 'Symbol'],
+    }, 'Label', 'Symbol', {
+    }],
     list: [
         '',
         'DEV',
         'QA',
         'STG',
         'LOCAL',
-        'Symbol'
+        'Symbol',
+        'Im a really long string that Im going to use to test the ellipsis functionality Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long'
     ],
     results: [
         '',

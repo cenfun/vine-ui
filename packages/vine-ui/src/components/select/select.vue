@@ -88,6 +88,11 @@ const props = defineProps({
         default: ''
     },
 
+    maxWidth: {
+        type: String,
+        default: ''
+    },
+
     searchable: {
         type: Boolean,
         default: false
@@ -169,6 +174,9 @@ const viewStyle = computed(() => {
         if (data.width !== 'auto') {
             st.width = autoPx(data.width);
         }
+    }
+    if (props.maxWidth) {
+        st['max-width'] = props.maxWidth;
     }
     return st;
 });
