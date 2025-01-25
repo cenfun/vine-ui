@@ -11,7 +11,6 @@
       class="vui-select-view"
       :style="viewStyle"
     >
-      <span>{{ data.viewLabel || " " }}</span>
       <input
         v-model="data.viewLabel"
         v-select-on-focus="props.selectOnFocus"
@@ -24,6 +23,7 @@
         @focus="onFocus"
         @blur="onBlur"
       >
+      <span>{{ data.viewLabel || " " }}</span>
     </div>
 
     <div class="vui-select-hide">
@@ -718,21 +718,6 @@ onMounted(() => {
     box-sizing: border-box;
     text-overflow: ellipsis;
 
-    span {
-        position: relative;
-        display: inline-block;
-        min-width: 2px;
-        padding: 5px 20px 5px 5px;
-        box-sizing: border-box;
-        font-size: inherit;
-        font-family: inherit;
-        line-height: inherit;
-        white-space: pre;
-        opacity: 0;
-        user-select: none;
-        pointer-events: none;
-    }
-
     input {
         position: absolute;
         top: 0;
@@ -741,6 +726,8 @@ onMounted(() => {
         height: 100%;
         padding: 5px 20px 5px 5px;
         box-sizing: border-box;
+        font-size: inherit;
+        font-family: inherit;
         border: 1px solid #aaa;
         border-radius: 5px;
         background-image: url("../../images/select.svg");
@@ -770,6 +757,21 @@ onMounted(() => {
 
     input.vui-select-search {
         cursor: text;
+    }
+
+    /* padding left 25px bigger than 20px */
+    span {
+        position: relative;
+        display: inline-block;
+        min-width: 2px;
+        padding: 5px 25px 5px 5px;
+        box-sizing: border-box;
+        font-size: inherit;
+        font-family: inherit;
+        white-space: pre;
+        opacity: 0;
+        user-select: none;
+        pointer-events: none;
     }
 }
 

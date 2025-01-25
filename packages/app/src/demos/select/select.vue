@@ -206,6 +206,8 @@ const data = reactive({
         'STG',
         'LOCAL',
         'Symbol',
+        'Im going to use to test the ellipsis functionality',
+        '中文中文😊😊😊很长的中文很长的中文很长的中文很长的中文很长的中文',
         'Im a really long string that Im going to use to test the ellipsis functionality Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long Long'
     ],
     results: [
