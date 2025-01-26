@@ -54,7 +54,8 @@ import {
     computed, onMounted,
     ref, shallowReactive,
     watch, watchEffect,
-    useSlots
+    useSlots,
+    nextTick
 } from 'vue';
 import { microtask } from 'async-tick';
 
@@ -454,34 +455,41 @@ const layout = () => {
 
     const viewRect = getRect($view);
     const bodyRect = getRect(document.body);
-    let listRect = getRect($list);
 
-    const st = $list.style;
+    const lst = $list.style;
 
-    // fix list min width
+    // reset position
+    lst.left = '0px';
+    lst.top = '0px';
+
+    // update list min/max width
     // console.log('list,view width', listRect.width, viewRect.width);
-    if (listRect.width < viewRect.width) {
-        st.minWidth = `${viewRect.width}px`;
-        listRect = getRect($list);
-    }
+    lst.minWidth = `${viewRect.width}px`;
+    const maxWidth = Math.min(350, bodyRect.width);
+    // console.log('maxWidth', maxWidth, bodyRect.width);
+    lst.maxWidth = `${maxWidth}px`;
 
-    // console.log('viewRect', viewRect, 'listRect', listRect, 'bodyRect', bodyRect);
+    nextTick(() => {
+        const listRect = getRect($list);
 
-    const left = getListLeft(viewRect, listRect, bodyRect);
-    const top = getListTop(viewRect, listRect, bodyRect);
+        // console.log('viewRect', viewRect, 'listRect', listRect, 'bodyRect', bodyRect);
 
-    // console.log('left', left, 'top', top);
+        const left = getListLeft(viewRect, listRect, bodyRect);
+        const top = getListTop(viewRect, listRect, bodyRect);
 
-    st.left = `${left}px`;
-    st.top = `${top}px`;
+        // console.log('left', left, 'top', top);
 
-    // selected element.scrollIntoView();
-    const $selected = $list.querySelector('.vui-select-item.selected');
-    if ($selected) {
-        // scrollIntoView cased whole page scroll if body scrollable
-        // $selected.scrollIntoView();
-        $selected.parentNode.scrollTop = $selected.offsetTop;
-    }
+        lst.left = `${left}px`;
+        lst.top = `${top}px`;
+
+        // selected element.scrollIntoView();
+        const $selected = $list.querySelector('.vui-select-item.selected');
+        if ($selected) {
+            // scrollIntoView cased whole page scroll if body scrollable
+            // $selected.scrollIntoView();
+            $selected.parentNode.scrollTop = $selected.offsetTop;
+        }
+    });
 
 };
 
