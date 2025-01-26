@@ -1,7 +1,7 @@
 <template>
   <div
-    ref="el"
-    :class="classList"
+    ref="elRef"
+    :class="['vui-select', cid]"
   >
     <label v-if="props.label">
       {{ props.label }}
@@ -23,15 +23,14 @@
         @focus="onFocus"
         @blur="onBlur"
       >
-      <span>{{ data.viewLabel || " " }}</span>
+      <span>{{ data.widthLabel }}</span>
     </div>
-
-    <div class="vui-select-hide">
-      <div class="vui vui-select-list">
+    <div class="vui-select-options">
+      <div class="vui-select-list">
         <div
           v-for="item in data.list"
           :key="item.index"
-          :class="getItemClass(item)"
+          :class="['vui-select-item', item.selected?'selected':'']"
           @mousedown="onItemClick(item)"
         >
           <div class="vui-select-item-label">
@@ -52,19 +51,20 @@
 
 <script setup>
 import {
-    computed, onMounted, ref, shallowReactive, watch, watchEffect, useSlots
+    computed, onMounted,
+    ref, shallowReactive,
+    watch, watchEffect,
+    useSlots
 } from 'vue';
 import { microtask } from 'async-tick';
 
 import {
-    hasOwn, clamp, isList, autoPx, toStr, bindEvents, unbindEvents, getCID, vSelectOnFocus, getSlot
+    hasOwn, isList, autoPx, toStr, bindEvents, unbindEvents, getCID, vSelectOnFocus, getSlot
 } from '../../utils/util.js';
 
 import IconX from '../../images/icon-x.vue';
 
 const cid = getCID('VuiSelect');
-
-const classList = ['vui-select', cid];
 
 const props = defineProps({
 
@@ -119,6 +119,7 @@ const props = defineProps({
     }
 });
 
+const slots = useSlots();
 const emit = defineEmits(['update:modelValue', 'change', 'search', 'remove']);
 
 const data = shallowReactive({
@@ -135,8 +136,7 @@ const data = shallowReactive({
 
     lastDirection: 'down',
 
-    // for view width
-    width: props.width,
+    widthLabel: ' ',
 
     selectedIndex: -1,
     // label for view display
@@ -149,42 +149,23 @@ const data = shallowReactive({
 
 });
 
-watchEffect(() => {
-    data.value = toStr(props.modelValue === null ? props.value : props.modelValue);
-});
 
-watch(() => data.value, (v) => {
-    initSelectedItem();
-    emit('update:modelValue', v);
-    emit('change', v);
-});
-
-watchEffect(() => {
-    data.viewLabel = props.searchable && data.searchValue !== null ? data.searchValue : data.selectedLabel;
-});
-
-watch(() => props.options, () => {
-    initList();
-});
-
-const el = ref(null);
+const elRef = ref(null);
 let $el;
 let $view;
-let $hide;
+let $options;
 let $list;
 
 const viewStyle = computed(() => {
     const st = {};
-    if (data.width) {
-        if (data.width !== 'auto') {
-            st.width = autoPx(data.width);
-        }
+    if (props.width && props.width !== 'auto') {
+        st.width = autoPx(props.width);
     }
     if (props.minWidth) {
-        st['min-width'] = props.minWidth;
+        st['--vui-select-min-width'] = props.minWidth;
     }
     if (props.maxWidth) {
-        st['max-width'] = props.maxWidth;
+        st['--vui-select-max-width'] = props.maxWidth;
     }
     return st;
 });
@@ -197,6 +178,9 @@ const resizeHandler = (e) => {
 };
 
 const isSelectInner = (elem) => {
+    if (!$list) {
+        return false;
+    }
     if ($list === elem) {
         return true;
     }
@@ -297,6 +281,9 @@ const keyArrowHandler = (e, offset) => {
 };
 
 const scrollIntoViewAsync = microtask((offset) => {
+    if (!$list) {
+        return;
+    }
     const target = $list.querySelector('.vui-select-item.selected');
     if (!target) {
         return;
@@ -348,6 +335,27 @@ const bindKeyEvents = () => {
     bindEvents(keyEvents, $el);
 };
 
+// =========================================================================================================
+
+const onItemClick = (item) => {
+
+    // console.log(cid, 'item click');
+
+    data.searchValue = null;
+    data.selectedIndex = item.index;
+    data.selectedLabel = item.label;
+    data.selectedValue = item.value;
+    data.value = item.value;
+
+    // console.log(props.label, 'onItemClick', item, data.selectedLabel);
+
+    close();
+
+};
+
+const onItemRemove = (item) => {
+    emit('remove', item);
+};
 
 // =========================================================================================================
 
@@ -357,8 +365,8 @@ const showList = () => {
 };
 
 const hideList = () => {
+    $options.appendChild($list);
     data.isOpen = false;
-    $list.remove();
 };
 
 // =========================================================================================================
@@ -380,6 +388,28 @@ const closeAsync = microtask(close);
 
 // =========================================================================================================
 
+const getRect = (elem) => {
+    const br = elem.getBoundingClientRect();
+    const rect = {
+        left: Math.round(br.left),
+        top: Math.round(br.top)
+    };
+
+    // fix offset (no fixed in body)
+    rect.left += window.scrollX;
+    rect.top += window.scrollY;
+
+    if (elem === document.body) {
+        // exclude scrollbar size
+        rect.width = elem.clientWidth;
+        rect.height = elem.clientHeight;
+    } else {
+        rect.width = elem.offsetWidth;
+        rect.height = elem.offsetHeight;
+    }
+    return rect;
+};
+
 const getListTop = (viewRect, listRect, bodyRect) => {
     const space = 2;
 
@@ -393,7 +423,7 @@ const getListTop = (viewRect, listRect, bodyRect) => {
         up: top.up > 0
     };
 
-    // console.log(top, ok);
+    // console.log('top ok', top, ok);
 
     if (ok[data.lastDirection]) {
         return top[data.lastDirection];
@@ -408,37 +438,42 @@ const getListTop = (viewRect, listRect, bodyRect) => {
     return top.up;
 };
 
-const getRect = (elem) => {
-    const br = elem.getBoundingClientRect();
-    const rect = {
-        left: br.left + window.pageXOffset,
-        top: br.top + window.pageYOffset,
-        width: elem.offsetWidth,
-        height: elem.offsetHeight
-    };
-
-    return rect;
+const getListLeft = (viewRect, listRect, bodyRect) => {
+    const space = 2;
+    let left = Math.max(viewRect.left, 0);
+    if (left + listRect.width >= bodyRect.width) {
+        left = bodyRect.width - listRect.width - space;
+    }
+    return left;
 };
 
 const layout = () => {
+    if (!$list) {
+        return;
+    }
 
     const viewRect = getRect($view);
-    const listRect = getRect($list);
     const bodyRect = getRect(document.body);
+    let listRect = getRect($list);
 
-    const top = getListTop(viewRect, listRect, bodyRect);
+    const st = $list.style;
 
-    let left = Math.max(viewRect.left, 0);
-    if (left + listRect.width > bodyRect.width) {
-        left = bodyRect.width - listRect.width;
+    // fix list min width
+    // console.log('list,view width', listRect.width, viewRect.width);
+    if (listRect.width < viewRect.width) {
+        st.minWidth = `${viewRect.width}px`;
+        listRect = getRect($list);
     }
+
+    // console.log('viewRect', viewRect, 'listRect', listRect, 'bodyRect', bodyRect);
+
+    const left = getListLeft(viewRect, listRect, bodyRect);
+    const top = getListTop(viewRect, listRect, bodyRect);
 
     // console.log('left', left, 'top', top);
 
-    const st = $list.style;
     st.left = `${left}px`;
     st.top = `${top}px`;
-    st.minWidth = `${viewRect.width}px`;
 
     // selected element.scrollIntoView();
     const $selected = $list.querySelector('.vui-select-item.selected');
@@ -499,39 +534,6 @@ const onBlur = (e) => {
     data.searchValue = null;
     closeAsync();
     unbindKeyEvents();
-};
-
-
-// =========================================================================================================
-
-
-const getItemClass = (item) => {
-    const ls = ['vui-select-item'];
-    if (item.value === data.selectedValue) {
-        ls.push('selected');
-    }
-    return ls;
-};
-
-const onItemClick = (item) => {
-
-    // console.log(cid, 'item click');
-
-    data.searchValue = null;
-    data.selectedIndex = item.index;
-    data.selectedLabel = item.label;
-    data.selectedValue = item.value;
-    data.value = item.value;
-
-    // console.log(props.label, 'onItemClick', item, data.selectedLabel);
-
-    close();
-};
-
-const onItemRemove = (item) => {
-    // console.log(cid, 'item remove');
-
-    emit('remove', item);
 };
 
 // =========================================================================================================
@@ -598,34 +600,6 @@ const getListFromSlot = (ls) => {
 
 // =========================================================================================================
 
-// wait for list render
-const initWidthIfNeeded = microtask(() => {
-
-    // fixed width or already calculated
-    if (data.width) {
-        return;
-    }
-
-    // auto width
-    document.body.appendChild($hide);
-    const listRect = $list.getBoundingClientRect();
-    $el.appendChild($hide);
-
-    const listWidth = Math.ceil(listRect.width);
-    // console.log(cid, listWidth);
-
-    // list item padding 5px = view padding 5px
-    // only icon width
-    const viewIconWidth = 15;
-
-    const viewMinWidth = 50;
-    const viewMaxWidth = 350;
-    // no padding because list have same padding
-    const w = clamp(listWidth + viewIconWidth, viewMinWidth, viewMaxWidth);
-    data.width = `${w}px`;
-
-});
-
 const layoutIfNeeded = microtask(() => {
     if (props.disabled) {
         return;
@@ -668,7 +642,21 @@ const initSelectedItem = () => {
 
 };
 
-const slots = useSlots();
+// get max label for list only first time
+const initMaxLabel = () => {
+
+    if (data.maxLabel) {
+        return;
+    }
+
+    let maxLabel = '';
+    data.list.forEach((it) => {
+        if (it.label && it.label.length > maxLabel.length) {
+            maxLabel = it.label;
+        }
+    });
+    data.maxLabel = maxLabel || ' ';
+};
 
 const initList = () => {
 
@@ -680,25 +668,65 @@ const initList = () => {
         item.value = toStr(item.value);
     });
 
+    // console.log('initList', cid, data.list);
+
     data.list = list;
 
     initSelectedItem();
-
-    // async calculate width first time
-    initWidthIfNeeded();
 
     // async layout if list is show and change list dynamic
     layoutIfNeeded();
 
 };
 
+watchEffect(() => {
+    data.value = toStr(props.modelValue === null ? props.value : props.modelValue);
+});
+
+watch([
+    () => data.viewLabel,
+    () => data.maxLabel
+], () => {
+
+
+    // fixed width or already calculated
+    if (props.width) {
+        data.widthLabel = data.viewLabel || ' ';
+        return;
+    }
+
+    data.widthLabel = data.maxLabel || ' ';
+
+});
+
+watch(() => data.selectedValue, (v) => {
+    data.list.forEach((it) => {
+        it.selected = it.value === v;
+    });
+});
+
+watch(() => data.value, (v) => {
+    initSelectedItem();
+    emit('update:modelValue', v);
+    emit('change', v);
+});
+
+watchEffect(() => {
+    data.viewLabel = props.searchable && data.searchValue !== null ? data.searchValue : data.selectedLabel;
+});
+
+watch(() => props.options, (v) => {
+    initList();
+});
+
 onMounted(() => {
-    $el = el.value;
+    $el = elRef.value;
     $view = $el.querySelector('.vui-select-view');
-    $hide = $el.querySelector('.vui-select-hide');
-    $list = $el.querySelector('.vui-select-list');
+    $options = $el.querySelector('.vui-select-options');
+    $list = $options.querySelector('.vui-select-list');
 
     initList();
+    initMaxLabel();
 });
 
 </script>
@@ -720,9 +748,12 @@ onMounted(() => {
 }
 
 .vui-select-view {
+    --vui-select-min-width: 50px;
+    --vui-select-max-width: 350px;
+
     position: relative;
-    min-width: 50px;
-    max-width: 100%;
+    min-width: var(--vui-select-min-width);
+    max-width: var(--vui-select-max-width);
     box-sizing: border-box;
     text-overflow: ellipsis;
 
@@ -772,6 +803,7 @@ onMounted(() => {
         position: relative;
         display: inline-block;
         min-width: 2px;
+        max-width: var(--vui-select-max-width);
         padding: 5px 25px 5px 5px;
         box-sizing: border-box;
         font-size: inherit;
@@ -783,20 +815,15 @@ onMounted(() => {
     }
 }
 
-/* hide for width computed */
-.vui-select-hide {
+.vui-select-options {
+    position: absolute;
+    display: none;
+}
+
+.vui-select-list {
     position: absolute;
     top: 0;
     left: 0;
-    width: 500px;
-    visibility: hidden;
-}
-
-/* top/left -500px will not caused body size change */
-.vui-select-list {
-    position: absolute;
-    top: -500px;
-    left: -500px;
     z-index: 10000;
     max-width: 350px;
     max-height: 300px;
@@ -862,4 +889,5 @@ onMounted(() => {
         background: #555;
     }
 }
+
 </style>

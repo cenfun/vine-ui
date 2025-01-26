@@ -18,13 +18,7 @@
       >
         <VuiSelect
           v-model="data.value"
-          label="prop options:"
-          :options="data.options"
-        />
-
-        <VuiSelect
-          v-model="data.value"
-          label="slot options:"
+          label="slot options auto:"
           width="auto"
           @remove="onSelectRemove"
         >
@@ -65,6 +59,17 @@
         >
           <option />
         </VuiSelect>
+      </VuiFlex>
+
+      <VuiFlex
+        gap="10px"
+        wrap
+      >
+        <VuiSelect
+          v-model="data.value"
+          label="prop options:"
+          :options="data.options"
+        />
 
         <VuiSelect
           v-model="data.value"
@@ -77,16 +82,18 @@
 
       <VuiSelect
         v-model="data.value"
-        label="width auto min 100:"
+        label="width 100 < auto < 100%:"
         width="auto"
         min-width="100px"
+        max-width="100%"
         :options="data.list"
       />
 
       <VuiSelect
         v-model="data.value"
-        label="width 100%:"
+        label="width 100% < 100%:"
         width="100%"
+        max-width="100%"
         :options="data.list"
       />
 
@@ -142,7 +149,7 @@
           v-model="data.value"
           width="auto"
           max-width="200px"
-          label="width auto max 200:"
+          label="width auto < 200:"
           :options="data.list"
         />
       </VuiFlex>
@@ -162,7 +169,7 @@
         />
         <VuiSelect
           v-model="data.value"
-          label="search width auto:"
+          label="search auto < 200:"
           width="auto"
           max-width="200px"
           :options="data.results"
