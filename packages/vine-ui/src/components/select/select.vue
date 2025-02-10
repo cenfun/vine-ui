@@ -30,7 +30,7 @@
         <div
           v-for="item in data.list"
           :key="item.index"
-          :class="['vui-select-item', item.selected?'selected':'']"
+          :class="['vui-select-item', item.value === data.selectedValue?'selected':'']"
           @mousedown="onItemClick(item)"
         >
           <div class="vui-select-item-label">
@@ -597,9 +597,6 @@ const getListFromSlot = (ls) => {
         }
         if (!hasOwn(item, 'value')) {
             item.value = item.label;
-        }
-        if (hasOwn(item, 'selected')) {
-            item.selected = true;
         }
         if (hasOwn(item, 'removable')) {
             item.removable = true;
