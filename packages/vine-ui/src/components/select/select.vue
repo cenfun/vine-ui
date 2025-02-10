@@ -14,7 +14,7 @@
       <input
         v-model="data.viewLabel"
         v-select-on-focus="props.selectOnFocus"
-        type="text"
+        :type="props.type"
         :class="props.searchable?'vui-select-search':''"
         :disabled="props.disabled"
         :readonly="!props.searchable"
@@ -77,6 +77,11 @@ const props = defineProps({
     disabled: {
         type: Boolean,
         default: false
+    },
+
+    type: {
+        type: String,
+        default: 'text'
     },
 
     options: {
