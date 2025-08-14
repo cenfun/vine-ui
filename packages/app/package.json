@@ -1,6 +1,6 @@
 {
     "name": "vine-ui-app",
-    "version": "3.1.16",
+    "version": "3.1.17",
     "private": true,
     "main": "dist/vine-ui-app.js",
     "files": [
@@ -9,7 +9,7 @@
     "license": "MIT",
     "dependencies": {
         "fps-detector": "^1.0.3",
-        "vine-ui": "~3.1.16",
+        "vine-ui": "~3.1.17",
         "vue-router": "^4.5.1"
     },
     "devDependencies": {}
