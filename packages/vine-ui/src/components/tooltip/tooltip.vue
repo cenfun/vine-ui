@@ -115,7 +115,8 @@ const styleList = computed(() => {
     const st = {
         top: `${data.top}px`,
         left: `${data.left}px`,
-        background: data.background
+        background: data.background,
+        padding: data.padding
     };
     if (props.color) {
         st['--vui-tooltip-color'] = props.color;
@@ -157,6 +158,7 @@ const updateSync = () => {
     });
     if (style.changed) {
         data.background = style.background;
+        data.padding = style.padding;
     }
 };
 
@@ -240,6 +242,7 @@ defineExpose({
     .vui-tooltip-content {
         position: relative;
         max-width: var(--vui-tooltip-max-width);
+        margin: 10px;
         overflow: hidden;
     }
 }

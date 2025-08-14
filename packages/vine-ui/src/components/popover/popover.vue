@@ -187,7 +187,8 @@ const styleList = computed(() => {
     const st = {
         top: `${data.top}px`,
         left: `${data.left}px`,
-        background: data.background
+        background: data.background,
+        padding: data.padding
     };
 
     if (props.color) {
@@ -274,6 +275,7 @@ const updateSync = () => {
     });
 
     data.background = style.background;
+    data.padding = style.padding;
 
     emit('update', positionInfo);
 };
@@ -466,12 +468,11 @@ defineExpose({
     --vui-popover-width: 200px;
     --vui-popover-min-height: 20px;
     --vui-popover-max-height: 800px;
-    --vui-popover-padding: 20px;
+    --vui-popover-padding: 15px;
 
     position: fixed;
     z-index: 1000;
     margin: 0;
-    padding: var(--vui-popover-padding);
     box-sizing: border-box;
     color: var(--vui-popover-color);
     border: none;
@@ -486,7 +487,7 @@ defineExpose({
         width: var(--vui-popover-width);
         min-height: var(--vui-popover-min-height);
         max-height: var(--vui-popover-max-height);
-        padding: 5px;
+        margin: var(--vui-popover-padding);
         overflow: hidden;
     }
 
