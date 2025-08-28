@@ -51,7 +51,7 @@
 
 <script setup>
 import {
-    computed, onMounted,
+    computed, onMounted, onUnmounted,
     ref, shallowReactive,
     watch, watchEffect,
     useSlots,
@@ -737,6 +737,14 @@ onMounted(() => {
 
     initList();
     initMaxLabel();
+});
+
+onUnmounted(() => {
+    unbindOpenEvents();
+    unbindKeyEvents();
+    if ($list && $list.parentNode) {
+        $list.parentNode.removeChild($list);
+    }
 });
 
 </script>
