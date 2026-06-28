@@ -218,9 +218,6 @@ export interface VuiLayoutProps {
   gutterHoverSize?: string;
   /** Gutter drag handle size */
   gutterSize?: string;
-  /** Layout sizes as comma-separated values (e.g. "200px,auto,1fr") */
-  layout?: string;
-  /** v-model binding for layout string */
   modelValue?: string;
 }
 export const VuiLayout: DefineComponent<VuiLayoutProps>;

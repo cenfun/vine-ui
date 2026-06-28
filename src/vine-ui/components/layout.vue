@@ -11,7 +11,7 @@
 
 <script setup>
 import {
-    computed, onMounted, ref, shallowReactive, watch, watchEffect
+    computed, onMounted, ref, shallowReactive, watch
 } from 'vue';
 
 import {
@@ -63,14 +63,6 @@ const props = defineProps({
     gutterSize: {
         type: String,
         default: '4px'
-    },
-
-    /** Layout sizes as comma-separated values (e.g. "200px,auto,1fr") */
-
-
-    layout: {
-        type: String,
-        default: ''
     }
 
 });
@@ -82,7 +74,6 @@ const mv = defineModel({
 
 const data = shallowReactive({
 
-    layout: '',
     layoutList: [],
     layoutReset: false,
 
@@ -103,13 +94,8 @@ const data = shallowReactive({
 
 });
 
-watchEffect(() => {
-    data.layout = mv.value === null ? props.layout : mv.value;
-});
-
-watch(() => data.layout, (v) => {
+watch(() => mv.value, (v) => {
     layoutChangeHandler();
-    mv.value = v;
 });
 
 watch(() => data.layoutList, (v) => {
@@ -524,8 +510,8 @@ const layoutChangeHandler = () => {
     const list = getLayoutFromChildren();
 
     // merge with layout string
-    if (data.layout) {
-        `${data.layout}`.split(',').forEach((item, i) => {
+    if (mv.value) {
+        `${mv.value}`.split(',').forEach((item, i) => {
             item = `${item}`.trim();
             if (isAutoSize(item)) {
                 item = 'auto';
@@ -551,7 +537,7 @@ const layoutChangeHandler = () => {
 
 const layoutListChangeHandler = () => {
     // update layout back
-    data.layout = data.layoutList.join(',');
+    mv.value = data.layoutList.join(',');
 
     updateTotalSize();
     setChildrenLayout();
