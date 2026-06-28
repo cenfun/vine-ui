@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="data.visible"
+    v-show="mv"
     ref="el"
     v-init="{cid}"
     :class="classList"
@@ -22,7 +22,7 @@
 
 <script setup>
 import {
-    computed, onMounted, ref, reactive, watchEffect, watch
+    computed, onMounted, ref, watch
 } from 'vue';
 
 import {
@@ -65,34 +65,17 @@ const props = defineProps({
     closeOnClickOut: {
         type: Boolean,
         default: true
-    },
-
-    /** Initial visibility (used without v-model) */
-
-
-    visible: {
-        type: Boolean,
-        default: false
     }
 
 });
 
 const mv = defineModel({
     type: Boolean,
-    default: null
+    default: false
 });
 
-const data = reactive({
-    visible: false
-});
-
-watchEffect(() => {
-    data.visible = mv.value === null ? props.visible : mv.value;
-});
-
-watch(() => data.visible, (v) => {
+watch(() => mv.value, (v) => {
     eventsHandler();
-    mv.value = v;
 });
 
 const el = ref(null);
@@ -111,11 +94,11 @@ const styleMap = computed(() => {
 
 const close = () => {
 
-    if (!data.visible) {
+    if (!mv.value) {
         return;
     }
 
-    data.visible = false;
+    mv.value = false;
 
 };
 
@@ -133,7 +116,7 @@ const documentEvents = {
 };
 
 const eventsHandler = () => {
-    if (data.visible) {
+    if (mv.value) {
         if (props.closeOnClickOut) {
             setTimeout(() => {
                 bindEvents(documentEvents, document);

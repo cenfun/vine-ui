@@ -66,9 +66,6 @@ export interface VuiDialogProps {
   height?: string;
   /** Close dialog when clicking outside */
   closeOnClickOut?: boolean;
-  /** Initial visibility (used without v-model) */
-  visible?: boolean;
-  /** v-model binding for visibility */
   modelValue?: boolean | null;
 }
 export const VuiDialog: DefineComponent<VuiDialogProps>;
