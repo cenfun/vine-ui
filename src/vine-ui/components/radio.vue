@@ -5,7 +5,7 @@
   >
     <input
       :id="cid"
-      v-model="data.checked"
+      v-model="mv"
       :disabled="props.disabled"
       :name="props.name"
       :value="props.value"
@@ -19,9 +19,7 @@
   </div>
 </template>
 <script setup>
-import {
-    reactive, watch, watchEffect
-} from 'vue';
+import { watch } from 'vue';
 import { getCID, vInit } from '../utils/util.js';
 
 const cid = getCID('VuiRadio');
@@ -54,14 +52,6 @@ const props = defineProps({
         default: false
     },
 
-    /** Initial checked state (used without v-model) */
-
-
-    checked: {
-        type: Boolean,
-        default: false
-    },
-
     /** Radio value */
 
 
@@ -79,16 +69,7 @@ const mv = defineModel({
 
 const emit = defineEmits(['change']);
 
-const data = reactive({
-    checked: false
-});
-
-watchEffect(() => {
-    data.checked = mv.value === null ? props.checked : mv.value;
-});
-
-watch(() => data.checked, (v) => {
-    mv.value = v;
+watch(() => mv.value, (v) => {
     emit('change', v);
 });
 

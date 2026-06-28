@@ -368,11 +368,8 @@ export interface VuiRadioProps {
   name?: string;
   /** Disable the radio */
   disabled?: boolean;
-  /** Initial checked state (used without v-model) */
-  checked?: boolean;
   /** Radio value */
   value?: string;
-  /** v-model binding for checked state */
   modelValue?: string | null;
 }
 export const VuiRadio: DefineComponent<VuiRadioProps>;

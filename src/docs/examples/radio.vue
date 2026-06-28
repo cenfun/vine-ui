@@ -20,11 +20,11 @@
       />
 
       <VuiRadio
+        v-model="radioValue1"
         name="radioName1"
         value="2"
-        checked
       >
-        no model checked
+        model checked
       </VuiRadio>
 
       <VuiRadio
