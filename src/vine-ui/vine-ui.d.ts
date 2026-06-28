@@ -50,9 +50,6 @@ export interface VuiCheckboxProps {
   label?: string;
   /** Disable the checkbox */
   disabled?: boolean;
-  /** Initial checked state (used without v-model) */
-  checked?: boolean;
-  /** v-model binding for checked state */
   modelValue?: boolean | null;
 }
 export const VuiCheckbox: DefineComponent<VuiCheckboxProps>;
