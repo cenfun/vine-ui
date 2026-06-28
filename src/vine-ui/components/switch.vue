@@ -33,7 +33,7 @@
 </template>
 <script setup>
 import {
-    computed, reactive, watch, watchEffect, useSlots
+    computed, watch, useSlots
 } from 'vue';
 import {
     getCID, getSlot, vInit, normalizePosition
@@ -105,42 +105,25 @@ onColor */
     disabled: {
         type: Boolean,
         default: false
-    },
-
-    /** Initial checked state (used without v-model) */
-
-
-    checked: {
-        type: Boolean,
-        default: false
     }
 
 });
 
 const mv = defineModel({
     type: Boolean,
-    default: null
+    default: false
 });
 
 const emit = defineEmits(['change']);
 
-const data = reactive({
-    checked: false
-});
-
-watchEffect(() => {
-    data.checked = mv.value === null ? props.checked : mv.value;
-});
-
-watch(() => data.checked, (v) => {
-    mv.value = v;
+watch(() => mv.value, (v) => {
     emit('change', v);
 });
 
 
 const classList = computed(() => {
     const ls = ['vui', 'vui-switch'];
-    if (data.checked) {
+    if (mv.value) {
         ls.push('vui-switch-checked');
     }
     if (props.labelClickable) {
@@ -155,10 +138,10 @@ const classList = computed(() => {
 
 const buttonStyleList = computed(() => {
 
-    let bgc = data.checked ? defaultColors[1] : defaultColors[0];
+    let bgc = mv.value ? defaultColors[1] : defaultColors[0];
     if (props.colors) {
         const ls = `${props.colors}`.split(',').map((it) => it.trim());
-        if (data.checked && ls[1]) {
+        if (mv.value && ls[1]) {
             bgc = ls[1];
         } else if (ls[0]) {
             bgc = ls[0];
@@ -176,7 +159,7 @@ const buttonStyleList = computed(() => {
 const iconStyleList = computed(() => {
     return {
         width: `calc(${props.height} - 4px)`,
-        right: data.checked ? '2px' : `calc(${props.width} - ${props.height} + 2px)`
+        right: mv.value ? '2px' : `calc(${props.width} - ${props.height} + 2px)`
     };
 });
 
@@ -191,7 +174,7 @@ const onClick = (e) => {
         return;
     }
     if (props.labelClickable || e.target.classList.contains('vui-switch-button')) {
-        data.checked = !data.checked;
+        mv.value = !mv.value;
     }
 };
 

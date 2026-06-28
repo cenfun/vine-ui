@@ -47,28 +47,13 @@
       />
 
       <VuiSwitch
+        v-model="state.value"
         :label-position="state.labelPosition"
         :label-clickable="state.labelClickable"
         width="45px"
         height="24px"
-        checked
       >
         large {{ state.value }}
-      </VuiSwitch>
-
-      <VuiSwitch
-        :label-position="state.labelPosition"
-        :label-clickable="state.labelClickable"
-        checked
-      >
-        checked
-      </VuiSwitch>
-
-      <VuiSwitch
-        :label-position="state.labelPosition"
-        :label-clickable="state.labelClickable"
-      >
-        unchecked
       </VuiSwitch>
     </VuiFlex>
 

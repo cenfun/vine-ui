@@ -6,7 +6,7 @@
     :style="styleList"
   >
     <div
-      v-if="data.resizable"
+      v-if="props.resizable"
       class="vui-flyover-resizer"
     />
     <slot />
@@ -15,7 +15,7 @@
 
 <script setup>
 import {
-    ref, computed, watch, watchEffect, onMounted, onUnmounted, reactive
+    ref, computed, watch, onMounted, onUnmounted, reactive
 } from 'vue';
 import { microtask } from 'async-tick';
 import {
@@ -67,21 +67,13 @@ const props = defineProps({
     resizable: {
         type: Boolean,
         default: true
-    },
-
-    /** Initial visibility (used without v-model) */
-
-
-    visible: {
-        type: Boolean,
-        default: false
     }
 
 });
 
 const mv = defineModel({
     type: Boolean,
-    default: null
+    default: false
 });
 
 const emit = defineEmits(['start', 'end', 'resize']);
@@ -89,36 +81,18 @@ const emit = defineEmits(['start', 'end', 'resize']);
 const pos = computed(() => normalizePosition(props.position));
 
 const data = reactive({
-    visible: props.visible,
-    position: props.position,
     width: props.width,
-    resizable: props.resizable,
 
     hasStarted: false,
     resizeInfo: null
 });
 
-watchEffect(() => {
-    data.visible = mv.value === null ? props.visible : mv.value;
-});
-
-watch(() => data.visible, (nv, ov) => {
+watch(() => mv.value, (nv, ov) => {
     // console.log('visible change', ov, nv);
     onStart(ov, nv);
-    mv.value = nv;
 });
 
-watchEffect(() => {
-    data.position = pos.value;
-});
-watchEffect(() => {
-    data.width = props.width;
-});
-watchEffect(() => {
-    data.resizable = props.resizable;
-});
-
-watch(() => data.resizable, () => {
+watch(() => props.resizable, () => {
     bindResizeEvents();
 });
 
@@ -175,6 +149,7 @@ const onStart = (ov, nv) => {
     emit('start', nv);
 };
 
+
 const onEnd = (v) => {
     data.hasStarted = false;
     unbindAnimationEvents();
@@ -192,10 +167,11 @@ const onEnd = (v) => {
 const animationEvents = {
     animationend: {
         handler: (e) => {
-            onEnd(data.visible);
+            onEnd(mv.value);
         }
     }
 };
+
 
 const bindAnimationEvents = () => {
     bindEvents(animationEvents, $el);
@@ -268,7 +244,7 @@ const updateSize = (e) => {
         startWidth, startMinWidth, startMaxWidth, startX
     } = data.resizeInfo;
 
-    const offsetFactor = data.position === 'right' ? -1 : 1;
+    const offsetFactor = pos.value === 'right' ? -1 : 1;
     const offsetX = (e.pageX - startX) * offsetFactor;
 
     // console.log(offsetX, startWidth);
@@ -318,7 +294,7 @@ const mousedownEvents = {
 
 const bindResizeEvents = () => {
     unbindEvents(mousedownEvents);
-    if (data.resizable) {
+    if (props.resizable) {
         bindResizeAsync();
     }
 };
@@ -332,7 +308,7 @@ const bindResizeAsync = microtask(() => {
 
 onMounted(() => {
     $el = el.value;
-    if (data.visible) {
+    if (mv.value) {
         onStart(false, true);
     }
     bindResizeEvents();

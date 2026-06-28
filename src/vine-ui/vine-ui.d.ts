@@ -115,9 +115,6 @@ export interface VuiFlyoverProps {
   maxWidth?: StringOrNumber;
   /** Enable drag resize handle */
   resizable?: boolean;
-  /** Initial visibility (used without v-model) */
-  visible?: boolean;
-  /** v-model binding for visibility */
   modelValue?: boolean | null;
 }
 export const VuiFlyover: DefineComponent<VuiFlyoverProps>;
@@ -435,9 +432,6 @@ export interface VuiSwitchProps {
   height?: string;
   /** Disable the switch */
   disabled?: boolean;
-  /** Initial checked state (used without v-model) */
-  checked?: boolean;
-  /** v-model binding for checked state */
   modelValue?: boolean | null;
 }
 export const VuiSwitch: DefineComponent<VuiSwitchProps>;
