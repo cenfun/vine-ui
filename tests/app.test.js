@@ -1,5 +1,5 @@
-const { test } = require('@playwright/test');
-const MCR = require('monocart-coverage-reports');
+import { test } from '@playwright/test';
+import MCR from 'monocart-coverage-reports';
 const CDPClient = MCR.CDPClient;
 
 test('e2e test', async ({ page }) => {
@@ -49,9 +49,8 @@ test('e2e test', async ({ page }) => {
         },
 
         sourcePath: {
-            'vine-ui/packages/vine-ui/': '',
-            'vine-ui-app/packages/vine-ui/': '',
-            'vine-ui-app/packages/': ''
+            'vine-ui/src/': '',
+            'vine-ui-app/src/': ''
         },
 
         reports: [
