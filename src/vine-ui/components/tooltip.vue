@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="data.visible"
+    v-show="props.visible"
     ref="el"
     v-init="{cid}"
     :class="classList"
@@ -13,7 +13,7 @@
 </template>
 <script setup>
 import {
-    computed, onMounted, onUnmounted, reactive, ref, watch, watchEffect
+    computed, onMounted, onUnmounted, reactive, ref, watch
 } from 'vue';
 
 import {
@@ -126,15 +126,9 @@ const el = ref(null);
 let $el;
 
 const data = reactive({
-    visible: props.visible,
-
     top: 0,
     left: 0,
     background: ''
-});
-
-watchEffect(() => {
-    data.visible = props.visible;
 });
 
 const classList = computed(() => {
@@ -167,7 +161,7 @@ const styleList = computed(() => {
 // ====================================================================================================
 
 const updateSync = () => {
-    if (!data.visible) {
+    if (!props.visible) {
         return;
     }
 
@@ -203,7 +197,7 @@ const updateSync = () => {
 const update = microtask(updateSync);
 
 const render = () => {
-    if (!data.visible) {
+    if (!props.visible) {
         return;
     }
     if (!$el) {
@@ -237,7 +231,7 @@ const unbindContainerEvent = () => {
 
 // ====================================================================================================
 
-watch(() => data.visible, (v) => {
+watch(() => props.visible, (v) => {
     render();
 });
 

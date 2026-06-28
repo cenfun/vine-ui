@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="data.visible"
+    v-show="mv"
     ref="el"
     v-init="{cid}"
     :class="classList"
@@ -31,7 +31,7 @@
 
 <script setup>
 import {
-    computed, onMounted, ref, reactive, watchEffect, watch
+    computed, onMounted, ref, watch
 } from 'vue';
 
 import {
@@ -90,36 +90,19 @@ const props = defineProps({
     appendToBody: {
         type: Boolean,
         default: false
-    },
-
-    /** Initial visibility (used without v-model) */
-
-
-    visible: {
-        type: Boolean,
-        default: false
     }
 
 });
 
 const mv = defineModel({
     type: Boolean,
-    default: null
+    default: false
 });
 
 const emit = defineEmits(['close']);
 
-const data = reactive({
-    visible: false
-});
-
-watchEffect(() => {
-    data.visible = mv.value === null ? props.visible : mv.value;
-});
-
-watch(() => data.visible, (v) => {
+watch(() => mv.value, (v) => {
     eventsHandler();
-    mv.value = v;
     if (!v) {
         emit('close');
     }
@@ -144,11 +127,11 @@ const styleMap = computed(() => {
 
 const close = () => {
 
-    if (!data.visible) {
+    if (!mv.value) {
         return;
     }
 
-    data.visible = false;
+    mv.value = false;
 
 };
 
@@ -171,7 +154,7 @@ const maskEvents = {
 
 const eventsHandler = () => {
     const cls = document.body.classList;
-    if (data.visible) {
+    if (mv.value) {
         cls.add('vui-modal-lock-body');
         if (props.closeOnClickOut) {
             setTimeout(() => {

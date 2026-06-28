@@ -257,9 +257,6 @@ export interface VuiModalProps {
   maxWidth?: string;
   /** Append modal element to document body */
   appendToBody?: boolean;
-  /** Initial visibility (used without v-model) */
-  visible?: boolean;
-  /** v-model binding for visibility */
   modelValue?: boolean | null;
 }
 export const VuiModal: DefineComponent<VuiModalProps>;
@@ -326,9 +323,6 @@ export interface VuiPopoverProps {
   container?: any;
   /** Disable pointer events (non-interactive popover) */
   nonreactive?: boolean;
-  /** Initial visibility (used without v-model) */
-  visible?: boolean;
-  /** v-model binding for visibility */
   modelValue?: boolean | null;
 }
 export const VuiPopover: DefineComponent<VuiPopoverProps>;

@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="data.visible"
+    v-show="mv"
     ref="el"
     v-init="{cid}"
     :class="classList"
@@ -27,7 +27,7 @@
 
 <script setup>
 import {
-    computed, onMounted, reactive, ref, watch, watchEffect, onUnmounted
+    computed, onMounted, reactive, ref, watch, onUnmounted
 } from 'vue';
 import {
     getBestPosition, getPositionStyle, getRect, getElement
@@ -177,21 +177,13 @@ const props = defineProps({
     nonreactive: {
         type: Boolean,
         default: false
-    },
-
-    /** Initial visibility (used without v-model) */
-
-
-    visible: {
-        type: Boolean,
-        default: false
     }
 
 });
 
 const mv = defineModel({
     type: Boolean,
-    default: null
+    default: false
 });
 
 const el = ref(null);
@@ -200,20 +192,13 @@ let $el;
 const emit = defineEmits(['open', 'update', 'beforeClose', 'close']);
 
 const data = reactive({
-    visible: false,
-
     left: 0,
     top: 0,
     background: ''
 });
 
-watchEffect(() => {
-    data.visible = mv.value === null ? props.visible : mv.value;
-});
-
-watch(() => data.visible, (v) => {
+watch(() => mv.value, (v) => {
     render();
-    mv.value = v;
     if (!v) {
         emit('close');
     }
@@ -272,10 +257,10 @@ const styleList = computed(() => {
 // =============================================================================
 
 const close = () => {
-    if (!data.visible) {
+    if (!mv.value) {
         return;
     }
-    data.visible = false;
+    mv.value = false;
 };
 
 const beforeClose = () => {
@@ -291,7 +276,7 @@ const beforeClose = () => {
 
 let positionInfo;
 const updateSync = () => {
-    if (!data.visible) {
+    if (!mv.value) {
         return;
     }
 
@@ -345,7 +330,7 @@ const update = microtask(updateSync);
 
 const render = () => {
 
-    if (!data.visible) {
+    if (!mv.value) {
         // clean when closed
         unbindEvents();
         return;
@@ -429,7 +414,7 @@ const scrollHandler = (e) => {
 
 const bindCloseEvent = () => {
     unbindCloseEvent();
-    if (props.autoClose && data.visible) {
+    if (props.autoClose && mv.value) {
         setTimeout(() => {
             window.addEventListener('click', clickHandler, true);
             window.addEventListener('keydown', keydownHandler);
