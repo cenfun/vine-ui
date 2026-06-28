@@ -24,7 +24,7 @@
             v-for="(item, key) in data.props"
             :key="key"
           >
-            <td>{{ getPropKey(item) }}</td>
+            <td>{{ item.name }}</td>
             <td>{{ item.type && item.type.name }}</td>
             <td>{{ item.defaultValue.value }}</td>
             <td>{{ getPropDescription(item) }}</td>
@@ -121,16 +121,6 @@ const data = shallowReactive({
     example: null
 });
 
-let previousName;
-const getPropKey = (item) => {
-    const name = item.name;
-    if (name === 'modelValue') {
-        return `v-model (${previousName})`;
-    }
-    previousName = name;
-    return name;
-};
-
 const getPropDescription = (item) => {
     const vs = item.values;
     if (vs) {
@@ -156,10 +146,7 @@ const update = () => {
 
     data.props = info.props;
 
-    let events = info.events;
-    if (events) {
-        events = events.filter((it) => it.name !== 'update:modelValue');
-    }
+    const events = info.events;
     data.events = isList(events) ? events : null;
 
     data.slots = info.slots;

@@ -439,7 +439,7 @@ const initSelected = microtask((reason) => {
 
 watch(() => mv.value, (vs) => {
     data.value = vs;
-    initSelected('watch modelValue');
+    initSelected('watch mv');
 });
 
 onMounted(() => {

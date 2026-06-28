@@ -159,14 +159,6 @@ const props = defineProps({
     index: {
         type: Boolean,
         default: false
-    },
-
-    /** Initial value (used without v-model) */
-
-
-    value: {
-        type: [String, Number],
-        default: ''
     }
 
 });
@@ -678,7 +670,7 @@ const getListFromSlot = (ls) => {
 
 // =========================================================================================================
 
-const update = microtask(() => {
+const updateLayout = microtask(() => {
     if (props.disabled) {
         return;
     }
@@ -769,9 +761,19 @@ const initList = () => {
     initSelectedItem();
 
     // async layout if list is show and change list dynamic
-    update();
+    updateLayout();
 
 };
+
+const update = microtask(() => {
+    $el = elRef.value;
+    $view = $el.querySelector('.vui-select-view');
+    $options = $el.querySelector('.vui-select-options');
+    $list = $options.querySelector('.vui-select-list');
+
+    initList();
+    initMaxLabel();
+});
 
 watchEffect(() => {
     const v = mv.value === null ? props.value : mv.value;
@@ -806,17 +808,11 @@ watchEffect(() => {
 });
 
 watch(() => props.options, (v) => {
-    initList();
+    update();
 });
 
 onMounted(() => {
-    $el = elRef.value;
-    $view = $el.querySelector('.vui-select-view');
-    $options = $el.querySelector('.vui-select-options');
-    $list = $options.querySelector('.vui-select-list');
-
-    initList();
-    initMaxLabel();
+    update();
 });
 
 onUnmounted(() => {

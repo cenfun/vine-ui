@@ -38,7 +38,6 @@ export interface VuiButtonGroupProps {
   color?: string;
   /** If true, v-model binds to option.value; otherwise binds to index */
   bindValue?: boolean;
-  modelValue?: StringOrNumber | null;
 }
 export const VuiButtonGroup: DefineComponent<VuiButtonGroupProps>;
 
@@ -50,7 +49,6 @@ export interface VuiCheckboxProps {
   label?: string;
   /** Disable the checkbox */
   disabled?: boolean;
-  modelValue?: boolean | null;
 }
 export const VuiCheckbox: DefineComponent<VuiCheckboxProps>;
 
@@ -66,7 +64,6 @@ export interface VuiDialogProps {
   height?: string;
   /** Close dialog when clicking outside */
   closeOnClickOut?: boolean;
-  modelValue?: boolean | null;
 }
 export const VuiDialog: DefineComponent<VuiDialogProps>;
 
@@ -115,7 +112,6 @@ export interface VuiFlyoverProps {
   maxWidth?: StringOrNumber;
   /** Enable drag resize handle */
   resizable?: boolean;
-  modelValue?: boolean | null;
 }
 export const VuiFlyover: DefineComponent<VuiFlyoverProps>;
 
@@ -197,7 +193,6 @@ export interface VuiInputProps {
   iconRightClickable?: boolean;
   /** Initial value (used without v-model) */
   value?: StringOrNumber;
-  modelValue?: StringOrNumber;
 }
 export const VuiInput: DefineComponent<VuiInputProps>;
 
@@ -215,7 +210,6 @@ export interface VuiLayoutProps {
   gutterHoverSize?: string;
   /** Gutter drag handle size */
   gutterSize?: string;
-  modelValue?: string;
 }
 export const VuiLayout: DefineComponent<VuiLayoutProps>;
 
@@ -254,7 +248,6 @@ export interface VuiModalProps {
   maxWidth?: string;
   /** Append modal element to document body */
   appendToBody?: boolean;
-  modelValue?: boolean | null;
 }
 export const VuiModal: DefineComponent<VuiModalProps>;
 
@@ -277,8 +270,6 @@ export interface VuiMultiSelectProps {
   placeholder?: string;
   /** Array of options [{label, value}] or grouped [{label, options: [{label, value}]}] */
   options?: VuiMultiSelectOption[] | null;
-  /** v-model binding for selected values array */
-  modelValue?: StringOrNumber[] | null;
 }
 export const VuiMultiSelect: DefineComponent<VuiMultiSelectProps>;
 
@@ -320,7 +311,6 @@ export interface VuiPopoverProps {
   container?: any;
   /** Disable pointer events (non-interactive popover) */
   nonreactive?: boolean;
-  modelValue?: boolean | null;
 }
 export const VuiPopover: DefineComponent<VuiPopoverProps>;
 
@@ -355,7 +345,6 @@ export interface VuiRadioProps {
   disabled?: boolean;
   /** Radio value */
   value?: string;
-  modelValue?: string | null;
 }
 export const VuiRadio: DefineComponent<VuiRadioProps>;
 
@@ -392,8 +381,6 @@ export interface VuiSelectProps {
   index?: boolean;
   /** Initial value (used without v-model) */
   value?: StringOrNumber;
-  /** v-model binding for selected value */
-  modelValue?: StringOrNumber | null;
 }
 export const VuiSelect: DefineComponent<VuiSelectProps>;
 
@@ -432,7 +419,6 @@ export interface VuiSwitchProps {
   height?: string;
   /** Disable the switch */
   disabled?: boolean;
-  modelValue?: boolean | null;
 }
 export const VuiSwitch: DefineComponent<VuiSwitchProps>;
 
