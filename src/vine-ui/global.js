@@ -31,6 +31,19 @@ export const mount = (Component, options) => {
     };
 };
 
+// initGlobalTooltips((target, text) => {
+//     // console.log(target, text);
+//     if (text === true) {
+//         // console.log(target.clientWidth, target.scrollWidth);
+//         if (target.clientWidth < target.scrollWidth) {
+//             showTooltip(target, target.innerText);
+//         }
+//         return;
+//     }
+//     showTooltip(target, text);
+// }, (target) => {
+//     hideTooltip();
+// });
 
 export const initGlobalTooltips = (onEnter, onLeave, getTooltip) => {
     if (typeof onEnter !== 'function' || typeof onLeave !== 'function') {
@@ -39,7 +52,9 @@ export const initGlobalTooltips = (onEnter, onLeave, getTooltip) => {
 
     if (typeof getTooltip !== 'function') {
         getTooltip = (target) => {
-            return target.getAttribute('tooltip');
+            if (target.hasAttribute('tooltip')) {
+                return target.getAttribute('tooltip') || true;
+            }
         };
     }
 
