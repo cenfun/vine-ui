@@ -9,22 +9,15 @@
     </label>
 
     <div
-      class="vui-select-view"
+      :class="viewClass"
       :style="viewStyle"
+      tabindex="0"
+      @click.stop="onClick"
+      @focus="onFocus"
+      @blur="onBlur"
     >
-      <input
-        v-model="data.viewLabel"
-        v-select-on-focus="props.selectOnFocus"
-        :type="props.type"
-        :class="props.searchable?'vui-select-search':''"
-        :disabled="props.disabled"
-        :readonly="!props.searchable"
-        @click.stop="onClick"
-        @input.stop="onInput"
-        @focus="onFocus"
-        @blur="onBlur"
-      >
-      <span>{{ data.widthLabel }}</span>
+      {{ data.viewLabel }}
+      <span>&nbsp;</span>
     </div>
     <div class="vui-select-options">
       <div
@@ -34,18 +27,11 @@
         <div
           v-for="(item, ii) in data.list"
           :key="ii"
-          :class="['vui-select-item', item.selected?'selected':'']"
+          :class="['vui-select-item', item.selected?'vui-select-selected':'']"
           @mousedown="onItemClick(item)"
         >
           <div class="vui-select-item-label">
             {{ item.label }}
-          </div>
-          <div
-            v-if="item.removable"
-            class="vui-select-item-remove"
-            @mousedown.stop.prevent="onItemRemove(item)"
-          >
-            X
           </div>
         </div>
       </div>
@@ -57,7 +43,7 @@
 import {
     computed, onMounted,
     ref, reactive,
-    watch, watchEffect,
+    watch,
     useSlots,
     nextTick,
     onUnmounted
@@ -65,7 +51,7 @@ import {
 import { microtask } from 'async-tick';
 
 import {
-    hasOwn, isList, autoPx, toStr, bindEvents, unbindEvents, getCID, vSelectOnFocus, getSlot, toNum, vInit
+    hasOwn, isList, autoPx, bindEvents, unbindEvents, getCID, getSlot, vInit
 } from '../utils/util.js';
 
 const cid = getCID('VuiSelect');
@@ -73,89 +59,48 @@ const cid = getCID('VuiSelect');
 const props = defineProps({
 
     /** Select label text */
-
-
     label: {
         type: String,
         default: ''
     },
 
     /** Disable the select */
-
-
     disabled: {
         type: Boolean,
         default: false
     },
 
-    /** Input type attribute */
-
-
-    type: {
-        type: String,
-        default: 'text'
-    },
-
     /** Array of option objects [{label, value}] */
-
-
     options: {
         type: Array,
         default: null
     },
 
     /** Select width */
-
-
     width: {
         type: [String, Number],
         default: ''
     },
 
     /** Select minimum width */
-
-
     minWidth: {
         type: [String, Number],
         default: ''
     },
 
     /** Select maximum width */
-
-
     maxWidth: {
         type: [String, Number],
         default: ''
     },
 
-    /** Select font size */
-
-
+    /** Font size for options*/
     fontSize: {
         type: [String, Number],
         default: ''
     },
 
-    /** Enable search/filter functionality */
-
-
-    searchable: {
-        type: Boolean,
-        default: false
-    },
-
-    /** Auto-select text on focus */
-
-
-    selectOnFocus: {
-        type: Boolean,
-        default: true
-    },
-
-    /** If true,
- v-model binds to option index instead of value */
-
-
+    /** If true, v-model binds to option index instead of value */
     index: {
         type: Boolean,
         default: false
@@ -164,17 +109,15 @@ const props = defineProps({
 });
 
 const mv = defineModel({
-    type: [String, Number],
+    type: [String, Number, Boolean],
     default: null
 });
 
 const slots = useSlots();
-const emit = defineEmits(['change', 'search', 'remove', 'focus', 'blur']);
+const emit = defineEmits(['focus', 'blur']);
 
 const data = reactive({
 
-    // from v-model
-    value: '',
     // from list selected item
     viewLabel: '',
 
@@ -185,16 +128,11 @@ const data = reactive({
 
     lastDirection: 'down',
 
-    widthLabel: ' ',
-
     selectedIndex: -1,
     // label for view display
     selectedLabel: '',
     // value for selected item class
-    selectedValue: null,
-
-    // for search input
-    searchValue: null
+    selectedValue: null
 
 });
 
@@ -204,6 +142,14 @@ let $el;
 let $view;
 let $options;
 let $list;
+
+const viewClass = computed(() => {
+    const cls = ['vui-select-view'];
+    if (props.disabled) {
+        cls.push('vui-select-disabled');
+    }
+    return cls;
+});
 
 const viewStyle = computed(() => {
     const st = {};
@@ -336,7 +282,7 @@ const keyArrowHandler = (e, offset) => {
 
     data.selectedIndex = index;
     data.selectedValue = item.value;
-    updateSelectedItem();
+    updateSelected(item);
 
     scrollIntoViewAsync(offset);
 };
@@ -345,7 +291,7 @@ const scrollIntoViewAsync = microtask((offset) => {
     if (!$list) {
         return;
     }
-    const target = $list.querySelector('.vui-select-item.selected');
+    const target = $list.querySelector('.vui-select-selected');
     if (!target) {
         return;
     }
@@ -368,11 +314,10 @@ const keyEnterHandler = (e) => {
     }
 
     const item = data.list[data.selectedIndex];
-    if (item) {
-        data.searchValue = null;
-        data.selectedLabel = item.label;
-        data.value = props.index ? item.index : item.value;
-    }
+
+    updateSelected(item);
+    updateValue(item);
+
     close();
 };
 
@@ -402,21 +347,16 @@ const onItemClick = (item) => {
 
     // console.log(cid, 'item click');
 
-    data.searchValue = null;
     data.selectedIndex = item.index;
     data.selectedLabel = item.label;
     data.selectedValue = item.value;
-    data.value = props.index ? item.index : item.value;
 
     // console.log(props.label, 'onItemClick', item, data.selectedLabel);
-    updateSelectedItem();
+    updateSelected(item);
+    updateValue(item);
 
     close();
 
-};
-
-const onItemRemove = (item) => {
-    emit('remove', item);
 };
 
 // =========================================================================================================
@@ -501,12 +441,23 @@ const getListTop = (viewRect, listRect, bodyRect) => {
 };
 
 const getListLeft = (viewRect, listRect, bodyRect) => {
-    const space = 2;
-    let left = Math.max(viewRect.left, 0);
-    if (left + listRect.width >= bodyRect.width) {
-        left = bodyRect.width - listRect.width - space;
+
+    if (viewRect.left <= bodyRect.width / 2) {
+        if (viewRect.left + listRect.width <= bodyRect.width) {
+            return viewRect.left;
+        }
+    } else {
+        const rightAlignLeft = viewRect.left + viewRect.width - listRect.width;
+        if (rightAlignLeft >= 0) {
+            return rightAlignLeft;
+        }
     }
-    return left;
+
+    if (listRect.width < bodyRect.width) {
+        return Math.round((bodyRect.width - listRect.width) / 2);
+    }
+
+    return 0;
 };
 
 const layout = () => {
@@ -525,10 +476,15 @@ const layout = () => {
 
     // update list min/max width
     // console.log('list,view width', listRect.width, viewRect.width);
-    lst.minWidth = `${viewRect.width}px`;
     const maxWidth = Math.min(350, bodyRect.width);
     // console.log('maxWidth', maxWidth, bodyRect.width);
     lst.maxWidth = `${maxWidth}px`;
+
+    if (viewRect.width < maxWidth) {
+        lst.minWidth = `${viewRect.width}px`;
+    } else {
+        lst.minWidth = '';
+    }
 
     nextTick(() => {
         const listRect = getRect($list);
@@ -544,7 +500,7 @@ const layout = () => {
         lst.top = `${top}px`;
 
         // selected element.scrollIntoView();
-        const $selected = $list.querySelector('.vui-select-item.selected');
+        const $selected = $list.querySelector('.vui-select-selected');
         if ($selected) {
             // scrollIntoView cased whole page scroll if body scrollable
             // $selected.scrollIntoView();
@@ -578,18 +534,32 @@ const open = () => {
 // then click body will trigger focus and blur, that not make sense
 const openAsync = microtask(open);
 
+const updateLayout = microtask(() => {
+    if (props.disabled) {
+        return;
+    }
+
+    if (!$el) {
+        return;
+    }
+
+    if (data.shouldOpen && !data.isOpen) {
+        openAsync();
+        return;
+    }
+
+    if (!data.isOpen) {
+        return;
+    }
+
+    layout();
+
+});
+
 // =========================================================================================================
 
 const onClick = (e) => {
-    open();
-};
-
-const onInput = (e) => {
-    data.searchValue = data.viewLabel;
-    if (!data.isOpen) {
-        open();
-    }
-    emit('search', e);
+    openAsync();
 };
 
 const onFocus = (e) => {
@@ -602,11 +572,57 @@ const onFocus = (e) => {
 
 const onBlur = (e) => {
     // console.log(cid, 'blur');
-    data.searchValue = null;
     closeAsync();
     unbindKeyEvents();
 
     emit('blur');
+};
+
+
+// =========================================================================================================
+
+const updateSelected = (item) => {
+    if (!item) {
+        return;
+    }
+    data.list.forEach((it, i) => {
+        it.selected = false;
+    });
+    item.selected = true;
+};
+
+const updateValue = (item) => {
+    if (!item) {
+        return;
+    }
+    data.viewLabel = item.label;
+    const nv = props.index ? item.index : item.value;
+    if (mv.value !== nv) {
+        mv.value = nv;
+    }
+};
+
+const initSelectedItem = () => {
+
+    const item = data.list.find((it) => {
+        return props.index ? it.index === mv.value : it.value === mv.value;
+    });
+
+    if (item) {
+        data.selectedIndex = item.index;
+        data.selectedLabel = item.label;
+        data.selectedValue = item.value;
+    } else {
+        data.selectedIndex = -1;
+        data.selectedLabel = '';
+        data.selectedValue = null;
+    }
+
+    // console.log(cid, 'initSelectedItem', item, data.selectedIndex);
+
+    updateSelected(item);
+    updateValue(item);
+
 };
 
 // =========================================================================================================
@@ -651,15 +667,14 @@ const getListFromSlot = (ls) => {
     };
 
     ls = ls.map((vn) => {
-        const item = vn.props || {};
+        const item = {
+            ... (vn.props || {})
+        };
         if (!hasOwn(item, 'label')) {
             item.label = getChildrenLabel(vn.children);
         }
         if (!hasOwn(item, 'value')) {
             item.value = item.label;
-        }
-        if (hasOwn(item, 'removable')) {
-            item.removable = true;
         }
         return item;
     });
@@ -668,82 +683,6 @@ const getListFromSlot = (ls) => {
 };
 
 
-// =========================================================================================================
-
-const updateLayout = microtask(() => {
-    if (props.disabled) {
-        return;
-    }
-
-    if (!$el) {
-        return;
-    }
-
-    if (data.shouldOpen && !data.isOpen) {
-        openAsync();
-        return;
-    }
-
-    if (!data.isOpen) {
-        return;
-    }
-
-    layout();
-
-});
-
-// =========================================================================================================
-
-const updateSelectedItem = () => {
-
-    if (!isList(data.list)) {
-        return;
-    }
-    data.list.forEach((it, i) => {
-        it.selected = false;
-    });
-    const selectedItem = data.list.find((it) => it.value === data.selectedValue);
-    if (selectedItem) {
-        selectedItem.selected = true;
-    }
-};
-
-const initSelectedItem = () => {
-
-    const item = props.index ? data.list[data.value] : data.list.find((it) => it.value === data.value);
-
-    if (item) {
-        data.selectedIndex = item.index;
-        data.selectedLabel = item.label;
-        data.selectedValue = item.value;
-    } else {
-        data.selectedIndex = -1;
-        data.selectedLabel = '';
-        data.selectedValue = null;
-    }
-
-    // console.log(cid, 'initSelectedItem', item, data.selectedIndex);
-
-    updateSelectedItem();
-
-};
-
-// get max label for list only first time
-const initMaxLabel = () => {
-
-    if (data.maxLabel) {
-        return;
-    }
-
-    let maxLabel = '';
-    data.list.forEach((it) => {
-        if (it.label && it.label.length > maxLabel.length) {
-            maxLabel = it.label;
-        }
-    });
-    data.maxLabel = maxLabel || ' ';
-};
-
 const initList = () => {
 
     const list = props.options ? getListFromProps(props.options) : getListFromSlot(getSlot(slots));
@@ -751,7 +690,6 @@ const initList = () => {
     // for selectedIndex
     list.forEach((item, i) => {
         item.index = i;
-        item.value = toStr(item.value);
     });
 
     // console.log('initList', cid, data.list);
@@ -772,42 +710,12 @@ const update = microtask(() => {
     $list = $options.querySelector('.vui-select-list');
 
     initList();
-    initMaxLabel();
-});
-
-watchEffect(() => {
-    const v = mv.value === null ? props.value : mv.value;
-    data.value = props.index ? toNum(v) : toStr(v);
 });
 
 watch([
-    () => data.viewLabel,
-    () => data.maxLabel
-], () => {
-
-
-    // fixed width or already calculated
-    if (props.width) {
-        data.widthLabel = data.viewLabel || ' ';
-        return;
-    }
-
-    data.widthLabel = data.maxLabel || ' ';
-
-});
-
-watch(() => data.value, (v) => {
-    initSelectedItem();
-    mv.value = v;
-    emit('change', v);
-});
-
-
-watchEffect(() => {
-    data.viewLabel = props.searchable && data.searchValue !== null ? data.searchValue : data.selectedLabel;
-});
-
-watch(() => props.options, (v) => {
+    mv,
+    () => props.options
+], (v) => {
     update();
 });
 
@@ -847,71 +755,47 @@ defineExpose({
 }
 
 .vui-select-view {
-    --vui-select-min-width: 50px;
+    --vui-select-min-width: 42px;
     --vui-select-max-width: 350px;
-    --vui-select-padding: 5px 24px 5px 8px;
+    --vui-select-padding: 6px 16px 6px 8px;
     --vui-select-font-size: inherit;
 
     position: relative;
     min-width: var(--vui-select-min-width);
     max-width: var(--vui-select-max-width);
+    padding: var(--vui-select-padding);
     font-weight: normal;
+    font-size: var(--vui-select-font-size);
+    line-height: 100%;
+    white-space: nowrap;
     text-overflow: ellipsis;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background-image: url("../images/select.svg");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 8px 10px;
+    background-clip: padding-box;
+    cursor: pointer;
+    overflow: hidden;
+    appearance: none;
+    user-select: none;
+    transition: var(--vui-color-transition);
 
-    span {
-        position: relative;
-        display: inline-block;
-        min-width: 2px;
-        max-width: var(--vui-select-max-width);
-        padding: var(--vui-select-padding);
-        font-size: var(--vui-select-font-size);
-        white-space: pre;
-        border: 1px solid transparent;
-        border-radius: 5px;
-        opacity: 0;
-        user-select: none;
-        pointer-events: none;
+    &.vui-select-disabled {
+        color: gray;
+        border: 1px solid #ccc;
+        background-image: url("../images/select-disabled.svg");
+        cursor: default;
     }
 
-    input {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        padding: var(--vui-select-padding);
-        font-size: var(--vui-select-font-size);
-        border: 1px solid #aaa;
-        border-radius: 5px;
-        background-image: url("../images/select.svg");
-        background-repeat: no-repeat;
-        background-position: right 8px center;
-        background-size: 8px 10px;
-        background-clip: padding-box;
-        cursor: pointer;
-        appearance: none;
-        user-select: none;
-        transition: var(--vui-color-transition);
+    &:not(.vui-select-disabled):hover {
+        border: 1px solid #888;
+    }
 
-        &:disabled {
-            color: gray;
-            border: 1px solid #ccc;
-            background-image: url("../images/select-disabled.svg");
-            cursor: default;
-        }
-
-        &:not(:disabled):hover {
-            border: 1px solid #888;
-        }
-
-        &:not(:disabled):focus {
-            outline: 1px solid var(--vui-neutral-60);
-            outline-offset: -1px;
-        }
-
-        &.vui-select-search {
-            cursor: text;
-        }
+    &:not(.vui-select-disabled):focus {
+        outline: 1px solid var(--vui-neutral-60);
+        outline-offset: -1px;
     }
 }
 
@@ -942,18 +826,6 @@ defineExpose({
     overflow: hidden;
 }
 
-.vui-select-item-remove {
-    position: relative;
-    color: #000;
-    visibility: hidden;
-    cursor: pointer;
-    opacity: 0.6;
-
-    &:hover {
-        opacity: 1;
-    }
-}
-
 .vui-select-item {
     position: relative;
     display: flex;
@@ -961,33 +833,25 @@ defineExpose({
     gap: 8px;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 8px;
+    padding: 6px 8px;
     color: #555;
     font-size: var(--vui-select-font-size);
     cursor: pointer;
 
     &:hover {
         background: #e8e8e8;
-
-        .vui-select-item-remove {
-            visibility: visible;
-        }
     }
 
     &:not(:last-child) {
         border-bottom: 1px solid #eee;
     }
 
-    &.selected {
+    &.vui-select-selected {
         color: #fff;
         background: #666;
-
-        .vui-select-item-remove {
-            color: #fff;
-        }
     }
 
-    &.selected:hover {
+    &.vui-select-selected:hover {
         background: #555;
     }
 }

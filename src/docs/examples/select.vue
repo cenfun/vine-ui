@@ -20,7 +20,6 @@
           v-model="data.value"
           label="slot options auto:"
           width="auto"
-          @remove="onSelectRemove"
         >
           <option value="">
             empty value
@@ -32,9 +31,8 @@
           </option>
           <option>text</option>
           <option
-            label="attr removable"
+            label="attr"
             value="attr"
-            removable
           />
           <option selected>
             One
@@ -153,32 +151,6 @@
           :options="data.list"
         />
       </VuiFlex>
-
-      <VuiFlex
-        gap="10px"
-        wrap
-        align="space-between"
-      >
-        <VuiSelect
-          v-model="data.value"
-          label="search:"
-          :options="data.results"
-          :searchable="true"
-          @search="onSelectSearch"
-          @remove="onSelectRemove"
-        />
-        <VuiSelect
-          v-model="data.value"
-          label="search auto < 200:"
-          width="auto"
-          max-width="200px"
-          :options="data.results"
-          :searchable="true"
-          :select-on-focus="false"
-          tooltip="select-on-focus=false and no @search event"
-          @remove="onSelectRemove"
-        />
-      </VuiFlex>
     </VuiFlex>
   </VuiFlex>
 </template>
@@ -227,44 +199,5 @@ const data = reactive({
 watch(() => data.visible, (v) => {
     sessionStorage.setItem('vui-select-visible', v);
 });
-
-const onSelectSearch = (e) => {
-
-    // console.log(e);
-    const value = e.target.value;
-    if (!value) {
-        return;
-    }
-
-    const len = Math.ceil(30 * Math.random());
-    const results = [];
-    let i = 0;
-    while (i < len) {
-        const ls = [value];
-        ls.length = Math.ceil(12 * Math.random());
-        const str = ls.join(' Text');
-        results.push({
-            // only label
-            label: `${i + 1}, ${str}`,
-            removable: true
-        });
-        i++;
-    }
-    data.results = results;
-
-    // console.log(v);
-};
-
-const onSelectRemove = (item) => {
-    console.log('onSelectRemove', item);
-    const v = item.value;
-    data.results = data.results.filter((it) => {
-        // no value here
-        if (it.label === v) {
-            return false;
-        }
-        return true;
-    });
-};
 
 </script>
