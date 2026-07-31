@@ -463,8 +463,6 @@ defineExpose({
     gap: 3px;
     color: #1e1e1e;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 100%;
 
     label {
         position: relative;
@@ -479,11 +477,10 @@ defineExpose({
     gap: 5px;
     justify-content: space-between;
     align-items: center;
-    min-height: 30px;
+    min-height: var(--vui-min-height);
     padding: 3px 5px;
     color: #495057;
     font-weight: 400;
-    font-size: 14px;
     border: 1px solid #aaa;
     border-radius: 5px;
     background-color: #fff;
@@ -544,7 +541,6 @@ defineExpose({
 .vui-multi-select-panel {
     max-height: 300px;
     color: #1e1e1e;
-    font-size: 14px;
     background-color: #fff;
     overflow: hidden auto;
 }
@@ -556,7 +552,6 @@ defineExpose({
 .vui-multi-select-group-name {
     padding: 6px 8px 4px;
     font-weight: 600;
-    font-size: 14px;
     cursor: pointer;
 }
 
@@ -624,7 +619,6 @@ defineExpose({
     padding: 2px 5px;
     color: #5e5e5e;
     font-weight: 400;
-    font-size: 14px;
     border: solid 1px #ccc;
     border-radius: 5px;
     background-color: var(--vui-neutral-5);
@@ -634,7 +628,7 @@ defineExpose({
     display: flex;
     gap: 5px;
     align-items: center;
-    font-size: 12px;
+    font-size: var(--vui-font-size-s);
 }
 
 </style>

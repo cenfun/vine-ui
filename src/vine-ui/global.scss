@@ -1,11 +1,14 @@
 :root {
     --vui-color-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
     --vui-opacity-transition: opacity 0.15s ease-in-out;
+    --vui-min-height: 28px;
 
     /** font */
     --vui-font-size-s: 12px;
     --vui-font-size: 14px;
     --vui-font-size-l: 16px;
+    --vui-font-size-xl: 18px;
+    --vui-font-size-xxl: 20px;
 
     /** neutral */
     --vui-neutral-0: #fff;

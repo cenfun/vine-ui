@@ -270,9 +270,9 @@ defineExpose({
     .vui-input-icon {
         position: absolute;
         top: 50%;
+        z-index: 1;
         transform: translateY(-50%);
         pointer-events: none;
-        z-index: 1;
     }
 
     .vui-input-icon-clickable {
@@ -290,9 +290,9 @@ defineExpose({
 
     .vui-input-icon-clear {
         right: 7px;
+        z-index: 2;
         cursor: pointer;
         pointer-events: auto;
-        z-index: 2;
 
         &:hover {
             opacity: 0.7;
@@ -306,6 +306,7 @@ defineExpose({
     input {
         display: inline-block;
         width: 100%;
+        min-height: var(--vui-min-height);
         padding: 5px;
         color: #495057;
         font-weight: 400;

@@ -210,11 +210,10 @@ defineExpose({
     justify-content: center;
     align-items: center;
     min-width: 80px;
-    padding: 6px 12px;
+    min-height: var(--vui-min-height);
+    padding: 3px 12px;
     color: #5e5e5e;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 100%;
     text-align: center;
     text-overflow: ellipsis;
     border: 1px solid #808080;

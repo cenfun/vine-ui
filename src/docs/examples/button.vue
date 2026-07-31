@@ -31,14 +31,24 @@
     </VuiButton>
 
     <VuiButton width="120px">
-      width: 120px Button
+      <span>width: 120px Button</span>
+    </VuiButton>
+
+    <VuiButton>
+      <VuiIcon icon="info" /> Info
+    </VuiButton>
+
+    <VuiButton round>
+      Arrow<VuiIcon icon="arrow-down" />
     </VuiButton>
   </VuiFlex>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import { VuiButton, VuiFlex } from '../vine-ui.js';
+import {
+    VuiButton, VuiFlex, VuiIcon
+} from '../vine-ui.js';
 
 const count = ref(0);
 

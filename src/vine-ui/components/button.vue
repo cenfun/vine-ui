@@ -22,34 +22,30 @@ const cid = getCID('VuiButton');
 const props = defineProps({
 
     /** Button text content */
-
-
     label: {
         type: String,
         default: ''
     },
 
     /** Use primary style (blue background) */
-
-
     primary: {
         type: Boolean,
         default: false
     },
 
-    /** Button type attribute (button,
- submit,
- reset) */
+    /** Use round style */
+    round: {
+        type: Boolean,
+        default: false
+    },
 
-
+    /** Button type attribute (button, submit, reset) */
     type: {
         type: String,
         default: 'button'
     },
 
     /** Button width (supports px or number) */
-
-
     width: {
         type: [String, Number],
         default: ''
@@ -74,6 +70,9 @@ const classList = computed(() => {
     if (props.primary) {
         ls.push('vui-button-primary');
     }
+    if (props.round) {
+        ls.push('vui-button-round');
+    }
     return ls;
 });
 
@@ -93,21 +92,19 @@ defineExpose({
 @use "../global.scss";
 
 .vui-button {
-    display: inline-block;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
     min-width: 16px;
     max-width: 200px;
+    min-height: var(--vui-min-height);
     padding: 5px 8px;
     color: #6c757d;
     font-weight: 400;
-    line-height: 1;
-    white-space: nowrap;
-    text-align: center;
-    text-overflow: ellipsis;
-    vertical-align: middle;
     border: 1px solid #6c757d;
     border-radius: 5px;
     background-color: #f5f5f5;
-    overflow: hidden;
     user-select: none;
     transition: var(--vui-color-transition);
 
@@ -151,6 +148,11 @@ defineExpose({
             background-color: #6c757d;
             opacity: 0.65;
         }
+    }
+
+    &.vui-button-round {
+        padding: 5px 12px;
+        border-radius: 24px;
     }
 }
 </style>

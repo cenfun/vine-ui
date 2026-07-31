@@ -45,6 +45,14 @@
         <div>Item C</div>
       </VuiButtonGroup>
       <div>Selected index: {{ index2 }}</div>
+
+      <VuiButtonGroup v-model="index2">
+        <div>Item A</div>
+      </VuiButtonGroup>
+      <VuiButtonGroup v-model="index2">
+        <div>Item A</div>
+        <div>Item B</div>
+      </VuiButtonGroup>
     </VuiFlex>
   </VuiFlex>
 </template>

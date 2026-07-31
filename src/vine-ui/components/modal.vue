@@ -206,7 +206,7 @@ defineExpose({
     height: 40px;
     margin-top: -15px;
     margin-right: -15px;
-    font-size: 20px;
+    font-size: var(--vui-font-size-xxl);
     line-height: 40px;
     text-align: center;
     border-radius: 20px;
@@ -249,7 +249,7 @@ defineExpose({
     margin-bottom: 10px;
     padding-bottom: 10px;
     font-weight: bold;
-    font-size: 18px;
+    font-size: var(--vui-font-size-xl);
     border-bottom: 2px solid #333;
 }
 

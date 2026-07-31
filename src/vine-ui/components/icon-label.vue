@@ -153,9 +153,6 @@ defineExpose({
 }
 
 .vui-icon-label-text {
-    color: inherit;
-    font-size: inherit;
-    line-height: 1;
     white-space: nowrap;
     user-select: none;
 }

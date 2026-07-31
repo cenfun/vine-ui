@@ -542,7 +542,7 @@ defineExpose({
 
         .vui-popover-title {
             font-weight: bold;
-            font-size: 16px;
+            font-size: var(--vui-font-size-l);
         }
     }
 
