@@ -152,6 +152,7 @@ defineExpose({
     --vui-icon-color: inherit;
 
     position: relative;
+    flex-shrink: 0;
     width: var(--vui-icon-width);
     height: var(--vui-icon-height);
     margin: 0;

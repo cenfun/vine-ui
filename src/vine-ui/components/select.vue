@@ -16,8 +16,11 @@
       @focus="onFocus"
       @blur="onBlur"
     >
-      {{ data.viewLabel }}
-      <span>&nbsp;</span>
+      <span>{{ data.viewLabel }}</span>
+      <Icon
+        icon="arrow-select"
+        size="10px"
+      />
     </div>
     <div class="vui-select-options">
       <div
@@ -49,6 +52,8 @@ import {
     onUnmounted
 } from 'vue';
 import { microtask } from 'async-tick';
+
+import Icon from './icon.vue';
 
 import {
     hasOwn, isList, autoPx, bindEvents, unbindEvents, getCID, getSlot, vInit
@@ -757,35 +762,38 @@ defineExpose({
 .vui-select-view {
     --vui-select-min-width: 42px;
     --vui-select-max-width: 350px;
-    --vui-select-padding: 6px 16px 6px 8px;
+    --vui-select-padding: 3px 8px;
     --vui-select-font-size: inherit;
 
     position: relative;
+    display: flex;
+    gap: 3px;
+    justify-content: space-between;
+    align-items: center;
     min-width: var(--vui-select-min-width);
     max-width: var(--vui-select-max-width);
+    min-height: var(--vui-min-height);
     padding: var(--vui-select-padding);
-    font-weight: normal;
-    font-size: var(--vui-select-font-size);
-    line-height: 100%;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     border: 1px solid #aaa;
     border-radius: 5px;
-    background-image: url("../images/select.svg");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 8px 10px;
-    background-clip: padding-box;
     cursor: pointer;
     overflow: hidden;
     appearance: none;
     user-select: none;
     transition: var(--vui-color-transition);
 
+    span {
+        flex: auto 1 1;
+        font-weight: normal;
+        font-size: var(--vui-select-font-size);
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
     &.vui-select-disabled {
         color: gray;
         border: 1px solid #ccc;
-        background-image: url("../images/select-disabled.svg");
         cursor: default;
     }
 
