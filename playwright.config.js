@@ -1,8 +1,8 @@
-const { defineConfig, devices } = require('@playwright/test');
+import { defineConfig, devices } from '@playwright/test';
 
 const baseURL = 'http://localhost:8080/';
 
-module.exports = defineConfig({
+export default defineConfig({
     use: {
         baseURL
     },
@@ -10,7 +10,7 @@ module.exports = defineConfig({
     outputDir: '.temp/e2e',
 
     webServer: {
-        command: 'sf dev app --silent',
+        command: 'npx vite --port 8080',
         url: baseURL,
         reuseExistingServer: !process.env.CI
     },

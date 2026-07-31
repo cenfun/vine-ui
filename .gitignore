@@ -3,4 +3,5 @@
 /.temp/
 /dist/
 /public/dist/
-/packages/*/dist/
+/docs
+/.codegraph

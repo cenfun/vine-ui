@@ -1,0 +1,80 @@
+:root {
+    --vui-color-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+    --vui-opacity-transition: opacity 0.15s ease-in-out;
+
+    /** font */
+    --vui-font-size-s: 12px;
+    --vui-font-size: 14px;
+    --vui-font-size-l: 16px;
+
+    /** neutral */
+    --vui-neutral-0: #fff;
+    --vui-neutral-1: #fcfcfc;
+    --vui-neutral-2: #fafafa;
+    --vui-neutral-3: #f7f7f7;
+    --vui-neutral-5: #f5f4f4;
+    --vui-neutral-8: #efeeed;
+    --vui-neutral-10: #eae9e8;
+    --vui-neutral-20: #bbbab8;
+    --vui-neutral-30: #9c9a99;
+    --vui-neutral-40: #7e7c79;
+    --vui-neutral-50: #63615e;
+    --vui-neutral-60: #4d4b49;
+    --vui-neutral-70: #3c3a38;
+    --vui-neutral-80: #2c2b2a;
+    --vui-neutral-90: #1a1918;
+    --vui-neutral-100: #000;
+
+    /** blue */
+    --vui-blue-10: #dfeaf9;
+    --vui-blue-20: #9ebce6;
+    --vui-blue-30: #6fa1e3;
+    --vui-blue-40: #457ed1;
+    --vui-blue-50: #1f63bd;
+    --vui-blue-60: #174f9e;
+    --vui-blue-70: #0c3d7f;
+    --vui-blue-80: #092d5f;
+    --vui-blue-90: #071831;
+
+    /** green */
+    --vui-green-10: #dff1de;
+    --vui-green-20: #97d49b;
+    --vui-green-30: #69c573;
+    --vui-green-40: #33b74a;
+    --vui-green-50: #00992f;
+    --vui-green-60: #007d26;
+    --vui-green-70: #0c6120;
+    --vui-green-80: #08461a;
+    --vui-green-90: #06210c;
+
+    /** yellow */
+    --vui-yellow-10: #fff4d9;
+    --vui-yellow-20: #ffe3a5;
+    --vui-yellow-30: #ffda86;
+    --vui-yellow-40: #ffd15b;
+    --vui-yellow-50: #ffc722;
+    --vui-yellow-60: #e5b10a;
+    --vui-yellow-70: #b69024;
+    --vui-yellow-80: #806828;
+    --vui-yellow-90: #2c2309;
+
+    /** red */
+    --vui-red-10: #ffe2de;
+    --vui-red-20: #faa79b;
+    --vui-red-30: #ff7d6d;
+    --vui-red-40: #fd493a;
+    --vui-red-50: #e9210e;
+    --vui-red-60: #c01908;
+    --vui-red-70: #902013;
+    --vui-red-80: #651b13;
+    --vui-red-90: #31120d;
+}
+
+.vui,
+.vui *,
+.vui *::before,
+.vui *::after {
+    box-sizing: border-box;
+    font-size: var(--vui-font-size);
+    font-family: inherit;
+}
