@@ -99,6 +99,7 @@ defineExpose({
     padding: 5px 8px;
     color: #6c757d;
     font-weight: 400;
+    line-height: 1;
     white-space: nowrap;
     text-align: center;
     text-overflow: ellipsis;
