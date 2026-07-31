@@ -17,9 +17,11 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "build:docs": "vite build --mode docs",
         "test": "npx playwright test",
-        "patch": "npm run build && sf publish patch"
+        "version": "npm run build",
+        "publish": "node ./scripts/publish.js",
+        "docs": "vite build --mode docs",
+        "docs:preview": "vite preview --mode docs"
     },
     "files": [
         "dist"
