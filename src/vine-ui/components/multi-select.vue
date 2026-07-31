@@ -28,7 +28,10 @@
             class="vui-multi-select-selected-close"
             @click.stop="onItemRemove(item)"
           >
-            <Icon icon="close" />
+            <Icon
+              icon="close"
+              size="12px"
+            />
           </div>
         </div>
       </div>
@@ -477,7 +480,7 @@ defineExpose({
     justify-content: space-between;
     align-items: center;
     min-height: 30px;
-    padding: 5px;
+    padding: 3px 5px;
     color: #495057;
     font-weight: 400;
     font-size: 14px;
@@ -616,27 +619,22 @@ defineExpose({
 
 .vui-multi-select-selected-item {
     display: flex;
+    gap: 5px;
     align-items: center;
+    padding: 2px 5px;
     color: #5e5e5e;
     font-weight: 400;
     font-size: 14px;
     border: solid 1px #ccc;
     border-radius: 5px;
     background-color: var(--vui-neutral-5);
-
-    > div {
-        padding: 5px;
-
-        &:not(:last-child) {
-            padding-right: 2px;
-        }
-    }
 }
 
 .vui-multi-select-selected-name {
     display: flex;
     gap: 5px;
     align-items: center;
+    font-size: 12px;
 }
 
 </style>
