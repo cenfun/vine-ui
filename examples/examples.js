@@ -47,4 +47,18 @@ paths.forEach((path) => {
 
 const examples = Object.values(map);
 
+examples.sort((a, b) => {
+    return a.path.localeCompare(b.path);
+});
+
+examples.forEach((item) => {
+    item.list.sort((a, b) => {
+        // remove .vue
+        return a.path.slice(0, -4).localeCompare(b.path.slice(0, -4));
+    });
+    // console.log('item', item.path, item.list.map((i) => i.path));
+});
+
+// console.log('examples', examples);
+
 export default examples;

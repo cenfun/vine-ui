@@ -10,7 +10,6 @@ import VuiInput from './components/input.vue';
 import VuiLayout from './components/layout.vue';
 import VuiLoading from './components/loading.vue';
 import VuiModal from './components/modal.vue';
-import VuiMultiSelect from './components/multi-select.vue';
 import VuiPopover from './components/popover.vue';
 import VuiProgress from './components/progress.vue';
 import VuiRadio from './components/radio.vue';
@@ -43,7 +42,6 @@ export {
     VuiLayout,
     VuiLoading,
     VuiModal,
-    VuiMultiSelect,
     VuiPopover,
     VuiProgress,
     VuiRadio,

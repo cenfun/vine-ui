@@ -16,7 +16,31 @@
       @focus="onFocus"
       @blur="onBlur"
     >
-      <span>{{ data.viewLabel }}</span>
+      <template v-if="props.multiple">
+        <div class="vui-select-selected-list">
+          <div
+            v-for="(item, ii) in data.selectedList"
+            :key="ii"
+            class="vui-select-selected-item"
+          >
+            <div class="vui-select-selected-name">
+              {{ item.label || item.value }}
+            </div>
+            <div
+              class="vui-select-selected-close"
+              @click.stop="onSelectedItemRemove(item)"
+            >
+              <Icon
+                icon="close"
+                size="12px"
+              />
+            </div>
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <span>{{ data.viewLabel }}</span>
+      </template>
       <Icon
         icon="arrow-select"
         size="10px"
@@ -24,18 +48,23 @@
     </div>
     <div class="vui-select-options">
       <div
-        class="vui vui-select-list"
+        :class="['vui vui-select-list', props.multiple ? 'vui-select-list-multiple' : '']"
         :style="listStyle"
       >
         <div
           v-for="(item, ii) in data.list"
           :key="ii"
-          :class="['vui-select-item', item.selected?'vui-select-selected':'']"
-          @mousedown="onItemClick(item)"
+          :class="['vui-select-item', item.selected?'vui-select-selected':'', props.multiple && item.index === data.selectedIndex ? 'vui-select-active' : '']"
+          @mousedown="onItemClick(item, $event)"
         >
           <div class="vui-select-item-label">
             {{ item.label }}
           </div>
+          <Icon
+            v-if="props.multiple"
+            icon="selected"
+            size="14px"
+          />
         </div>
       </div>
     </div>
@@ -109,12 +138,18 @@ const props = defineProps({
     index: {
         type: Boolean,
         default: false
+    },
+
+    /** Enable multiple selection */
+    multiple: {
+        type: Boolean,
+        default: false
     }
 
 });
 
 const mv = defineModel({
-    type: [String, Number, Boolean],
+    type: [String, Number, Boolean, Array],
     default: null
 });
 
@@ -137,7 +172,10 @@ const data = reactive({
     // label for view display
     selectedLabel: '',
     // value for selected item class
-    selectedValue: null
+    selectedValue: null,
+
+    // selected items for multiple mode
+    selectedList: []
 
 });
 
@@ -287,7 +325,10 @@ const keyArrowHandler = (e, offset) => {
 
     data.selectedIndex = index;
     data.selectedValue = item.value;
-    updateSelected(item);
+
+    if (!props.multiple) {
+        updateSelected(item);
+    }
 
     scrollIntoViewAsync(offset);
 };
@@ -296,7 +337,7 @@ const scrollIntoViewAsync = microtask((offset) => {
     if (!$list) {
         return;
     }
-    const target = $list.querySelector('.vui-select-selected');
+    const target = $list.querySelector('.vui-select-selected, .vui-select-active');
     if (!target) {
         return;
     }
@@ -319,6 +360,14 @@ const keyEnterHandler = (e) => {
     }
 
     const item = data.list[data.selectedIndex];
+
+    if (props.multiple) {
+        if (item) {
+            updateSelected(item);
+            updateValue(item);
+        }
+        return;
+    }
 
     updateSelected(item);
     updateValue(item);
@@ -348,9 +397,14 @@ const bindKeyEvents = () => {
 
 // =========================================================================================================
 
-const onItemClick = (item) => {
+const onItemClick = (item, e) => {
 
     // console.log(cid, 'item click');
+
+    if (props.multiple) {
+        // keep focus on view so the list stays open for the next selection
+        e?.preventDefault();
+    }
 
     data.selectedIndex = item.index;
     data.selectedLabel = item.label;
@@ -360,7 +414,9 @@ const onItemClick = (item) => {
     updateSelected(item);
     updateValue(item);
 
-    close();
+    if (!props.multiple) {
+        close();
+    }
 
 };
 
@@ -586,8 +642,25 @@ const onBlur = (e) => {
 
 // =========================================================================================================
 
+const updateSelectedList = () => {
+    data.selectedList = data.list.filter((it) => it.selected).sort((a, b) => a.index - b.index);
+    mv.value = data.selectedList.map((it) => (props.index ? it.index : it.value));
+};
+
+const onSelectedItemRemove = (item) => {
+    if (props.disabled) {
+        return;
+    }
+    item.selected = false;
+    updateSelectedList();
+};
+
 const updateSelected = (item) => {
     if (!item) {
+        return;
+    }
+    if (props.multiple) {
+        item.selected = !item.selected;
         return;
     }
     data.list.forEach((it, i) => {
@@ -600,6 +673,10 @@ const updateValue = (item) => {
     if (!item) {
         return;
     }
+    if (props.multiple) {
+        updateSelectedList();
+        return;
+    }
     data.viewLabel = item.label;
     const nv = props.index ? item.index : item.value;
     if (mv.value !== nv) {
@@ -608,6 +685,23 @@ const updateValue = (item) => {
 };
 
 const initSelectedItem = () => {
+
+    if (props.multiple) {
+        const selectedValues = isList(mv.value) ? mv.value : [];
+        data.list.forEach((it) => {
+            const v = props.index ? it.index : it.value;
+            it.selected = selectedValues.includes(v);
+        });
+        data.selectedList = data.list.filter((it) => it.selected).sort((a, b) => a.index - b.index);
+        data.viewLabel = '';
+        data.selectedLabel = '';
+        data.selectedValue = null;
+        if (data.selectedIndex < 0 || data.selectedIndex >= data.list.length) {
+            const firstSelected = data.selectedList[0];
+            data.selectedIndex = firstSelected ? firstSelected.index : 0;
+        }
+        return;
+    }
 
     const item = data.list.find((it) => {
         return props.index ? it.index === mv.value : it.value === mv.value;
@@ -690,7 +784,7 @@ const getListFromSlot = (ls) => {
 
 const initList = () => {
 
-    const list = props.options ? getListFromProps(props.options) : getListFromSlot(getSlot(slots));
+    const list = isList(props.options) ? getListFromProps(props.options) : getListFromSlot(getSlot(slots));
 
     // for selectedIndex
     list.forEach((item, i) => {
@@ -713,13 +807,18 @@ const update = microtask(() => {
     $view = $el.querySelector('.vui-select-view');
     $options = $el.querySelector('.vui-select-options');
     $list = $options.querySelector('.vui-select-list');
+    if (!$list) {
+        // list is appended to document.body while open
+        $list = document.body.querySelector('.vui-select-list');
+    }
 
     initList();
 });
 
 watch([
     mv,
-    () => props.options
+    () => props.options,
+    () => props.multiple
 ], (v) => {
     update();
 });
@@ -861,6 +960,70 @@ defineExpose({
 
     &.vui-select-selected:hover {
         background: #555;
+    }
+}
+
+.vui-select-selected-list {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.vui-select-selected-item {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    max-width: 100%;
+    padding: 1px 5px;
+    color: #5e5e5e;
+    font-size: var(--vui-font-size-s);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--vui-neutral-5);
+}
+
+.vui-select-selected-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vui-select-selected-close {
+    display: flex;
+    flex-shrink: 0;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: var(--vui-opacity-transition);
+}
+
+.vui-select-selected-close:hover {
+    opacity: 1;
+}
+
+.vui-select-list-multiple .vui-select-item {
+    .vui-icon {
+        display: none;
+    }
+
+    &.vui-select-selected {
+        color: var(--vui-blue-50);
+        background: transparent;
+
+        .vui-icon {
+            display: block;
+        }
+    }
+
+    &.vui-select-selected:hover {
+        background: #e8e8e8;
+    }
+
+    &.vui-select-active {
+        background: #e8e8e8;
     }
 }
 </style>

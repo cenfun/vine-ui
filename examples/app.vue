@@ -80,7 +80,7 @@ provide('tooltip', tooltip);
 
 onMounted(() => {
 
-    console.log('examples', examples);
+    // console.log('examples', examples);
 
     new FPSDetector('.fps-detector');
 

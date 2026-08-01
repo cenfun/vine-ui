@@ -252,28 +252,6 @@ export interface VuiModalProps {
 export const VuiModal: DefineComponent<VuiModalProps>;
 
 // ============================================================
-// VuiMultiSelect
-// ============================================================
-export interface VuiMultiSelectOption {
-  label?: string;
-  value?: StringOrNumber;
-  options?: VuiMultiSelectOption[];
-}
-export interface VuiMultiSelectProps {
-  /** Multi-select label text */
-  label?: string;
-  /** Disable the multi-select */
-  disabled?: boolean;
-  /** Enable search/filter functionality */
-  searchable?: boolean;
-  /** Search input placeholder text */
-  placeholder?: string;
-  /** Array of options [{label, value}] or grouped [{label, options: [{label, value}]}] */
-  options?: VuiMultiSelectOption[] | null;
-}
-export const VuiMultiSelect: DefineComponent<VuiMultiSelectProps>;
-
-// ============================================================
 // VuiPopover
 // ============================================================
 export interface VuiPopoverProps {
@@ -379,6 +357,8 @@ export interface VuiSelectProps {
   selectOnFocus?: boolean;
   /** If true, v-model binds to option index instead of value */
   index?: boolean;
+  /** Enable multiple selection */
+  multiple?: boolean;
   /** Initial value (used without v-model) */
   value?: StringOrNumber;
 }
