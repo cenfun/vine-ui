@@ -7,27 +7,6 @@
     <title>Vine UI</title>
 </head>
 <body>
-    <script type="module" src="/src/docs/index.js"></script>
-
-    <script>
-        // keep scroll position when reload
-        const storeKey = 'vui-scroll-position';
-        const scrollTarget = document.querySelector('.vui-example-body');
-        if (scrollTarget) {
-            const positionHandler = function(event) {
-                const position = sessionStorage.getItem(storeKey);
-                if (position) {
-                    const ls = position.split(',');
-                    scrollTarget.scrollTo(ls[0], ls[1]);
-                    sessionStorage.removeItem(storeKey);
-                }
-                window.removeEventListener('load', positionHandler);
-            };
-            window.addEventListener('load', positionHandler);
-            window.addEventListener('beforeunload', function(e) {
-                sessionStorage.setItem(storeKey, `${scrollTarget.scrollLeft},${scrollTarget.scrollTop}`);
-            });
-        }
-    </script>
+    <script type="module" src="/examples/index.js"></script>
 </body>
 </html>
