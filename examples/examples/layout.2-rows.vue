@@ -59,7 +59,7 @@ const gutterSize = ref('10px');
 <style lang="scss">
 .vui-layout-custom-gutter {
     .vui-layout-gutter {
-        background-image: url("../../images/gutter.svg");
+        background-image: url("../images/gutter.svg");
         background-repeat: no-repeat;
         background-position: center center;
         background-size: 16px 16px;

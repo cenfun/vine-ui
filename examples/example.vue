@@ -100,7 +100,7 @@
   </div>
 </template>
 <script setup>
-import { isList } from '../vine-ui/utils/util.js';
+import { isList } from '../src/utils/util.js';
 import {
     onMounted, watch, shallowReactive
 } from 'vue';
@@ -110,7 +110,7 @@ import Editor from './utils/editor.js';
 
 import examples from './examples.js';
 
-import metadata from '../../.temp/metadata.json';
+import metadata from '../.temp/metadata.json';
 
 const route = useRoute();
 watch(() => route.path, (v) => {

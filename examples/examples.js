@@ -1,4 +1,4 @@
-import { kebabToPascalCase } from '../vine-ui/utils/util.js';
+import { kebabToPascalCase } from '../src/utils/util.js';
 const modules = import.meta.glob('./examples/**/*.vue', {
     eager: true
 });
