@@ -217,6 +217,9 @@ const scrollToElement = ($elem) => {
 
 const viewClass = computed(() => {
     const cls = ['vui-select-view'];
+    if (props.multiple) {
+        cls.push('vui-select-multiple');
+    }
     if (props.disabled) {
         cls.push('vui-select-disabled');
     }
@@ -898,6 +901,10 @@ defineExpose({
         outline: 1px solid var(--vui-neutral-60);
         outline-offset: -1px;
     }
+}
+
+.vui-select-multiple {
+    padding-left: 5px;
 }
 
 /* list popup */
