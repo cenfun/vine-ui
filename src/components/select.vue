@@ -24,11 +24,12 @@
             class="vui-select-selected-item"
           >
             <div class="vui-select-selected-name">
-              {{ item.label || item.value }}
+              {{ item.label }}
             </div>
             <div
+              v-if="!props.disabled"
               class="vui-select-selected-close"
-              @click.stop="onSelectedItemRemove(item)"
+              @click.stop="onSelectedItemRemove(item, $event)"
             >
               <Icon
                 icon="close"
@@ -167,10 +168,6 @@ const data = reactive({
     lastDirection: 'down',
 
     selectedIndex: -1,
-    // label for view display
-    selectedLabel: '',
-    // value for selected item class
-    selectedValue: null,
 
     // selected items for multiple mode
     selectedList: []
@@ -241,6 +238,118 @@ const viewStyle = computed(() => {
     }
     return st;
 });
+
+// =========================================================================================================
+
+const updateModelValue = () => {
+    if (props.multiple) {
+        const selectedValues = data.selectedList.map((it) => (props.index ? it.index : it.value));
+        mv.value = selectedValues;
+    } else {
+        const item = data.list.find((it) => it.selected);
+        if (item) {
+            mv.value = props.index ? item.index : item.value;
+        } else {
+            mv.value = null;
+        }
+    }
+};
+
+
+const updateAllSelected = (inputValue, uiOnly) => {
+
+    // both for single and multiple mode
+    data.selectedIndex = -1;
+
+    if (props.multiple) {
+        const selectedList = [];
+        if (isList(inputValue)) {
+            data.list.forEach((it, ii) => {
+                const v = props.index ? it.index : it.value;
+                it.selected = inputValue.includes(v);
+                if (it.selected) {
+                    selectedList.push(it);
+                }
+            });
+
+            // first one is selectedIndex
+            if (isList(selectedList)) {
+                data.selectedIndex = selectedList[0].index;
+            }
+
+        }
+        data.selectedList = selectedList;
+
+    } else {
+        data.list.forEach((it, ii) => {
+            it.selected = false;
+        });
+        const item = props.index ? data.list[inputValue] : data.list.find((it) => it.value === inputValue);
+        if (item) {
+            item.selected = true;
+            data.selectedIndex = item.index;
+            data.viewLabel = item.label;
+        }
+    }
+
+    if (!uiOnly) {
+        updateModelValue();
+    }
+
+};
+
+const updateItemSelected = (item) => {
+    if (props.disabled) {
+        return;
+    }
+
+    if (!item) {
+        return;
+    }
+
+    const v = props.index ? item.index : item.value;
+    let inputValue;
+    if (props.multiple) {
+        inputValue = isList(mv.value) ? [].concat(mv.value) : [];
+        if (item.selected) {
+            // unselect
+            inputValue = inputValue.filter((it) => it !== v);
+        } else {
+            // select
+            inputValue.push(v);
+        }
+    } else {
+        // change
+        inputValue = v;
+    }
+
+    updateAllSelected(inputValue);
+};
+
+// =========================================================================================================
+
+const onItemClick = (item, e) => {
+
+    // console.log(cid, 'item click');
+
+    if (props.multiple) {
+        // keep focus on view so the list stays open for the next selection
+        e?.preventDefault();
+    }
+
+    updateItemSelected(item);
+
+    if (!props.multiple) {
+        close();
+    }
+
+};
+
+const onSelectedItemRemove = (item, e) => {
+
+    // console.log(cid, 'onSelectedItemRemove', item);
+    updateItemSelected(item);
+};
 
 // =========================================================================================================
 
@@ -357,6 +466,8 @@ const keyArrowHandler = (e, offset) => {
         startIndex = data.selectedIndex;
     }
 
+    // console.log('keyArrowHandler', startIndex, offset, data.selectedIndex);
+
     const nextIndex = startIndex + offset;
     if (nextIndex < 0 || nextIndex >= len) {
         return;
@@ -375,19 +486,12 @@ const keyEnterHandler = (e) => {
     }
 
     const item = data.list[data.activeIndex];
-    if (item) {
-        if (props.multiple) {
-            if (item) {
-                updateSelected(item);
-                updateValue(item);
-            }
-        } else {
-            updateSelected(item);
-            updateValue(item);
-        }
+    updateItemSelected(item);
+
+    if (!props.multiple) {
+        close();
     }
 
-    close();
 };
 
 const keyEscapeHandler = (e) => {
@@ -408,31 +512,6 @@ const unbindKeyEvents = () => {
 const bindKeyEvents = () => {
     unbindKeyEvents();
     bindEvents(keyEvents, $el);
-};
-
-// =========================================================================================================
-
-const onItemClick = (item, e) => {
-
-    // console.log(cid, 'item click');
-
-    if (props.multiple) {
-        // keep focus on view so the list stays open for the next selection
-        e?.preventDefault();
-    }
-
-    data.selectedIndex = item.index;
-    data.selectedLabel = item.label;
-    data.selectedValue = item.value;
-
-    // console.log(props.label, 'onItemClick', item, data.selectedLabel);
-    updateSelected(item);
-    updateValue(item);
-
-    if (!props.multiple) {
-        close();
-    }
-
 };
 
 // =========================================================================================================
@@ -643,99 +722,11 @@ const onFocus = (e) => {
 };
 
 const onBlur = (e) => {
-    console.log(cid, 'blur');
+    // console.log(cid, 'blur');
     closeAsync();
     unbindKeyEvents();
 
     emit('blur');
-};
-
-
-// =========================================================================================================
-
-const updateSelectedList = () => {
-    data.selectedList = data.list.filter((it) => it.selected).sort((a, b) => a.index - b.index);
-    mv.value = data.selectedList.map((it) => (props.index ? it.index : it.value));
-};
-
-const onSelectedItemRemove = (item) => {
-    if (props.disabled) {
-        return;
-    }
-    item.selected = false;
-    updateSelectedList();
-};
-
-const updateSelected = (item) => {
-    if (!item) {
-        return;
-    }
-    if (props.multiple) {
-        item.selected = !item.selected;
-        return;
-    }
-    data.list.forEach((it, i) => {
-        it.selected = false;
-    });
-    item.selected = true;
-};
-
-const updateValue = (item) => {
-    if (!item) {
-        data.viewLabel = '';
-        return;
-    }
-    if (props.multiple) {
-        updateSelectedList();
-        return;
-    }
-    data.viewLabel = item.label;
-    const nv = props.index ? item.index : item.value;
-    if (mv.value !== nv) {
-        mv.value = nv;
-    }
-};
-
-// =========================================================================================================
-
-const initSelectedItem = () => {
-
-    if (props.multiple) {
-        const selectedValues = isList(mv.value) ? mv.value : [];
-        data.list.forEach((it) => {
-            const v = props.index ? it.index : it.value;
-            it.selected = selectedValues.includes(v);
-        });
-        data.selectedList = data.list.filter((it) => it.selected).sort((a, b) => a.index - b.index);
-        data.viewLabel = '';
-        data.selectedLabel = '';
-        data.selectedValue = null;
-        if (data.selectedIndex < 0 || data.selectedIndex >= data.list.length) {
-            const firstSelected = data.selectedList[0];
-            data.selectedIndex = firstSelected ? firstSelected.index : 0;
-        }
-        return;
-    }
-
-    const item = data.list.find((it) => {
-        return props.index ? it.index === mv.value : it.value === mv.value;
-    });
-
-    if (item) {
-        data.selectedIndex = item.index;
-        data.selectedLabel = item.label;
-        data.selectedValue = item.value;
-    } else {
-        data.selectedIndex = -1;
-        data.selectedLabel = '';
-        data.selectedValue = null;
-    }
-
-    // console.log(cid, 'initSelectedItem', item, data.selectedIndex);
-
-    updateSelected(item);
-    updateValue(item);
-
 };
 
 // =========================================================================================================
@@ -801,10 +792,13 @@ const initList = () => {
     // for selectedIndex
     list.forEach((item, i) => {
         item.index = i;
+        item.selected = false;
     });
     // console.log('initList', cid, list);
     data.list = list;
-    initSelectedItem();
+
+    // ui only, do not update model value, because model value is already set by user
+    updateAllSelected(mv.value, true);
 };
 
 // =========================================================================================================
