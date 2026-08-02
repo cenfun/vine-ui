@@ -26,6 +26,7 @@
       padding="5px"
       margin="10px 0 0 0"
       :align="data.position==='left'?'right':'left'"
+      wrap
     >
       <div>Props:</div>
 

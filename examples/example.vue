@@ -253,7 +253,8 @@ onMounted(() => {
 }
 
 .vui-example-table {
-    min-width: 600px;
+    width: 100%;
+    max-width: 800px;
     border-collapse: collapse;
 
     tr:hover {
@@ -277,8 +278,6 @@ onMounted(() => {
     margin-top: 10px;
 
     .cm-editor {
-        min-width: 600px;
-        max-width: 1200px;
         max-height: 350px;
     }
 

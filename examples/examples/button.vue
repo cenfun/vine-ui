@@ -2,6 +2,7 @@
   <VuiFlex
     gap="10px"
     padding="5px"
+    wrap
   >
     <VuiButton
       :label="'Label + ' + count"

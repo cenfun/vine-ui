@@ -2,6 +2,7 @@
   <VuiFlex
     direction="column"
     gap="10px"
+    wrap
   >
     <div class="vui-example-subtitle">
       Basic
@@ -9,6 +10,7 @@
     <VuiFlex
       gap="10px"
       padding="5px"
+      wrap
     >
       <VuiInput
         v-model="inputText"
@@ -52,6 +54,7 @@
     <VuiFlex
       gap="10px"
       padding="5px"
+      wrap
     >
       <VuiInput
         v-model="inputText"
@@ -74,6 +77,7 @@
     <VuiFlex
       gap="10px"
       padding="5px"
+      wrap
     >
       <VuiInput
         v-model="inputText"
@@ -111,6 +115,7 @@
     <VuiFlex
       gap="10px"
       padding="5px"
+      wrap
     >
       <VuiInput
         v-model="inputText"
@@ -136,6 +141,7 @@
     <VuiFlex
       gap="10px"
       padding="5px"
+      wrap
     >
       <VuiInput
         v-model="inputText"

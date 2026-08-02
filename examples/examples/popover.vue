@@ -3,6 +3,7 @@
     <VuiFlex
       gap="20px"
       padding="5px"
+      wrap
     >
       <VuiButton @click="openPopover">
         Popover top left
@@ -35,6 +36,7 @@
     <VuiFlex
       gap="20px"
       padding="5px"
+      wrap
     >
       <VuiButton @click="openPopover">
         Popover bottom left

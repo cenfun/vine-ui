@@ -1,6 +1,9 @@
 <template>
   <div>
-    <VuiFlex gap="10px">
+    <VuiFlex
+      gap="10px"
+      wrap
+    >
       <VuiFlex
         :direction="flex.direction"
 
@@ -75,6 +78,7 @@
       gap="10px"
       padding="5px"
       margin="10px 0 0 0"
+      wrap
     >
       <div>Props:</div>
       <VuiSelect

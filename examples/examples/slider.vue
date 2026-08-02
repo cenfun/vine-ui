@@ -11,7 +11,7 @@
         Basic slider (drag to scroll)
       </div>
       <VuiSlider
-        width="400px"
+        width="300px"
         height="80px"
       >
         <div class="slider-example-list">
@@ -35,7 +35,7 @@
       </div>
       <VuiSlider
         button
-        width="400px"
+        width="300px"
         height="80px"
         :step="200"
       >
@@ -60,7 +60,7 @@
       </div>
       <VuiSlider
         button
-        width="600px"
+        width="100%"
         height="60px"
       >
         <div class="slider-example-list">

@@ -3,6 +3,7 @@
     <VuiFlex
       gap="20px"
       padding="5px"
+      wrap
     >
       <VuiButton tooltip="This is tooltip left This is tooltip left This is tooltip left">
         Hover Tooltip

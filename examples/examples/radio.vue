@@ -3,6 +3,7 @@
     <VuiFlex
       gap="10px"
       padding="5px"
+      wrap
     >
       <div>radioName1</div>
 
@@ -37,6 +38,7 @@
     <VuiFlex
       gap="10px"
       padding="5px"
+      wrap
     >
       <div>radioName2</div>
 

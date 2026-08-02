@@ -29,7 +29,13 @@ import {
 import { Motion } from './utils/motion.js';
 import { StartMoveEnd } from './utils/start-move-end.js';
 
+const VERSION = window.VERSION;
+const TAG = window.TAG;
+
 export {
+    VERSION,
+    TAG,
+
     VuiButton,
     VuiButtonGroup,
     VuiCheckbox,

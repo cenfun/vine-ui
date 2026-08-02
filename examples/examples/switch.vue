@@ -3,7 +3,10 @@
     direction="column"
     gap="10px"
   >
-    <VuiFlex gap="10px">
+    <VuiFlex
+      gap="10px"
+      wrap
+    >
       <VuiSwitch
         v-model="state.value"
         label="switch"

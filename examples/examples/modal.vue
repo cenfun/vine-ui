@@ -12,6 +12,7 @@
       gap="10px"
       padding="5px"
       margin="10px 0 0 0"
+      wrap
     >
       <div>Props:</div>
       <VuiSelect

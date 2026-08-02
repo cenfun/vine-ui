@@ -1,5 +1,8 @@
 <template>
-  <VuiFlex gap="10px">
+  <VuiFlex
+    gap="10px"
+    wrap
+  >
     <VuiCheckbox label="Checkbox" />
 
     <VuiCheckbox v-model="checkboxChecked">
