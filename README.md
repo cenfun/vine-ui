@@ -89,6 +89,7 @@ setIcons({
 // then use it in a template
 // <VuiIcon icon="my-icon" />
 ```
+Find free icons from [https://cenfun.github.io/open-icons/](https://cenfun.github.io/open-icons/)
 
 ### `showToast`
 

@@ -6,6 +6,12 @@
     <div class="vui-example-subtitle">
       Custom icons via setIcons()
     </div>
+    <p>
+      Find free icons from <a
+        href="https://cenfun.github.io/open-icons/"
+        target="_blank"
+      >https://cenfun.github.io/open-icons/</a>
+    </p>
     <VuiFlex
       gap="10px"
       wrap
