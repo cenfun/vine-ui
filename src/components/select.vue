@@ -11,7 +11,7 @@
     <div
       :class="viewClass"
       :style="viewStyle"
-      tabindex="0"
+      :tabindex="props.disabled?'':0"
       @click.stop="onClick"
       @focus="onFocus"
       @blur="onBlur"
@@ -60,9 +60,13 @@
             :class="{'vui-select-item': true, 'vui-select-selected': item.selected, 'vui-select-active': ii === data.activeIndex}"
             @mousedown="onItemClick(item, $event)"
           >
-            <div class="vui-select-item-label">
+            <div class="vui-select-label">
               {{ item.label }}
             </div>
+            <Icon
+              v-if="item.selected"
+              icon="selected"
+            />
           </div>
         </div>
       </div>
@@ -328,6 +332,7 @@ const updateItemSelected = (item) => {
     }
 
     updateAllSelected(inputValue);
+
 };
 
 // =========================================================================================================
@@ -343,7 +348,9 @@ const onItemClick = (item, e) => {
 
     updateItemSelected(item);
 
-    if (!props.multiple) {
+    if (props.multiple) {
+        data.activeIndex = -1;
+    } else {
         close();
     }
 
@@ -932,7 +939,7 @@ defineExpose({
     overflow: hidden auto;
 }
 
-.vui-select-item-label {
+.vui-select-label {
     flex: 1 1 0%;
     min-height: 1rem;
     overflow: hidden;
@@ -974,17 +981,12 @@ defineExpose({
     }
 
     &.vui-select-selected {
-        color: #fff;
-        background: #666;
+        color: var(--vui-blue-50);
     }
 
     &.vui-select-active {
         color: #fff;
-        background: #555;
-    }
-
-    &.vui-select-selected.vui-select-active {
-        background: #444;
+        background: #999;
     }
 }
 
