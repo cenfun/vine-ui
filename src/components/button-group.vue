@@ -229,8 +229,8 @@ defineExpose({
 .vui-button-group-item.vui-button-group-selected {
     position: relative;
     color: #fff;
+    border-color: var(--vui-button-group-color);
     background-color: var(--vui-button-group-color);
-    transition: var(--vui-color-transition);
 }
 
 .vui-button-group-item:first-child {
