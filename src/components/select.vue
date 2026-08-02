@@ -61,11 +61,6 @@
             <div class="vui-select-item-label">
               {{ item.label }}
             </div>
-            <Icon
-              v-if="props.multiple"
-              icon="selected"
-              size="14px"
-            />
           </div>
         </div>
       </div>
@@ -687,6 +682,7 @@ const updateSelected = (item) => {
 
 const updateValue = (item) => {
     if (!item) {
+        data.viewLabel = '';
         return;
     }
     if (props.multiple) {
@@ -869,7 +865,7 @@ defineExpose({
 
     position: relative;
     display: flex;
-    gap: 3px;
+    gap: 5px;
     justify-content: space-between;
     align-items: center;
     min-width: var(--vui-select-min-width);
@@ -908,6 +904,8 @@ defineExpose({
         outline-offset: -1px;
     }
 }
+
+/* list popup */
 
 .vui-select-options {
     position: absolute;
@@ -950,8 +948,23 @@ defineExpose({
     font-size: inherit;
     cursor: pointer;
 
+    &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        content: "";
+        width: 100%;
+        height: 100%;
+        background: rgb(0 0 0 / 5%);
+        opacity: 0;
+        pointer-events: none;
+        transition: var(--vui-opacity-transition);
+    }
+
     &:hover {
-        background: #e8e8e8;
+        &::after {
+            opacity: 1;
+        }
     }
 
     &:not(:last-child) {
@@ -963,10 +976,13 @@ defineExpose({
         background: #666;
     }
 
-    &.vui-select-selected:hover {
-        background: #555;
+    &.vui-select-active {
+        color: #fff;
+        background: #888;
     }
 }
+
+/* multiple select */
 
 .vui-select-selected-list {
     display: flex;
@@ -1003,32 +1019,10 @@ defineExpose({
     cursor: pointer;
     opacity: 0.8;
     transition: var(--vui-opacity-transition);
-}
 
-.vui-select-selected-close:hover {
-    opacity: 1;
-}
-
-.vui-select-list-multiple .vui-select-item {
-    .vui-icon {
-        display: none;
-    }
-
-    &.vui-select-selected {
-        color: var(--vui-blue-50);
-        background: transparent;
-
-        .vui-icon {
-            display: block;
-        }
-    }
-
-    &.vui-select-selected:hover {
-        background: #e8e8e8;
-    }
-
-    &.vui-select-active {
-        background: #e8e8e8;
+    &:hover {
+        opacity: 1;
     }
 }
+
 </style>
