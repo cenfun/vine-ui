@@ -29,6 +29,7 @@
             <div
               v-if="!props.disabled"
               class="vui-select-selected-close"
+              @mousedown.prevent
               @click.stop="onSelectedItemRemove(item, $event)"
             >
               <Icon
@@ -346,7 +347,6 @@ const onItemClick = (item, e) => {
 };
 
 const onSelectedItemRemove = (item, e) => {
-
     // console.log(cid, 'onSelectedItemRemove', item);
     updateItemSelected(item);
 };
@@ -710,6 +710,7 @@ const updateLayout = microtask(() => {
 // =========================================================================================================
 
 const onClick = (e) => {
+    // console.log(cid, 'click');
     openAsync();
 };
 
