@@ -5,6 +5,8 @@ import { DefineComponent } from 'vue';
 // ============================================================
 type StringOrNumber = string | number;
 
+type VuiSlot = (props?: any) => any;
+
 // ============================================================
 // VuiButton
 // ============================================================
@@ -13,6 +15,8 @@ export interface VuiButtonProps {
   label?: string;
   /** Use primary style (blue background) */
   primary?: boolean;
+  /** Use round style */
+  round?: boolean;
   /** Button type attribute (button, submit, reset) */
   type?: string;
   /** Button width (supports px or number) */
@@ -20,7 +24,13 @@ export interface VuiButtonProps {
   /** Disable the button */
   disabled?: boolean;
 }
-export const VuiButton: DefineComponent<VuiButtonProps>;
+export type VuiButtonEmits = {
+  click: (e: MouseEvent) => void;
+};
+export interface VuiButtonSlots {
+  default: VuiSlot;
+}
+export const VuiButton: DefineComponent<VuiButtonProps, {}, {}, {}, {}, {}, {}, VuiButtonEmits>;
 
 // ============================================================
 // VuiButtonGroup
@@ -32,6 +42,8 @@ export interface VuiButtonGroupOption {
   title?: string;
 }
 export interface VuiButtonGroupProps {
+  /** v-model value (index or option value, depends on bindValue) */
+  modelValue?: any;
   /** Array of option objects [{label, value}] for rendering items */
   options?: VuiButtonGroupOption[] | null;
   /** Custom color for selected state */
@@ -39,23 +51,41 @@ export interface VuiButtonGroupProps {
   /** If true, v-model binds to option.value; otherwise binds to index */
   bindValue?: boolean;
 }
-export const VuiButtonGroup: DefineComponent<VuiButtonGroupProps>;
+export type VuiButtonGroupEmits = {
+  'update:modelValue': (value: any) => void;
+  change: (value: any) => void;
+};
+export interface VuiButtonGroupSlots {
+  default: VuiSlot;
+}
+export const VuiButtonGroup: DefineComponent<VuiButtonGroupProps, {}, {}, {}, {}, {}, {}, VuiButtonGroupEmits>;
 
 // ============================================================
 // VuiCheckbox
 // ============================================================
 export interface VuiCheckboxProps {
+  /** v-model value (checked state) */
+  modelValue?: any;
   /** Checkbox label text */
   label?: string;
   /** Disable the checkbox */
   disabled?: boolean;
 }
-export const VuiCheckbox: DefineComponent<VuiCheckboxProps>;
+export type VuiCheckboxEmits = {
+  'update:modelValue': (value: any) => void;
+  change: (value: any) => void;
+};
+export interface VuiCheckboxSlots {
+  default: VuiSlot;
+}
+export const VuiCheckbox: DefineComponent<VuiCheckboxProps, {}, {}, {}, {}, {}, {}, VuiCheckboxEmits>;
 
 // ============================================================
 // VuiDialog
 // ============================================================
 export interface VuiDialogProps {
+  /** v-model value (visible state) */
+  modelValue?: any;
   /** Dialog message text */
   message?: string;
   /** Dialog window width */
@@ -65,7 +95,13 @@ export interface VuiDialogProps {
   /** Close dialog when clicking outside */
   closeOnClickOut?: boolean;
 }
-export const VuiDialog: DefineComponent<VuiDialogProps>;
+export type VuiDialogEmits = {
+  'update:modelValue': (value: any) => void;
+};
+export interface VuiDialogSlots {
+  default: VuiSlot;
+}
+export const VuiDialog: DefineComponent<VuiDialogProps, {}, {}, {}, {}, {}, {}, VuiDialogEmits>;
 
 // ============================================================
 // VuiFlex
@@ -96,12 +132,17 @@ export interface VuiFlexProps {
   /** Padding inside the container */
   padding?: StringOrNumber;
 }
+export interface VuiFlexSlots {
+  default: VuiSlot;
+}
 export const VuiFlex: DefineComponent<VuiFlexProps>;
 
 // ============================================================
 // VuiFlyover
 // ============================================================
 export interface VuiFlyoverProps {
+  /** v-model value (visible state) */
+  modelValue?: any;
   /** Slide position: right or left */
   position?: 'right' | 'left';
   /** Flyover width (px or %) */
@@ -113,7 +154,16 @@ export interface VuiFlyoverProps {
   /** Enable drag resize handle */
   resizable?: boolean;
 }
-export const VuiFlyover: DefineComponent<VuiFlyoverProps>;
+export type VuiFlyoverEmits = {
+  'update:modelValue': (value: any) => void;
+  start: (value: any) => void;
+  end: (value: any) => void;
+  resize: (width: StringOrNumber) => void;
+};
+export interface VuiFlyoverSlots {
+  default: VuiSlot;
+}
+export const VuiFlyover: DefineComponent<VuiFlyoverProps, {}, {}, {}, {}, {}, {}, VuiFlyoverEmits>;
 
 // ============================================================
 // VuiIcon
@@ -159,12 +209,20 @@ export interface VuiIconLabelProps {
   /** Gap between icon and label */
   gap?: string;
 }
-export const VuiIconLabel: DefineComponent<VuiIconLabelProps>;
+export type VuiIconLabelEmits = {
+  click: (e: MouseEvent) => void;
+};
+export interface VuiIconLabelSlots {
+  default: VuiSlot;
+}
+export const VuiIconLabel: DefineComponent<VuiIconLabelProps, {}, {}, {}, {}, {}, {}, VuiIconLabelEmits>;
 
 // ============================================================
 // VuiInput
 // ============================================================
 export interface VuiInputProps {
+  /** v-model value (input text) */
+  modelValue?: StringOrNumber;
   /** Input label text */
   label?: string;
   /** Input type (text, number, password, etc.) */
@@ -194,12 +252,26 @@ export interface VuiInputProps {
   /** Initial value (used without v-model) */
   value?: StringOrNumber;
 }
-export const VuiInput: DefineComponent<VuiInputProps>;
+export type VuiInputEmits = {
+  'update:modelValue': (value: StringOrNumber) => void;
+  enter: (e: Event) => void;
+  input: (e: Event) => void;
+  focus: (e: Event) => void;
+  blur: (e: Event) => void;
+  click: (e: Event) => void;
+  'icon-click': (e: Event) => void;
+};
+export interface VuiInputSlots {
+  default: VuiSlot;
+}
+export const VuiInput: DefineComponent<VuiInputProps, {}, {}, {}, {}, {}, {}, VuiInputEmits>;
 
 // ============================================================
 // VuiLayout
 // ============================================================
 export interface VuiLayoutProps {
+  /** v-model value */
+  modelValue?: any;
   /** Layout container width */
   width?: string;
   /** Layout container height */
@@ -211,7 +283,13 @@ export interface VuiLayoutProps {
   /** Gutter drag handle size */
   gutterSize?: string;
 }
-export const VuiLayout: DefineComponent<VuiLayoutProps>;
+export type VuiLayoutEmits = {
+  'update:modelValue': (value: any) => void;
+};
+export interface VuiLayoutSlots {
+  default: VuiSlot;
+}
+export const VuiLayout: DefineComponent<VuiLayoutProps, {}, {}, {}, {}, {}, {}, VuiLayoutEmits>;
 
 // ============================================================
 // VuiLoading
@@ -236,6 +314,8 @@ export const VuiLoading: DefineComponent<VuiLoadingProps>;
 // VuiModal
 // ============================================================
 export interface VuiModalProps {
+  /** v-model value (visible state) */
+  modelValue?: any;
   /** Modal title text */
   title?: string;
   /** Show close button */
@@ -249,12 +329,21 @@ export interface VuiModalProps {
   /** Append modal element to document body */
   appendToBody?: boolean;
 }
-export const VuiModal: DefineComponent<VuiModalProps>;
+export type VuiModalEmits = {
+  'update:modelValue': (value: any) => void;
+  close: () => void;
+};
+export interface VuiModalSlots {
+  default: VuiSlot;
+}
+export const VuiModal: DefineComponent<VuiModalProps, {}, {}, {}, {}, {}, {}, VuiModalEmits>;
 
 // ============================================================
 // VuiPopover
 // ============================================================
 export interface VuiPopoverProps {
+  /** v-model value (visible state) */
+  modelValue?: any;
   /** Popover title text */
   title?: string;
   /** Target element or rect for positioning */
@@ -290,7 +379,18 @@ export interface VuiPopoverProps {
   /** Disable pointer events (non-interactive popover) */
   nonreactive?: boolean;
 }
-export const VuiPopover: DefineComponent<VuiPopoverProps>;
+export type VuiPopoverEmits = {
+  'update:modelValue': (value: any) => void;
+  open: (el: any) => void;
+  update: (info: any) => void;
+  beforeClose: () => void;
+  close: () => void;
+};
+export interface VuiPopoverSlots {
+  header: VuiSlot;
+  default: VuiSlot;
+}
+export const VuiPopover: DefineComponent<VuiPopoverProps, {}, {}, {}, {}, {}, {}, VuiPopoverEmits>;
 
 // ============================================================
 // VuiProgress
@@ -315,6 +415,8 @@ export const VuiProgress: DefineComponent<VuiProgressProps>;
 // VuiRadio
 // ============================================================
 export interface VuiRadioProps {
+  /** v-model value (checked state) */
+  modelValue?: any;
   /** Radio label text */
   label?: string;
   /** Radio group name */
@@ -324,7 +426,14 @@ export interface VuiRadioProps {
   /** Radio value */
   value?: string;
 }
-export const VuiRadio: DefineComponent<VuiRadioProps>;
+export type VuiRadioEmits = {
+  'update:modelValue': (value: any) => void;
+  change: (value: any) => void;
+};
+export interface VuiRadioSlots {
+  default: VuiSlot;
+}
+export const VuiRadio: DefineComponent<VuiRadioProps, {}, {}, {}, {}, {}, {}, VuiRadioEmits>;
 
 // ============================================================
 // VuiSelect
@@ -335,12 +444,12 @@ export interface VuiSelectOption {
   removable?: boolean;
 }
 export interface VuiSelectProps {
+  /** v-model value (option value or index) */
+  modelValue?: any;
   /** Select label text */
   label?: string;
   /** Disable the select */
   disabled?: boolean;
-  /** Input type attribute */
-  type?: string;
   /** Array of option objects [{label, value}] */
   options?: VuiSelectOption[] | null;
   /** Select width */
@@ -351,18 +460,20 @@ export interface VuiSelectProps {
   maxWidth?: StringOrNumber;
   /** Select font size */
   fontSize?: StringOrNumber;
-  /** Enable search/filter functionality */
-  searchable?: boolean;
-  /** Auto-select text on focus */
-  selectOnFocus?: boolean;
   /** If true, v-model binds to option index instead of value */
   index?: boolean;
   /** Enable multiple selection */
   multiple?: boolean;
-  /** Initial value (used without v-model) */
-  value?: StringOrNumber;
 }
-export const VuiSelect: DefineComponent<VuiSelectProps>;
+export type VuiSelectEmits = {
+  'update:modelValue': (value: any) => void;
+  focus: (e: Event) => void;
+  blur: (e: Event) => void;
+};
+export interface VuiSelectSlots {
+  item: (props: { item: any }) => any;
+}
+export const VuiSelect: DefineComponent<VuiSelectProps, {}, {}, {}, {}, {}, {}, VuiSelectEmits>;
 
 // ============================================================
 // VuiSlider
@@ -379,12 +490,20 @@ export interface VuiSliderProps {
   /** Scroll step size in pixels when using buttons */
   step?: number | string;
 }
-export const VuiSlider: DefineComponent<VuiSliderProps>;
+export type VuiSliderEmits = {
+  update: (data: any) => void;
+};
+export interface VuiSliderSlots {
+  default: VuiSlot;
+}
+export const VuiSlider: DefineComponent<VuiSliderProps, {}, {}, {}, {}, {}, {}, VuiSliderEmits>;
 
 // ============================================================
 // VuiSwitch
 // ============================================================
 export interface VuiSwitchProps {
+  /** v-model value (checked state) */
+  modelValue?: any;
   /** Switch label text */
   label?: string;
   /** Label position: left or right */
@@ -400,7 +519,14 @@ export interface VuiSwitchProps {
   /** Disable the switch */
   disabled?: boolean;
 }
-export const VuiSwitch: DefineComponent<VuiSwitchProps>;
+export type VuiSwitchEmits = {
+  'update:modelValue': (value: any) => void;
+  change: (value: any) => void;
+};
+export interface VuiSwitchSlots {
+  default: VuiSlot;
+}
+export const VuiSwitch: DefineComponent<VuiSwitchProps, {}, {}, {}, {}, {}, {}, VuiSwitchEmits>;
 
 // ============================================================
 // VuiTab
@@ -417,14 +543,24 @@ export interface VuiTabColors {
   selected?: string;
 }
 export interface VuiTabProps {
-  /** Array of tab options [{label, value, disabled}] */
-  options?: VuiTabOption[];
+  /** v-model value (selected index or value) */
+  modelValue?: any;
+  /** Array of tab options (strings or [{label, value, disabled}]) */
+  options?: (string | VuiTabOption)[];
   /** Color configuration object: {background, separator, hover, selected} */
   colors?: VuiTabColors;
   /** Tab alignment: left, center, or right */
   align?: 'left' | 'center' | 'right' | '';
 }
-export const VuiTab: DefineComponent<VuiTabProps>;
+export type VuiTabEmits = {
+  'update:modelValue': (value: any) => void;
+};
+export interface VuiTabSlots {
+  left: VuiSlot;
+  default: VuiSlot;
+  right: VuiSlot;
+}
+export const VuiTab: DefineComponent<VuiTabProps, {}, {}, {}, {}, {}, {}, VuiTabEmits>;
 
 // ============================================================
 // VuiToast
@@ -434,8 +570,6 @@ export interface VuiToastProps {
   type?: string;
   /** Toast message content */
   content?: string;
-  /** Auto-dismiss duration in ms (0 = no auto-dismiss) */
-  duration?: number;
 }
 export const VuiToast: DefineComponent<VuiToastProps>;
 
@@ -465,6 +599,9 @@ export interface VuiTooltipProps {
   nonreactive?: boolean;
   /** Initial visibility (used without v-model) */
   visible?: boolean;
+}
+export interface VuiTooltipSlots {
+  default: VuiSlot;
 }
 export const VuiTooltip: DefineComponent<VuiTooltipProps>;
 
