@@ -84,24 +84,25 @@ onMounted(() => {
 
     new FPSDetector('.fps-detector');
 
-    const getTooltip = (target) => {
-        const text = target.getAttribute('tooltip');
-        if (text) {
-            return text;
+    initGlobalTooltips((target) => {
+        let text = target.getAttribute('tooltip');
+        if (!text) {
+            if (target.clientWidth < target.scrollWidth) {
+                text = target.innerText;
+            } else {
+                return;
+            }
         }
-        if (target.classList.contains('tooltip')) {
-            return target.innerText;
-        }
-    };
-
-    initGlobalTooltips((target, text) => {
         tooltip.visible = true;
         tooltip.target = target;
         tooltip.text = text;
+
     }, (target) => {
+
         tooltip.visible = false;
         tooltip.text = '';
-    }, getTooltip);
+
+    });
 
 });
 
@@ -222,6 +223,7 @@ body {
     height: 100%;
     margin-left: 10px;
     padding: 10px;
+    cursor: pointer;
     overflow-y: auto;
 }
 

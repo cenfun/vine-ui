@@ -31,10 +31,9 @@ export const mount = (Component, options) => {
     };
 };
 
-// initGlobalTooltips((target, text) => {
-//     // console.log(target, text);
-//     if (text === true) {
-//         // console.log(target.clientWidth, target.scrollWidth);
+// initGlobalTooltips((target) => {
+//     const text = target.getAttribute('tooltip');
+//     if (!text) {
 //         if (target.clientWidth < target.scrollWidth) {
 //             showTooltip(target, target.innerText);
 //         }
@@ -45,31 +44,25 @@ export const mount = (Component, options) => {
 //     hideTooltip();
 // });
 
-export const initGlobalTooltips = (onEnter, onLeave, getTooltip) => {
+export const initGlobalTooltips = (onEnter, onLeave) => {
     if (typeof onEnter !== 'function' || typeof onLeave !== 'function') {
         return;
     }
 
-    if (typeof getTooltip !== 'function') {
-        getTooltip = (target) => {
-            if (target.hasAttribute('tooltip')) {
-                return target.getAttribute('tooltip') || true;
-            }
-        };
-    }
+    const hasTooltip = (target) => {
+        return target && target.hasAttribute('tooltip');
+    };
 
     document.body.addEventListener('mouseenter', (e) => {
         const target = e.target;
-        const text = getTooltip(target);
-        if (text) {
-            onEnter(target, text);
+        if (hasTooltip(target)) {
+            onEnter(target);
         }
     }, true);
 
     document.body.addEventListener('mouseleave', (e) => {
         const target = e.target;
-        const text = getTooltip(target);
-        if (text) {
+        if (hasTooltip(target)) {
             onLeave(target);
         }
     }, true);

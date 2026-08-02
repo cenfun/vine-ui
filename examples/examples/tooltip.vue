@@ -8,9 +8,19 @@
         Hover Tooltip
       </VuiButton>
 
-      <VuiButton class="tooltip">
-        This is long text for test class="tooltip"
-      </VuiButton>
+      <div
+        tooltip
+        class="vui-auto-tooltip"
+      >
+        This is long text for auto tooltip
+      </div>
+      <div
+        tooltip
+        class="vui-auto-tooltip"
+        style="width: 120px;"
+      >
+        This is long text for auto tooltip
+      </div>
 
       <VuiButton
         @mouseenter="onHtml"
@@ -114,3 +124,15 @@ const onHtml = (e) => {
 };
 
 </script>
+<style lang="scss" scoped>
+.vui-auto-tooltip {
+    padding: 5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    &:hover {
+        background-color: var(--vui-blue-10);
+    }
+}
+</style>
