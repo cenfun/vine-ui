@@ -55,7 +55,7 @@
           <div
             v-for="(item, ii) in data.list"
             :key="ii"
-            :class="['vui-select-item', item.selected?'vui-select-selected':'', props.multiple && item.index === data.selectedIndex ? 'vui-select-active' : '']"
+            :class="{'vui-select-item': true, 'vui-select-selected': item.selected, 'vui-select-active': ii === data.activeIndex}"
             @mousedown="onItemClick(item, $event)"
           >
             <div class="vui-select-item-label">
@@ -201,6 +201,21 @@ const unmountElements = () => {
     $options = null;
     $popup = null;
 };
+const scrollToElement = ($elem) => {
+    if (!$elem) {
+        return;
+    }
+    const container = $elem.parentNode;
+    if (!container) {
+        return;
+    }
+    const targetRect = $elem.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const isInView = targetRect.top >= containerRect.top && targetRect.bottom <= containerRect.bottom;
+    if (!isInView) {
+        container.scrollTop = $elem.offsetTop + 1;
+    }
+};
 
 const viewClass = computed(() => {
     const cls = ['vui-select-view'];
@@ -263,6 +278,9 @@ const isViewParent = (elem) => {
 };
 
 const scrollHandler = (e) => {
+    if (!data.isOpen) {
+        return;
+    }
     // console.log('scrollHandler');
     if (isSelectInner(e.target)) {
         return;
@@ -299,8 +317,8 @@ const bindOpenEvents = () => {
 const keydownHandler = (e) => {
     // console.log(e.key);
     const handlers = {
-        ArrowDown: keyArrowDownHandler,
         ArrowUp: keyArrowUpHandler,
+        ArrowDown: keyArrowDownHandler,
         Enter: keyEnterHandler,
         Escape: keyEscapeHandler
     };
@@ -319,47 +337,36 @@ const keyArrowUpHandler = (e) => {
     keyArrowHandler(e, -1);
 };
 
+const scrollToActive = microtask(() => {
+    if (!$popup) {
+        return;
+    }
+    const $active = $popup.querySelector('.vui-select-active');
+    scrollToElement($active);
+});
+
 const keyArrowHandler = (e, offset) => {
     if (!data.isOpen) {
         open();
         return;
     }
     const len = data.list.length;
-    const index = data.selectedIndex + offset;
-    if (index >= len || index < 0) {
+
+    let startIndex = data.activeIndex;
+    if (startIndex < 0) {
+        startIndex = data.selectedIndex;
+    }
+
+    const nextIndex = startIndex + offset;
+    if (nextIndex < 0 || nextIndex >= len) {
         return;
     }
-    const item = data.list[index];
 
-    data.selectedIndex = index;
-    data.selectedValue = item.value;
+    data.activeIndex = nextIndex;
 
-    if (!props.multiple) {
-        updateSelected(item);
-    }
-
-    scrollIntoViewAsync(offset);
+    scrollToActive();
 };
 
-const scrollIntoViewAsync = microtask((offset) => {
-    if (!$popup) {
-        return;
-    }
-    const target = $popup.querySelector('.vui-select-selected, .vui-select-active');
-    if (!target) {
-        return;
-    }
-    const tt = target.offsetTop;
-    const th = target.clientHeight;
-    const lt = $popup.scrollTop;
-    const lh = $popup.clientHeight;
-    if (tt < lt || tt + th > lt + lh) {
-        const block = offset > 0 ? 'end' : 'start';
-        target.scrollIntoView({
-            block
-        });
-    }
-});
 
 const keyEnterHandler = (e) => {
     if (!data.isOpen) {
@@ -367,18 +374,18 @@ const keyEnterHandler = (e) => {
         return;
     }
 
-    const item = data.list[data.selectedIndex];
-
-    if (props.multiple) {
-        if (item) {
+    const item = data.list[data.activeIndex];
+    if (item) {
+        if (props.multiple) {
+            if (item) {
+                updateSelected(item);
+                updateValue(item);
+            }
+        } else {
             updateSelected(item);
             updateValue(item);
         }
-        return;
     }
-
-    updateSelected(item);
-    updateValue(item);
 
     close();
 };
@@ -433,6 +440,7 @@ const onItemClick = (item, e) => {
 const showList = () => {
     document.body.appendChild($popup);
     data.isOpen = true;
+    data.activeIndex = -1;
 };
 
 const hideList = () => {
@@ -569,15 +577,7 @@ const layout = () => {
         popupStyle.top = `${top}px`;
 
         const $selected = $popup.querySelector('.vui-select-selected');
-        if ($selected) {
-            const container = $selected.parentNode;
-            const targetRect = $selected.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            const isInView = targetRect.top >= containerRect.top && targetRect.bottom <= containerRect.bottom;
-            if (!isInView) {
-                container.scrollTop = $selected.offsetTop - 1;
-            }
-        }
+        scrollToElement($selected);
     });
 
 };
