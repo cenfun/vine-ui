@@ -978,7 +978,11 @@ defineExpose({
 
     &.vui-select-active {
         color: #fff;
-        background: #888;
+        background: #555;
+    }
+
+    &.vui-select-selected.vui-select-active {
+        background: #444;
     }
 }
 
