@@ -48,23 +48,25 @@
     </div>
     <div class="vui-select-options">
       <div
-        :class="['vui vui-select-list', props.multiple ? 'vui-select-list-multiple' : '']"
-        :style="listStyle"
+        v-init="{cid: cidPopup}"
+        class="vui vui-select-popup"
       >
-        <div
-          v-for="(item, ii) in data.list"
-          :key="ii"
-          :class="['vui-select-item', item.selected?'vui-select-selected':'', props.multiple && item.index === data.selectedIndex ? 'vui-select-active' : '']"
-          @mousedown="onItemClick(item, $event)"
-        >
-          <div class="vui-select-item-label">
-            {{ item.label }}
+        <div class="vui-select-list">
+          <div
+            v-for="(item, ii) in data.list"
+            :key="ii"
+            :class="['vui-select-item', item.selected?'vui-select-selected':'', props.multiple && item.index === data.selectedIndex ? 'vui-select-active' : '']"
+            @mousedown="onItemClick(item, $event)"
+          >
+            <div class="vui-select-item-label">
+              {{ item.label }}
+            </div>
+            <Icon
+              v-if="props.multiple"
+              icon="selected"
+              size="14px"
+            />
           </div>
-          <Icon
-            v-if="props.multiple"
-            icon="selected"
-            size="14px"
-          />
         </div>
       </div>
     </div>
@@ -89,6 +91,7 @@ import {
 } from '../utils/util.js';
 
 const cid = getCID('VuiSelect');
+const cidPopup = getCID('VuiSelectPopup');
 
 const props = defineProps({
 
@@ -179,12 +182,30 @@ const data = reactive({
 
 });
 
-
 const elRef = ref(null);
 let $el;
 let $view;
 let $options;
-let $list;
+let $popup;
+const initElements = () => {
+    $el = elRef.value;
+    $view = $el.querySelector('.vui-select-view');
+    $options = $el.querySelector('.vui-select-options');
+    $popup = $options.querySelector('.vui-select-popup');
+    if (!$popup) {
+        // list is appended to document.body while open
+        $popup = document.querySelector(`[cid=${cidPopup}]`);
+    }
+};
+const unmountElements = () => {
+    if ($popup && $popup.parentNode) {
+        $popup.parentNode.removeChild($popup);
+    }
+    $el = null;
+    $view = null;
+    $options = null;
+    $popup = null;
+};
 
 const viewClass = computed(() => {
     const cls = ['vui-select-view'];
@@ -211,14 +232,6 @@ const viewStyle = computed(() => {
     return st;
 });
 
-const listStyle = computed(() => {
-    const st = {};
-    if (props.fontSize) {
-        st['--vui-select-font-size'] = autoPx(props.fontSize);
-    }
-    return st;
-});
-
 // =========================================================================================================
 
 const resizeHandler = (e) => {
@@ -227,15 +240,15 @@ const resizeHandler = (e) => {
 };
 
 const isSelectInner = (elem) => {
-    if (!$list) {
+    if (!$popup) {
         return false;
     }
-    if ($list === elem) {
+    if ($popup === elem) {
         return true;
     }
     let inner = false;
     try {
-        inner = $list.contains(elem);
+        inner = $popup.contains(elem);
     } catch (e) {
         // empty
     }
@@ -334,17 +347,17 @@ const keyArrowHandler = (e, offset) => {
 };
 
 const scrollIntoViewAsync = microtask((offset) => {
-    if (!$list) {
+    if (!$popup) {
         return;
     }
-    const target = $list.querySelector('.vui-select-selected, .vui-select-active');
+    const target = $popup.querySelector('.vui-select-selected, .vui-select-active');
     if (!target) {
         return;
     }
     const tt = target.offsetTop;
     const th = target.clientHeight;
-    const lt = $list.scrollTop;
-    const lh = $list.clientHeight;
+    const lt = $popup.scrollTop;
+    const lh = $popup.clientHeight;
     if (tt < lt || tt + th > lt + lh) {
         const block = offset > 0 ? 'end' : 'start';
         target.scrollIntoView({
@@ -423,12 +436,12 @@ const onItemClick = (item, e) => {
 // =========================================================================================================
 
 const showList = () => {
-    document.body.appendChild($list);
+    document.body.appendChild($popup);
     data.isOpen = true;
 };
 
 const hideList = () => {
-    $options.appendChild($list);
+    $options.appendChild($popup);
     data.isOpen = false;
 };
 
@@ -522,33 +535,33 @@ const getListLeft = (viewRect, listRect, bodyRect) => {
 };
 
 const layout = () => {
-    if (!$list) {
+    if (!$popup) {
         return;
     }
 
     const viewRect = getRect($view);
     const bodyRect = getRect(document.body);
 
-    const lst = $list.style;
+    const popupStyle = $popup.style;
 
     // reset position
-    lst.left = '0px';
-    lst.top = '0px';
+    popupStyle.left = '0px';
+    popupStyle.top = '0px';
 
-    // update list min/max width
-    // console.log('list,view width', listRect.width, viewRect.width);
-    const maxWidth = Math.min(350, bodyRect.width);
-    // console.log('maxWidth', maxWidth, bodyRect.width);
-    lst.maxWidth = `${maxWidth}px`;
-
-    if (viewRect.width < maxWidth) {
-        lst.minWidth = `${viewRect.width}px`;
-    } else {
-        lst.minWidth = '';
+    const fontSize = props.fontSize;
+    if (fontSize) {
+        popupStyle.fontSize = autoPx(fontSize);
     }
 
+    // update list min/max width
+    let maxWidth = Math.max(viewRect.width, 300);
+    maxWidth = Math.min(maxWidth, bodyRect.width);
+    // console.log('maxWidth', maxWidth, bodyRect.width);
+    popupStyle.maxWidth = `${maxWidth}px`;
+    popupStyle.minWidth = `${viewRect.width}px`;
+
     nextTick(() => {
-        const listRect = getRect($list);
+        const listRect = getRect($popup);
 
         // console.log('viewRect', viewRect, 'listRect', listRect, 'bodyRect', bodyRect);
 
@@ -557,15 +570,18 @@ const layout = () => {
 
         // console.log('left', left, 'top', top);
 
-        lst.left = `${left}px`;
-        lst.top = `${top}px`;
+        popupStyle.left = `${left}px`;
+        popupStyle.top = `${top}px`;
 
-        // selected element.scrollIntoView();
-        const $selected = $list.querySelector('.vui-select-selected');
+        const $selected = $popup.querySelector('.vui-select-selected');
         if ($selected) {
-            // scrollIntoView cased whole page scroll if body scrollable
-            // $selected.scrollIntoView();
-            $selected.parentNode.scrollTop = $selected.offsetTop;
+            const container = $selected.parentNode;
+            const targetRect = $selected.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            const isInView = targetRect.top >= containerRect.top && targetRect.bottom <= containerRect.bottom;
+            if (!isInView) {
+                container.scrollTop = $selected.offsetTop - 1;
+            }
         }
     });
 
@@ -632,7 +648,7 @@ const onFocus = (e) => {
 };
 
 const onBlur = (e) => {
-    // console.log(cid, 'blur');
+    console.log(cid, 'blur');
     closeAsync();
     unbindKeyEvents();
 
@@ -683,6 +699,8 @@ const updateValue = (item) => {
         mv.value = nv;
     }
 };
+
+// =========================================================================================================
 
 const initSelectedItem = () => {
 
@@ -783,36 +801,22 @@ const getListFromSlot = (ls) => {
 
 
 const initList = () => {
-
     const list = isList(props.options) ? getListFromProps(props.options) : getListFromSlot(getSlot(slots));
-
     // for selectedIndex
     list.forEach((item, i) => {
         item.index = i;
     });
-
-    // console.log('initList', cid, data.list);
-
+    // console.log('initList', cid, list);
     data.list = list;
-
     initSelectedItem();
-
-    // async layout if list is show and change list dynamic
-    updateLayout();
-
 };
 
-const update = microtask(() => {
-    $el = elRef.value;
-    $view = $el.querySelector('.vui-select-view');
-    $options = $el.querySelector('.vui-select-options');
-    $list = $options.querySelector('.vui-select-list');
-    if (!$list) {
-        // list is appended to document.body while open
-        $list = document.body.querySelector('.vui-select-list');
-    }
+// =========================================================================================================
 
+const update = microtask(() => {
     initList();
+    // async layout if list is show and change list dynamic
+    updateLayout();
 });
 
 watch([
@@ -824,15 +828,14 @@ watch([
 });
 
 onMounted(() => {
+    initElements();
     update();
 });
 
 onUnmounted(() => {
     unbindOpenEvents();
     unbindKeyEvents();
-    if ($list && $list.parentNode) {
-        $list.parentNode.removeChild($list);
-    }
+    unmountElements();
 });
 
 defineExpose({
@@ -911,19 +914,21 @@ defineExpose({
     display: none;
 }
 
-.vui-select-list {
-    --vui-select-font-size: inherit;
-
+.vui-select-popup {
     position: absolute;
     top: 0;
     left: 0;
     z-index: 10000;
-    max-width: 350px;
-    max-height: 300px;
     border: 1px solid #aaa;
     border-radius: 5px;
     background-color: #fff;
     box-shadow: 0 3px 8px rgb(0 0 0 / 30%);
+    overflow: hidden;
+}
+
+.vui-select-list {
+    position: relative;
+    max-height: 300px;
     overflow: hidden auto;
 }
 
@@ -942,7 +947,7 @@ defineExpose({
     align-items: center;
     padding: 6px 8px;
     color: #555;
-    font-size: var(--vui-select-font-size);
+    font-size: inherit;
     cursor: pointer;
 
     &:hover {
@@ -987,9 +992,9 @@ defineExpose({
 }
 
 .vui-select-selected-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .vui-select-selected-close {
