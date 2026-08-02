@@ -14,7 +14,10 @@
         >Vue 3.x</a>
       </div>
       <VuiFlex gap="10px">
-        <div class="fps-detector" />
+        <div
+          v-if="isDev"
+          class="fps-detector"
+        />
         <a
           href="https://github.com/cenfun/vine-ui"
           target="_blank"
@@ -66,6 +69,8 @@ import FPSDetector from 'fps-detector';
 
 import examples from './examples.js';
 
+const isDev = import.meta.env.DEV;
+
 const tooltip = reactive({
     visible: false,
     target: '',
@@ -82,7 +87,9 @@ onMounted(() => {
 
     // console.log('examples', examples);
 
-    new FPSDetector('.fps-detector');
+    if (isDev) {
+        new FPSDetector('.fps-detector');
+    }
 
     initGlobalTooltips((target) => {
         let text = target.getAttribute('tooltip');
