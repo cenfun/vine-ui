@@ -620,9 +620,8 @@ export function setIcons(iconMap: Record<string, string>): void;
 
 /** Initialize global tooltip event listeners */
 export function initGlobalTooltips(
-  onEnter: (target: HTMLElement, text: string) => void,
-  onLeave: (target: HTMLElement) => void,
-  getTooltip?: (target: HTMLElement) => string | null
+  onEnter: (target: HTMLElement) => void,
+  onLeave: (target: HTMLElement) => void
 ): void;
 
 /** Mount a Vue component to a DOM element */

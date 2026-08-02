@@ -136,19 +136,27 @@ Global tooltip handling for any element with a `tooltip` attribute (used by the 
 import { initGlobalTooltips } from 'vine-ui';
 
 initGlobalTooltips(
-    // onEnter: target hovered, text = tooltip content
-    (target, text) => {
+    // onEnter: fired when hovering an element with a tooltip attribute
+    (target) => {
+        const text = target.getAttribute('tooltip');
+        if (!text) {
+            // optional: fall back to innerText when the text is truncated (ellipsis)
+            if (target.clientWidth < target.scrollWidth) {
+                tooltip.visible = true;
+                tooltip.target = target;
+                tooltip.text = target.innerText;
+            }
+            return;
+        }
         tooltip.visible = true;
         tooltip.target = target;
         tooltip.text = text;
     },
-    // onLeave: target no longer hovered
+    // onLeave: fired when the mouse leaves the element
     (target) => {
         tooltip.visible = false;
         tooltip.text = '';
-    },
-    // optional getTooltip: customize how text is resolved
-    (target) => target.getAttribute('tooltip')
+    }
 );
 ```
 
