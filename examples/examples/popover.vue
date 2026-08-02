@@ -129,7 +129,9 @@
 </template>
 
 <script setup>
-import { reactive, watch } from 'vue';
+import {
+    reactive, watch, onUnmounted
+} from 'vue';
 import {
     VuiButton, VuiCheckbox, VuiFlex, VuiPopover, VuiSelect, VuiSwitch
 } from '../vine-ui.js';
@@ -218,6 +220,10 @@ watch(() => data.movable, (v) => {
         data.container = null;
         data.nonreactive = false;
     }
+});
+
+onUnmounted(() => {
+    window.removeEventListener('mousemove', mouseMoveHandler);
 });
 
 

@@ -26,7 +26,7 @@
           >
             <td>{{ item.name }}</td>
             <td>{{ item.type && item.type.name }}</td>
-            <td>{{ item.defaultValue.value }}</td>
+            <td>{{ getDefaultValue(item) }}</td>
             <td>{{ getPropDescription(item) }}</td>
           </tr>
           <template v-if="data.events">
@@ -129,20 +129,40 @@ const getPropDescription = (item) => {
     return item.description;
 };
 
+const getDefaultValue = (item) => {
+    // vue-docgen-api omits defaultValue for props without a default
+    if (item && item.defaultValue) {
+        return item.defaultValue.value;
+    }
+    return '';
+};
+
 const getExampleTitle = (item) => {
     const list = item.path.split('/');
     const title = list.pop().slice(0, -4).split('-').join(' ');
     return `Example ${title}`;
 };
 
+// bump on every update to ignore stale async renders on fast route switches
+let updateSeq = 0;
+
 const update = () => {
     const item = examples.find((it) => it.path === route.path);
     // console.log(item);
     data.example = item;
 
+    if (!item) {
+        return;
+    }
+
     const info = metadata[item.key];
 
     // console.log(info);
+
+    // metadata is generated at dev-server start; guard stale/missing entries
+    if (!info) {
+        return;
+    }
 
     data.props = info.props;
 
@@ -155,7 +175,11 @@ const update = () => {
 
     data.source = info.source;
 
+    const seq = ++updateSeq;
     setTimeout(() => {
+        if (seq !== updateSeq) {
+            return;
+        }
         sourceHandler(item.list);
     });
 

@@ -122,12 +122,12 @@
 </template>
 
 <script setup>
-import { reactive, watch } from 'vue';
+import {
+    reactive, watch, onMounted
+} from 'vue';
 import {
     VuiButton, VuiFlex, VuiFlyover, VuiSelect, VuiSwitch
 } from '../vine-ui.js';
-
-const visible = sessionStorage.getItem('vui-flyover-visible') === 'true';
 
 const data = reactive({
     width: '30%',
@@ -135,13 +135,21 @@ const data = reactive({
     maxWidth: '100%',
     position: 'right',
     resizable: true,
-    visible: visible,
+    visible: false,
 
     contentHeight: ''
 });
 
 watch(() => data.visible, (v) => {
     sessionStorage.setItem('vui-flyover-visible', v);
+});
+
+// restore last visible state in browser only (safe for SSR/prerender)
+onMounted(() => {
+    const visible = sessionStorage.getItem('vui-flyover-visible');
+    if (visible !== null) {
+        data.visible = visible === 'true';
+    }
 });
 
 const onStart = (v) => {

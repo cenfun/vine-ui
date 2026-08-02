@@ -11,7 +11,7 @@ paths.forEach((path) => {
     const list = path.toLowerCase().split('/');
 
     // ./examples/button.vue  or  ./examples/layout-2-columns.vue
-    const filename = list[2];
+    const filename = list[list.length - 1];
     const key = filename.replace(/\.vue$/, '');
 
     // Group by first segment (e.g. 'layout-2-columns' → group 'layout')

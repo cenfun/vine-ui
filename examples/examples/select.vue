@@ -168,15 +168,15 @@
   </VuiFlex>
 </template>
 <script setup>
-import { reactive, watch } from 'vue';
+import {
+    reactive, watch, onMounted
+} from 'vue';
 import {
     VuiSelect, VuiFlex, VuiSwitch, VuiIcon
 } from '../vine-ui.js';
 
-const visible = sessionStorage.getItem('vui-select-visible');
-
 const data = reactive({
-    visible: visible ? visible === 'true' : true,
+    visible: true,
     value: 'STG',
     options: [{
         label: 'One'
@@ -211,6 +211,14 @@ const data = reactive({
 
 watch(() => data.visible, (v) => {
     sessionStorage.setItem('vui-select-visible', v);
+});
+
+// restore last visible state in browser only (safe for SSR/prerender)
+onMounted(() => {
+    const visible = sessionStorage.getItem('vui-select-visible');
+    if (visible !== null) {
+        data.visible = visible === 'true';
+    }
 });
 
 </script>

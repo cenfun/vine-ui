@@ -33,7 +33,19 @@ import { parseMixed } from '@lezer/common';
 
 const readOnlyCompartment = new Compartment();
 
+// keep track of created views per container so they can be destroyed on re-render
+const views = new WeakMap();
+
 const Editor = (options) => {
+
+    const container = options.container;
+
+    // destroy the previous view for this container to avoid leaking rAF/DOM listeners
+    const oldView = views.get(container);
+    if (oldView) {
+        oldView.destroy();
+        views.delete(container);
+    }
 
     // https://github.com/codemirror/basic-setup/
     const basicSetup = [
@@ -96,8 +108,8 @@ const Editor = (options) => {
         return new LanguageSupport(mixedHTML);
     };
 
-    return new EditorView({
-        parent: options.container,
+    const view = new EditorView({
+        parent: container,
         doc: options.content,
         indentUnit: 4,
         indentWithTabs: false,
@@ -111,6 +123,10 @@ const Editor = (options) => {
             vscodeDark
         ]
     });
+
+    views.set(container, view);
+
+    return view;
 
 };
 
