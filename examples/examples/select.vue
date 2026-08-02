@@ -145,6 +145,19 @@
 
         <VuiSelect
           v-model="data.value"
+          label="item slot"
+          :options="data.list"
+        >
+          <template #item="{item}">
+            <VuiFlex gap="5px">
+              <VuiIcon icon="d-arrow-right" />
+              {{ item.label }}
+            </VuiFlex>
+          </template>
+        </VuiSelect>
+
+        <VuiSelect
+          v-model="data.value"
           width="auto"
           max-width="200px"
           label="width auto < 200:"
@@ -157,7 +170,7 @@
 <script setup>
 import { reactive, watch } from 'vue';
 import {
-    VuiSelect, VuiFlex, VuiSwitch
+    VuiSelect, VuiFlex, VuiSwitch, VuiIcon
 } from '../vine-ui.js';
 
 const visible = sessionStorage.getItem('vui-select-visible');

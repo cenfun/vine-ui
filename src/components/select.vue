@@ -60,9 +60,14 @@
             :class="{'vui-select-item': true, 'vui-select-selected': item.selected, 'vui-select-active': ii === data.activeIndex}"
             @mousedown="onItemClick(item, $event)"
           >
-            <div class="vui-select-label">
-              {{ item.label }}
-            </div>
+            <slot
+              name="item"
+              :item="item"
+            >
+              <div class="vui-select-label">
+                {{ item.label }}
+              </div>
+            </slot>
             <Icon
               v-if="item.selected"
               icon="selected"
@@ -279,12 +284,6 @@ const updateAllSelected = (inputValue, uiOnly) => {
                     selectedList.push(it);
                 }
             });
-
-            // first one is selectedIndex
-            if (isList(selectedList)) {
-                data.selectedIndex = selectedList[0].index;
-            }
-
         }
         data.selectedList = selectedList;
 
@@ -359,6 +358,7 @@ const onItemClick = (item, e) => {
 const onSelectedItemRemove = (item, e) => {
     // console.log(cid, 'onSelectedItemRemove', item);
     updateItemSelected(item);
+    data.activeIndex = -1;
 };
 
 // =========================================================================================================
@@ -478,9 +478,11 @@ const keyArrowHandler = (e, offset) => {
 
     // console.log('keyArrowHandler', startIndex, offset, data.selectedIndex);
 
-    const nextIndex = startIndex + offset;
-    if (nextIndex < 0 || nextIndex >= len) {
-        return;
+    let nextIndex = startIndex + offset;
+    if (nextIndex < 0) {
+        nextIndex = 0;
+    } else if (nextIndex >= len) {
+        nextIndex = len - 1;
     }
 
     data.activeIndex = nextIndex;
