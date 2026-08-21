@@ -159,6 +159,7 @@ defineExpose({
     padding: 0;
     color: var(--vui-icon-color);
     overflow: hidden;
+    user-select: none;
 
     svg {
         display: block;
