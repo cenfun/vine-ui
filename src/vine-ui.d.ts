@@ -541,6 +541,8 @@ export interface VuiTabColors {
   separator?: string;
   hover?: string;
   selected?: string;
+  simpleBorder?: string;
+  simpleSelected?: string;
 }
 export interface VuiTabProps {
   /** v-model value (selected index or value) */
@@ -551,6 +553,8 @@ export interface VuiTabProps {
   colors?: VuiTabColors;
   /** Tab alignment: left, center, or right */
   align?: 'left' | 'center' | 'right' | '';
+  /** Use the simple underline-only style */
+  simple?: boolean;
 }
 export type VuiTabEmits = {
   'update:modelValue': (value: any) => void;

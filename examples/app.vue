@@ -248,7 +248,6 @@ body {
 .vui-example-body {
     height: 100%;
     padding: 10px;
-    cursor: pointer;
     overflow-y: auto;
 }
 

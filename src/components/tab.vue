@@ -52,7 +52,7 @@ const props = defineProps({
 
 
     /**
-     * {background: "#e8e8e8", separator: "#666", hover: "#e0e0e0", selected: "#fff"}
+     * {background: "#e8e8e8", separator: "#666", hover: "#e0e0e0", selected: "#fff", simpleBorder: "#ccc", simpleSelected: "#333"}
      */
     colors: {
         type: Object,
@@ -70,8 +70,14 @@ const props = defineProps({
         validator: (value) => {
             return ['left', 'center', 'right', 'l', 'r', ''].includes(value);
         }
-    }
+    },
 
+
+    /** Use the simple underline-only style */
+    simple: {
+        type: Boolean,
+        default: false
+    }
 
 });
 
@@ -86,13 +92,16 @@ const classMap = computed(() => {
     if (tabAlign.value) {
         ls.push(`vui-tab-align-${tabAlign.value}`);
     }
+    if (props.simple) {
+        ls.push('vui-tab-simple');
+    }
     return ls;
 });
 
 const styleMap = computed(() => {
     const st = {};
     const {
-        background, separator, hover, selected
+        background, separator, hover, selected, simpleBorder, simpleSelected
     } = props.colors;
     if (background) {
         st['--vui-tab-color-background'] = background;
@@ -105,6 +114,12 @@ const styleMap = computed(() => {
     }
     if (selected) {
         st['--vui-tab-color-selected'] = selected;
+    }
+    if (simpleBorder) {
+        st['--vui-tab-color-simple-border'] = simpleBorder;
+    }
+    if (simpleSelected) {
+        st['--vui-tab-color-simple-selected'] = simpleSelected;
     }
 
     return st;
@@ -162,6 +177,8 @@ defineExpose({
     --vui-tab-color-separator: #666;
     --vui-tab-color-hover: #e0e0e0;
     --vui-tab-color-selected: #fff;
+    --vui-tab-color-simple-border: #ccc;
+    --vui-tab-color-simple-selected: #333;
     --vui-tab-path-left: path("M0,10 h11 v-10 h-1 Q10,10 0,10 z");
     --vui-tab-path-right: path("M11,10 h-11 v-10 h1 Q1,10 11,10 z");
 
@@ -288,6 +305,45 @@ defineExpose({
 
         & + .vui-tab-item:not(.vui-tab-selected)::before {
             display: none;
+        }
+    }
+}
+
+.vui-tab.vui-tab-simple {
+    border-bottom: 1px solid var(--vui-tab-color-simple-border);
+    background-color: transparent;
+
+    .vui-tab-list {
+        padding: 0;
+    }
+
+    .vui-tab-item {
+        border-radius: 0;
+
+        &::before,
+        &::after {
+            content: none;
+        }
+
+        &.vui-tab-selected {
+            background-color: transparent;
+
+            &::after {
+                position: absolute;
+                left: 0;
+                bottom: -1px;
+                right: 0;
+                content: "";
+                display: block;
+                width: auto;
+                height: 4px;
+                background-color: var(--vui-tab-color-simple-selected);
+                clip-path: none;
+            }
+        }
+
+        &:hover:not(.vui-tab-selected) {
+            background-color: transparent;
         }
     }
 }

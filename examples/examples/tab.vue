@@ -25,6 +25,9 @@
             Right
           </option>
         </VuiSelect>
+        <VuiSwitch v-model="tabSimple">
+          Simple style
+        </VuiSwitch>
       </VuiFlex>
 
       <div>
@@ -32,6 +35,7 @@
           v-model="tab1"
           :options="['Tab A', 'Tab B', 'Tab C']"
           :align="tabAlign"
+          :simple="tabSimple"
         >
           <template #left>
             <div>
@@ -62,6 +66,7 @@
           v-model="tab2"
           :options="options2"
           :align="tabAlign"
+          :simple="tabSimple"
         />
         <div class="tab-pane">
           Selected value: <b>{{ tab2 }}</b>
@@ -74,14 +79,15 @@
       direction="column"
     >
       <div class="example-label">
-        Tabs with custom colors (background, separator, hover, selected)
+        Tabs with custom colors (background, separator, hover, selected, simpleBorder, simpleSelected)
       </div>
       <div>
         <VuiTab
           v-model="tab3"
           :options="['Red', 'Green', 'Blue']"
-          :colors="{ background: '#ccc', separator: '#dc3545', hover: '#f8d7da', selected: '#fff3cd' }"
+          :colors="{ background: '#ccc', separator: '#dc3545', hover: '#f8d7da', selected: '#fff3cd', simpleBorder: '#f5c2c7', simpleSelected: '#dc3545' }"
           :align="tabAlign"
+          :simple="tabSimple"
         />
         <div class="tab-pane">
           Selected: {{ ['Red', 'Green', 'Blue'][tab3] }}
@@ -101,6 +107,7 @@
           v-model="tab4"
           :options="['Outer 1', 'Outer 2']"
           :align="tabAlign"
+          :simple="tabSimple"
         />
         <div
           v-if="tab4===0"
@@ -110,6 +117,7 @@
             v-model="subTab"
             :options="['Sub A', 'Sub B']"
             :align="tabAlign"
+            :simple="tabSimple"
           />
           <div class="tab-pane">
             Sub selected: {{ ['Sub A', 'Sub B'][subTab] }}
@@ -129,11 +137,12 @@
 <script setup>
 import { ref } from 'vue';
 import {
-    VuiFlex, VuiSelect, VuiTab
+    VuiFlex, VuiSelect, VuiSwitch, VuiTab
 } from '../vine-ui.js';
 
 
 const tabAlign = ref('');
+const tabSimple = ref(false);
 const tab1 = ref(0);
 const tab2 = ref('option2');
 const tab3 = ref(0);
