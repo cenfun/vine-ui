@@ -659,9 +659,13 @@ export function mount(
   }
 ): { el: HTMLElement; unmount: () => void };
 
-/** Show a toast notification */
+/**
+ * Show a toast notification.
+ * Calling `unmount` dismisses the toast and cancels its pending auto-dismiss timer.
+ */
 export function showToast(
   options: VuiToastProps & {
+    /** Auto-dismiss delay in milliseconds. Defaults to 2000; use 0 to disable auto-dismiss. */
     timeout?: number;
   },
   container?: HTMLElement

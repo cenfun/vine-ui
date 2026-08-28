@@ -106,7 +106,7 @@ showToast({ type: 'info', content: 'Long message', timeout: 5000 });
 // render into a custom container (defaults to a fixed container appended to body)
 const container = document.getElementById('toast-area');
 const { unmount } = showToast({ type: 'success', content: 'Hi' }, container);
-// unmount(); // dismiss manually
+// unmount(); // dismiss manually and cancel the pending auto-dismiss timer
 ```
 
 ### `mount`

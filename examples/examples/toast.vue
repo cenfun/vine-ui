@@ -3,6 +3,12 @@
     direction="column"
     gap="10px"
   >
+    <VuiSelect
+      v-model="data.timeout"
+      label="timeout:"
+      :options="data.timeoutOptions"
+    />
+
     <div class="vui-example-subtitle">
       showToast - different types
     </div>
@@ -51,28 +57,56 @@
 </template>
 
 <script setup>
-import { defineComponent, h } from 'vue';
+import {
+    defineComponent, h, onUnmounted, reactive
+} from 'vue';
 
 import {
-    VuiButton, VuiFlex, showToast
+    VuiButton, VuiFlex, VuiSelect, showToast
 } from '../vine-ui.js';
 
+const data = reactive({
+    timeout: 2000,
+    timeoutOptions: ['', 0, 1000, 2000, 3000, 10000].map((value) => ({
+        label: `${value}`,
+        value
+    }))
+});
+
+const toastInstances = new Set();
+
+const openToast = (options) => {
+    const toast = showToast({
+        ... options,
+        timeout: data.timeout
+    });
+    toastInstances.add(toast);
+    return toast;
+};
+
+onUnmounted(() => {
+    toastInstances.forEach((toast) => {
+        toast.unmount();
+    });
+    toastInstances.clear();
+});
+
 const show = (type) => {
-    showToast({
+    openToast({
         type,
         content: `This is a ${type} toast message!`
     });
 };
 
 const showCustom = () => {
-    showToast({
+    openToast({
         type: 'info',
         content: 'This is a custom toast message with longer content to demonstrate the toast component.'
     });
 };
 
 const showCustomStyle = () => {
-    showToast({
+    openToast({
         type: 'success',
         icon: 'success',
         iconColor: '#fff',
@@ -85,7 +119,7 @@ const showCustomStyle = () => {
 };
 
 const showHtml = () => {
-    showToast({
+    openToast({
         type: 'success',
         content: '<strong>HTML content</strong><br><span>Rendered with innerHTML</span>',
         html: true
@@ -103,14 +137,14 @@ const ToastContent = defineComponent({
 });
 
 const showComponent = () => {
-    showToast({
+    openToast({
         type: 'info',
         content: ToastContent
     });
 };
 
 const showVNode = () => {
-    showToast({
+    openToast({
         type: 'success',
         content: h('div', [
             h('strong', 'VNode content'),
@@ -120,22 +154,22 @@ const showVNode = () => {
 };
 
 const showMultiple = () => {
-    showToast({
+    openToast({
         type: 'success', content: 'First toast'
     });
-    showToast({
+    openToast({
         type: 'error', content: 'Second toast'
     });
-    showToast({
+    openToast({
         type: 'info', content: 'Third toast'
     });
 };
 </script>
 <style scoped>
 .vui-example-subtitle {
-  color: #666;
-  font-weight: bold;
-  font-size: 13px;
-  margin-top: 5px;
+    margin-top: 5px;
+    color: #666;
+    font-weight: bold;
+    font-size: 13px;
 }
 </style>

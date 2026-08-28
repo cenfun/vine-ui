@@ -224,6 +224,8 @@ export const initGlobalTooltips = (onEnter, onLeave) => {
 let toastContainer;
 
 /**
+ * Shows a toast notification. A timeout of 0 disables auto-dismiss.
+ * Calling the returned unmount function cancels any pending auto-dismiss timer.
  *
  * @param {*} options: type, icon, iconColor, iconSize, content, html, color, border, background, timeout
  * @param {*} container
@@ -266,9 +268,27 @@ export const showToast = (options, container) => {
         }
     });
 
-    setTimeout(() => {
+    let timeoutId = null;
+    let unmounted = false;
+    const unmount = () => {
+        if (unmounted) {
+            return;
+        }
+        unmounted = true;
+        if (timeoutId !== null) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        }
         vn.unmount();
-    }, options.timeout || 2000);
+    };
 
-    return vn;
+    const timeout = options.timeout ?? 2000;
+    if (timeout !== 0) {
+        timeoutId = setTimeout(unmount, timeout);
+    }
+
+    return {
+        el: vn.el,
+        unmount
+    };
 };
