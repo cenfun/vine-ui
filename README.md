@@ -100,6 +100,7 @@ import { setMaxToastCount, setToastContainerPosition, showToast } from 'vine-ui'
 setMaxToastCount(10);
 
 // Position the built-in container: left/center/right and top/center/bottom.
+// Toasts use the configured direction for their enter and leave animations.
 // Shorthands l/c/r and t/c/b are also supported. The default is center/top/20px.
 // The minimum gap is 10px; centered axes ignore the gap.
 setToastContainerPosition('right', 'bottom', 20);

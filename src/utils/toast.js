@@ -5,6 +5,7 @@ import { mount } from './mount.js';
 let defaultToastContainer;
 const toastUnmountsByContainer = new WeakMap();
 let maxToastCount = 10;
+const toastAnimationDuration = 200;
 let toastContainerPosition = {
     x: 'center',
     y: 'top',
@@ -127,6 +128,7 @@ export const setMaxToastCount = (count) => {
 /**
  * Shows a toast notification. An invalid timeout uses the 2000ms default; 0 disables auto-dismiss.
  * Toasts that do not auto-dismiss or last longer than one minute show a manual close button.
+ * Toasts animate into and out of the direction configured for the built-in container.
  * Each container retains at most the configured number of recently added toasts (10 by default).
  * Adding another toast dismisses the oldest one and cancels its pending timer.
  * A per-call container is not affected by setToastContainerPosition.
@@ -137,6 +139,7 @@ export const setMaxToastCount = (count) => {
  * @returns
  */
 export const showToast = (options, container) => {
+    const useDefaultContainer = !container;
     container = getToastContainer(container);
 
     let toastUnmounts = toastUnmountsByContainer.get(container);
@@ -150,9 +153,28 @@ export const showToast = (options, container) => {
 
     const timeout = isNum(options.timeout) ? options.timeout : 2000;
     const close = timeout === 0 || timeout > 60000;
+    const position = useDefaultContainer ? toastContainerPosition : {
+        x: 'center',
+        y: 'top'
+    };
     let vn = null;
     let timeoutId = null;
+    let leaveTimeoutId = null;
     let unmounted = false;
+    let animationEndHandler = null;
+
+    const finishUnmount = () => {
+        if (leaveTimeoutId !== null) {
+            clearTimeout(leaveTimeoutId);
+            leaveTimeoutId = null;
+        }
+        const toastEl = vn.el.querySelector('.vui-toast');
+        if (toastEl && animationEndHandler) {
+            toastEl.removeEventListener('animationend', animationEndHandler);
+        }
+        vn.unmount();
+    };
+
     const unmount = () => {
         if (unmounted) {
             return;
@@ -166,7 +188,20 @@ export const showToast = (options, container) => {
         if (index !== -1) {
             toastUnmounts.splice(index, 1);
         }
-        vn.unmount();
+
+        const toastEl = vn.el.querySelector('.vui-toast');
+        if (!toastEl) {
+            finishUnmount();
+            return;
+        }
+        animationEndHandler = (e) => {
+            if (e.target === toastEl && e.animationName === 'vui-toast-leave') {
+                finishUnmount();
+            }
+        };
+        toastEl.addEventListener('animationend', animationEndHandler);
+        toastEl.classList.add('vui-toast-leave');
+        leaveTimeoutId = setTimeout(finishUnmount, toastAnimationDuration + 50);
     };
 
     vn = mount(VuiToast, {
@@ -182,6 +217,8 @@ export const showToast = (options, container) => {
             border: options.border,
             background: options.background,
             close,
+            positionX: position.x,
+            positionY: position.y,
             onClose: unmount
         }
     });

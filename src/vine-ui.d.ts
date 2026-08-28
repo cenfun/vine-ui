@@ -590,6 +590,10 @@ export interface VuiToastProps {
   background?: string;
   /** Show a manual close button */
   close?: boolean;
+  /** Horizontal enter/leave animation direction */
+  positionX?: 'left' | 'center' | 'right';
+  /** Vertical enter/leave animation direction */
+  positionY?: 'top' | 'center' | 'bottom';
 }
 export interface VuiToastEmits {
   close: () => void;

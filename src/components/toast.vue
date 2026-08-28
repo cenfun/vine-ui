@@ -109,6 +109,20 @@ const props = defineProps({
     close: {
         type: Boolean,
         default: false
+    },
+
+    /** Horizontal animation direction */
+
+    positionX: {
+        type: String,
+        default: 'center'
+    },
+
+    /** Vertical animation direction */
+
+    positionY: {
+        type: String,
+        default: 'top'
     }
 
 });
@@ -138,6 +152,37 @@ const data = reactive({
     style: {}
 });
 
+const horizontalOffsetMap = {
+    left: '-100%',
+    center: '0',
+    right: '100%'
+};
+
+const enterVerticalOffsetMap = {
+    top: '100%',
+    center: '0',
+    bottom: '100%'
+};
+
+const leaveVerticalOffsetMap = {
+    top: '-100%',
+    center: '0',
+    bottom: '-100%'
+};
+
+const getToastStyle = () => {
+    const center = props.positionX === 'center' && props.positionY === 'center';
+    return {
+        color: props.color,
+        border: props.border,
+        background: props.background,
+        '--vui-toast-translate-x': horizontalOffsetMap[props.positionX] || '0',
+        '--vui-toast-enter-y': enterVerticalOffsetMap[props.positionY] || '0',
+        '--vui-toast-leave-y': leaveVerticalOffsetMap[props.positionY] || '0',
+        '--vui-toast-scale': center ? 0.9 : 1
+    };
+};
+
 const update = microtask(() => {
     const defaults = iconMap[props.type] || iconMap.info;
     const settings = {
@@ -155,11 +200,7 @@ const update = microtask(() => {
     }
 
     data.settings = settings;
-    data.style = {
-        color: props.color,
-        border: props.border,
-        background: props.background
-    };
+    data.style = getToastStyle();
 });
 
 watch([
@@ -169,7 +210,9 @@ watch([
     () => props.iconSize,
     () => props.color,
     () => props.border,
-    () => props.background
+    () => props.background,
+    () => props.positionX,
+    () => props.positionY
 ], () => {
     update();
 });
@@ -184,14 +227,27 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@keyframes vui-toast-slide-in-up {
+@keyframes vui-toast-enter {
     from {
-        visibility: visible;
-        transform: translate3d(0, 100%, 0);
+        opacity: 0;
+        transform: translate3d(var(--vui-toast-translate-x), var(--vui-toast-enter-y), 0) scale(var(--vui-toast-scale));
     }
 
     to {
-        transform: translate3d(0, 0, 0);
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes vui-toast-leave {
+    from {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate3d(var(--vui-toast-translate-x), var(--vui-toast-leave-y), 0) scale(var(--vui-toast-scale));
     }
 }
 
@@ -204,9 +260,16 @@ defineExpose({
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 4px 12px 0 rgb(0 0 0 / 8%);
-    animation-name: vui-toast-slide-in-up;
+    animation-name: vui-toast-enter;
     animation-duration: 0.2s;
+    animation-timing-function: ease-out;
     animation-fill-mode: both;
+}
+
+.vui-toast-leave {
+    pointer-events: none;
+    animation-name: vui-toast-leave;
+    animation-timing-function: ease-in;
 }
 
 .vui-toast-closeable {
@@ -219,5 +282,11 @@ defineExpose({
     right: 6px;
     display: flex;
     cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vui-toast {
+        animation-duration: 0.01ms;
+    }
 }
 </style>
