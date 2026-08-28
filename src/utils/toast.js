@@ -151,7 +151,7 @@ export const showToast = (options, container) => {
     const el = document.createElement('div');
     container.appendChild(el);
 
-    const timeout = isNum(options.timeout) ? options.timeout : 2000;
+    const timeout = isNum(options.timeout) && options.timeout >= 0 ? options.timeout : 2000;
     const close = timeout === 0 || timeout > 60000;
     const position = useDefaultContainer ? toastContainerPosition : {
         x: 'center',
