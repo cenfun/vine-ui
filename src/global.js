@@ -1,27 +1,56 @@
 import { createVNode, render } from 'vue';
 import VuiToast from './components/toast.vue';
 
-// example createApp/h
-// const example = () => {
+// example createApp/h: props, events, v-model, and slots
+// const modelExample = () => {
 //     const div = document.createElement('div');
-//     const vm = createApp({
+//     document.body.appendChild(div);
+//
+//     const app = createApp({
+//         data() {
+//             return {
+//                 value: 'Initial value'
+//             };
+//         },
+//         methods: {
+//             handleCustomEvent(payload) {
+//                 console.log('xxx-xxx:', payload);
+//             }
+//         },
 //         render() {
-//             return h(VuiFlex, {
-//                 gap: '5px'
-//             }, {
-//                 default: () => {
-//                     return [
-//                         'string value',
-//                         h(VuiIconLabel, {
-//                             icon: 'drop-down',
-//                             button: true
-//                         })
-//                     ];
+//             return h(MyComponent, {
+//                 // Normal props
+//                 title: 'Example',
+//
+//                 // @xxx-xxx="handleCustomEvent"
+//                 onXxxXxx: this.handleCustomEvent,
+//
+//                 // v-model:value="value"
+//                 value: this.value,
+//                 'onUpdate:value': (newValue) => {
+//                     this.value = newValue;
 //                 }
+//             }, {
+//                 // Component slots
+//                 default: () => [
+//                     'Default slot content',
+//                     h('span', null, 'Child element')
+//                 ]
 //             });
 //         }
-//     }).mount(div);
-//     return vm.$el;
+//     });
+//
+//     const vm = app.mount(div);
+//
+//     const unmount = () => {
+//         app.unmount();
+//         div.remove();
+//     };
+//
+//     return {
+//         el: vm.$el,
+//         unmount
+//     };
 // };
 
 /**
