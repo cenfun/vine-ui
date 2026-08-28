@@ -73,10 +73,24 @@
     --vui-red-90: #31120d;
 }
 
-.vui,
-.vui *,
-.vui *::before,
-.vui *::after {
+:where(.vui) {
     box-sizing: border-box;
+    font-family: inherit;
+}
+
+:where(
+    .vui *,
+    .vui *::before,
+    .vui *::after
+) {
+    box-sizing: inherit;
+}
+
+:where(
+    .vui button,
+    .vui input,
+    .vui select,
+    .vui textarea
+) {
     font-family: inherit;
 }
