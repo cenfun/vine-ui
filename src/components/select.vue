@@ -847,8 +847,6 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@use "../global.scss";
-
 .vui-select {
     position: relative;
     display: flex;

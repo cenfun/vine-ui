@@ -86,8 +86,6 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@use "../global.scss";
-
 .vui-progress {
     position: relative;
     border-style: solid;

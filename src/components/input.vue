@@ -245,8 +245,6 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@use "../global.scss";
-
 .vui-input {
     display: flex;
     flex-direction: row;

@@ -325,8 +325,6 @@ defineExpose({
 </script>
 
 <style lang="scss">
-@use "../global.scss";
-
 .vui-flyover {
     position: fixed;
     top: 0;

@@ -62,8 +62,6 @@ defineExpose({
 </script>
 
 <style lang="scss">
-@use "../global.scss";
-
 .vui-checkbox {
     position: relative;
     display: flex;

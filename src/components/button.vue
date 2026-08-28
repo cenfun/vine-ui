@@ -89,8 +89,6 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@use "../global.scss";
-
 .vui-button {
     display: flex;
     gap: 5px;

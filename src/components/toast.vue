@@ -88,8 +88,6 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@use "../global.scss";
-
 @keyframes vui-toast-slide-in-up {
     from {
         visibility: visible;

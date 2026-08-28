@@ -1,3 +1,5 @@
+import './global.scss';
+
 import VuiButton from './components/button.vue';
 import VuiButtonGroup from './components/button-group.vue';
 import VuiCheckbox from './components/checkbox.vue';

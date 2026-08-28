@@ -254,8 +254,6 @@ defineExpose({
 </script>
 
 <style lang="scss">
-@use "../global.scss";
-
 .vui-tooltip {
     --vui-tooltip-color: inherit;
     --vui-tooltip-max-width: 320px;

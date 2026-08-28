@@ -144,8 +144,6 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@use "../global.scss";
-
 .vui-icon {
     --vui-icon-width: 16px;
     --vui-icon-height: 16px;

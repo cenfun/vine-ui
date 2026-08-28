@@ -97,8 +97,6 @@ defineExpose({
 
 </script>
 <style lang="scss">
-@use '../global.scss';
-
 .vui-loading {
     position: relative;
     z-index: 1000;

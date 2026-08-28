@@ -131,8 +131,6 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@use "../global.scss";
-
 .vui-icon-label {
     --vui-icon-label-gap: 4px;
 

@@ -78,8 +78,6 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@use "../global.scss";
-
 .vui-radio {
     position: relative;
     display: flex;

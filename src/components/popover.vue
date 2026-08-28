@@ -506,8 +506,6 @@ defineExpose({
 </script>
 
 <style lang="scss">
-@use "../global.scss";
-
 .vui-popover {
     --vui-popover-color: inherit;
     --vui-popover-width: 200px;

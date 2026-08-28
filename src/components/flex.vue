@@ -172,8 +172,6 @@ defineExpose({
 </script>
 
 <style lang="scss">
-@use "../global.scss";
-
 .vui-flex {
     --vui-flex-gap: 0;
     --vui-flex-margin: 0;

@@ -183,8 +183,6 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@use "../global.scss";
-
 .vui-switch {
     display: flex;
     gap: 5px;

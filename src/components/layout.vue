@@ -557,8 +557,6 @@ defineExpose({
 </script>
 
 <style lang="scss">
-@use "../global.scss";
-
 .vui-layout {
     --vui-gutter-hover-size: 2px;
     --vui-gutter-size: 4px;

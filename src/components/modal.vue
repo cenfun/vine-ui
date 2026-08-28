@@ -180,8 +180,6 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@use "../global.scss";
-
 .vui-modal-lock-body {
     overflow: hidden;
     touch-action: none;
