@@ -1,6 +1,129 @@
 import { createVNode, render } from 'vue';
 import VuiToast from './components/toast.vue';
 
+// example createApp/h
+// const example = () => {
+//     const div = document.createElement('div');
+//     const vm = createApp({
+//         render() {
+//             return h(VuiFlex, {
+//                 gap: '5px'
+//             }, {
+//                 default: () => {
+//                     return [
+//                         'string value',
+//                         h(VuiIconLabel, {
+//                             icon: 'drop-down',
+//                             button: true
+//                         })
+//                     ];
+//                 }
+//             });
+//         }
+//     }).mount(div);
+//     return vm.$el;
+// };
+
+/**
+ * Mounts a Vue component or native element to a DOM element.
+ *
+ * - If `options.el` is not provided, a div is created and appended to document.body.
+ * - If `options.app` is provided, the component inherits the Vue app context,
+ *   including plugins, global components, and provided values.
+ * - Call `unmount` on the returned object to unmount the component and remove its element.
+ * - Pass event listeners through `options.props` using Vue's `onXxx` naming convention.
+ * - To use `v-model`, pass its model prop and corresponding `onUpdate:modelName` listener.
+ *
+ * @param {*} Component The Vue component or native element to mount
+ * @param {Object} options The mount options
+ * @param {HTMLElement} [options.el] The target element
+ * @param {Object} [options.props] Props passed to the component
+ * @param {*} [options.children] Child nodes or slots. Use a string for text content, an
+ *   array for multiple element children, or a slots object with functions for component children.
+ * @param {import('vue').App} [options.app] The Vue app whose context should be inherited
+ * @returns {{ el: HTMLElement, unmount: Function }} The target element and unmount function
+ *
+ * @example
+ * // Create the target element automatically.
+ * const toast = mount(VuiToast, {
+ *     props: {
+ *         type: 'success',
+ *         content: 'Saved successfully'
+ *     }
+ * });
+ *
+ * // Unmount the component and remove its element when it is no longer needed.
+ * toast.unmount();
+ *
+ * @example
+ * // For a native element, pass its child VNodes as an array.
+ * const element = mount('div', {
+ *     children: [
+ *         createVNode('span', null, 'First child'),
+ *         createVNode('span', null, 'Second child')
+ *     ]
+ * });
+ *
+ * @example
+ * // For a component, pass its slots as an object whose values are functions.
+ * // The component can also inherit the context of an existing Vue app.
+ * const result = mount(MyComponent, {
+ *     el: document.querySelector('#component-container'),
+ *     app,
+ *     props: { title: 'Example' },
+ *     children: {
+ *         default: () => 'Default slot content'
+ *     }
+ * });
+ *
+ * @example
+ * // Pass event listeners as props. `onClick` handles a native click event.
+ * const button = mount('button', {
+ *     props: {
+ *         onClick: (event) => {
+ *             console.log('Clicked:', event);
+ *         }
+ *     },
+ *     children: 'Click me'
+ * });
+ *
+ * // Convert kebab-case component event names to camelCase after the `on` prefix.
+ * // For example, `@xxx-xxx="handler"` becomes `onXxxXxx: handler`.
+ * const component = mount(MyComponent, {
+ *     props: {
+ *         onXxxXxx: (payload) => {
+ *             console.log('xxx-xxx:', payload);
+ *         }
+ *     }
+ * });
+ *
+ * @example
+ * // The examples below show how v-model is represented as props and listeners.
+ * // A direct mount does not create a reactive parent, so changing the local
+ * // variable captures the emitted value but does not rerender the VNode.
+ * // `v-model="value"` passes `modelValue` and listens for `update:modelValue`.
+ * let value = 'Initial value';
+ * const input = mount(MyInput, {
+ *     props: {
+ *         modelValue: value,
+ *         'onUpdate:modelValue': (newValue) => {
+ *             value = newValue;
+ *         }
+ *     }
+ * });
+ *
+ * @example
+ * // `v-model:value="value"` uses `value` as the prop and `update:value` as the event.
+ * let selectedValue = 'Initial value';
+ * const namedModel = mount(MyInput, {
+ *     props: {
+ *         value: selectedValue,
+ *         'onUpdate:value': (newValue) => {
+ *             selectedValue = newValue;
+ *         }
+ *     }
+ * });
+ */
 export const mount = (Component, options) => {
 
     const vn = createVNode(Component, options.props, options.children);
