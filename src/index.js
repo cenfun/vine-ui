@@ -26,9 +26,11 @@ import VuiTooltip from './components/tooltip.vue';
 import {
     icons, defaultIcons, setIcons
 } from './utils/icons.js';
+import { mount } from './utils/mount.js';
+import { initGlobalTooltips } from './utils/tooltip.js';
 import {
-    initGlobalTooltips, mount, showToast
-} from './global.js';
+    setMaxToastCount, setToastContainerPosition, showToast
+} from './utils/toast.js';
 import { Motion } from './utils/motion.js';
 import { StartMoveEnd } from './utils/start-move-end.js';
 
@@ -68,6 +70,8 @@ export {
 
     initGlobalTooltips,
     mount,
+    setMaxToastCount,
+    setToastContainerPosition,
     showToast,
 
     Motion,

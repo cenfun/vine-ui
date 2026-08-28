@@ -3,11 +3,36 @@
     direction="column"
     gap="10px"
   >
-    <VuiSelect
-      v-model="data.timeout"
-      label="timeout:"
-      :options="data.timeoutOptions"
-    />
+    <VuiFlex
+      gap="10px"
+      wrap
+    >
+      <VuiSelect
+        v-model="data.timeout"
+        label="timeout:"
+        :options="data.timeoutOptions"
+      />
+      <VuiSelect
+        v-model="data.maxToastCount"
+        label="max toast count:"
+        :options="data.maxToastCountOptions"
+      />
+      <VuiSelect
+        v-model="data.positionX"
+        label="position x:"
+        :options="data.positionXOptions"
+      />
+      <VuiSelect
+        v-model="data.positionY"
+        label="position y:"
+        :options="data.positionYOptions"
+      />
+      <VuiSelect
+        v-model="data.positionGap"
+        label="position gap:"
+        :options="data.positionGapOptions"
+      />
+    </VuiFlex>
 
     <div class="vui-example-subtitle">
       showToast - different types
@@ -58,19 +83,42 @@
 
 <script setup>
 import {
-    defineComponent, h, onUnmounted, reactive
+    defineComponent, h, onUnmounted, reactive, watch
 } from 'vue';
 
 import {
-    VuiButton, VuiFlex, VuiSelect, showToast
+    VuiButton, VuiFlex, VuiSelect,
+    setMaxToastCount, setToastContainerPosition, showToast
 } from '../vine-ui.js';
+
+const toOptions = (list) => list.map((value) => ({
+    label: `${value}`,
+    value
+}));
 
 const data = reactive({
     timeout: 2000,
-    timeoutOptions: ['', 0, 1000, 2000, 3000, 10000].map((value) => ({
-        label: `${value}`,
-        value
-    }))
+    timeoutOptions: toOptions(['', 0, 1000, 2000, 3000, 10000]),
+    maxToastCount: 10,
+    maxToastCountOptions: toOptions([10, 5, 3]),
+    positionX: 'center',
+    positionXOptions: ['left', 'center', 'right'],
+    positionY: 'top',
+    positionYOptions: ['top', 'center', 'bottom'],
+    positionGap: 20,
+    positionGapOptions: toOptions([10, 20, 50])
+});
+
+watch(() => data.maxToastCount, (count) => {
+    setMaxToastCount(count);
+});
+
+watch([
+    () => data.positionX,
+    () => data.positionY,
+    () => data.positionGap
+], ([x, y, gap]) => {
+    setToastContainerPosition(x, y, gap);
 });
 
 const toastInstances = new Set();
@@ -89,6 +137,8 @@ onUnmounted(() => {
         toast.unmount();
     });
     toastInstances.clear();
+    setMaxToastCount(10);
+    setToastContainerPosition();
 });
 
 const show = (type) => {

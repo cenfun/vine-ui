@@ -2,6 +2,7 @@
   <div
     v-init="{cid}"
     class="vui vui-toast"
+    :class="{'vui-toast-closeable': props.close}"
     :style="data.style"
   >
     <Icon
@@ -15,6 +16,13 @@
         :content="props.content"
         :html="props.html"
       />
+    </div>
+    <div
+      v-if="props.close"
+      class="vui-toast-close"
+      @click="emit('close')"
+    >
+      <Icon icon="close" />
     </div>
   </div>
 </template>
@@ -94,10 +102,18 @@ const props = defineProps({
     background: {
         type: String,
         default: ''
+    },
+
+    /** Show a manual close button */
+
+    close: {
+        type: Boolean,
+        default: false
     }
 
-
 });
+
+const emit = defineEmits(['close']);
 
 const iconMap = {
     success: {
@@ -180,6 +196,7 @@ defineExpose({
 }
 
 .vui-toast {
+    position: relative;
     display: flex;
     gap: 8px;
     align-items: center;
@@ -190,5 +207,17 @@ defineExpose({
     animation-name: vui-toast-slide-in-up;
     animation-duration: 0.2s;
     animation-fill-mode: both;
+}
+
+.vui-toast-closeable {
+    padding-right: 32px;
+}
+
+.vui-toast-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    display: flex;
+    cursor: pointer;
 }
 </style>

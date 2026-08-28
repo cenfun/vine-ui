@@ -588,8 +588,13 @@ export interface VuiToastProps {
   border?: string;
   /** CSS background shorthand */
   background?: string;
+  /** Show a manual close button */
+  close?: boolean;
 }
-export const VuiToast: DefineComponent<VuiToastProps>;
+export interface VuiToastEmits {
+  close: () => void;
+}
+export const VuiToast: DefineComponent<VuiToastProps, {}, {}, {}, {}, {}, {}, VuiToastEmits>;
 
 // ============================================================
 // VuiTooltip
@@ -659,14 +664,31 @@ export function mount(
   }
 ): { el: HTMLElement; unmount: () => void };
 
+export type ToastHorizontalPosition = 'left' | 'center' | 'right' | 'l' | 'c' | 'r';
+export type ToastVerticalPosition = 'top' | 'center' | 'bottom' | 't' | 'c' | 'b';
+
 /**
- * Show a toast notification.
+ * Set the position of the built-in Toast container. Defaults to center/top with a 20px gap.
+ * The minimum gap is 10px. The gap is ignored on centered axes. Per-call custom containers are not affected.
+ */
+export function setToastContainerPosition(
+  x?: ToastHorizontalPosition,
+  y?: ToastVerticalPosition,
+  gap?: StringOrNumber
+): void;
+
+/** Set the maximum number of toasts retained by each container (default: 10). Invalid values are ignored. */
+export function setMaxToastCount(count: number): void;
+
+/**
+ * Show a toast notification. Each container retains at most the configured number of toasts.
+ * Adding another toast dismisses the oldest one and cancels its pending timer.
  * Calling `unmount` dismisses the toast and cancels its pending auto-dismiss timer.
  */
 export function showToast(
   options: VuiToastProps & {
-    /** Auto-dismiss delay in milliseconds. Defaults to 2000; use 0 to disable auto-dismiss. */
-    timeout?: number;
+    /** Auto-dismiss delay in milliseconds. Defaults to 2000; use 0 to disable or an empty string to use the default. */
+    timeout?: number | '';
   },
   container?: HTMLElement
 ): { el: HTMLElement; unmount: () => void };

@@ -94,16 +94,28 @@ Find free icons from [https://cenfun.github.io/open-icons/](https://cenfun.githu
 ### `showToast`
 
 ```js
-import { showToast } from 'vine-ui';
+import { setMaxToastCount, setToastContainerPosition, showToast } from 'vine-ui';
+
+// Set the per-container toast limit (default: 10).
+setMaxToastCount(10);
+
+// Position the built-in container: left/center/right and top/center/bottom.
+// Shorthands l/c/r and t/c/b are also supported. The default is center/top/20px.
+// The minimum gap is 10px; centered axes ignore the gap.
+setToastContainerPosition('right', 'bottom', 20);
+// setToastContainerPosition(); // restore the default position
 
 // types: success | error | info
 showToast({ type: 'success', content: 'Saved successfully' });
 showToast({ type: 'error', content: 'Something went wrong' });
 
-// custom dismiss timeout in ms (default: 2000, 0 = keep until manually closed)
+// custom dismiss timeout in ms (default: 2000, '' = use default, 0 = keep until manually closed)
+// Toasts with timeout 0 or greater than 60000 show a manual close icon.
 showToast({ type: 'info', content: 'Long message', timeout: 5000 });
 
-// render into a custom container (defaults to a fixed container appended to body)
+// Each container keeps at most the configured number of recently added toasts.
+// Adding another toast dismisses the oldest one and cancels its pending timer.
+// A per-call custom container is not affected by setToastContainerPosition.
 const container = document.getElementById('toast-area');
 const { unmount } = showToast({ type: 'success', content: 'Hi' }, container);
 // unmount(); // dismiss manually and cancel the pending auto-dismiss timer
