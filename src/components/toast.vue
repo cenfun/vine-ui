@@ -11,7 +11,10 @@
       :size="data.settings.size"
     />
     <div class="vui-toast-content">
-      <VuiContentRenderer :content="props.content" />
+      <VuiContentRenderer
+        :content="props.content"
+        :html="props.html"
+      />
     </div>
   </div>
 </template>
@@ -21,9 +24,9 @@ import {
 } from 'vue';
 import { microtask } from 'async-tick';
 
+import VuiContentRenderer from './content-renderer.vue';
 import Icon from './icon.vue';
 
-import { VuiContentRenderer } from '../global.js';
 import { getCID, vInit } from '../utils/util.js';
 
 const cid = getCID('VuiToast');
@@ -63,6 +66,13 @@ const props = defineProps({
     content: {
         type: [String, Object, Function],
         default: ''
+    },
+
+    /** Render string content as HTML */
+
+    html: {
+        type: Boolean,
+        default: false
     },
 
     /** Toast text color */

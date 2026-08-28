@@ -579,7 +579,9 @@ export interface VuiToastProps {
   /** Custom icon size */
   iconSize?: string;
   /** Toast text/HTML content, Vue component, or VNode */
-  content?: string | Component | VNode;
+  content?: string | Component | VNode | null;
+  /** Render string content as HTML */
+  html?: boolean;
   /** Toast text color */
   color?: string;
   /** CSS border shorthand */
@@ -627,7 +629,8 @@ export const VuiTooltip: DefineComponent<VuiTooltipProps>;
 
 /** Render text/HTML, a Vue component, or a VNode. HTML content must be trusted. */
 export const VuiContentRenderer: DefineComponent<{
-  content?: string | Component | VNode;
+  content?: string | Component | VNode | null;
+  html?: boolean;
 }>;
 
 /** Icon name to SVG string map (mutable, can be extended via setIcons) */

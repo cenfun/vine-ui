@@ -3,6 +3,7 @@ import './global.scss';
 import VuiButton from './components/button.vue';
 import VuiButtonGroup from './components/button-group.vue';
 import VuiCheckbox from './components/checkbox.vue';
+import VuiContentRenderer from './components/content-renderer.vue';
 import VuiDialog from './components/dialog.vue';
 import VuiFlex from './components/flex.vue';
 import VuiFlyover from './components/flyover.vue';
@@ -26,7 +27,7 @@ import {
     icons, defaultIcons, setIcons
 } from './utils/icons.js';
 import {
-    initGlobalTooltips, mount, showToast, VuiContentRenderer
+    initGlobalTooltips, mount, showToast
 } from './global.js';
 import { Motion } from './utils/motion.js';
 import { StartMoveEnd } from './utils/start-move-end.js';
@@ -41,6 +42,7 @@ export {
     VuiButton,
     VuiButtonGroup,
     VuiCheckbox,
+    VuiContentRenderer,
     VuiDialog,
     VuiFlex,
     VuiFlyover,
@@ -67,7 +69,6 @@ export {
     initGlobalTooltips,
     mount,
     showToast,
-    VuiContentRenderer,
 
     Motion,
     StartMoveEnd

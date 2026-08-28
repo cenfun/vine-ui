@@ -87,7 +87,8 @@ const showCustomStyle = () => {
 const showHtml = () => {
     showToast({
         type: 'success',
-        content: '<strong>HTML content</strong><br><span>Rendered with innerHTML</span>'
+        content: '<strong>HTML content</strong><br><span>Rendered with innerHTML</span>',
+        html: true
     });
 };
 
