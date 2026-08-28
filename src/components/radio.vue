@@ -11,16 +11,29 @@
       :value="props.value"
       type="radio"
     >
-    <label :for="cid">
-      <slot>
-        {{ props.label }}
-      </slot>
+    <label
+      class="vui-radio-control"
+      :for="cid"
+    >
+      <span class="vui-radio-icon" />
+      <span
+        v-if="labelContent"
+        class="vui-radio-label"
+      >
+        <slot>
+          {{ props.label }}
+        </slot>
+      </span>
     </label>
   </div>
 </template>
 <script setup>
-import { watch } from 'vue';
-import { getCID, vInit } from '../utils/util.js';
+import {
+    computed, useSlots, watch
+} from 'vue';
+import {
+    getCID, getSlot, vInit
+} from '../utils/util.js';
 
 const cid = getCID('VuiRadio');
 
@@ -67,6 +80,12 @@ const mv = defineModel({
     default: null
 });
 
+const slots = useSlots();
+
+const labelContent = computed(() => {
+    return props.label || getSlot(slots);
+});
+
 const emit = defineEmits(['change']);
 
 watch(() => mv.value, (v) => {
@@ -83,93 +102,103 @@ defineExpose({
     display: flex;
     flex-direction: row;
     align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    min-width: 0;
     height: 30px;
     line-height: 30px;
 
-    label {
+    .vui-radio-control {
+        display: flex;
+        flex: 1 1 auto;
+        gap: 3px;
+        align-items: center;
+        min-width: 0;
+        height: 30px;
+    }
+
+    .vui-radio-icon {
         position: relative;
         display: block;
-        min-width: 22px;
-        max-width: 500px;
-        min-height: 30px;
-        margin-left: -22px;
-        padding-left: 25px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-
-        &::before {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            content: "";
-            display: block;
-            width: 16px;
-            height: 16px;
-            border: #adb5bd solid 1px;
-            border-radius: 50%;
-            background: #fff;
-            transform: translate(3px, -50%);
-            transition: var(--vui-color-transition);
-        }
+        flex: none;
+        width: 16px;
+        height: 16px;
+        margin: 0 3px;
+        border: #adb5bd solid 1px;
+        border-radius: 50%;
+        background-color: #fff;
+        transition: var(--vui-color-transition);
 
         &::after {
             position: absolute;
             top: 50%;
-            left: 0;
+            left: 50%;
             content: "";
             display: none;
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: var(--vui-blue-50);
-            transform: translate(6px, -50%);
+            background-color: var(--vui-blue-50);
+            transform: translate(-50%, -50%);
         }
     }
 
-    input {
+    .vui-radio-label {
         display: block;
-        width: 22px;
-        height: 22px;
-        margin: 0;
-        padding: 0;
-        opacity: 0;
+        flex: 1 1 auto;
+        min-width: 0;
+        min-height: 30px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 
-        &:focus ~ label::before {
+    input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        opacity: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+
+        &:focus + .vui-radio-control .vui-radio-icon {
             box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
         }
 
-        &:disabled ~ label {
+        &:disabled + .vui-radio-control {
             color: #6c757d;
         }
 
-        &:disabled ~ label::before {
+        &:disabled + .vui-radio-control .vui-radio-icon {
             background-color: #e9ecef;
         }
 
-        &:checked ~ label::before {
+        &:checked + .vui-radio-control .vui-radio-icon {
             border-color: var(--vui-blue-50);
         }
 
-        &:checked ~ label::after {
+        &:checked + .vui-radio-control .vui-radio-icon::after {
             display: block;
         }
 
-        &:checked:disabled ~ label::before {
+        &:checked:disabled + .vui-radio-control .vui-radio-icon {
             border-color: #80bdff;
         }
 
-        &:checked:disabled ~ label::after {
+        &:checked:disabled + .vui-radio-control .vui-radio-icon::after {
             background-color: rgb(0 123 255 / 50%);
         }
 
-        &:not(:checked):focus ~ label::before {
+        &:not(:checked):focus + .vui-radio-control .vui-radio-icon {
             border-color: #80bdff;
         }
+    }
 
-        &:not(:disabled, :checked, :focus) ~ label:hover::before {
-            border-color: #888;
-        }
+    &:hover input:not(:disabled, :checked, :focus) + .vui-radio-control .vui-radio-icon {
+        border-color: #888;
     }
 }
 
