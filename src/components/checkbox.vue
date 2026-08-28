@@ -15,7 +15,7 @@
     >
       <span class="vui-checkbox-icon" />
       <span
-        v-if="labelContent"
+        v-if="hasLabel()"
         class="vui-checkbox-label"
       >
         <slot>
@@ -27,12 +27,8 @@
 </template>
 
 <script setup>
-import {
-    computed, useSlots, watch
-} from 'vue';
-import {
-    getCID, getSlot, vInit
-} from '../utils/util.js';
+import { useSlots, watch } from 'vue';
+import { getCID, vInit } from '../utils/util.js';
 
 const cid = getCID('VuiCheckbox');
 
@@ -65,9 +61,9 @@ const mv = defineModel({
 
 const slots = useSlots();
 
-const labelContent = computed(() => {
-    return props.label || getSlot(slots);
-});
+const hasLabel = () => {
+    return Boolean(props.label || slots.default);
+};
 
 const emit = defineEmits(['change']);
 

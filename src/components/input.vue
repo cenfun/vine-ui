@@ -3,7 +3,7 @@
     v-init="{cid}"
     :class="classMap"
   >
-    <label v-if="labelContent">
+    <label v-if="hasLabel()">
       <slot>
         {{ props.label }}
       </slot>
@@ -63,7 +63,7 @@ import { microtask } from 'async-tick';
 
 import Icon from './icon.vue';
 import {
-    autoPx, getCID, bindAttrs, vSelectOnFocus, getSlot, vInit
+    autoPx, getCID, bindAttrs, vSelectOnFocus, vInit
 } from '../utils/util.js';
 
 const cid = getCID('VuiInput');
@@ -224,9 +224,9 @@ const inputClassList = computed(() => {
 
 const slots = useSlots();
 
-const labelContent = computed(() => {
-    return props.label || getSlot(slots);
-});
+const hasLabel = () => {
+    return Boolean(props.label || slots.default);
+};
 
 const update = microtask(() => {
     mv.value = props.value;

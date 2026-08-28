@@ -5,7 +5,7 @@
     @click="onClick"
   >
     <div
-      v-if="labelContent && labelPos==='left'"
+      v-if="hasLabel() && labelPos==='left'"
       class="vui-switch-label"
     >
       <slot>
@@ -22,7 +22,7 @@
       />
     </div>
     <div
-      v-if="labelContent && labelPos==='right'"
+      v-if="hasLabel() && labelPos==='right'"
       class="vui-switch-label"
     >
       <slot>
@@ -36,7 +36,7 @@ import {
     computed, watch, useSlots
 } from 'vue';
 import {
-    getCID, getSlot, vInit, normalizePosition
+    getCID, vInit, normalizePosition
 } from '../utils/util.js';
 
 const defaultColors = ['#aaaaaa', '#1890ff'];
@@ -165,9 +165,9 @@ const iconStyleList = computed(() => {
 
 const slots = useSlots();
 
-const labelContent = computed(() => {
-    return props.label || getSlot(slots);
-});
+const hasLabel = () => {
+    return Boolean(props.label || slots.default);
+};
 
 const onClick = (e) => {
     if (props.disabled) {

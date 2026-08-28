@@ -17,7 +17,7 @@
     >
       <span class="vui-radio-icon" />
       <span
-        v-if="labelContent"
+        v-if="hasLabel()"
         class="vui-radio-label"
       >
         <slot>
@@ -28,12 +28,8 @@
   </div>
 </template>
 <script setup>
-import {
-    computed, useSlots, watch
-} from 'vue';
-import {
-    getCID, getSlot, vInit
-} from '../utils/util.js';
+import { useSlots, watch } from 'vue';
+import { getCID, vInit } from '../utils/util.js';
 
 const cid = getCID('VuiRadio');
 
@@ -82,9 +78,9 @@ const mv = defineModel({
 
 const slots = useSlots();
 
-const labelContent = computed(() => {
-    return props.label || getSlot(slots);
-});
+const hasLabel = () => {
+    return Boolean(props.label || slots.default);
+};
 
 const emit = defineEmits(['change']);
 
