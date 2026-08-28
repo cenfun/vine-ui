@@ -31,6 +31,18 @@
       <VuiButton @click="showCustom">
         Custom message
       </VuiButton>
+      <VuiButton @click="showCustomStyle">
+        Custom style
+      </VuiButton>
+      <VuiButton @click="showHtml">
+        HTML content
+      </VuiButton>
+      <VuiButton @click="showComponent">
+        Component content
+      </VuiButton>
+      <VuiButton @click="showVNode">
+        VNode content
+      </VuiButton>
       <VuiButton @click="showMultiple">
         Multiple toasts
       </VuiButton>
@@ -39,6 +51,8 @@
 </template>
 
 <script setup>
+import { defineComponent, h } from 'vue';
+
 import {
     VuiButton, VuiFlex, showToast
 } from '../vine-ui.js';
@@ -54,6 +68,53 @@ const showCustom = () => {
     showToast({
         type: 'info',
         content: 'This is a custom toast message with longer content to demonstrate the toast component.'
+    });
+};
+
+const showCustomStyle = () => {
+    showToast({
+        type: 'success',
+        icon: 'success',
+        iconColor: '#fff',
+        iconSize: '24px',
+        content: 'Toast with a custom border and background',
+        color: '#fff',
+        border: '1px solid #67c23a',
+        background: 'linear-gradient(90deg, #67c23a, #409eff)'
+    });
+};
+
+const showHtml = () => {
+    showToast({
+        type: 'success',
+        content: '<strong>HTML content</strong><br><span>Rendered with innerHTML</span>'
+    });
+};
+
+const ToastContent = defineComponent({
+    name: 'ToastExampleContent',
+    setup() {
+        return () => h('div', [
+            h('strong', 'Component content'),
+            h('div', 'Rendered from a Vue component')
+        ]);
+    }
+});
+
+const showComponent = () => {
+    showToast({
+        type: 'info',
+        content: ToastContent
+    });
+};
+
+const showVNode = () => {
+    showToast({
+        type: 'success',
+        content: h('div', [
+            h('strong', 'VNode content'),
+            h('div', 'Created directly with h()')
+        ])
     });
 };
 

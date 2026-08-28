@@ -1,5 +1,42 @@
-import { createVNode, render } from 'vue';
+import {
+    createVNode, defineComponent, h, isVNode, render
+} from 'vue';
 import VuiToast from './components/toast.vue';
+
+/**
+ * Renders text, HTML, a Vue component, or a VNode.
+ * Strings containing an opening and closing angle bracket are rendered as trusted HTML.
+ */
+export const VuiContentRenderer = defineComponent({
+    name: 'VuiContentRenderer',
+    props: {
+        content: {
+            type: [String, Object, Function],
+            default: ''
+        }
+    },
+    setup(props) {
+        return () => {
+            const content = props.content;
+            if (typeof content === 'string') {
+                const start = content.indexOf('<');
+                if (start !== -1 && content.indexOf('>', start + 1) !== -1) {
+                    return h('span', {
+                        style: {
+                            display: 'contents'
+                        },
+                        innerHTML: content
+                    });
+                }
+                return content;
+            }
+            if (isVNode(content)) {
+                return content;
+            }
+            return h(content);
+        };
+    }
+});
 
 // example createApp/h: props, events, v-model, and slots
 // const modelExample = () => {
@@ -225,7 +262,7 @@ let toastContainer;
 
 /**
  *
- * @param {*} options: type, content, timeout
+ * @param {*} options: type, icon, iconColor, iconSize, content, color, border, background, timeout
  * @param {*} container
  * @returns
  */
@@ -255,7 +292,13 @@ export const showToast = (options, container) => {
         el,
         props: {
             type: options.type,
-            content: options.content
+            icon: options.icon,
+            iconColor: options.iconColor,
+            iconSize: options.iconSize,
+            content: options.content,
+            color: options.color,
+            border: options.border,
+            background: options.background
         }
     });
 

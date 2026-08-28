@@ -26,7 +26,7 @@ import {
     icons, defaultIcons, setIcons
 } from './utils/icons.js';
 import {
-    initGlobalTooltips, mount, showToast
+    initGlobalTooltips, mount, showToast, VuiContentRenderer
 } from './global.js';
 import { Motion } from './utils/motion.js';
 import { StartMoveEnd } from './utils/start-move-end.js';
@@ -67,6 +67,7 @@ export {
     initGlobalTooltips,
     mount,
     showToast,
+    VuiContentRenderer,
 
     Motion,
     StartMoveEnd

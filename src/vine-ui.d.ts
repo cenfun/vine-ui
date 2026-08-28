@@ -1,4 +1,4 @@
-import { DefineComponent } from 'vue';
+import { Component, DefineComponent, VNode } from 'vue';
 
 // ============================================================
 // Component type helpers
@@ -570,10 +570,22 @@ export const VuiTab: DefineComponent<VuiTabProps, {}, {}, {}, {}, {}, {}, VuiTab
 // VuiToast
 // ============================================================
 export interface VuiToastProps {
-  /** Toast type: success, error, info, or custom */
+  /** Toast type: success, error, or info */
   type?: string;
-  /** Toast message content */
-  content?: string;
+  /** Custom icon name */
+  icon?: string;
+  /** Custom icon color */
+  iconColor?: string;
+  /** Custom icon size */
+  iconSize?: string;
+  /** Toast text/HTML content, Vue component, or VNode */
+  content?: string | Component | VNode;
+  /** Toast text color */
+  color?: string;
+  /** CSS border shorthand */
+  border?: string;
+  /** CSS background shorthand */
+  background?: string;
 }
 export const VuiToast: DefineComponent<VuiToastProps>;
 
@@ -613,6 +625,11 @@ export const VuiTooltip: DefineComponent<VuiTooltipProps>;
 // Utilities
 // ============================================================
 
+/** Render text/HTML, a Vue component, or a VNode. HTML content must be trusted. */
+export const VuiContentRenderer: DefineComponent<{
+  content?: string | Component | VNode;
+}>;
+
 /** Icon name to SVG string map (mutable, can be extended via setIcons) */
 export const icons: Record<string, string>;
 
@@ -641,9 +658,7 @@ export function mount(
 
 /** Show a toast notification */
 export function showToast(
-  options: {
-    type?: string;
-    content?: string;
+  options: VuiToastProps & {
     timeout?: number;
   },
   container?: HTMLElement
