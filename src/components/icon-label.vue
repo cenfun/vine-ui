@@ -136,7 +136,6 @@ defineExpose({
 
     display: inline-flex;
     gap: var(--vui-icon-label-gap);
-    justify-content: center;
     align-items: center;
 }
 
