@@ -85,8 +85,7 @@ defineExpose({
     width: fit-content;
     max-width: 100%;
     min-width: 0;
-    height: 30px;
-    line-height: 30px;
+    height: var(--vui-min-height);
 
     .vui-checkbox-control {
         display: flex;
@@ -94,7 +93,7 @@ defineExpose({
         gap: 3px;
         align-items: center;
         min-width: 0;
-        height: 30px;
+        height: var(--vui-min-height);
     }
 
     .vui-checkbox-icon {
@@ -117,7 +116,8 @@ defineExpose({
         display: block;
         flex: 1 1 auto;
         min-width: 0;
-        min-height: 30px;
+        height: var(--vui-min-height);
+        line-height: var(--vui-min-height);
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;

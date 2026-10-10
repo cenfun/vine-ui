@@ -53,6 +53,10 @@
         <div>Item A</div>
         <div>Item B</div>
       </VuiButtonGroup>
+      <VuiButtonGroup v-model="index2">
+        <div>中文</div>
+        <div>选项</div>
+      </VuiButtonGroup>
     </VuiFlex>
   </VuiFlex>
 </template>

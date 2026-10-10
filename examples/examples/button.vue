@@ -42,6 +42,10 @@
     <VuiButton round>
       Arrow<VuiIcon icon="arrow-down" />
     </VuiButton>
+
+    <VuiButton>
+      中文
+    </VuiButton>
   </VuiFlex>
 </template>
 

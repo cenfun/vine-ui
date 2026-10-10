@@ -23,6 +23,8 @@
       :label="'Label ' + checkboxChecked"
     />
 
+    <VuiCheckbox>中文</VuiCheckbox>
+
     <VuiCheckbox>
       this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long! this label is long!
     </VuiCheckbox>
