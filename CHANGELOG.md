@@ -2,11 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## [4.1.1] - 2026-10-10
+## [4.2.0] - 2026-10-10
+
+### Breaking Changes
+
+- Removed the `change` event from `VuiButtonGroup`; use `v-model` to listen for selection changes instead.
 
 ### Changed
 
-- Refactored `VuiButtonGroup` to render options and slots from a normalized list without rebuilding the DOM, and removed its `change` event in favor of `v-model`.
+- Refactored `VuiButtonGroup` to render options and slots from a normalized list without rebuilding the DOM.
+- Unified Checkbox and Radio heights with `--vui-min-height` and centered their labels.
+- Adjusted Button padding and IconLabel alignment for consistent component sizing.
+- Updated development dependencies.
 
 ## [4.1.0] - 2026-08-28
 

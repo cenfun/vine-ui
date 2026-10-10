@@ -44,16 +44,15 @@ export interface VuiButtonGroupOption {
 export interface VuiButtonGroupProps {
   /** v-model value (index or option value, depends on bindValue) */
   modelValue?: any;
-  /** Array of option objects [{label, value}] for rendering items */
-  options?: VuiButtonGroupOption[] | null;
+  /** Array of options for rendering items (objects, strings, or numbers) */
+  options?: (VuiButtonGroupOption | StringOrNumber)[] | null;
   /** Custom color for selected state */
   color?: string;
-  /** If true, v-model binds to option.value; otherwise binds to index */
+  /** If true, v-model binds to option.value; otherwise binds to index. Only applies in options mode; slot mode always binds by index */
   bindValue?: boolean;
 }
 export type VuiButtonGroupEmits = {
   'update:modelValue': (value: any) => void;
-  change: (value: any) => void;
 };
 export interface VuiButtonGroupSlots {
   default: VuiSlot;
