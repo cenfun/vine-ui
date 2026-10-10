@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.1.1] - 2026-10-10
+
+### Changed
+
+- Refactored `VuiButtonGroup` to render options and slots from a normalized list without rebuilding the DOM, and removed its `change` event in favor of `v-model`.
+
 ## [4.1.0] - 2026-08-28
 
 ### Added
@@ -28,4 +34,3 @@ All notable changes to this project will be documented in this file.
 - Fixed Toast count enforcement so adding a Toast dismisses the oldest Toast in the same container.
 - Fixed Toast exit animations and reduced-motion behavior.
 
-[4.1.0]: https://github.com/cenfun/vine-ui/compare/4.0.0...4.1.0

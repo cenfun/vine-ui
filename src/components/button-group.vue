@@ -1,19 +1,34 @@
 <template>
   <div
-    ref="list"
     v-init="{cid}"
     :class="classList"
     :style="styleMap"
     @click="onClick"
   >
-    <slot />
+    <div
+      v-for="(item, i) in data.list"
+      :key="i"
+      class="vui-button-group-item"
+      :class="{ 'vui-button-group-selected': data.index === i }"
+      :data-index="i"
+    >
+      {{ item.label }}
+    </div>
+
+    <!-- temporary hidden host: read slot content, then it gets removed -->
+    <div
+      v-if="data.slotPending"
+      ref="slotHost"
+      class="vui-button-group-slot-host"
+    >
+      <slot />
+    </div>
   </div>
 </template>
 <script setup>
 import {
-    computed, watch, reactive, onMounted, ref
+    computed, watch, reactive, onMounted, ref, nextTick
 } from 'vue';
-import { microtask } from 'async-tick';
 
 import {
     toNum, getCID, hasOwn, vInit
@@ -24,16 +39,12 @@ const cid = getCID('VuiButtonGroup');
 const props = defineProps({
 
     /** Array of option objects [{label, value}] for rendering items */
-
-
     options: {
         type: Array,
         default: null
     },
 
     /** Custom color for selected state */
-
-
     color: {
         type: String,
         default: ''
@@ -41,8 +52,6 @@ const props = defineProps({
 
     /** If true,
  v-model binds to option.value; otherwise binds to index */
-
-
     bindValue: {
         type: Boolean,
         default: false
@@ -56,12 +65,14 @@ const mv = defineModel({
     default: null
 });
 
-const emit = defineEmits(['change']);
-
 const data = reactive({
+    list: [],
+    index: -1,
+    // whether the hidden slot host should be mounted (for reading slot content)
+    slotPending: false
 });
 
-const list = ref(null);
+const slotHost = ref(null);
 
 const classList = computed(() => {
     return [
@@ -78,25 +89,83 @@ const styleMap = computed(() => {
     return st;
 });
 
-const updateSelection = () => {
-    const $list = list.value?.children || [];
-    Array.from($list).forEach((elem, i) => {
-        if (data.index === i) {
-            elem.classList.add('vui-button-group-selected');
-        } else {
-            elem.classList.remove('vui-button-group-selected');
+const isOptions = computed(() => Array.isArray(props.options));
+
+// bindValue only applies in options mode; slot mode always binds by index
+const bindValue = computed(() => isOptions.value && props.bindValue);
+
+// =========================================================================================================
+
+const getItemLabel = (item, i) => {
+    return item.label || item.name || item.title || item.value || i;
+};
+
+const getLabel = (item, i) => {
+    if (typeof item === 'object' && item !== null) {
+        return getItemLabel(item, i);
+    }
+    if (typeof item === 'string' || typeof item === 'number') {
+        return `${item}`;
+    }
+    return i;
+};
+
+const getListFromProps = (ls) => {
+    return ls.map((item, i) => {
+        const label = getLabel(item, i);
+        if (item && typeof item === 'object') {
+            const newItem = {
+                ... item
+            };
+            if (!hasOwn(newItem, 'value')) {
+                newItem.value = label;
+            }
+            return {
+                label,
+                value: newItem.value
+            };
         }
+        return {
+            label,
+            value: label
+        };
     });
 };
 
-const onIndexChange = (index) => {
-    // console.log('onIndexChange', cid, index, props.options);
-    if (data.bindValue) {
-        mv.value = props.options?.[index]?.value;
+const getListFromSlot = (host) => {
+    if (!host) {
+        return [];
+    }
+    return Array.from(host.children).map((elem) => {
+        const label = (elem.textContent || '').trim();
+        return {
+            label,
+            value: label
+        };
+    });
+};
+
+const resolveIndex = () => {
+    if (bindValue.value) {
+        const index = data.list.findIndex((item) => item.value === mv.value);
+        return index >= 0 ? index : 0;
+    }
+    return toNum(mv.value);
+};
+
+const initList = (list) => {
+    data.list = list;
+    data.index = resolveIndex();
+};
+
+// =========================================================================================================
+
+const syncModel = (index) => {
+    if (bindValue.value) {
+        mv.value = data.list[index]?.value;
     } else {
         mv.value = index;
     }
-    emit('change', mv.value);
 };
 
 const onClick = (e) => {
@@ -113,74 +182,64 @@ const onClick = (e) => {
     if (!tabItem) {
         return;
     }
-    const index = toNum(tabItem.getAttribute('index'));
+    const index = toNum(tabItem.getAttribute('data-index'));
     if (index === data.index) {
         return;
     }
     data.index = index;
-    updateSelection();
 };
 
-const renderOptions = () => {
+// =========================================================================================================
+// slot content is rendered into a hidden host first, read from the DOM, then the host is removed.
+// this way both options and slot are normalized into data.list and rendered by the same v-for.
 
-    const $list = list.value;
-    $list.innerHTML = '';
+let slotReadVersion = 0;
 
-    // eslint-disable-next-line complexity
-    props.options.forEach((item, i) => {
-
-        const label = item?.label || item?.name || item?.title || item?.value || i;
-        if (!hasOwn(item, 'value')) {
-            item.value = label;
+const readSlot = () => {
+    const version = ++slotReadVersion;
+    data.slotPending = true;
+    nextTick(() => {
+        if (version !== slotReadVersion) {
+            // superseded by a newer read / options mode
+            return;
         }
-
-        const elem = document.createElement('div');
-        elem.setAttribute('index', i);
-        elem.classList.add('vui-button-group-item');
-        elem.innerHTML = label;
-        $list.appendChild(elem);
+        const list = getListFromSlot(slotHost.value);
+        data.slotPending = false;
+        initList(list);
     });
-
-    if (data.bindValue) {
-        const index = props.options.findIndex((item) => item.value === mv.value);
-        data.index = index >= 0 ? index : 0;
-    } else {
-        data.index = toNum(mv.value);
-    }
-    updateSelection();
-
 };
 
-const renderSlots = () => {
-    const $children = list.value?.children || [];
-    Array.from($children).forEach((elem, i) => {
-        elem.setAttribute('index', i);
-        elem.classList.add('vui-button-group-item');
-    });
-    data.bindValue = false;
-    data.index = toNum(mv.value);
-    updateSelection();
-};
-
-const update = microtask((v) => {
-    data.bindValue = props.bindValue;
-    if (Array.isArray(props.options)) {
-        renderOptions();
+const update = () => {
+    if (isOptions.value) {
+        // cancel any pending slot read
+        slotReadVersion++;
+        data.slotPending = false;
+        initList(getListFromProps(props.options));
         return;
     }
-    renderSlots();
-});
+    readSlot();
+};
+
+const updateIndex = () => {
+    data.index = resolveIndex();
+};
 
 watch(() => data.index, (v) => {
-    onIndexChange(v);
+    syncModel(v);
 });
 
-watch([
-    () => mv.value,
-    () => props.options,
-    () => props.bindValue
-], () => {
+// list source changed
+watch(() => props.options, () => {
     update();
+});
+
+// only selection changed, no need to rebuild the list
+watch(() => mv.value, () => {
+    updateIndex();
+});
+
+watch(() => props.bindValue, () => {
+    updateIndex();
 });
 
 onMounted(() => {
@@ -200,6 +259,10 @@ defineExpose({
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.vui-button-group-slot-host {
+    display: none;
 }
 
 .vui-button-group-item {
