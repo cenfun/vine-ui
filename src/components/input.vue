@@ -249,9 +249,11 @@ defineExpose({
     display: flex;
     flex-direction: row;
     align-items: center;
+    line-height: normal;
 
     label {
         display: inline-block;
+        flex-shrink: 0;
         max-width: 200px;
         padding-right: 5px;
         white-space: nowrap;
@@ -264,6 +266,7 @@ defineExpose({
     position: relative;
     display: inline-flex;
     align-items: center;
+    line-height: normal;
 
     .vui-input-icon {
         position: absolute;

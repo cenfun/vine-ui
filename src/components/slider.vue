@@ -267,6 +267,7 @@ defineExpose({
     align-items: center;
     width: 32px;
     height: 32px;
+    line-height: normal;
     color: #5e5e5e;
     border: 1px solid #5e5e5e;
     border-radius: 50%;

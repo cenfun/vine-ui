@@ -11,7 +11,10 @@
       :color="data.settings.color"
       :size="data.settings.size"
     />
-    <div class="vui-toast-content">
+    <div
+      class="vui-toast-content"
+      :class="{'vui-toast-text': typeof props.content === 'string' && !props.html}"
+    >
       <VuiContentRenderer
         :content="props.content"
         :html="props.html"
@@ -264,6 +267,10 @@ defineExpose({
     animation-duration: 0.2s;
     animation-timing-function: ease-out;
     animation-fill-mode: both;
+}
+
+.vui-toast-text {
+    line-height: normal;
 }
 
 .vui-toast-leave {

@@ -213,6 +213,7 @@ defineExpose({
     min-width: 60px;
     max-width: 200px;
     padding: 10px 15px;
+    line-height: normal;
     white-space: nowrap;
     text-align: center;
     text-overflow: ellipsis;

@@ -187,6 +187,7 @@ defineExpose({
     display: flex;
     gap: 5px;
     align-items: center;
+    line-height: normal;
 }
 
 .vui-switch-label {

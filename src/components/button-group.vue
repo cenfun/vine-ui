@@ -259,6 +259,7 @@ defineExpose({
     display: flex;
     flex-direction: row;
     align-items: center;
+    line-height: normal;
 }
 
 .vui-button-group-slot-host {
@@ -273,6 +274,7 @@ defineExpose({
     min-width: 80px;
     min-height: var(--vui-min-height);
     padding: 3px 12px;
+    line-height: normal;
     color: #5e5e5e;
     font-weight: 400;
     text-align: center;

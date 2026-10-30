@@ -853,10 +853,12 @@ defineExpose({
     flex-direction: row;
     gap: 5px;
     align-items: center;
+    line-height: normal;
 
     label {
         position: relative;
         display: inline-block;
+        flex-shrink: 0;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
@@ -877,6 +879,7 @@ defineExpose({
     max-width: var(--vui-select-max-width);
     min-height: var(--vui-min-height);
     padding: var(--vui-select-padding);
+    line-height: normal;
     border: 1px solid #aaa;
     border-radius: 5px;
     cursor: pointer;
@@ -953,6 +956,7 @@ defineExpose({
     justify-content: space-between;
     align-items: center;
     padding: 6px 8px;
+    line-height: normal;
     color: #555;
     font-size: inherit;
     cursor: pointer;
@@ -999,6 +1003,7 @@ defineExpose({
     gap: 4px;
     align-items: center;
     min-width: 0;
+    line-height: normal;
     overflow: hidden;
 }
 
@@ -1008,6 +1013,7 @@ defineExpose({
     align-items: center;
     max-width: 100%;
     padding: 1px 5px;
+    line-height: normal;
     color: #5e5e5e;
     font-size: var(--vui-font-size-s);
     border: 1px solid #ccc;

@@ -137,6 +137,7 @@ defineExpose({
     display: inline-flex;
     gap: var(--vui-icon-label-gap);
     align-items: center;
+    line-height: normal;
 }
 
 .vui-icon-label-button {
@@ -150,6 +151,7 @@ defineExpose({
 }
 
 .vui-icon-label-text {
+    flex-shrink: 0;
     white-space: nowrap;
     user-select: none;
 }

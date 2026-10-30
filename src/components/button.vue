@@ -98,6 +98,7 @@ defineExpose({
     max-width: 200px;
     min-height: var(--vui-min-height);
     padding: 3px 8px;
+    line-height: normal;
     color: #6c757d;
     font-weight: 400;
     border: 1px solid #6c757d;
