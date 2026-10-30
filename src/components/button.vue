@@ -100,7 +100,6 @@ defineExpose({
     padding: 3px 8px;
     line-height: normal;
     color: #6c757d;
-    font-weight: 400;
     border: 1px solid #6c757d;
     border-radius: 5px;
     background-color: #f5f5f5;

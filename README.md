@@ -71,6 +71,27 @@ export default {
 </script>
 ```
 
+### Host typography
+
+Controls inherit the host font family, size, weight, style, and letter spacing through `.vui`. Defaults use low-specificity `:where()` selectors and do not reset controls outside `.vui`.
+
+```css
+.vui {
+    font-family: var(--app-font-family, inherit);
+    font-size: 16px;
+}
+
+.vui-button {
+    font-weight: 600;
+}
+```
+
+Place overrides outside `@layer` to override the unlayered defaults. Prefer inherited or fixed font sizes to avoid scaling nested components repeatedly. Body-mounted overlays inherit from `body`, so use global font settings or a custom container where supported.
+
+### Upgrading to 4.2.1
+
+No public API or type changes. Controls now inherit host typography, so larger or bold fonts may change their appearance. The minimum height remains `28px`; Checkbox and Radio can grow with larger text. Custom-content line heights and existing `px` font-size tokens are preserved. See the [changelog](https://github.com/cenfun/vine-ui/blob/main/CHANGELOG.md).
+
 ## Utilities
 
 ### Icons (`icons`, `defaultIcons`, `setIcons`)
@@ -269,3 +290,13 @@ npm run build   # build library to dist/
 ```
 
 Examples source: [examples/](examples/)
+
+### Preparing a patch release
+
+After validation, commit all changes and run from a clean working tree:
+
+```sh
+npm run publish -- patch
+```
+
+The helper increments the version, builds, and creates the release commit and tag. Do not bump the version manually. Pushing and publishing to npm remain manual steps.

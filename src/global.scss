@@ -75,7 +75,6 @@
 
 :where(.vui) {
     box-sizing: border-box;
-    font-family: inherit;
 }
 
 :where(
@@ -87,10 +86,15 @@
 }
 
 :where(
+    .vui,
     .vui button,
     .vui input,
     .vui select,
     .vui textarea
 ) {
     font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
 }

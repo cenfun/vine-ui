@@ -310,7 +310,6 @@ defineExpose({
         min-height: var(--vui-min-height);
         padding: 5px;
         color: #495057;
-        font-weight: 400;
         border: 1px solid #aaa;
         border-radius: 5px;
         background-color: #fff;

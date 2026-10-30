@@ -890,7 +890,6 @@ defineExpose({
 
     span {
         flex: auto 1 1;
-        font-weight: normal;
         font-size: var(--vui-select-font-size);
         white-space: nowrap;
         text-overflow: ellipsis;

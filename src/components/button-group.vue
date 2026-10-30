@@ -276,7 +276,6 @@ defineExpose({
     padding: 3px 12px;
     line-height: normal;
     color: #5e5e5e;
-    font-weight: 400;
     text-align: center;
     text-overflow: ellipsis;
     border: 1px solid #808080;

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.1] - 2026-10-30
+
+### Fixed
+
+- Fixed inherited line heights affecting control alignment without changing custom-content line heights.
+- Improved label sizing and truncation, including larger fonts in Checkbox and Radio.
+- Made controls inherit host typography and removed forced normal font weights.
+
+### Changed
+
+- Updated development dependencies and removed unused packages.
+
 ## [4.2.0] - 2026-10-10
 
 ### Breaking Changes
